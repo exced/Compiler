@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Config file for EGG Grammar  -->
+
+  <egg
+      module="true"
+      lang="java"
+      scanner="jlex"
+      gen="egg"
+      prefix="mcs"
+      so="false"
+      dst="false"
+      main="false"
+  >
+    <import    lib="mcs.tds.*"/>
+    <import    lib="mcs.type.*"/>
+    <import    lib="java.util.*"/>
+    <import    lib="mcs.gc.*"/>
+  </egg>

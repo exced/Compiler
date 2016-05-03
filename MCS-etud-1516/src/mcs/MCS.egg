@@ -1,0 +1,312 @@
+-----------------------------------------------------
+-- Grammaires de MC  et MCS                       --
+-----------------------------------------------------
+--options
+option auto = true;
+option version = 0.0.1;
+option k=2;
+--attributes 
+
+-- le fichier source
+inh source : MCSSourceFile for PROGRAMME;
+-- la machine cible pour la generation de code
+inh machine : IMachine for 
+         ENTITES, ENTITE, DECL, FONCTION, INST, BLOC, INSTS, SIX,
+         PARFS, PARF, PARFSX, ES, ESX, 
+         E, AFFX, A, AX, R, RX, T, TX, F,FX
+--         -- decommenter la ligne suivante pour MCS
+--       , BASE, DEFS, DEF
+--         -- fin extension MCS
+         ;
+-- ces attributs permettent de recuperer les instructions du code ASM inline       
+syn code_asm : STRING for ASM;
+-- la TDS courante
+inh tds_asm : TDS for ASM;
+
+--terminals
+space separateur is  "[\r\n\t ]+";     
+space comm is  "\/\/[^\n]*\n";
+sugar paro is  "\(";
+sugar parf is  "\)";
+sugar aco is  "\{";     
+sugar acf is  "\}"; 
+sugar virg is  ",";
+sugar pt is "\.";
+sugar pv is  "\;";
+sugar affect is  "=";
+sugar si is  "if";
+sugar sinon is  "else";
+sugar void is  "void";
+sugar asm is  "asm";
+sugar int is  "int";
+sugar char is  "char";
+sugar struct is "struct";
+sugar typedef is "typedef";
+-- decommenter pour MCS
+--sugar ref is "ref" ;
+--sugar out is "out";
+--sugar namespace is "namespace";
+--sugar using is "using";
+--sugar class is "class";
+--sugar public is "public" ;
+--sugar private is "private";
+--sugar dpts is "\:";
+--sugar bool is "bool";
+--sugar true is "true";
+--sugar false is "false";
+--sugar this is "this";
+--sugar new is "new" ;
+--sugar null2 is "null";
+--sugar base is "base" ;
+-- 
+sugar retour is  "return";
+sugar arrow is "\-\>";
+sugar null is  "NULL";
+sugar inf is  "\<";
+sugar infeg is  "\<=";
+sugar sup is  "\>";
+sugar supeg is  "\>=";
+sugar eg is  "==";
+sugar neg is  "\!=";
+sugar plus is  "\+";
+sugar moins is  "\-";
+sugar ou is  "\|\|";
+sugar mult is  "\*";
+sugar div is  "\/";
+sugar mod is  "\%" ; 
+sugar et is  "\&\&";
+sugar non is  "\!";
+term entier is  "[0-9]+";
+term caractere is  "\'[^\']\'";
+term chaine is  "\"[^\"]*\"";
+term ident is  "[a-z][_0-9A-Za-z]*";
+term identc is  "[A-Z][_0-9A-Za-z]*";
+
+-- pour les instructions en assembleur TAM 'inline'
+compil ASM;
+
+--production rules
+PROGRAMME -> #init ENTITES #gen;
+global
+   machine : IMachine;
+-- transmission de la machine cible  (choisie par l'option -m au lancement) 
+#init {
+local
+do
+   machine := PROGRAMME^source.getMachine();
+   if machine = null then
+     error(NO_MACH, PROGRAMME^source.getMachName());
+   else
+     ENTITES^machine := machine;
+   end
+end
+}
+-- ecrit le code dans un fichier
+#gen {
+local
+do
+   machine.writeCode(PROGRAMME^source.getFileName(),"; no code\n");  
+end
+}
+ENTITES -> ;
+ENTITES -> ENTITE ENTITES ;
+-- definition d'un nom de type (commence par une majuscule)
+ENTITE -> typedef TYPE identc pv ;
+-- definition d'une variable globale ou d'une fonction
+-- (commence par une minuscule)
+ENTITE ->  TYPE ident DECL ;
+-- Variable
+DECL -> pv;
+DECL -> FONCTION ;
+-- Fonction
+FONCTION ->  paro PARFS parf BLOC ;
+-- parametres de fonctions
+PARFS ->  ;
+PARFS ->  PARF PARFSX ;
+PARFSX ->  ;
+PARFSX ->  virg PARF PARFSX ;
+PARF ->  TYPE ident ;
+-- les types (de base, noms, struct et pointeurs)
+TYPE -> STYPE  PTRS ;
+-- type de base
+-- des * pour definir un pointeur
+PTRS -> ;
+PTRS -> mult PTRS ;
+-- types de base
+STYPE-> void  ;
+STYPE-> int ;
+STYPE-> char ;
+-- nom de type (commence par une majuscule)
+STYPE -> identc;
+-------------  
+-- et struct
+STYPE -> struct aco CHAMPS acf ;
+CHAMPS -> ;
+-- un nom de champ commence par une minuscule
+CHAMPS -> CHAMP CHAMPS ;
+CHAMP -> TYPE ident pv;
+-- corps de fonction et bloc d'instructions
+BLOC ->  aco INSTS acf ;
+-- instructions
+INSTS ->   ;
+INSTS ->  INST INSTS  ;
+-- declaration de variable locale avec ou sans init 
+INST ->  TYPE ident AFFX pv ;
+-- instruction expression (affectation et appel de procedure)
+INST -> E pv ;
+-- bloc d'instructions
+INST ->  BLOC  ;
+-- conditionnelle
+INST ->   si paro E parf BLOC SIX ;
+SIX ->    sinon BLOC ;
+SIX -> ;
+-- retour de fonction
+INST ->  retour  E pv ;
+
+
+-- les expressions -------------
+-----------------------------------------------------------------------
+-- E = expression (y compris l'affectation)
+-- A = expression figurant dans une affectation
+-- R = expression figurant dans une expresion relationnelle
+-- T = expression figurant dans une expression additive (TERME)
+-- F = expression figurant dans une expression multiplicative (FACTEUR)
+-----------------------------------------------------------------------
+E ->   A  AFFX ;
+-- affectation
+AFFX -> affect  A  ;
+AFFX -> ;
+-- relation
+A ->   R AX  ;
+AX -> OPREL R;
+AX ->  ;
+-- operateurs relationnels
+OPREL -> inf ;
+OPREL -> sup ;
+OPREL -> infeg ;
+OPREL -> supeg ;
+OPREL -> eg ;
+OPREL -> neg ;
+R ->  T  RX ;
+-- additions ...
+RX ->   OPADD  T RX  ;
+RX -> ;
+-- operateurs additifs
+OPADD -> plus ;
+OPADD -> moins ;
+OPADD -> ou ;
+-- multiplication, ...
+T ->  F  TX  ;
+TX ->   OPMUL  F TX  ;
+TX ->  ;
+-- operateurs multiplicatifs
+OPMUL -> mult ;
+OPMUL -> div ;
+OPMUL -> mod ;
+OPMUL -> et ;
+-- expressions de base
+-- Constante entiere
+F -> entier   ;
+-- Constante chaine
+F -> chaine ;
+-- Constante caractere
+F -> caractere ;
+-- expression unaire
+F ->  OPUN  F  ;
+-- operateurs unaires
+OPUN -> plus ;
+OPUN -> moins ;
+OPUN -> non;
+-- pointeur NULL
+F -> null  ;
+-- expression parenthesee
+F ->  paro E parf FX ;
+F ->  paro TYPE parf  F ;
+F -> mult F ;
+F -> ident FX ;
+FX -> ;
+-- acces champ
+FX ->   pt  ident FX ;
+-- acces champ pointeur
+FX ->   arrow  ident FX ;
+-- appel de sous-programme
+FX ->   paro ES parf FX;
+-- arguments appel de sous-programme
+ES -> ;
+ES -> E ESX  ;
+ESX ->  ;
+ESX -> virg E ESX ;
+
+------------- inline asm ----------------
+-- peut être utile pour implanter des sous-programmes
+-- directement en assembleur TAM.
+ENTITE ->   asm #tds ASM#gen; 
+#tds {
+do 
+  -- A faire : Remplacer 'null' par la table courante pour que
+  -- le code  ASM puisse acceder aux variables de MC ou MCS
+  ASM^tds_asm := null; 
+end
+}
+#gen {
+do
+  -- On recupere le code assembleur 'inline' dans : ASM^code_asm ;
+end
+}
+
+INST ->  asm   #tds ASM #gen ;
+#tds {
+do
+  -- A remplacer par la table courante pour que
+  -- l'assembleur puisse acceder aux variables
+  ASM^tds_asm := null; 
+end
+}
+
+#gen {
+do
+  -- ASM^code_asm contient le code assembleur inline
+  -- dans lequel les noms de variables ont ete remplaces
+  -- par leurs adresses.
+end
+}
+
+----------------- CS extension --------------------
+-- Decommenter les regles suivantes pour l'extension CS
+-------------------------------------------------
+--TYPE -> bool;
+---- definit un contenu d'un namespace
+--ENTITE -> namespace identc aco ENTITES acf ;
+---- donne l acces au contenu du 'namespace'
+--ENTITE -> using identc IDC pv ;
+--IDC -> ;
+--IDC -> pt identc IDC ;
+---- definition d'une classe (peut etre en dehors d'un namespace)
+--ENTITE -> ACCES class identc HERITAGE aco DEFS acf ;
+---- acces 
+--ACCES -> public;
+--ACCES -> private;
+--ACCES -> ;
+---- heritage
+--HERITAGE -> ;
+--HERITAGE -> dpts identc IDC ;
+---- membres d'une classe
+--DEFS -> ;
+--DEFS ->  ACCES DEF DEFS ;
+--DEF  ->  TYPE ident DECL ;
+---- constructeur
+--DEF  ->  identc paro PARFS parf BASE BLOC;
+---- appel eventuel au constructeur de la classe parente.
+--BASE -> ;
+--BASE -> dpts base paro ES parf  ;
+---- Mode de passage pour les fonctions et méthodes : rien : D, ref : D/R, out : R
+--PARF ->  MODE TYPE ident ;
+--MODE -> ref ;
+--MODE -> out ; 
+--F -> true;
+--F -> false;
+--F -> this FX;
+--F -> base FX;
+--F -> null2;
+--F -> new identc IDC paro ES parf ;
+end
