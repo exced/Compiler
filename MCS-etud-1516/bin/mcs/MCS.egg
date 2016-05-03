@@ -23,6 +23,15 @@ syn code_asm : STRING for ASM;
 -- la TDS courante
 inh tds_asm : TDS for ASM;
 
+inh tds    : TDS     for BLOC, INSTS, INST ;
+inh tam : TAM for F, FX, BLOC;
+syn code : STRING for F, BLOC, INSTS, INST, E;
+syn code_est_adresse : BOOLEAN for  F, FX ;
+syn type : DTYPE for F, TYPE;
+syn adresse : INTEGER for  F, FX ;
+inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS;
+syn dep : INTEGER for INST , INSTS;
+
 --terminals
 space separateur is  "[\r\n\t ]+";     
 space comm is  "\/\/[^\n]*\n";
@@ -110,8 +119,12 @@ end
 }
 ENTITES -> ;
 ENTITES -> ENTITE ENTITES ;
+
+
 -- definition d'un nom de type (commence par une majuscule)
 ENTITE -> typedef TYPE identc pv ;
+
+
 -- definition d'une variable globale ou d'une fonction
 -- (commence par une minuscule)
 ENTITE ->  TYPE ident DECL ;
@@ -141,25 +154,109 @@ STYPE -> identc;
 -------------  
 -- et struct
 STYPE -> struct aco CHAMPS acf ;
+
+
 CHAMPS -> ;
 -- un nom de champ commence par une minuscule
 CHAMPS -> CHAMP CHAMPS ;
-CHAMP -> TYPE ident pv;
+
+
+CHAMP -> TYPE ident pv ;
+
+
 -- corps de fonction et bloc d'instructions
-BLOC ->  aco INSTS acf ;
--- instructions
-INSTS ->   ;
-INSTS ->  INST INSTS  ;
+BLOC ->  aco #tds INSTS acf #gen;
+global        -- globale aux actions de cette regle
+  t : TDS;    -- pour voir la TDS du bloc
+#tds {
+do
+   t :=  new TDS(BLOC^tds);
+   INSTS^tds := t;
+end
+}
+#gen {
+do
+   write "; tds:\n" + t;
+   write "; taille des locales = " + (INSTS^dep - BLOC^hdep)+ "\n";
+   BLOC^code := INSTS^code + BLOC^tam.genFree(INSTS^dep - BLOC^hdep);
+end
+}
+
+-- instructions --
+INSTS ->  #gen ;
+#gen {
+do
+  INSTS^dep := INSTS^hdep ;
+  INSTS^code := "";
+end
+}
+
+INSTS ->  INST #dep INSTS #gen ;
+#dep {
+do
+  INSTS1^hdep := INST^dep;
+end
+}
+#gen {
+do
+  INSTS^dep := INSTS1^dep;
+  INSTS^code := INST^code + INSTS1^code;
+end
+}
+
+--TODO prendre en compte AFFX
 -- declaration de variable locale avec ou sans init 
-INST ->  TYPE ident AFFX pv ;
+INST ->  TYPE ident AFFX pv #gen;
+#gen {
+local
+    i : INFO ;
+do
+    i := INST^tds.chercherGlobalement(ident^txt);
+    if i /= nil then
+       error(B_00, ident^txt);
+    else    
+      -- creer un type
+     i := new INFOTYPE(TYPE^type);
+     call INST^tds.inserer(ident^txt,  i);
+     INST^dep := INST^hdep ;
+     INST^code := "";
+    end
+end
+}
+
 -- instruction expression (affectation et appel de procedure)
 INST -> E pv ;
+
+
 -- bloc d'instructions
 INST ->  BLOC  ;
+
+
+--TODO prendre en compte SIX
 -- conditionnelle
-INST ->   si paro E parf BLOC SIX ;
+INST ->   si paro E #type parf BLOC SIX #gen;
+#gen {
+do
+    INST^dep := INST^hdep;
+    INST^code := INST^tam.genIf(E^code, BLOC^code, BLOC1^code) ;
+end
+}
+
+#type {
+do
+   if ~E^type.compareTo(new DTYPE("booleen", 1)) then
+      error(B_04, E^type);
+   end
+end
+}
+
+
 SIX ->    sinon BLOC ;
+
+
 SIX -> ;
+
+
 -- retour de fonction
 INST ->  retour  E pv ;
 
@@ -204,17 +301,51 @@ OPMUL -> mult ;
 OPMUL -> div ;
 OPMUL -> mod ;
 OPMUL -> et ;
+
 -- expressions de base
--- Constante entiere
-F -> entier   ;
+
+-- Constante entiere --
+F -> entier  #gen ;
+#gen {
+do
+    F^type := new DTYPE("entier", 1);
+    F^code_est_adresse := false;
+    F^code := F^tam.genCst(entier^txt);
+    F^adresse := -1;
+end
+}
+
 -- Constante chaine
-F -> chaine ;
+F -> chaine #gen;
+#gen {
+do
+    F^type := new DTYPE("entier", 1);
+    F^code_est_adresse := false;
+    F^code := F^tam.genChaine(chaine^txt);
+    F^adresse := -1;
+end
+}
+
+
 -- Constante caractere
-F -> caractere ;
+F -> caractere #gen;
+#gen {
+do
+    F^type := new DTYPE("entier", 1);
+    F^code_est_adresse := false;
+    F^code := F^tam.genCaractere(caractere^txt);
+    F^adresse := -1;
+end
+}
+
+
 -- expression unaire
 F ->  OPUN  F  ;
+
+
 -- operateurs unaires
 OPUN -> plus ;
+
 OPUN -> moins ;
 OPUN -> non;
 -- pointeur NULL

@@ -29,7 +29,7 @@ public abstract class AbstractMachine implements IMachine {
 			int pt = fname.lastIndexOf('.');
 			String name = fname.substring(0, pt);
 			String asmName = name + "." + getSuffixe();
-			System.err.println("Test Ecriture du code dans " + asmName);
+			System.err.println("Ecriture du code dans " + asmName);
 			PrintWriter pw = new PrintWriter(new FileOutputStream(asmName));
 			pw.print("; Generated code for " + fname
 					+ ".\n; Do not modify by hand\n" + code);
