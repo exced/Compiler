@@ -25,9 +25,9 @@ inh tds_asm : TDS for ASM;
 
 inh tds    : TDS     for BLOC, INSTS, INST ;
 inh tam : TAM for F, FX, BLOC;
-syn code : STRING for F, BLOC, INSTS, INST, E;
+syn code : STRING for PROGRAMME,ENTITES, F, BLOC, INSTS, INST, E;
 syn code_est_adresse : BOOLEAN for  F, FX ;
-syn type : DTYPE for F, TYPE;
+syn type : DTYPE for F, TYPE, OPUN, OPMUL;
 syn adresse : INTEGER for  F, FX ;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS;
 syn dep : INTEGER for INST , INSTS;
@@ -114,7 +114,8 @@ end
 #gen {
 local
 do
-   machine.writeCode(PROGRAMME^source.getFileName(),"; no code\n");  
+   PROGRAMME^code := ENTITES^code;
+   machine.writeCode(PROGRAMME^source.getFileName(), PROGRAMME^code);  
 end
 }
 ENTITES -> ;
@@ -122,17 +123,30 @@ ENTITES -> ENTITE ENTITES ;
 
 
 -- definition d'un nom de type (commence par une majuscule)
-ENTITE -> typedef TYPE identc pv ;
+ENTITE -> typedef #tds TYPE identc pv ;
+#tds {
+do
+    -- insertion du type dans la TDS
+    ENTITE^tds.inserer(TYPE^type); 
+end
+}
 
 
 -- definition d'une variable globale ou d'une fonction
 -- (commence par une minuscule)
 ENTITE ->  TYPE ident DECL ;
+
+
 -- Variable
 DECL -> pv;
+
+
 DECL -> FONCTION ;
+
 -- Fonction
 FONCTION ->  paro PARFS parf BLOC ;
+
+
 -- parametres de fonctions
 PARFS ->  ;
 PARFS ->  PARF PARFSX ;
@@ -340,18 +354,54 @@ end
 
 
 -- expression unaire
-F ->  OPUN  F  ;
-
+F ->  OPUN  F #type ;
+#type {
+do
+    F^type := F1^type;
+end
+}
 
 -- operateurs unaires
-OPUN -> plus ;
+OPUN -> plus #type;
+#type {
+-- controle de type
+do
+    if ~OPUN^type.compareTo("entier") then
+        error(B_10, OPUN^type.getNom());
+    end
+end
+}
 
-OPUN -> moins ;
-OPUN -> non;
+OPUN -> moins #type;
+#type {
+do
+    if ~OPUN^type.compareTo("entier") then
+        error(B_10, OPUN^type.getNom());
+    end    
+end
+}
+
+OPUN -> non #type;
+#type {
+do
+    if ~OPUN^type.compareTo("booleen") then
+        error(B_10, OPUN^type.getNom());
+    end
+end
+}
+
 -- pointeur NULL
-F -> null  ;
+F -> null #type ;
+#type {
+do
+    F^type := new POINTEUR();
+end
+}
+
+
 -- expression parenthesee
 F ->  paro E parf FX ;
+
 F ->  paro TYPE parf  F ;
 F -> mult F ;
 F -> ident FX ;
