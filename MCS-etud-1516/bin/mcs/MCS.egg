@@ -23,14 +23,16 @@ syn code_asm : STRING for ASM;
 -- la TDS courante
 inh tds_asm : TDS for ASM;
 
-inh tds    : TDS     for BLOC, INSTS, INST ;
+inh tds    : TDS     for BLOC, ENTITE, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX ;
 inh tam : TAM for F, FX, BLOC;
-syn code : STRING for PROGRAMME,ENTITES, F, BLOC, INSTS, INST, E, OPUN;
+syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC, INSTS, INST, E, OPUN;
 syn code_est_adresse : BOOLEAN for  F, FX ;
-syn type : DTYPE for F, TYPE, OPUN, OPMUL,OPREL;
+syn type : DTYPE for F, TYPE, STYPE,OPUN, OPMUL,OPREL,PTRS;
 syn adresse : INTEGER for  F, FX ;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS;
 syn dep : INTEGER for INST , INSTS;
+inh champs : LCHAMPS for CHAMPS, CHAMP;
+inh hadr : INTEGER for BLOC, INSTS, INST , CHAMPS;
 
 --terminals
 space separateur is  "[\r\n\t ]+";     
@@ -118,64 +120,239 @@ do
    machine.writeCode(PROGRAMME^source.getFileName(), PROGRAMME^code);  
 end
 }
-ENTITES -> ;
-ENTITES -> ENTITE ENTITES ;
+ENTITES -> #gen;
+#gen {
+do
+    ENTITES^code := "";
+end
+}
+
+
+ENTITES -> ENTITE ENTITES #gen;
+#gen {
+do
+    ENTITES^code := ENTITE^code + ENTITES^code;
+end
+}    
 
 
 -- definition d'un nom de type (commence par une majuscule)
-ENTITE -> typedef #tds TYPE identc pv ;
+ENTITE -> typedef TYPE identc pv #tds;
 #tds {
+local
+    i : INFO ;
 do
-    -- insertion du type dans la TDS
-    ENTITE^tds.inserer(TYPE^type); 
+    i := ENTITE^tds.chercherGlobalement(identc^txt);
+    if i /= null then
+       error(B_01, identc^txt);
+    else    
+      -- creer un type
+      i := new INFOTYPE(TYPE^type);
+      ENTITE^tds.inserer(identc^txt,  i);
+    end
 end
 }
 
 
 -- definition d'une variable globale ou d'une fonction
 -- (commence par une minuscule)
-ENTITE ->  TYPE ident DECL ;
+ENTITE ->  TYPE ident DECL #tds;
+#tds {
+local
+    i : INFO ;
+do
+    i := ENTITE^tds.chercherGlobalement(ident^txt);
+    if i /= null then
+       error(B_02, ident^txt);
+    else    
+      -- creer un type
+      i := new INFOTYPE(TYPE^type);
+      ENTITE^tds.inserer(ident^txt,  i);
+    end
+    -- transmission tds
+    DECL^tds := ENTITE^tds;
+end
+}
 
 
 -- Variable
-DECL -> pv;
+DECL -> pv ;
 
-
-DECL -> FONCTION ;
+-- déclaration d'une fonction
+DECL ->#tds FONCTION ;
+#tds {
+do
+    FONCTION^tds := DECL^tds;
+end
+}
 
 -- Fonction
-FONCTION ->  paro PARFS parf BLOC ;
-
+FONCTION ->  paro #tds PARFS parf BLOC ;
+global
+    tdsParam : TDS;
+#tds {
+do
+    tdsParam := new TDS(FONCTION^tds);
+    PARFS^tds := tdsParam; 
+    BLOC^tds := new TDS(tdsParam);
+end
+}
 
 -- parametres de fonctions
 PARFS ->  ;
-PARFS ->  PARF PARFSX ;
+-- Done
+
+
+-- 
+-- multi paramètres
+PARFS -> #tds PARF PARFSX ;
+global
+    tds:TDS;
+#tds {
+do
+    tds := new TDS(PARFS^tds);
+    PARF^tds := tds;
+    PARFSX^tds := tds;
+end
+}
+
+
 PARFSX ->  ;
-PARFSX ->  virg PARF PARFSX ;
-PARF ->  TYPE ident ;
+-- Done
+
+
+PARFSX -> #tds  virg PARF PARFSX ;
+global
+    tds:TDS;
+#tds {
+do
+    tds := new TDS(PARFSX^tds);
+    PARF^tds := tds;
+    PARFSX1^tds := tds;
+end
+}
+
+-- type
+PARF -> TYPE ident #tds;
+#tds {
+local
+    i : INFO ;
+do
+    i := PARF^tds.chercherGlobalement(ident^txt);
+    if i /= null then
+       error(B_02, ident^txt);
+    else    
+      -- creer un type
+      i := new INFOTYPE(TYPE^type);
+      PARF^tds.inserer(ident^txt,  i);
+    end
+end
+}
+
 -- les types (de base, noms, struct et pointeurs)
-TYPE -> STYPE  PTRS ;
+TYPE -> STYPE PTRS #type;
+#type {
+do
+    if PTRS^type = nil then
+        TYPE^type := STYPE^type;
+    else
+        TYPE^type := new POINTEUR(PTRS^type) ;
+    end    
+end
+}
+
 -- type de base
 -- des * pour definir un pointeur
-PTRS -> ;
-PTRS -> mult PTRS ;
+PTRS -> #type;
+#type {
+do
+    PTRS^type := nil;
+end
+}
+
+-- variable qualifiee 
+PTRS -> mult PTRS #type;
+#type {
+do
+    PTRS^type := new POINTEUR(PTRS1^type);
+end
+}
+
 -- types de base
-STYPE-> void  ;
-STYPE-> int ;
-STYPE-> char ;
+STYPE-> void #type ;
+#type {
+do
+    STYPE^type := new DTYPE("void");
+end
+}
+
+STYPE-> int #type;
+#type {
+do
+    STYPE^type := new DTYPE("int");
+end
+}
+
+STYPE-> char #type;
+#type {
+do
+    STYPE^type := new DTYPE("char");
+end
+}
+
 -- nom de type (commence par une majuscule)
-STYPE -> identc;
+STYPE -> identc #type;
+#type {
+do
+    STYPE^type := new DTYPE(identc^txt);
+end
+}
+
 -------------  
 -- et struct
-STYPE -> struct aco CHAMPS acf ;
+STYPE -> struct aco #ch CHAMPS acf #type;
+global 
+ lc : LCHAMPS ;
+#ch {
+do
+  lc := new LCHAMPS();
+  CHAMPS^champs := lc;
+  CHAMPS^hadr := 0;
+end
+}
+#type {
+ do
+   STYPE^type := new STRUCT(lc);
+ end
+}
 
 
 CHAMPS -> ;
+-- Done
+
 -- un nom de champ commence par une minuscule
-CHAMPS -> CHAMP CHAMPS ;
+CHAMPS -> #champ CHAMP CHAMPS ;
+#champ {
+do
+    CHAMP^champs := CHAMPS1^champs;
+end
+}
 
 
-CHAMP -> TYPE ident pv ;
+CHAMP -> TYPE ident pv #champ;
+#champ {
+ local
+  c : CHAMP ;
+ do
+  c := CHAMP^champs.chercher(ident^txt);
+    if c /= null then
+       error(B_00, ident^txt);
+    else    
+      c := new CHAMP(ident^txt, TYPE^type, CHAMPS^hadr);
+     CHAMP^champs.inserer(c);
+    end
+ end
+}
 
 
 -- corps de fonction et bloc d'instructions
@@ -317,7 +494,7 @@ OPREL -> infeg #type;
 #type {
 -- controle de type
 do
-    if ~OPUN^type.compareTo("entier") then
+    if ~OPUN^type.compareTo("int") then
         error(B_10, OPUN^type.getNom());
     end
 end
@@ -327,7 +504,7 @@ OPREL -> supeg #type;
 #type {
 -- controle de type
 do
-    if ~OPUN^type.compareTo("entier") then
+    if ~OPUN^type.compareTo("int") then
         error(B_10, OPUN^type.getNom());
     end
 end
@@ -337,7 +514,7 @@ OPREL -> eg #type;
 #type {
 -- controle de type
 do
-    if ~OPUN^type.compareTo("entier") then
+    if ~OPUN^type.compareTo("int") then
         error(B_10, OPUN^type.getNom());
     end
 end
@@ -368,7 +545,7 @@ OPMUL -> et ;
 F -> entier  #gen ;
 #gen {
 do
-    F^type := new DTYPE("entier", 1);
+    F^type := new DTYPE("int", 1);
     F^code_est_adresse := false;
     F^code := F^tam.genCst(entier^txt);
     F^adresse := -1;
@@ -379,7 +556,7 @@ end
 F -> chaine #gen;
 #gen {
 do
-    F^type := new DTYPE("entier", 1);
+    F^type := new DTYPE("int", 1);
     F^code_est_adresse := false;
     F^code := F^tam.genChaine(chaine^txt);
     F^adresse := -1;
@@ -391,7 +568,7 @@ end
 F -> caractere #gen;
 #gen {
 do
-    F^type := new DTYPE("entier", 1);
+    F^type := new DTYPE("int", 1);
     F^code_est_adresse := false;
     F^code := F^tam.genCaractere(caractere^txt);
     F^adresse := -1;
@@ -417,7 +594,7 @@ OPUN -> plus #type;
 #type {
 -- controle de type
 do
-    if ~OPUN^type.compareTo("entier") then
+    if ~OPUN^type.compareTo("int") then
         error(B_10, OPUN^type.getNom());
     end
 end
@@ -426,7 +603,7 @@ end
 OPUN -> moins #type;
 #type {
 do
-    if ~OPUN^type.compareTo("entier") then
+    if ~OPUN^type.compareTo("int") then
         error(B_10, OPUN^type.getNom());
     end    
 end
@@ -435,7 +612,7 @@ end
 OPUN -> non #type;
 #type {
 do
-    if ~OPUN^type.compareTo("booleen") then
+    if ~OPUN^type.compareTo("bool") then
         error(B_10, OPUN^type.getNom());
     end
 end
