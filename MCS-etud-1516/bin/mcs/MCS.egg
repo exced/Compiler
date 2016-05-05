@@ -25,9 +25,9 @@ inh tds_asm : TDS for ASM;
 
 inh tds    : TDS     for BLOC, INSTS, INST ;
 inh tam : TAM for F, FX, BLOC;
-syn code : STRING for PROGRAMME,ENTITES, F, BLOC, INSTS, INST, E;
+syn code : STRING for PROGRAMME,ENTITES, F, BLOC, INSTS, INST, E, OPUN;
 syn code_est_adresse : BOOLEAN for  F, FX ;
-syn type : DTYPE for F, TYPE, OPUN, OPMUL;
+syn type : DTYPE for F, TYPE, OPUN, OPMUL,OPREL;
 syn adresse : INTEGER for  F, FX ;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS;
 syn dep : INTEGER for INST , INSTS;
@@ -284,6 +284,7 @@ INST ->  retour  E pv ;
 -- F = expression figurant dans une expression multiplicative (FACTEUR)
 -----------------------------------------------------------------------
 E ->   A  AFFX ;
+
 -- affectation
 AFFX -> affect  A  ;
 AFFX -> ;
@@ -291,12 +292,57 @@ AFFX -> ;
 A ->   R AX  ;
 AX -> OPREL R;
 AX ->  ;
+
 -- operateurs relationnels
-OPREL -> inf ;
-OPREL -> sup ;
-OPREL -> infeg ;
-OPREL -> supeg ;
-OPREL -> eg ;
+OPREL -> inf #type;
+#type {
+-- controle de type
+do
+    if ~OPREL^type.compareTo("entier") then
+        error(B_10, OPREL^type.getNom());
+    end
+end
+}
+
+OPREL -> sup #type;
+#type {
+-- controle de type
+do
+    if ~OPUN^type.compareTo("entier") then
+        error(B_10, OPUN^type.getNom());
+    end
+end
+}
+OPREL -> infeg #type;
+#type {
+-- controle de type
+do
+    if ~OPUN^type.compareTo("entier") then
+        error(B_10, OPUN^type.getNom());
+    end
+end
+}
+
+OPREL -> supeg #type;
+#type {
+-- controle de type
+do
+    if ~OPUN^type.compareTo("entier") then
+        error(B_10, OPUN^type.getNom());
+    end
+end
+}
+
+OPREL -> eg #type;
+#type {
+-- controle de type
+do
+    if ~OPUN^type.compareTo("entier") then
+        error(B_10, OPUN^type.getNom());
+    end
+end
+}
+
 OPREL -> neg ;
 R ->  T  RX ;
 -- additions ...
@@ -354,10 +400,15 @@ end
 
 
 -- expression unaire
-F ->  OPUN  F #type ;
+F ->  OPUN  F #type #gen ;
 #type {
 do
     F^type := F1^type;
+end
+}
+#gen {
+do
+    F^code := F1^code + OPUN^code;
 end
 }
 
@@ -394,7 +445,7 @@ end
 F -> null #type ;
 #type {
 do
-    F^type := new POINTEUR();
+    F^type := new POINTEUR(F^type);
 end
 }
 
@@ -406,6 +457,7 @@ F ->  paro TYPE parf  F ;
 F -> mult F ;
 F -> ident FX ;
 FX -> ;
+
 -- acces champ
 FX ->   pt  ident FX ;
 -- acces champ pointeur
