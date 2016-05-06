@@ -25,6 +25,8 @@ public abstract class AbstractMachine implements IMachine {
 	@Override
 	public void writeCode(String fname, String code) throws MCSException {
 		try {
+			System.out.println("writeCode appelé, code: " + code);
+			System.out.println("appelant: " + new Exception().getStackTrace()[1].getClassName());
 			// pre verifiee au lancement
 			int pt = fname.lastIndexOf('.');
 			String name = fname.substring(0, pt);

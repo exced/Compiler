@@ -5,11 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
-public class TAM {
+public class TAM extends AbstractMachine{
 	private String nom;
 
 	public TAM(String fname) {
-		if (fname.endsWith(".bloc")) {
+		if (fname.endsWith(".mcs")) {
 			nom = fname.substring(0, fname.length() - 5);
 		} else {
 			nom = fname;
@@ -114,5 +114,10 @@ public class TAM {
 
 	public String genComment(String c) {
 		return "; " + c + "\n";
+	}
+
+	@Override
+	public String getSuffixe() {
+		return "tam";
 	}
 }

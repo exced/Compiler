@@ -1,6 +1,6 @@
 package mcs.compiler;
 
-import mcs.gc.AbstractMachine;
+import mcs.gc.*;
 import mcs.gc.MTAM;
 import mg.egg.eggc.runtime.libjava.SourceUnit;
 
@@ -70,17 +70,18 @@ public class MCSSourceFile extends SourceUnit {
 	 * @param mach
 	 */
 	private void setMachine(String mach) {
-		// System.err.println("mach " + mach);
+		System.out.println("mach " + mach);
 		machName = mach;
 		if ("tam".equals(mach)) {
 			machine = new MTAM();
 		} else {
-			// TODO si la machine n'est pas tam
-			// machine = new ???();
+			machine = new TAM(mach);
+			System.out.println(machine);
 		}
 	}
 
 	public AbstractMachine getMachine() {
+		System.out.println("getMachine " + machine);
 		return machine;
 	}
 
