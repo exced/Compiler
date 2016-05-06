@@ -23,9 +23,9 @@ syn code_asm : STRING for ASM;
 -- la TDS courante
 inh tds_asm : TDS for ASM;
 
-inh tds    : TDS     for BLOC, ENTITE, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX ;
-inh tam : TAM for F, FX, BLOC;
-syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC, INSTS, INST, E, OPUN;
+inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX ;
+inh tam : TAM for F, FX, BLOC, DECL, FONCTION;
+syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC, INSTS, INST, E, OPUN,DECL;
 syn code_est_adresse : BOOLEAN for  F, FX ;
 syn type : DTYPE for F, TYPE, STYPE,OPUN, OPMUL,OPREL,PTRS, AFFX, A;
 syn adresse : INTEGER for  F, FX ;
@@ -97,7 +97,7 @@ term identc is  "[A-Z][_0-9A-Za-z]*";
 compil ASM;
 
 --production rules
-PROGRAMME -> #init ENTITES #gen;
+PROGRAMME -> #init #tds ENTITES #gen;
 global
    machine : IMachine;
 -- transmission de la machine cible  (choisie par l'option -m au lancement) 
@@ -113,14 +113,23 @@ do
 end
 }
 -- ecrit le code dans un fichier
+global
+    code : String;
 #gen {
 local
 do
-   PROGRAMME^code := ENTITES^code;
-   machine.writeCode(PROGRAMME^source.getFileName(), PROGRAMME^code);  
+   code := ENTITES^code;
+   PROGRAMME^code := code;
+   machine.writeCode(PROGRAMME^source.getFileName(), code);  
 end
 }
-ENTITES -> #gen;
+#tds {
+do
+    ENTITES^tds := new TDS(nil);
+end
+}
+
+ENTITES -> #gen ;
 #gen {
 do
     ENTITES^code := "";
@@ -128,16 +137,28 @@ end
 }
 
 
-ENTITES -> ENTITE ENTITES #gen;
+ENTITES -> #tds ENTITE #tds2 ENTITES #gen;
 #gen {
 do
-    ENTITES^code := ENTITE^code + ENTITES^code;
+    ENTITES^code := ENTITE^code + ENTITES1^code;
 end
 }    
+#tds {
+do
+    -- transmission de la tds parente
+    ENTITE^tds := ENTITES^tds;
+end
+}
+#tds2 {
+do
+    -- transmission de la tds parente après ajout de l'entite
+    ENTITES1^tds := ENTITES^tds;
+end
+}
 
 
 -- definition d'un nom de type (commence par une majuscule)
-ENTITE -> typedef TYPE identc pv #tds;
+ENTITE -> typedef TYPE identc pv #tds #gen;
 #tds {
 local
     i : INFO ;
@@ -152,11 +173,16 @@ do
     end
 end
 }
+#gen {
+do
+            
+end
+}
 
 
 -- definition d'une variable globale ou d'une fonction
 -- (commence par une minuscule)
-ENTITE ->  TYPE ident DECL #tds;
+ENTITE ->  TYPE ident #tds DECL #gen;
 #tds {
 local
     i : INFO ;
@@ -171,6 +197,11 @@ do
     end
     -- transmission tds
     DECL^tds := ENTITE^tds;
+end
+}
+#gen {
+do
+    ENTITE^code := DECL^code;
 end
 }
 
@@ -226,6 +257,7 @@ global
     tds:TDS;
 #tds {
 do
+--PROBLEME: merge les 2 tds pour n'avoir qu'une seule tds param
     tds := new TDS(PARFSX^tds);
     PARF^tds := tds;
     PARFSX1^tds := tds;
