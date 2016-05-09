@@ -20,17 +20,32 @@ inh machine : IMachine for
          ;
 -- ces attributs permettent de recuperer les instructions du code ASM inline       
 syn code_asm : STRING for ASM;
+-- attributs relatifs fonction
+inh identDecl : STRING for DECL, FONCTION;
+
 -- la TDS courante
 inh tds_asm : TDS for ASM;
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX ;
-syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC, INSTS, INST, E, OPUN,DECL;
-syn code_est_adresse : BOOLEAN for  F, FX ;
+syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC, INSTS, INST, E, OPUN;
+inh hcode : STRING for FX;
 syn type : DTYPE for F, TYPE, STYPE,OPUN, OPMUL,OPREL,PTRS, AFFX, A;
-syn adresse : INTEGER for  F, FX ;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
-inh hadr : INTEGER for BLOC, INSTS, INST , CHAMPS;
+syn code_est_adresse : BOOLEAN for  FACTEUR, FX ;
+inh hcode_est_adresse : BOOLEAN for FX ;
+-- Cet attribut sert a calculer les adresses STATIQUEMENT
+-- lorsque cela est possible. Vaut 0 si valeur non significative.
+-- Cet attribut est calcule systématiquement en attendant de
+-- savoir s'il est utile ou non ...
+syn adresse : INTEGER for  F, FX ; 
+inh hadresse : INTEGER for FX ;
+-- on pourrait utiliser une valeur particulière (c'est-a-dire non valide !)
+-- de l'adresse pour indiquer qu'on ne tient pas compte de l'adresse
+-- mais il vaut mieux utiliser un booleen adresse_utile
+syn adresse_utile : BOOLEAN for  F, FX ; 
+inh hadresse_utile : BOOLEAN for FX ;
+
 
 --terminals
 space separateur is  "[\r\n\t ]+";     
@@ -176,14 +191,14 @@ end
 }
 #gen {
 do
-            
+    ENTITE^code := "";        
 end
 }
 
 
 -- definition d'une variable globale ou d'une fonction
 -- (commence par une minuscule)
-ENTITE ->  TYPE ident #tds DECL #gen;
+ENTITE ->  TYPE ident #tds #nomFonction DECL #gen;
 #tds {
 local
     i : INFO ;
@@ -200,9 +215,14 @@ do
     DECL^tds := ENTITE^tds;
 end
 }
+#nomFonction {
+do
+    DECL^identDecl := ident^txt;
+end
+}
 #gen {
 do 
-    ENTITE^code := DECL^code;
+    ENTITE^code := "";
 end
 }
 
@@ -219,14 +239,42 @@ end
 }
 
 -- Fonction
-FONCTION ->  paro #tds PARFS parf BLOC ;
+FONCTION -> #tailleRetour paro #tds PARFS parf BLOC #gen;
 global
     tdsParam : TDS;
+    tam : IMachine;
+    tailleRetour : INTEGER;
+#tailleRetour {
+ local
+    i : INFO ;
+    it : INFOTYPE;
+    t : DTYPE;
+ do
+    -- rechercher l'ident   
+    i := FONCTION^tds.chercherGlobalement(FONCTION^identDecl);
+    if i = nil then
+      error(B_05, FONCTION^identDecl);
+    else
+        tailleRetour := i.getTaille();
+    end
+end
+}    
 #tds {
 do
     tdsParam := new TDS(FONCTION^tds);
     PARFS^tds := tdsParam; 
     BLOC^tds := new TDS(tdsParam);
+    BLOC^hdep := 3;
+end
+}
+#gen{
+local
+  cp : STRING ; -- code sous la forme d'une fonction
+do
+    tam := FONCTION^machine;
+    -- generer le prologue et l'epilogue de la fonction
+    -- etiquette + taille des parametres + taille retour + code des instructions
+    cp := tam.genFonction(FONCTION^identDecl, tdsParam.getTailleParam(), tailleRetour, BLOC^code);
 end
 }
 
@@ -350,7 +398,7 @@ global
 do
   lc := new LCHAMPS();
   CHAMPS^champs := lc;
-  CHAMPS^hadr := 0;
+  CHAMPS^hdep := 0;
 end
 }
 #type {
