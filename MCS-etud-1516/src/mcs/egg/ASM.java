@@ -1,7 +1,15 @@
 package mcs.egg;
-import mcs.tds.TDS;
+import mcs.tds.*;
+import mcs.type.*;
+import java.util.*;
+import mcs.gc.*;
+import mg.egg.eggc.runtime.libjava.EGGException;
+import mg.egg.eggc.runtime.libjava.ISourceUnit;
 import mg.egg.eggc.runtime.libjava.lex.LEX_CONTEXTE;
 import mg.egg.eggc.runtime.libjava.problem.IProblemReporter;
+import mg.egg.eggc.runtime.libjava.problem.IProblem;
+import mg.egg.eggc.runtime.libjava.problem.ProblemSeverities;
+import mg.egg.eggc.runtime.libjava.messages.NLS;
 public class ASM {
   LEX_ASM scanner;
   protected IProblemReporter problemReporter;

@@ -22,7 +22,6 @@ inh machine : IMachine for
 syn code_asm : STRING for ASM;
 -- la TDS courante
 inh tds_asm : TDS for ASM;
-
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX ;
 syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC, INSTS, INST, E, OPUN,DECL;
 syn code_est_adresse : BOOLEAN for  F, FX ;

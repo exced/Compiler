@@ -1,8 +1,13 @@
 package mcs.egg;
-import mcs.tds.TDS;
-import mg.egg.eggc.runtime.libjava.messages.CoreMessages;
-import mg.egg.eggc.runtime.libjava.messages.ICoreMessages;
+import mcs.tds.*;
+import mcs.type.*;
+import java.util.*;
+import mcs.gc.*;
+import mg.egg.eggc.runtime.libjava.lex.*;
+import mg.egg.eggc.runtime.libjava.*;
+import mg.egg.eggc.runtime.libjava.messages.*;
 import mg.egg.eggc.runtime.libjava.problem.IProblem;
+import java.util.Vector;
 public class S_TAM_ASM {
 LEX_ASM scanner;
   S_TAM_ASM() {
@@ -30,13 +35,6 @@ if  (att_eval)      action_auto_inh_0(x_3);
     x_4.analyser(LEX_ASM.token_acf);
 if  (att_eval)      action_gen_0(x_3);
   }
-private void action_gen_0(S_INSTS_ASM x_3) throws Exception {
-try {
-// instructions
-this.att_code_asm="; inline code_asm\n"+x_3.att_code_asm;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "ASM", "#gen","TAM -> aco INSTS acf #gen ;"});
-}
-  }
 private void action_auto_inh_0(S_INSTS_ASM x_3) throws Exception {
 try {
 // instructions
@@ -44,10 +42,17 @@ x_3.att_tds_asm=this.att_tds_asm;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "ASM", "#auto_inh","TAM -> aco INSTS acf #gen ;"});
 }
   }
+private void action_gen_0(S_INSTS_ASM x_3) throws Exception {
+try {
+// instructions
+this.att_code_asm="; inline code_asm\n"+x_3.att_code_asm;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "ASM", "#gen","TAM -> aco INSTS acf #gen ;"});
+}
+  }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_ASM.token_aco : // 258
+      case LEX_ASM.token_aco : // 2324
         regle0 () ;
       break ;
       default :

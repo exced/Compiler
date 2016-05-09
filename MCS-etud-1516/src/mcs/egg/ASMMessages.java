@@ -1,6 +1,5 @@
 package mcs.egg;
 import java.util.ResourceBundle;
-
 import mg.egg.eggc.runtime.libjava.messages.NLS;
 public class ASMMessages extends NLS {
   private static final long serialVersionUID = 1L;

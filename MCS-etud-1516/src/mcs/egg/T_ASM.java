@@ -1,5 +1,10 @@
 package mcs.egg;
-import mg.egg.eggc.runtime.libjava.EGGException;
+import mcs.tds.*;
+import mcs.type.*;
+import java.util.*;
+import mcs.gc.*;
+import mg.egg.eggc.runtime.libjava.*;
+import mg.egg.eggc.runtime.libjava.lex.*;
 public class T_ASM {
   LEX_ASM att_scanner;
   String att_txt;

@@ -1,7 +1,13 @@
 package mcs.egg;
-import mg.egg.eggc.runtime.libjava.messages.CoreMessages;
-import mg.egg.eggc.runtime.libjava.messages.ICoreMessages;
+import mcs.tds.*;
+import mcs.type.*;
+import java.util.*;
+import mcs.gc.*;
+import mg.egg.eggc.runtime.libjava.lex.*;
+import mg.egg.eggc.runtime.libjava.*;
+import mg.egg.eggc.runtime.libjava.messages.*;
 import mg.egg.eggc.runtime.libjava.problem.IProblem;
+import java.util.Vector;
 public class S_CINST_ASM {
 LEX_ASM scanner;
   S_CINST_ASM() {
@@ -54,10 +60,10 @@ this.att_code_asm=x_2.att_txt+'['+x_4.att_txt+']';
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_ASM.token_nb : // 279
+      case LEX_ASM.token_nb : // 2345
         regle27 () ;
       break ;
-      case LEX_ASM.token_ident : // 281
+      case LEX_ASM.token_ident : // 2347
         regle28 () ;
       break ;
       default :

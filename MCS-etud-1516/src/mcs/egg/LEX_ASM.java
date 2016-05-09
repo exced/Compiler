@@ -1,13 +1,16 @@
 package mcs.egg;
 import java.util.Arrays;
-
 import mg.egg.eggc.runtime.libjava.EGGException;
+import mg.egg.eggc.runtime.libjava.messages.NLS;
 import mg.egg.eggc.runtime.libjava.lex.LEXICAL4;
 import mg.egg.eggc.runtime.libjava.lex.LEX_CONTEXTE;
-import mg.egg.eggc.runtime.libjava.messages.NLS;
-import mg.egg.eggc.runtime.libjava.problem.IProblem;
 import mg.egg.eggc.runtime.libjava.problem.IProblemReporter;
+import mg.egg.eggc.runtime.libjava.problem.IProblem;
 import mg.egg.eggc.runtime.libjava.problem.ProblemSeverities;
+import mcs.tds.*;
+import mcs.type.*;
+import java.util.*;
+import mcs.gc.*;
 public class LEX_ASM extends LEXICAL4  {
  public static final int EOF = 0 ;
  public static final int token_loadl = 1 ;

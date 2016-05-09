@@ -1,13 +1,13 @@
 package mcs.egg;
-import mcs.gc.Emplacement;
-import mcs.gc.Register;
-import mcs.tds.INFO;
-import mcs.tds.INFOVAR;
-import mcs.tds.TDS;
-import mcs.type.DTYPE;
-import mg.egg.eggc.runtime.libjava.messages.CoreMessages;
-import mg.egg.eggc.runtime.libjava.messages.ICoreMessages;
+import mcs.tds.*;
+import mcs.type.*;
+import java.util.*;
+import mcs.gc.*;
+import mg.egg.eggc.runtime.libjava.lex.*;
+import mg.egg.eggc.runtime.libjava.*;
+import mg.egg.eggc.runtime.libjava.messages.*;
 import mg.egg.eggc.runtime.libjava.problem.IProblem;
+import java.util.Vector;
 public class S_ADR_ASM {
 LEX_ASM scanner;
   S_ADR_ASM() {
@@ -50,13 +50,6 @@ if  (att_eval)      action_gen_3(x_3, x_5, x_7);
     x_2.analyser(LEX_ASM.token_var);
 if  (att_eval)      action_gen_4(x_2);
   }
-private void action_gen_3(T_ASM x_3, T_ASM x_5, T_ASM x_7) throws Exception {
-try {
-// instructions
-this.att_code_asm="("+x_3.att_txt+") "+x_3.att_txt+'['+x_7.att_txt+']';
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "ASM", "#gen","ADR -> paro nb parf nb1 cro ident crf #gen ;"});
-}
-  }
 private void action_gen_4(T_ASM x_2) throws Exception {
 try {
 // locales
@@ -92,13 +85,20 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IASMMess
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "ASM", "#gen","ADR -> var #gen ;"});
 }
   }
+private void action_gen_3(T_ASM x_3, T_ASM x_5, T_ASM x_7) throws Exception {
+try {
+// instructions
+this.att_code_asm="("+x_3.att_txt+") "+x_3.att_txt+'['+x_7.att_txt+']';
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "ASM", "#gen","ADR -> paro nb parf nb1 cro ident crf #gen ;"});
+}
+  }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_ASM.token_paro : // 255
+      case LEX_ASM.token_paro : // 2321
         regle3 () ;
       break ;
-      case LEX_ASM.token_var : // 280
+      case LEX_ASM.token_var : // 2346
         regle4 () ;
       break ;
       default :

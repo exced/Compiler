@@ -1,7 +1,5 @@
 package mcs.egg;
-import mg.egg.eggc.runtime.libjava.lex.LEX_ANALYZER;
-import mg.egg.eggc.runtime.libjava.lex.LEX_CONTEXTE;
-import mg.egg.eggc.runtime.libjava.lex.Yytoken;
+import mg.egg.eggc.runtime.libjava.lex.*;
 
 public class JLEX_ASM implements  LEX_ANALYZER  {
 	private final int YY_BUFFER_SIZE = 512;
