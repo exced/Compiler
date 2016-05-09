@@ -26,9 +26,9 @@ inh identDecl : STRING for DECL, FONCTION;
 -- la TDS courante
 inh tds_asm : TDS for ASM;
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ;
-syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC,SIX, INSTS, INST, E, OPUN;
+syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC,SIX, INSTS, INST, E, OPUN, AFFX;
 inh hcode : STRING for FX;
-syn type : DTYPE for F, TYPE,E, STYPE,OPUN, OPMUL,OPREL,PTRS, AFFX, A;
+syn type : DTYPE for F, TYPE,E, STYPE,PTRS, AFFX, A, R;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
@@ -47,7 +47,7 @@ syn adresse_utile : BOOLEAN for  F, FX ;
 inh hadresse_utile : BOOLEAN for FX ;
 
 -- gestion des types pour les opérateurs, affectation etc
-inh htype : DTYPE for OPUN, AFFX, OPADD, OPMUL;
+inh htype : DTYPE for OPUN, AFFX, OPADD, OPMUL,OPREL,AX;
 
 
 
@@ -459,10 +459,9 @@ do
 end
 }
 
---TODO prendre en compte AFFX
 -- declaration de variable locale avec ou sans init 
-INST ->  TYPE ident AFFX pv #gen;
-#gen {
+INST ->  TYPE ident AFFX pv #tds #gen;
+#tds {
 local
     i : INFO ;
 do
@@ -474,13 +473,23 @@ do
      i := new INFOTYPE(TYPE^type);
      call INST^tds.inserer(ident^txt,  i);
      INST^dep := INST^hdep ;
-     INST^code := "";
     end
+end
+}
+#gen {
+do
+    INST^code := "";
 end
 }
 
 -- instruction expression (affectation et appel de procedure)
-INST -> E pv ;
+INST -> E pv #gen;
+#gen {
+do
+    -- le code dépend de s'il y a eu affectation ou appel
+    INST^code := INST^code + E^code;
+end
+}
 
 
 -- bloc d'instructions
@@ -535,31 +544,70 @@ end
 -- F = expression figurant dans une expression multiplicative (FACTEUR)
 -----------------------------------------------------------------------
 
-E ->   A #type AFFX ;
+E ->   A #type AFFX #gen;
 #type {
 do
-    AFFX^type := A^type;
+    E^type := A^type;
+    -- type pour permettre le controle d'erreur au moment de l'affectation
+    AFFX^htype := A^type;
+end
+}
+#gen {
+do
+    E^code := E^code + AFFX^code;  
 end
 }
 
 -- affectation
-AFFX -> affect  A  #type;
+AFFX -> affect  A  #type #gen;
 #type {
 -- controle de type
 do
-    if ~A^type.compareTo(AFFX^type) then
+    if ~A^type.compareTo(AFFX^htype) then
         error(B_10, A^type.getNom());
     end
 end
 }
+#gen {
+local 
+  code : STRING;
+do
+    if ~AFFX^htype.compareTo(A^type) then
+      error(B_02, AFFX^htype, A^type);
+    else
+      AFFX^dep := AFFX^hdep ;
+      --
+      code :=  AFFX^machine.genComment("Valeur") + A^code ;
+      if !AFFX^adresse_utile then
+        code := code + AFFX^tam.genComment("Adresse") +
+                     AFFX^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+       else
+        code := code + AFFX^machine.genWriteMem(AFFX^adresse, AFFX^htype.getTaille());
+       end              
+      AFFX^code := code; 
+                         
+     end
+  end
+}
 
-AFFX -> ;
+AFFX -> #gen;
+#gen {
+do
+    AFFX^code := "";
+end
+}
 
 -- relation
-A ->   R AX  ;
-
+A ->   R #htype AX  ;
+#htype {
+do
+    A^type := R^type;
+    AX^htype := R^type;
+end
+}
 
 AX -> OPREL R;
+--htype Done
 
 
 AX ->  ;
@@ -569,8 +617,8 @@ OPREL -> inf #type;
 #type {
 -- controle de type
 do
-    if ~OPREL^type.compareTo("int") then
-        error(B_10, OPREL^type.getNom());
+    if ~OPREL^htype.compareTo("int") then
+        error(B_10, OPREL^htype.getNom());
     end
 end
 }
@@ -579,8 +627,8 @@ OPREL -> sup #type;
 #type {
 -- controle de type
 do
-    if ~OPREL^type.compareTo("int") then
-        error(B_10, OPREL^type.getNom());
+    if ~OPREL^htype.compareTo("int") then
+        error(B_10, OPREL^htype.getNom());
     end
 end
 }
@@ -588,8 +636,8 @@ OPREL -> infeg #type;
 #type {
 -- controle de type
 do
-    if ~OPREL^type.compareTo("int") then
-        error(B_10, OPREL^type.getNom());
+    if ~OPREL^htype.compareTo("int") then
+        error(B_10, OPREL^htype.getNom());
     end
 end
 }
@@ -598,8 +646,8 @@ OPREL -> supeg #type;
 #type {
 -- controle de type
 do
-    if ~OPUN^type.compareTo("int") then
-        error(B_10, OPUN^type.getNom());
+    if ~OPREL^htype.compareTo("int") then
+        error(B_10, OPREL^htype.getNom());
     end
 end
 }
@@ -608,8 +656,8 @@ OPREL -> eg #type;
 #type {
 -- controle de type
 do
-    if ~OPREL^type.compareTo("int") then
-        error(B_10, OPREL^type.getNom());
+    if ~OPREL^htype.compareTo("int") then
+        error(B_10, OPREL^htype.getNom());
     end
 end
 }
@@ -618,8 +666,8 @@ OPREL -> neg #type;
 #type {
 -- controle de type
 do
-    if ~OPREL^type.compareTo("int") then
-        error(B_10, OPREL^type.getNom());
+    if ~OPREL^htype.compareTo("int") then
+        error(B_10, OPREL^htype.getNom());
     end
 end
 }
