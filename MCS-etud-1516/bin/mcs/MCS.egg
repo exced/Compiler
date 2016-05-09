@@ -25,14 +25,14 @@ inh identDecl : STRING for DECL, FONCTION;
 
 -- la TDS courante
 inh tds_asm : TDS for ASM;
-inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX ;
-syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC, INSTS, INST, E, OPUN;
+inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ;
+syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC,SIX, INSTS, INST, E, OPUN;
 inh hcode : STRING for FX;
-syn type : DTYPE for F, TYPE, STYPE,OPUN, OPMUL,OPREL,PTRS, AFFX, A;
-inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS;
+syn type : DTYPE for F, TYPE,E, STYPE,OPUN, OPMUL,OPREL,PTRS, AFFX, A;
+inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
-syn code_est_adresse : BOOLEAN for  FACTEUR, FX ;
+syn code_est_adresse : BOOLEAN for  F, FX ;
 inh hcode_est_adresse : BOOLEAN for FX ;
 -- Cet attribut sert a calculer les adresses STATIQUEMENT
 -- lorsque cela est possible. Vaut 0 si valeur non significative.
@@ -45,6 +45,10 @@ inh hadresse : INTEGER for FX ;
 -- mais il vaut mieux utiliser un booleen adresse_utile
 syn adresse_utile : BOOLEAN for  F, FX ; 
 inh hadresse_utile : BOOLEAN for FX ;
+
+-- gestion des types pour les opérateurs, affectation etc
+inh htype : DTYPE for OPUN, AFFX, OPADD, OPMUL;
+
 
 
 --terminals
@@ -153,25 +157,13 @@ end
 }
 
 
-ENTITES -> #tds ENTITE #tds2 ENTITES #gen;
+ENTITES ->  ENTITE ENTITES #gen;
 #gen {
 do
     ENTITES^code := ENTITE^code + ENTITES1^code;
 end
 }    
-#tds {
-do
-    -- transmission de la tds parente
-    ENTITE^tds := ENTITES^tds;
-end
-}
-#tds2 {
-do
-    -- transmission de la tds parente après ajout de l'entite
-    ENTITES1^tds := ENTITES^tds;
-end
-}
-
+-- TDS Done
 
 -- definition d'un nom de type (commence par une majuscule)
 ENTITE -> typedef TYPE identc pv #tds #gen;
@@ -231,12 +223,8 @@ end
 DECL -> pv ;
 
 -- déclaration d'une fonction
-DECL ->#tds FONCTION ;
-#tds {
-do
-    FONCTION^tds := DECL^tds;
-end
-}
+DECL -> FONCTION ;
+--TDS Done
 
 -- Fonction
 FONCTION -> #tailleRetour paro #tds PARFS parf BLOC #gen;
@@ -412,13 +400,8 @@ CHAMPS -> ;
 -- Done
 
 -- un nom de champ commence par une minuscule
-CHAMPS -> #champ CHAMP CHAMPS ;
-#champ {
-do
-    CHAMP^champs := CHAMPS1^champs;
-end
-}
-
+CHAMPS ->  CHAMP CHAMPS ;
+--Done
 
 CHAMP -> TYPE ident pv #champ;
 #champ {
@@ -429,7 +412,7 @@ CHAMP -> TYPE ident pv #champ;
     if c /= null then
        error(B_00, ident^txt);
     else    
-      c := new CHAMP(ident^txt, TYPE^type, CHAMPS^hadr);
+      c := new CHAMP(ident^txt, TYPE^type, CHAMP^hdep);
      CHAMP^champs.inserer(c);
     end
  end
@@ -450,7 +433,7 @@ end
 do
    write "; tds:\n" + t;
    write "; taille des locales = " + (INSTS^dep - BLOC^hdep)+ "\n";
-   BLOC^code := INSTS^code + BLOC^tam.genFree(INSTS^dep - BLOC^hdep);
+   BLOC^code := INSTS^code + BLOC^machine.genFree(INSTS^dep - BLOC^hdep);
 end
 }
 
@@ -504,13 +487,13 @@ INST -> E pv ;
 INST ->  BLOC  ;
 
 
---TODO prendre en compte SIX
+
 -- conditionnelle
-INST ->  #tds si paro E #type parf BLOC SIX #gen;
+INST ->  si paro E #type parf BLOC SIX #gen;
 #gen {
 do
     INST^dep := INST^hdep;
-    INST^code := INST^tam.genIf(E^code, BLOC^code, BLOC1^code) ;
+    INST^code := INST^machine.genIf(E^code, BLOC^code, SIX^code) ;
 end
 }
 #type {
@@ -520,17 +503,17 @@ do
    end
 end
 }
-#tds {
-do
-    BLOC^tds := INST
-end
-}
 
-
+-- bloc sinon 
 SIX ->    sinon BLOC ;
 
-
-SIX -> ;
+-- pas de bloc sinon
+SIX -> #gen;
+#gen{
+do
+    SIX^code := "";
+end
+}
 
 
 -- retour de fonction
@@ -571,9 +554,14 @@ end
 }
 
 AFFX -> ;
+
 -- relation
 A ->   R AX  ;
+
+
 AX -> OPREL R;
+
+
 AX ->  ;
 
 -- operateurs relationnels
@@ -651,8 +639,11 @@ TX ->   OPMUL  F TX  ;
 TX ->  ;
 -- operateurs multiplicatifs
 OPMUL -> mult ;
+
 OPMUL -> div ;
+
 OPMUL -> mod ;
+
 OPMUL -> et ;
 
 -- expressions de base
@@ -663,8 +654,9 @@ F -> entier  #gen ;
 do
     F^type := new DTYPE("int", 1);
     F^code_est_adresse := false;
-    F^code := F^tam.genCst(entier^txt);
-    F^adresse := -1;
+    F^code := F^machine.genCst(entier^txt);
+    F^adresse := 0;
+    F^adresse_utile := false;
 end
 }
 
@@ -674,7 +666,7 @@ F -> chaine #gen;
 do
     F^type := new DTYPE("int", 1);
     F^code_est_adresse := false;
-    F^code := F^tam.genChaine(chaine^txt);
+    F^code := F^machine.genChaine(chaine^txt);
     F^adresse := -1;
 end
 }
@@ -686,17 +678,18 @@ F -> caractere #gen;
 do
     F^type := new DTYPE("int", 1);
     F^code_est_adresse := false;
-    F^code := F^tam.genCaractere(caractere^txt);
+    F^code := F^machine.genCaractere(caractere^txt);
     F^adresse := -1;
 end
 }
 
 
 -- expression unaire
-F ->  OPUN  F #type #gen ;
-#type {
+-- dire les erreurs de type
+F -> #typeOp OPUN  F #gen ;
+#typeOp {
 do
-    F^type := F1^type;
+    OPUN^htype := F^type;
 end
 }
 #gen {
@@ -749,10 +742,13 @@ FX -> ;
 
 -- acces champ
 FX ->   pt  ident FX ;
+
 -- acces champ pointeur
 FX ->   arrow  ident FX ;
+
 -- appel de sous-programme
 FX ->   paro ES parf FX;
+
 -- arguments appel de sous-programme
 ES -> ;
 ES -> E ESX  ;
