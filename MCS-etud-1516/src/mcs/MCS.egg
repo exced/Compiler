@@ -25,7 +25,7 @@ inh identDecl : STRING for DECL, FONCTION;
 
 -- la TDS courante
 inh tds_asm : TDS for ASM;
-inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ;
+inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX;
 syn code : STRING for PROGRAMME,ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX;
 inh hcode : STRING for FX;
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
@@ -290,14 +290,11 @@ PARFSX ->  ;
 
 
 PARFSX -> #tds  virg PARF PARFSX ;
-global
-    tds:TDS;
 #tds {
-do
---PROBLEME: merge les 2 tds pour n'avoir qu'une seule tds param
-    tds := new TDS(PARFSX^tds);
-    PARF^tds := tds;
-    PARFSX1^tds := tds;
+do 
+    -- transmission des tds;
+    PARF^tds := PARFSX^tds;
+    PARFSX1^tds := PARFSX^tds;
 end
 }
 
@@ -307,6 +304,7 @@ PARF -> TYPE ident #tds;
 local
     i : INFO ;
 do
+    -- inserer les autres param dans la tds des param
     i := PARF^tds.chercherGlobalement(ident^txt);
     if i /= null then
        error(B_02, ident^txt);
@@ -863,8 +861,7 @@ end
 
 
 -- expression unaire
--- dire les erreurs de type
-F -> OPUN  F #type ;
+F -> OPUN  F #type #gen;
 #type {
 do
     -- controle de type
@@ -875,6 +872,15 @@ do
         F^type := F1^type;         
     end 
   
+end
+}
+global
+    code : STRING;
+#gen {
+do
+    code := F^code;
+    code := code + F^machine.genCst(F^type, F^type.getVal()); 
+    code := code + F^machine.genOpun(OPUN^type);
 end
 }
 
@@ -1013,13 +1019,30 @@ end
 }
 
 -- acces champ pointeur
-FX ->   arrow  ident FX ;
+FX ->   arrow  ident FX #gen;
+#gen {
+do
+    
+end
+}
 
 -- appel de sous-programme
-FX ->   paro ES parf FX;
+FX ->   paro #tds ES parf FX #gen;
+#tds {
+do
+    --création d'une TDS pour stocker les param de l'appel
+    ES^tds := new TDS();
+end
+}
+#gen {
+do
+    
+end
+}
 
 -- arguments appel de sous-programme
 ES -> ;
+-- Done
 
 
 ES -> E ESX  ;
@@ -1028,7 +1051,14 @@ ES -> E ESX  ;
 ESX ->  ;
 
 
-ESX -> virg E ESX ;
+ESX -> #tds virg E ESX ;
+#tds {
+do 
+    -- transmission des tds;
+    E^tds := ESX^tds;
+    ESX1^tds := ESX^tds;
+end
+}
 
 ------------- inline asm ----------------
 -- peut être utile pour implanter des sous-programmes
