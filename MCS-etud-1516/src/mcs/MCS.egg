@@ -28,7 +28,7 @@ inh tds_asm : TDS for ASM;
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ;
 syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC,SIX, INSTS, INST, E, OPUN, AFFX;
 inh hcode : STRING for FX;
-syn type : DTYPE for F, TYPE,E, STYPE,PTRS, AFFX, A, R;
+syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A, R;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
@@ -47,7 +47,7 @@ syn adresse_utile : BOOLEAN for  F, FX ;
 inh hadresse_utile : BOOLEAN for FX ;
 
 -- gestion des types pour les opérateurs, affectation etc
-inh htype : DTYPE for OPUN, AFFX, OPADD, OPMUL,OPREL,AX;
+inh htype : DTYPE for OPUN, AFFX, OPADD, OPMUL,OPREL,AX,FX;
 
 
 
@@ -783,13 +783,62 @@ end
 -- expression parenthesee
 F ->  paro E parf FX ;
 
+
 F ->  paro TYPE parf  F ;
+
+
 F -> mult F ;
+
+
 F -> ident FX ;
+
 FX -> ;
 
 -- acces champ
-FX ->   pt  ident FX ;
+FX ->   pt  ident #a FX #gen;
+#gen {
+do
+  FX^type := FX1^type;
+  FX^code_est_adresse := true;
+  FX^code :=FX1^code;
+  FX^adresse := FX1^adresse;
+  FX^adresse_utile := FX1^adresse_utile;
+end
+}
+
+#a {
+local
+ s : STRUCT ;
+ c : CHAMP;
+ lc : LCHAMPS;
+do
+  match FX^htype
+  with STRUCT then
+    s := FX^htype;
+    lc := s.getChamps();
+    c := lc.chercher(ident^txt);
+    if c = null then
+      error(B_10, ident^txt) ;
+    else
+      FX1^htype := c.getType();
+      --FX1^hcode_est_adresse := FX^hcode_est_adresse;
+      if ! FX^hadresse_utile then
+        FX1^hadresse := 0;
+        FX1^hadresse_utile := false;
+        FX1^hcode :=FX^hcode + FX^tam.genComment("acces champ : " + ident^txt) +
+                  FX^tam.genAdrField(c.getDep())  ;
+      else
+        FX1^hadresse := FX^hadresse + c.getDep();
+        FX1^hadresse_utile := true;
+        FX1^hcode := FX^tam.genComment("acces champ : " + ident^txt);
+      end
+    end    
+  else
+    error(B_09, FX^htype); 
+  end
+
+end
+}
 
 -- acces champ pointeur
 FX ->   arrow  ident FX ;
