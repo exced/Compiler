@@ -26,9 +26,9 @@ inh identDecl : STRING for DECL, FONCTION;
 -- la TDS courante
 inh tds_asm : TDS for ASM;
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ;
-syn code : STRING for PROGRAMME,ENTITE , ENTITES, F, BLOC,SIX, INSTS, INST, E, OPUN, AFFX;
+syn code : STRING for PROGRAMME,ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, OPUN, AFFX;
 inh hcode : STRING for FX;
-syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A, R;
+syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A, R,OPADD, OPMUL,OPUN,OPREL;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
@@ -47,7 +47,7 @@ syn adresse_utile : BOOLEAN for  F, FX ;
 inh hadresse_utile : BOOLEAN for FX ;
 
 -- gestion des types pour les opérateurs, affectation etc
-inh htype : DTYPE for OPUN, AFFX, OPADD, OPMUL,OPREL,AX,FX;
+inh htype : DTYPE for  AFFX,AX,FX;
 
 
 
@@ -526,9 +526,14 @@ end
 
 
 -- retour de fonction
-INST ->  retour  E pv #type;
+INST ->  retour  E pv #type #gen;
 #type {
 --controle de type retour-annoncé a l'init fonction
+do
+    
+end
+}
+#gen {
 do
     
 end
@@ -615,78 +620,70 @@ AX ->  ;
 -- operateurs relationnels
 OPREL -> inf #type;
 #type {
--- controle de type
 do
-    if ~OPREL^htype.compareTo("int") then
-        error(B_10, OPREL^htype.getNom());
-    end
+    OPREL^type := new DTYPE("OPRELINF");
 end
 }
 
 OPREL -> sup #type;
 #type {
--- controle de type
 do
-    if ~OPREL^htype.compareTo("int") then
-        error(B_10, OPREL^htype.getNom());
-    end
+    OPREL^type := new DTYPE("OPRELSUP");
 end
 }
 OPREL -> infeg #type;
 #type {
--- controle de type
 do
-    if ~OPREL^htype.compareTo("int") then
-        error(B_10, OPREL^htype.getNom());
-    end
+    OPREL^type := new DTYPE("OPRELINFEG");
 end
 }
 
 OPREL -> supeg #type;
 #type {
--- controle de type
 do
-    if ~OPREL^htype.compareTo("int") then
-        error(B_10, OPREL^htype.getNom());
-    end
+    OPREL^type := new DTYPE("OPRELSUPEG");
 end
 }
 
 OPREL -> eg #type;
 #type {
--- controle de type
 do
-    if ~OPREL^htype.compareTo("int") then
-        error(B_10, OPREL^htype.getNom());
-    end
+    OPREL^type := new DTYPE("OPRELEG");
 end
 }
 
 OPREL -> neg #type;
 #type {
--- controle de type
 do
-    if ~OPREL^htype.compareTo("int") then
-        error(B_10, OPREL^htype.getNom());
-    end
+    OPREL^type := new DTYPE("OPRELNEG");
 end
 }
 
 
 R ->  T  RX ;
+
+
 -- additions ...
 RX ->   OPADD  T RX  ;
 RX -> ;
 -- operateurs additifs
 OPADD -> plus ;
+
 OPADD -> moins ;
 OPADD -> ou ;
 -- multiplication, ...
 T ->  F  TX  ;
 TX ->   OPMUL  F TX  ;
 TX ->  ;
+
+
 -- operateurs multiplicatifs
 OPMUL -> mult ;
+#type {
+do
+    OPREL^type := new DTYPE("OPRELNEG");
+end
+}
 
 OPMUL -> div ;
 
@@ -825,12 +822,12 @@ do
       if ! FX^hadresse_utile then
         FX1^hadresse := 0;
         FX1^hadresse_utile := false;
-        FX1^hcode :=FX^hcode + FX^tam.genComment("acces champ : " + ident^txt) +
-                  FX^tam.genAdrField(c.getDep())  ;
+        FX1^hcode :=FX^hcode + FX^machine.genComment("acces champ : " + ident^txt) +
+                  FX^machine.genAdrField(c.getDep())  ;
       else
         FX1^hadresse := FX^hadresse + c.getDep();
         FX1^hadresse_utile := true;
-        FX1^hcode := FX^tam.genComment("acces champ : " + ident^txt);
+        FX1^hcode := FX^machine.genComment("acces champ : " + ident^txt);
       end
     end    
   else
@@ -848,8 +845,14 @@ FX ->   paro ES parf FX;
 
 -- arguments appel de sous-programme
 ES -> ;
+
+
 ES -> E ESX  ;
+
+
 ESX ->  ;
+
+
 ESX -> virg E ESX ;
 
 ------------- inline asm ----------------
