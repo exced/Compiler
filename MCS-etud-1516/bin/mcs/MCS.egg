@@ -28,7 +28,7 @@ inh tds_asm : TDS for ASM;
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ;
 syn code : STRING for PROGRAMME,ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX;
 inh hcode : STRING for FX;
-syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,OPADD, OPMUL,OPUN,OPREL;
+syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
@@ -47,7 +47,7 @@ syn adresse_utile : BOOLEAN for  F, FX ;
 inh hadresse_utile : BOOLEAN for FX ;
 
 -- gestion des types pour les opérateurs, affectation etc
-inh htype : DTYPE for  AFFX,AX,F,FX;
+inh htype : DTYPE for  AFFX,AX,F,FX,RX,TX;
 
 
 
@@ -460,7 +460,7 @@ end
 }
 
 -- declaration de variable locale avec ou sans init 
-INST ->  TYPE ident AFFX pv #tds #gen;
+INST ->  TYPE ident #htype AFFX pv #tds #type #gen ;
 #tds {
 local
     i : INFO ;
@@ -474,6 +474,20 @@ do
      call INST^tds.inserer(ident^txt,  i);
      INST^dep := INST^hdep ;
     end
+end
+}
+#htype {
+do
+    -- transmission de type
+    AFFX^htype := TYPE^type;
+end
+}
+#type {
+do
+    -- controle de type
+   if ~TYPE^type.compareTo(AFFX^type) then
+      error(B_11, TYPE^type, AFFX^type);
+   end
 end
 }
 #gen {
@@ -507,7 +521,7 @@ end
 }
 #type {
 do
-   if ~E^type.compareTo(new DTYPE("bool", 1)) then
+   if ~E^type.compareTo(new DTYPE("INT", 4)) then
       error(B_04, E^type);
    end
 end
@@ -684,13 +698,44 @@ do
 end
 }
 
-
-R ->  T  RX ;
+-- additions multiples
+R ->  T #type RX ;
+#type{
+do
+    -- transmission du type de R pour le controle de type
+    RX^htype := T^type;
+    -- on remonte le type
+    R^type := T^type;
+end
+}
 
 
 -- additions ...
-RX ->   OPADD  T RX  ;
-RX -> ;
+RX ->   OPADD  T RX  #type;
+#type {
+do
+    -- controle de type
+    if ~RX^htype.compareTo(OPADD^type, T^type) then
+        error(B_10, RX^htype.getNom(), OPADD^type, T^type);    
+    elseif ~RX^htype.compareTo(OPADD^type, RX1^type) then
+        error(B_10, RX^htype.getNom(), OPADD^type, RX1^type);
+    else
+    -- on remonte le type
+        RX^type := T^type;         
+    end 
+  
+end
+}
+
+
+
+RX -> #type;
+#type {
+do
+    RX^type := RX^htype;
+end
+}
+
 -- operateurs additifs
 OPADD -> plus #type;
 #type {
@@ -714,9 +759,43 @@ end
 }
 
 -- multiplication, ...
-T ->  F  TX  ;
-TX ->   OPMUL  F TX  ;
-TX ->  ;
+T -> #htype F #type TX  ;
+#htype {
+do
+    F^htype := T^type;
+end
+}
+#type{
+do
+    -- transmission du type de R pour le controle de type
+    TX^htype := F^type;
+    -- on remonte le type
+    T^type := F^type;
+end
+}
+
+TX ->   OPMUL  F TX  #type;
+#type {
+do
+    -- controle de type
+    if ~TX^htype.compareTo(OPMUL^type, F^type) then
+        error(B_10, TX^htype.getNom(), OPMUL^type, F^type);    
+    elseif ~TX^htype.compareTo(OPMUL^type, TX1^type) then
+        error(B_10, TX^htype.getNom(), OPMUL^type, TX1^type);
+    else
+    -- on remonte le type
+        TX^type := F^type;     
+    end 
+  
+end
+}
+
+TX -> #type ;
+#type {
+do
+    TX^type := TX^htype;
+end
+}
 
 
 -- operateurs multiplicatifs
@@ -769,7 +848,8 @@ do
     F^type := new DTYPE("int", 1);
     F^code_est_adresse := false;
     F^code := F^machine.genChaine(chaine^txt);
-    F^adresse := -1;
+    F^adresse := 0;
+    F^adresse_utile := false;
 end
 }
 
@@ -781,7 +861,8 @@ do
     F^type := new DTYPE("int", 1);
     F^code_est_adresse := false;
     F^code := F^machine.genCaractere(caractere^txt);
-    F^adresse := -1;
+    F^adresse := 0;
+    F^adresse_utile := false;
 end
 }
 
@@ -828,13 +909,28 @@ end
 F -> null #type ;
 #type {
 do
-    F^type := new POINTEUR(F^type);
+    F^type := new DTYPE("int", 1);
+    F^code_est_adresse := false;
+    F^code := "";
+    F^adresse := -1;
 end
 }
 
-
+----- TOOOOODOOOOOOO -----
 -- expression parenthesee
-F ->  paro E parf FX ;
+F ->  paro E parf FX #type;
+#type {
+do
+    -- controle de type
+    if ~E^htype.compareTo(FX^type) then
+        error(B_12, E^htype.getNom(), FX^type.getNom());
+    else
+    -- on remonte le type
+        F^type := E^type;         
+    end 
+  
+end
+}
 
 
 F ->  paro TYPE parf  F ;
