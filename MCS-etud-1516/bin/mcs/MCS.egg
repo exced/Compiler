@@ -28,7 +28,7 @@ inh tds_asm : TDS for ASM;
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ;
 syn code : STRING for PROGRAMME,ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, OPUN, AFFX;
 inh hcode : STRING for FX;
-syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A, R,OPADD, OPMUL,OPUN,OPREL;
+syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,OPADD, OPMUL,OPUN,OPREL;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
@@ -595,7 +595,12 @@ do
   end
 }
 
-AFFX -> #gen;
+AFFX -> #type #gen;
+#type {
+do
+    AFFX^type := new DTYPE("NULL");
+end
+}
 #gen {
 do
     AFFX^code := "";
@@ -603,16 +608,27 @@ end
 }
 
 -- relation
-A ->   R #htype AX  ;
-#htype {
+A ->   R #type AX ;
+#type{
 do
-    A^type := R^type;
+    -- transmission du type de R pour le controle de type
     AX^htype := R^type;
+    -- on remonte le type
+    A^type := R^type;
 end
 }
 
-AX -> OPREL R;
---htype Done
+
+AX -> OPREL R #type;
+#type {
+do
+    -- controle de type
+    if ~AX^htype.compareTo(OPREL^type, R^type) then
+        error(B_10, AX^htype.getNom());
+    end    
+end
+}
+
 
 
 AX ->  ;
@@ -678,18 +694,33 @@ TX ->  ;
 
 
 -- operateurs multiplicatifs
-OPMUL -> mult ;
+OPMUL -> mult #type;
 #type {
 do
-    OPREL^type := new DTYPE("OPRELNEG");
+    OPMUL^type := new DTYPE("OPMULMULT");
 end
 }
 
-OPMUL -> div ;
+OPMUL -> div #type;
+#type {
+do
+    OPMUL^type := new DTYPE("OPMULDIV");
+end
+}
 
-OPMUL -> mod ;
+OPMUL -> mod #type;
+#type {
+do
+    OPMUL^type := new DTYPE("OPMULMOD");
+end
+}
 
-OPMUL -> et ;
+OPMUL -> et #type;
+#type {
+do
+    OPMUL^type := new DTYPE("OPMULET");
+end
+}
 
 -- expressions de base
 
