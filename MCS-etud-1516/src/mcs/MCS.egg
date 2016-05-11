@@ -26,7 +26,7 @@ inh identDecl : STRING for DECL, FONCTION;
 -- la TDS courante
 inh tds_asm : TDS for ASM;
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ;
-syn code : STRING for PROGRAMME,ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, OPUN, AFFX;
+syn code : STRING for PROGRAMME,ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX;
 inh hcode : STRING for FX;
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,OPADD, OPMUL,OPUN,OPREL;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP;
@@ -47,7 +47,7 @@ syn adresse_utile : BOOLEAN for  F, FX ;
 inh hadresse_utile : BOOLEAN for FX ;
 
 -- gestion des types pour les opérateurs, affectation etc
-inh htype : DTYPE for  AFFX,AX,FX;
+inh htype : DTYPE for  AFFX,AX,F,FX;
 
 
 
@@ -625,13 +625,22 @@ do
     -- controle de type
     if ~AX^htype.compareTo(OPREL^type, R^type) then
         error(B_10, AX^htype.getNom());
-    end    
+    else
+    -- on remonte le type
+        AX^type := R^type;         
+    end 
+  
 end
 }
 
 
 
-AX ->  ;
+AX ->  #type;
+#type {
+do
+    AX^type := AX^htype;
+end
+}
 
 -- operateurs relationnels
 OPREL -> inf #type;
@@ -683,10 +692,27 @@ R ->  T  RX ;
 RX ->   OPADD  T RX  ;
 RX -> ;
 -- operateurs additifs
-OPADD -> plus ;
+OPADD -> plus #type;
+#type {
+do
+    OPADD^type := new DTYPE("OPADDPLUS");
+end
+}
 
-OPADD -> moins ;
-OPADD -> ou ;
+OPADD -> moins #type;
+#type {
+do
+    OPADD^type := new DTYPE("OPADDMOINS");
+end
+}
+
+OPADD -> ou #type;
+#type {
+do
+    OPADD^type := new DTYPE("OPADDOU");
+end
+}
+
 -- multiplication, ...
 T ->  F  TX  ;
 TX ->   OPMUL  F TX  ;
@@ -762,40 +788,39 @@ end
 
 -- expression unaire
 -- dire les erreurs de type
-F -> #typeOp OPUN  F #gen ;
-#typeOp {
+F -> OPUN  F #type ;
+#type {
 do
-    OPUN^htype := F^type;
-end
-}
-#gen {
-do
-    F^code := F1^code + OPUN^code;
+    -- controle de type
+    if ~F^htype.compareTo(OPUN^type, F1^type) then
+        error(B_10, F^htype.getNom(), OPUN^type.getNom(), F1^type.getNom());
+    else
+    -- on remonte le type
+        F^type := F1^type;         
+    end 
+  
 end
 }
 
 -- operateurs unaires
 OPUN -> plus #type;
 #type {
--- attribut de classe
 do
-
+    OPUN^type := new DTYPE("OPUNPLUS");
 end
 }
 
 OPUN -> moins #type;
 #type {
 do
--- attribut d'instance  
+    OPUN^type := new DTYPE("OPUNMOINS");
 end
 }
 
 OPUN -> non #type;
 #type {
 do
-    if ~OPUN^type.compareTo("bool") then
-        error(B_10, OPUN^type.getNom());
-    end
+    OPUN^type := new DTYPE("OPUNNON");
 end
 }
 
