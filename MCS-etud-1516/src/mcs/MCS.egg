@@ -47,7 +47,7 @@ syn adresse_utile : BOOLEAN for  F, FX ;
 inh hadresse_utile : BOOLEAN for FX ;
 
 -- gestion des types pour les opérateurs, affectation etc
-inh htype : DTYPE for  AFFX,AX,F,FX,RX,TX;
+inh htype : DTYPE for  AFFX,AX,FX,RX,TX;
 
 
 
@@ -759,12 +759,7 @@ end
 }
 
 -- multiplication, ...
-T -> #htype F #type TX  ;
-#htype {
-do
-    F^htype := T^type;
-end
-}
+T -> F #type TX  ;
 #type{
 do
     -- transmission du type de R pour le controle de type
@@ -873,8 +868,8 @@ F -> OPUN  F #type ;
 #type {
 do
     -- controle de type
-    if ~F^htype.compareTo(OPUN^type, F1^type) then
-        error(B_10, F^htype.getNom(), OPUN^type.getNom(), F1^type.getNom());
+    if ~F^type.compareTo(OPUN^type, F1^type) then
+        error(B_10, F^type.getNom(), OPUN^type.getNom(), F1^type.getNom());
     else
     -- on remonte le type
         F^type := F1^type;         
@@ -916,14 +911,14 @@ do
 end
 }
 
------ TOOOOODOOOOOOO -----
+
 -- expression parenthesee
 F ->  paro E parf FX #type;
 #type {
 do
     -- controle de type
-    if ~E^htype.compareTo(FX^type) then
-        error(B_12, E^htype.getNom(), FX^type.getNom());
+    if ~E^type.compareTo(FX^type) then
+        error(B_12, E^type.getNom(), FX^type.getNom());
     else
     -- on remonte le type
         F^type := E^type;         
@@ -933,15 +928,43 @@ end
 }
 
 
-F ->  paro TYPE parf  F ;
+F ->  paro TYPE parf  F #type;
+#type {
+do
+    -- controle de type
+    if ~TYPE^type.compareTo(F^type) then
+        error(B_12, TYPE^type.getNom(), F^type.getNom());
+    else
+    -- on remonte le type
+        F^type := TYPE^type;         
+    end 
+  
+end
+}
 
 
-F -> mult F ;
+F -> mult F #type;
+#type {
+do
+    -- controle de type
+    if ~F1^type.compareTo(F^type) then
+        error(B_12, F^type.getNom(), F1^type.getNom());
+    else
+    -- on remonte le type
+        F^type := new POINTEUR(F1^type);         
+    end         
+end
+}
 
 
 F -> ident FX ;
 
-FX -> ;
+FX -> #type;
+#type {
+do
+    FX^type := FX^htype;
+end
+}
 
 -- acces champ
 FX ->   pt  ident #a FX #gen;
