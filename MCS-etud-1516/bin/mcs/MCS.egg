@@ -973,7 +973,31 @@ end
 }
 
 
-F -> ident FX ;
+F -> ident FX #gen;
+global 
+  iv : INFOVAR ;
+  t : DTYPE;
+#gen{
+local
+  i:INFO;
+  code : STRING;
+do
+  i := F^tds.chercherGlobalement(ident^txt);
+  if i = null then
+    error(B_01, ident^txt);
+  end
+  match i 
+  with INFOVAR then
+    iv := i;
+    t := iv.getType();
+    F^type := t;
+    F^code := FX^code;
+    F^code_est_adresse := FX^code_est_adresse;
+  else
+    error(B_08, ident^txt);
+  end
+end
+}
 
 FX -> #type;
 #type {
