@@ -25,12 +25,12 @@ inh etiquette : STRING for DECL, FONCTION;
 
 -- la TDS courante
 inh tds_asm : TDS for ASM;
-inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX,F,FX;
-syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX;
+inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A;
+syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,A;
 inh hcode : STRING for FX;
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP,FX;
-syn dep : INTEGER for INST , INSTS, E;
+syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
 syn code_est_adresse : BOOLEAN for  F, FX ;
 inh hcode_est_adresse : BOOLEAN for FX ;
@@ -485,6 +485,8 @@ do
    if ~TYPE^type.compareTo(AFFX^type) then
       error(B_11, TYPE^type, AFFX^type);
    end
+   
+   --controle de type retour-decl
 end
 }
 #gen {
@@ -499,7 +501,7 @@ INST -> E pv #gen;
 do
     -- le code dépend de s'il y a eu affectation ou appel
     INST^code := E^code;
-    INST^dep := E^dep;
+    INST^dep := 0;
 end
 }
 
@@ -509,12 +511,12 @@ INST -> #dep BLOC  #code;
 #dep {
 do
     BLOC^hdep := 3;
-    INST^dep := BLOC^hdep;
+    INST^dep := 3;
 end
 }
 #code {
 do
-    
+    INST^code := BLOC^code;        
 end
 }
 
@@ -522,12 +524,6 @@ end
 
 -- conditionnelle
 INST ->  si paro E #type parf BLOC SIX #gen;
-#gen {
-do
-    INST^dep := INST^hdep;
-    INST^code := INST^machine.genIf(E^code, BLOC^code, SIX^code) ;
-end
-}
 #type {
 do
    if ~E^type.compareTo(new DTYPE("INT", 4)) then
@@ -535,9 +531,25 @@ do
    end
 end
 }
+#gen {
+do
+    INST^dep := INST^hdep;
+    INST^code := INST^machine.genIf(E^code, BLOC^code, SIX^code) ;
+end
+}
 
 -- bloc sinon 
-SIX ->    sinon BLOC ;
+SIX ->    sinon #hdep BLOC #gen;
+#hdep {
+do
+    BLOC^hdep := 3;
+end
+}
+#gen {
+do
+    SIX^code := BLOC^code;
+end
+}
 
 -- pas de bloc sinon
 SIX -> #gen;
@@ -551,14 +563,14 @@ end
 -- retour de fonction
 INST ->  retour  E pv #type #gen;
 #type {
---controle de type retour-annoncé a l'init fonction
 do
-    
+    -- remontee du type de retour pour le controle
 end
 }
 #gen {
 do
-    
+    INST^code := E^code;
+    INST^dep := 0;
 end
 }
 
@@ -582,7 +594,7 @@ end
 }
 #gen {
 do
-    E^code := E^code + AFFX^code;  
+    E^code := A^code + AFFX^code;  
 end
 }
 
@@ -591,6 +603,9 @@ AFFX -> affect  A  #type #gen;
 #type {
 -- controle de type
 do
+    -- remonter le type pour la declaration avec affectation
+    AFFX^type := AFFX^htype;
+    
     if ~A^type.compareTo(AFFX^htype) then
         error(B_10, A^type.getNom());
     end
@@ -603,8 +618,7 @@ do
     if ~AFFX^htype.compareTo(A^type) then
       error(B_02, AFFX^htype, A^type);
     else
-      AFFX^dep := AFFX^hdep ;
-      --
+    
       code :=  AFFX^machine.genComment("Valeur") + A^code ;
       if !AFFX^adresse_utile then
         code := code + AFFX^tam.genComment("Adresse") +
@@ -618,10 +632,10 @@ do
   end
 }
 
-AFFX -> #type #gen;
+AFFX ->#type #gen;
 #type {
 do
-    AFFX^type := new DTYPE("NULL");
+    AFFX^type := AFFX^htype;
 end
 }
 #gen {
@@ -631,7 +645,12 @@ end
 }
 
 -- relation
-A ->   R #type AX ;
+A -> #tds  R #type AX ;
+#tds {
+do
+    R^tds := A^tds;
+end
+}
 #type{
 do
     -- transmission du type de R pour le controle de type
@@ -642,7 +661,12 @@ end
 }
 
 
-AX -> OPREL R #type;
+AX -> OPREL #tds R #type;
+#tds {
+do
+    R^tds := AX^tds;
+end
+}
 #type {
 do
     -- controle de type
@@ -708,7 +732,12 @@ end
 }
 
 -- additions multiples
-R ->  T #type RX ;
+R -> #tds T #type RX ;
+#tds {
+do
+    T^tds := R^tds;
+end
+}
 #type{
 do
     -- transmission du type de R pour le controle de type
@@ -768,7 +797,12 @@ end
 }
 
 -- multiplication, ...
-T -> F #type TX  ;
+T -> #tds F #type TX  ;
+#tds {
+do
+    F^tds := T^tds;
+end
+}
 #type{
 do
     -- transmission du type de R pour le controle de type
@@ -778,7 +812,12 @@ do
 end
 }
 
-TX ->   OPMUL  F TX  #type;
+TX ->   OPMUL #tds F TX  #type;
+#tds {
+do
+    TX1^tds := TX^tds;
+end
+}
 #type {
 do
     -- controle de type
@@ -876,8 +915,8 @@ F -> OPUN  F #type #gen;
 #type {
 do
     -- controle de type
-    if ~F^type.compareTo(OPUN^type, F1^type) then
-        error(B_10, F^type.getNom(), OPUN^type.getNom(), F1^type.getNom());
+    if ~F^htype.compareTo(OPUN^type, F1^type) then
+        error(B_10, F^htype.getNom(), OPUN^type.getNom(), F1^type.getNom());
     else
     -- on remonte le type
         F^type := F1^type;         
@@ -1000,10 +1039,14 @@ do
 end
 }
 
-FX -> #type;
-#type {
+FX -> #gen;
+#gen {
 do
-    FX^type := FX^htype;
+  FX^type := FX^htype;
+  FX^code_est_adresse := FX^hcode_est_adresse;
+  FX^code := FX^hcode;
+  FX^adresse := FX^hadresse;
+  FX^adresse_utile := FX^hadresse_utile;
 end
 }
 
@@ -1057,7 +1100,7 @@ end
 FX ->   arrow  ident FX #gen;
 #gen {
 do
-    
+        
 end
 }
 
@@ -1124,6 +1167,7 @@ end
 #gen {
 do
   -- On recupere le code assembleur 'inline' dans : ASM^code_asm ;
+  ENTITE^code := ASM^code_asm;
 end
 }
 
@@ -1132,7 +1176,7 @@ INST ->  asm   #tds ASM #gen ;
 do
   -- A remplacer par la table courante pour que
   -- l'assembleur puisse acceder aux variables
-  ASM^tds_asm := null; 
+  ASM^tds_asm := INST^tds; 
 end
 }
 
@@ -1141,6 +1185,7 @@ do
   -- ASM^code_asm contient le code assembleur inline
   -- dans lequel les noms de variables ont ete remplaces
   -- par leurs adresses.
+  INST^code := ASM^code_asm;
 end
 }
 

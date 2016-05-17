@@ -106,6 +106,7 @@ public class MTAM extends AbstractMachine {
 				+ "\n" + "\tJUMP " + fin + "\n" + sinon + "\n" + code3 + "\n"
 				+ fin + "\n" + "\t; fin if\n";
 	}
+	
 
 	public String genMalloc(int taille) {
 		return "\tLOADL " + taille + "\n" + "\tSUBR Malloc\n";
