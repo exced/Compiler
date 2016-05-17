@@ -21,16 +21,16 @@ inh machine : IMachine for
 -- ces attributs permettent de recuperer les instructions du code ASM inline       
 syn code_asm : STRING for ASM;
 -- attributs relatifs fonction
-inh identDecl : STRING for DECL, FONCTION;
+inh etiquette : STRING for DECL, FONCTION;
 
 -- la TDS courante
 inh tds_asm : TDS for ASM;
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX,F,FX;
-syn code : STRING for PROGRAMME,ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX;
+syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX;
 inh hcode : STRING for FX;
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP,FX;
-syn dep : INTEGER for INST , INSTS;
+syn dep : INTEGER for INST , INSTS, E;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
 syn code_est_adresse : BOOLEAN for  F, FX ;
 inh hcode_est_adresse : BOOLEAN for FX ;
@@ -141,10 +141,9 @@ global
 #gen {
 local
 do
-   code := ENTITES^code;
+   -- on suppose la methode "int main()" existante, et sans parametres
+   code := machine.genCall("main") + ENTITES^code + machine.genFin();
    -- generation du code de fin du programme
-   code := code + "\nHALT";
-   PROGRAMME^code := code;
    machine.writeCode(PROGRAMME^source.getFileName(), code);  
 end
 }
@@ -209,7 +208,7 @@ end
 }
 #nomFonction {
 do
-    DECL^identDecl := ident^txt;
+    DECL^etiquette := ident^txt;
 end
 }
 #gen {
@@ -239,9 +238,9 @@ global
     t : DTYPE;
  do
     -- rechercher l'ident   
-    i := FONCTION^tds.chercherGlobalement(FONCTION^identDecl);
+    i := FONCTION^tds.chercherGlobalement(FONCTION^etiquette);
     if i = nil then
-      error(B_05, FONCTION^identDecl);
+      error(B_05, FONCTION^etiquette);
     else
         tailleRetour := i.getTaille();
     end
@@ -262,7 +261,7 @@ do
     tam := FONCTION^machine;
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
-    cp := tam.genFonction(FONCTION^identDecl, tdsParam.getTailleParam(), tailleRetour, BLOC^code);
+    cp := tam.genFonction(FONCTION^etiquette, tdsParam.getTailleParams(), tailleRetour, BLOC^code);
 end
 }
 
@@ -499,16 +498,18 @@ INST -> E pv #gen;
 #gen {
 do
     -- le code dépend de s'il y a eu affectation ou appel
-    INST^code := INST^code + E^code;
+    INST^code := E^code;
+    INST^dep := E^dep;
 end
 }
 
 
 -- bloc d'instructions
-INST -> #hdep BLOC  #code;
-#hdep {
+INST -> #dep BLOC  #code;
+#dep {
 do
     BLOC^hdep := 3;
+    INST^dep := BLOC^hdep;
 end
 }
 #code {

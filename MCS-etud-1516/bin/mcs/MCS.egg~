@@ -21,16 +21,16 @@ inh machine : IMachine for
 -- ces attributs permettent de recuperer les instructions du code ASM inline       
 syn code_asm : STRING for ASM;
 -- attributs relatifs fonction
-inh etiquette : STRING for DECL, FONCTION;
+inh identDecl : STRING for DECL, FONCTION;
 
 -- la TDS courante
 inh tds_asm : TDS for ASM;
-inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX,F,FX;
-syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX;
+inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX;
+syn code : STRING for PROGRAMME,ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX;
 inh hcode : STRING for FX;
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
-inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP,FX;
-syn dep : INTEGER for INST , INSTS, E;
+inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP;
+syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
 syn code_est_adresse : BOOLEAN for  F, FX ;
 inh hcode_est_adresse : BOOLEAN for FX ;
@@ -141,9 +141,10 @@ global
 #gen {
 local
 do
-   -- on suppose la methode "int main()" existante, et sans parametres
-   code := machine.genCall("main") + ENTITES^code + machine.genFin();
+   code := ENTITES^code;
    -- generation du code de fin du programme
+   code := code + "\nHALT";
+   PROGRAMME^code := code;
    machine.writeCode(PROGRAMME^source.getFileName(), code);  
 end
 }
@@ -208,7 +209,7 @@ end
 }
 #nomFonction {
 do
-    DECL^etiquette := ident^txt;
+    DECL^identDecl := ident^txt;
 end
 }
 #gen {
@@ -238,9 +239,9 @@ global
     t : DTYPE;
  do
     -- rechercher l'ident   
-    i := FONCTION^tds.chercherGlobalement(FONCTION^etiquette);
+    i := FONCTION^tds.chercherGlobalement(FONCTION^identDecl);
     if i = nil then
-      error(B_05, FONCTION^etiquette);
+      error(B_05, FONCTION^identDecl);
     else
         tailleRetour := i.getTaille();
     end
@@ -261,7 +262,7 @@ do
     tam := FONCTION^machine;
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
-    cp := tam.genFonction(FONCTION^etiquette, tdsParam.getTailleParams(), tailleRetour, BLOC^code);
+    cp := tam.genFonction(FONCTION^identDecl, tdsParam.getTailleParam(), tailleRetour, BLOC^code);
 end
 }
 
@@ -498,18 +499,16 @@ INST -> E pv #gen;
 #gen {
 do
     -- le code dépend de s'il y a eu affectation ou appel
-    INST^code := E^code;
-    INST^dep := E^dep;
+    INST^code := INST^code + E^code;
 end
 }
 
 
 -- bloc d'instructions
-INST -> #dep BLOC  #code;
-#dep {
+INST -> #hdep BLOC  #code;
+#hdep {
 do
     BLOC^hdep := 3;
-    INST^dep := BLOC^hdep;
 end
 }
 #code {
@@ -974,31 +973,7 @@ end
 }
 
 
-F -> ident FX #gen;
-global 
-  iv : INFOVAR ;
-  t : DTYPE;
-#gen{
-local
-  i:INFO;
-  code : STRING;
-do
-  i := F^tds.chercherGlobalement(ident^txt);
-  if i = null then
-    error(B_01, ident^txt);
-  end
-  match i 
-  with INFOVAR then
-    iv := i;
-    t := iv.getType();
-    F^type := t;
-    F^code := FX^code;
-    F^code_est_adresse := FX^code_est_adresse;
-  else
-    error(B_08, ident^txt);
-  end
-end
-}
+F -> ident FX ;
 
 FX -> #type;
 #type {
@@ -1070,14 +1045,13 @@ do
     --création d'une TDS pour stocker les param de l'appel
     tdsParam := new TDS(FX^tds);
     ES^tds := tdsParam; 
-    FX1^tds := new TDS(tdsParam);
-    FX1^hdep := 3;
+    FX^tds := new TDS(tdsParam);
+    FX^hdep := 3;
 end
 }
 #gen {
 do
-    -- appel du sous-programme à partir de l'étiquette
-    FX^code := FX^code + FX^machine.genCall();
+    
 end
 }
 
@@ -1086,19 +1060,10 @@ ES -> ;
 -- Done
 
 
-ES -> #tds E ESX  ;
-global
-    tds:TDS;
-#tds {
-do
-    tds := new TDS(ES^tds);
-    E^tds := tds;
-    ESX^tds := tds;
-end
-}
+ES -> E ESX  ;
+
 
 ESX ->  ;
--- Tds done
 
 
 ESX -> #tds virg E ESX ;

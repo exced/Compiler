@@ -1,16 +1,14 @@
 package mcs.tds;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * une TDS hiérarchique.
- * 
- * @author marcel
- * 
  */
-public class TDS extends HashMap<String, INFO> {
+public class TDS extends LinkedHashMap<String, INFO> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -72,6 +70,16 @@ public class TDS extends HashMap<String, INFO> {
 	 */
 	public void inserer(String n, INFO i) {
 		put(n, i);
+	}
+	
+	public int getTailleParams() {
+		int taille = 0;
+		Set<Map.Entry<String, INFO>> s = entrySet();
+		for (Map.Entry<String, INFO> e : s) {
+			taille+=e.getValue().getType().getTaille();
+
+		}
+		return taille;
 	}
 
 	public String toString() {

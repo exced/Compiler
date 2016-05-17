@@ -22,6 +22,7 @@ public class MTAM extends AbstractMachine {
 			nom = fname;
 		}
 	}
+	
 
 	public String genFonction(String etiquette, int taillepars,
 			int tailleretour, String code) {

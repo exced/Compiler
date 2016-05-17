@@ -6,17 +6,15 @@ import mcs.type.DTYPE;
 /**
  * Cette classe décrit une variable locale : adresse et type
  * 
- * @author marcel
  * 
  */
-public class INFOVAR implements INFO {
+public class INFOVAR extends INFO {
 	/**
 	 * Le type de la variable
 	 */
-	protected DTYPE type;
 
 	public DTYPE getType() {
-		return type;
+		return super.getType();
 	}
 
 	/**
@@ -39,7 +37,7 @@ public class INFOVAR implements INFO {
 	 * @param e
 	 */
 	public INFOVAR(DTYPE t, Emplacement e) {
-		type = t;
+		super(t);
 		empl = e;
 	}
 
