@@ -50,7 +50,7 @@ inh hadresse_utile : BOOLEAN for FX ;
 inh htype : DTYPE for  AFFX,AX,FX,RX,TX;
 
 -- gestion de l'affectation
-syn est_affectable : BOOLEAN for A;
+syn est_affectable : BOOLEAN for A,T,R,F,E,FX;
 
 
 
@@ -589,7 +589,7 @@ end
 -- F = expression figurant dans une expression multiplicative (FACTEUR)
 -----------------------------------------------------------------------
 
-E -> #tds A #type AFFX #gen;
+E -> #tds A #aff #type AFFX #gen;
 #tds {
 -- transmission tds
 do
@@ -597,7 +597,16 @@ do
     AFFX^tds := E^tds;
 end
 }
-
+#aff {
+do
+    --gestion d'erreur en cas de probleme d affectation
+    if ~A^est_affectable then
+        error(B_14);
+    else
+        E^est_affectable := A^est_affectable;
+    end
+end
+}
 #type {
 do
     E^type := A^type;
@@ -631,7 +640,6 @@ do
     end
 end
 }
-
 #gen {
 local 
   code : STRING;
@@ -666,10 +674,15 @@ end
 }
 
 -- relation
-A -> #tds R #type AX #gen;
+A -> #tds R #aff #type AX #gen;
 #tds {
 do
     R^tds := A^tds;
+end
+}
+#aff {
+do
+    A^est_affectable := R^est_affectable;
 end
 }
 #type{
@@ -758,10 +771,15 @@ end
 }
 
 -- additions multiples
-R -> #tds T #type RX ;
+R -> #tds T #aff #type RX ;
 #tds {
 do
     T^tds := R^tds;
+end
+}
+#aff {
+do
+    R^est_affectable := T^est_affectable;
 end
 }
 #type{
@@ -823,10 +841,15 @@ end
 }
 
 -- multiplication, ...
-T -> #tds F #type TX  ;
+T -> #tds F #aff #type TX  ;
 #tds {
 do
     F^tds := T^tds;
+end
+}
+#aff {
+do
+    T^est_affectable := F^est_affectable;
 end
 }
 #type{
@@ -838,7 +861,7 @@ do
 end
 }
 
-TX ->   OPMUL #tds F TX  #type;
+TX -> OPMUL #tds F TX  #type;
 #tds {
 do
     TX1^tds := TX^tds;
@@ -899,7 +922,13 @@ end
 -- expressions de base
 
 -- Constante entiere --
-F -> entier  #gen ;
+F -> entier #aff #gen ;
+#aff {
+do
+    -- non affectable car constante
+    F^est_affectable := false;
+end
+}
 #gen {
 do
     F^type := new DTYPE("int", 1);
@@ -911,7 +940,13 @@ end
 }
 
 -- Constante chaine
-F -> chaine #gen;
+F -> chaine #aff #gen;
+#aff {
+do
+    -- non affectable car constante
+    F^est_affectable := false;
+end
+}
 #gen {
 do
     F^type := new DTYPE("int", 1);
@@ -924,7 +959,13 @@ end
 
 
 -- Constante caractere
-F -> caractere #gen;
+F -> caractere #aff #gen;
+#aff {
+do
+    -- non affectable car constante
+    F^est_affectable := false;
+end
+}
 #gen {
 do
     F^type := new DTYPE("int", 1);
@@ -937,7 +978,13 @@ end
 
 
 -- expression unaire
-F -> OPUN  F #type #gen;
+F -> #aff OPUN  F #type #gen;
+#aff {
+do
+    -- non affectable car operation unaire
+    F^est_affectable := false;
+end
+}
 #type {
 do
     -- controle de type
@@ -983,7 +1030,13 @@ end
 }
 
 -- pointeur NULL
-F -> null #type ;
+F -> null #aff #type ;
+#aff {
+do
+    -- non affectable car pointeur null
+    F^est_affectable := false;
+end
+}
 #type {
 do
     F^type := new DTYPE("int", 1);
@@ -995,7 +1048,12 @@ end
 
 
 -- expression parenthesee
-F ->  paro E parf FX #type;
+F ->  paro E parf FX #aff #type;
+#aff {
+do
+    F^est_affectable := (E^est_affectable && FX^est_affectable);
+end
+}
 #type {
 do
     -- controle de type
@@ -1010,7 +1068,12 @@ end
 }
 
 
-F ->  paro TYPE parf  F #type;
+F ->  paro TYPE parf  F #aff #type;
+#aff {
+do
+    F^est_affectable := F1^est_affectable;
+end
+}
 #type {
 do
     -- controle de type
@@ -1025,7 +1088,12 @@ end
 }
 
 
-F -> mult F #type;
+F -> mult F #aff #type;
+#aff {
+do
+    F^est_affectable := F1^est_affectable;
+end
+}
 #type {
 do
     -- controle de type
@@ -1039,10 +1107,16 @@ end
 }
 
 
-F -> ident FX #gen;
+F -> ident FX #aff #gen;
+
 global 
   iv : INFOVAR ;
   t : DTYPE;
+#aff {
+do
+    F^est_affectable := FX^est_affectable;
+end
+}  
 #gen{
 local
   i:INFO;
@@ -1065,7 +1139,12 @@ do
 end
 }
 
-FX -> #gen;
+FX -> #aff #gen;
+#aff {
+do
+    FX^est_affectable := true;
+end
+}
 #gen {
 do
   FX^type := FX^htype;
@@ -1077,7 +1156,12 @@ end
 }
 
 -- acces champ
-FX ->   pt  ident #a FX #gen;
+FX ->   pt  ident #a FX #aff #gen;
+#aff {
+do
+    FX^est_affectable := FX1^est_affectable;
+end
+}
 #gen {
 do
   FX^type := FX1^type;
@@ -1087,7 +1171,6 @@ do
   FX^adresse_utile := FX1^adresse_utile;
 end
 }
-
 #a {
 local
  s : STRUCT ;
@@ -1123,7 +1206,12 @@ end
 }
 
 -- acces champ pointeur
-FX ->   arrow  ident FX #gen;
+FX ->   arrow  ident FX #aff #gen;
+#aff {
+do
+    FX^est_affectable := FX1^est_affectable;
+end
+}
 #gen {
 do
         
@@ -1131,9 +1219,15 @@ end
 }
 
 -- appel de sous-programme
-FX ->   paro #tds ES parf FX #gen;
+FX ->   paro #tds ES parf FX #aff #gen;
 global 
     tdsParam :  TDS;
+#aff {
+do
+    -- pour l instant on ne gere pas l affectation multiple
+    FX^est_affectable := false;
+end
+}    
 #tds {
 do
     --création d'une TDS pour stocker les param de l'appel
