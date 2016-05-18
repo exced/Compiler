@@ -32,14 +32,14 @@ syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMU
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP,FX;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
-syn code_est_adresse : BOOLEAN for  F, FX ;
-inh hcode_est_adresse : BOOLEAN for FX ;
+syn code_est_adresse : BOOLEAN for  F, FX, A ;
+inh hcode_est_adresse : BOOLEAN for FX,AFFX ;
 -- Cet attribut sert a calculer les adresses STATIQUEMENT
 -- lorsque cela est possible. Vaut 0 si valeur non significative.
 -- Cet attribut est calcule systématiquement en attendant de
 -- savoir s'il est utile ou non ...
-syn adresse : INTEGER for  F, FX ; 
-inh hadresse : INTEGER for FX ;
+syn adresse : INTEGER for  F, FX, A; 
+inh hadresse : INTEGER for FX ,AFFX;
 
 -- gestion des types pour les opérateurs, affectation etc
 inh htype : DTYPE for  AFFX,AX,FX,RX,TX,F;
@@ -475,6 +475,9 @@ end
 do
     -- transmission de type
     AFFX^htype := TYPE^type;
+    -- transmission de l adresse
+    AFFX^hcode_est_adresse := false;
+    AFFX^hadresse := "";
 end
 }
 #type {
@@ -594,6 +597,10 @@ end
 }
 #aff {
 do
+    -- transmission du bool hcode est adresse
+    AFFX^hcode_est_adresse := A^code_est_adresse;
+    -- transmission de l adresse de A pour la GC lors de l affectation
+    AFFX^hadresse := A^adresse;
     --gestion d'erreur en cas de probleme d affectation
     if ~A^est_affectable then
         error(B_14);
@@ -611,7 +618,7 @@ end
 }
 #gen {
 do
-    E^code := AAFFX^code;  
+    E^code := AFFX^code;  
 end
 }
 
@@ -644,11 +651,11 @@ do
     else
     
       code :=  AFFX^machine.genComment("Valeur") + A^code ;
-      if ~AFFX^adresse_utile then
+      if ~AFFX^hcode_est_adresse then
         code := code + AFFX^machine.genComment("Adresse") +
                      AFFX^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
-       else
-        code := code + AFFX^machine.genWriteMem(AFFX^adresse, AFFX^htype.getTaille());
+      else
+        code := code + AFFX^machine.genWriteMem(AFFX^hadresse, AFFX^htype.getTaille());
        end 
       AFFX^code := code; 
                          
