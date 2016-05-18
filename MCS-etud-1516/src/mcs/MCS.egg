@@ -25,8 +25,8 @@ inh etiquette : STRING for DECL, FONCTION;
 
 -- la TDS courante
 inh tds_asm : TDS for ASM;
-inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A;
-syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,A;
+inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
+syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,A,R,AX;
 inh hcode : STRING for FX;
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP,FX;
@@ -288,7 +288,7 @@ PARFSX ->  ;
 -- Done
 
 
-PARFSX -> #tds  virg PARF PARFSX ;
+PARFSX -> #tds virg PARF PARFSX ;
 #tds {
 do 
     -- transmission des tds;
@@ -491,7 +491,8 @@ end
 }
 #gen {
 do
-    INST^code := "";
+    -- MODIFIE
+    INST^code := AFFX^code;
 end
 }
 
@@ -510,6 +511,7 @@ end
 INST -> #dep BLOC  #code;
 #dep {
 do
+    -- CA SORT D OU
     BLOC^hdep := 3;
     INST^dep := 3;
 end
@@ -561,7 +563,7 @@ end
 
 
 -- retour de fonction
-INST ->  retour  E pv #type #gen;
+INST ->  retour E pv #type #gen;
 #type {
 do
     -- remontee du type de retour pour le controle
@@ -584,7 +586,15 @@ end
 -- F = expression figurant dans une expression multiplicative (FACTEUR)
 -----------------------------------------------------------------------
 
-E ->   A #type AFFX #gen;
+E -> #tds A #type AFFX #gen;
+#tds {
+-- transmission tds
+do
+    A^tds := E^tds;
+    AFFX^tds := E^tds;
+end
+}
+
 #type {
 do
     E^type := A^type;
@@ -599,7 +609,14 @@ end
 }
 
 -- affectation
-AFFX -> affect  A  #type #gen;
+AFFX -> affect #tds A  #type #gen;
+#tds {
+-- transmission tds
+do
+    A^tds := AFFX^tds;
+end
+}
+
 #type {
 -- controle de type
 do
@@ -611,6 +628,7 @@ do
     end
 end
 }
+
 #gen {
 local 
   code : STRING;
@@ -620,12 +638,12 @@ do
     else
     
       code :=  AFFX^machine.genComment("Valeur") + A^code ;
-      if !AFFX^adresse_utile then
-        code := code + AFFX^tam.genComment("Adresse") +
+      if ~AFFX^adresse_utile then
+        code := code + AFFX^machine.genComment("Adresse") +
                      AFFX^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
        else
         code := code + AFFX^machine.genWriteMem(AFFX^adresse, AFFX^htype.getTaille());
-       end              
+       end              s
       AFFX^code := code; 
                          
      end
@@ -645,7 +663,7 @@ end
 }
 
 -- relation
-A -> #tds  R #type AX ;
+A -> #tds R #type AX #gen;
 #tds {
 do
     R^tds := A^tds;
@@ -660,6 +678,11 @@ do
 end
 }
 
+#gen {
+do
+    A^code := R^code + AX^code;
+end
+}
 
 AX -> OPREL #tds R #type;
 #tds {
