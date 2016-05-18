@@ -27,7 +27,7 @@ inh etiquette : STRING for DECL, FONCTION;
 inh tds_asm : TDS for ASM;
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
 syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
-inh hcode : STRING for FX;
+--inh hcode : STRING for ;
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP,FX;
 syn dep : INTEGER for INST , INSTS;
@@ -593,6 +593,7 @@ E -> #tds A #aff #type AFFX #gen;
 do
     A^tds := E^tds;
     AFFX^tds := E^tds;
+
 end
 }
 #aff {
