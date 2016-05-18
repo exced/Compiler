@@ -49,6 +49,9 @@ inh hadresse_utile : BOOLEAN for FX ;
 -- gestion des types pour les opérateurs, affectation etc
 inh htype : DTYPE for  AFFX,AX,FX,RX,TX;
 
+-- gestion de l'affectation
+syn est_affectable : BOOLEAN for A;
+
 
 
 --terminals
