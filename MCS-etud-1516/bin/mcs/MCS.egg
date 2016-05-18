@@ -13,7 +13,7 @@ inh source : MCSSourceFile for PROGRAMME;
 inh machine : IMachine for 
          ENTITES, ENTITE, DECL, FONCTION, INST, BLOC, INSTS, SIX,
          PARFS, PARF, PARFSX, ES, ESX, 
-         E, AFFX, A, AX, R, RX, T, TX, F,FX,OPUN,OPMUL,OPREL
+         E, AFFX, A, AX, R, RX, T, TX, F,FX,OPUN,OPMUL,OPREL,OPADD
 --         -- decommenter la ligne suivante pour MCS
 --       , BASE, DEFS, DEF
 --         -- fin extension MCS
@@ -26,23 +26,23 @@ inh etiquette : STRING for DECL, FONCTION;
 -- la TDS courante
 inh tds_asm : TDS for ASM;
 inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
-syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,TX,A;
+syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
 inh hcode : STRING for FX;
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP,FX;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
-syn code_est_adresse : BOOLEAN for  F, FX, A ;
+syn code_est_adresse : BOOLEAN for  F, FX, A,AX,R,RX,T,TX ;
 inh hcode_est_adresse : BOOLEAN for FX,AFFX ;
 -- Cet attribut sert a calculer les adresses STATIQUEMENT
 -- lorsque cela est possible. Vaut 0 si valeur non significative.
 -- Cet attribut est calcule systématiquement en attendant de
 -- savoir s'il est utile ou non ...
-syn adresse : INTEGER for  F, FX, A; 
+syn adresse : INTEGER for  F, FX, A,R,T; 
 inh hadresse : INTEGER for FX ,AFFX;
 
 -- gestion des types pour les opérateurs, affectation etc
-inh htype : DTYPE for  AFFX,AX,FX,RX,TX,F;
+inh htype : DTYPE for  AFFX,AX,FX,RX,TX;
 
 -- gestion de l'affectation
 syn est_affectable : BOOLEAN for A,T,R,F,E,FX;
@@ -651,9 +651,9 @@ do
     else
     
       code :=  AFFX^machine.genComment("Valeur") + A^code ;
-      if ~AFFX^hcode_est_adresse then
+      if AFFX^hcode_est_adresse then
         code := code + AFFX^machine.genComment("Adresse") +
-                     AFFX^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+                     A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
       else
         code := code + AFFX^machine.genWriteMem(AFFX^hadresse, AFFX^htype.getTaille());
        end 
@@ -695,14 +695,23 @@ do
     A^type := R^type;
 end
 }
-
 #gen {
+local
+    est_adresse : BOOL;
 do
+    -- generation du code qui renvoie la valeur correspond a la relation
     A^code := R^code + AX^code;
+    est_adresse := (R^code_est_adresse && AX^code_est_adresse);
+    A^code_est_adresse := est_adresse;
+    if est_adresse then
+        A^adresse := R^adresse;
+    else
+        A^adresse := "";
+    end        
 end
 }
 
-AX -> OPREL #tds R #type;
+AX -> OPREL #tds R #type #gen;
 #tds {
 do
     R^tds := AX^tds;
@@ -717,16 +726,31 @@ do
     -- on remonte le type
         AX^type := R^type;         
     end 
-  
+end
+}
+#gen {
+do
+    -- remontee du code pour prendre en compte l operateur relationnel
+    -- on empile d abord les 2 valeurs puis on fait un SUBR op
+    AX^code := R^code + OPREL^code;     
+    -- membre de droite lors de la relation -> ce n est pas une adresse
+    AX^code_est_adresse := false;
 end
 }
 
 
 
-AX ->  #type;
+AX ->  #type #gen;
 #type {
 do
     AX^type := AX^htype;
+    -- pas de membre de droite lors de la relation -> adresse possible
+    AX^code_est_adresse := true;
+end
+}
+#gen {
+do
+    AX^code := "";
 end
 }
 
@@ -785,7 +809,7 @@ end
 }
 
 -- additions multiples
-R -> #tds T #aff #type RX ;
+R -> #tds T #aff #type RX #gen;
 #tds {
 do
     T^tds := R^tds;
@@ -804,10 +828,25 @@ do
     R^type := T^type;
 end
 }
+#gen {
+local
+    est_adresse : BOOL;
+do
+    -- generation du code qui renvoie la valeur correspond a la relation
+    R^code := T^code + RX^code;
+    est_adresse := (T^code_est_adresse && RX^code_est_adresse);
+    R^code_est_adresse := est_adresse;
+    if est_adresse then
+        R^adresse := T^adresse;
+    else
+        R^adresse := "";
+    end        
+end
+}
 
 
 -- additions ...
-RX ->   OPADD  T RX  #type;
+RX ->   OPADD  T RX  #type #gen;
 #type {
 do
     -- controle de type
@@ -819,7 +858,15 @@ do
     -- on remonte le type
         RX^type := T^type;         
     end 
-  
+end
+}
+#gen {
+do
+    -- opadd donc ce n est plus une adresse
+    RX^code_est_adresse := false;
+    -- remontee du code pour prendre en compte l operateur add
+    -- on empile d abord les 2 valeurs puis on fait un SUBR op
+    RX^code := T^code + RX1^code + OPADD^code;         
 end
 }
 
@@ -829,6 +876,10 @@ RX -> #type;
 #type {
 do
     RX^type := RX^htype;
+    -- adresse
+    RX^code_est_adresse := true;
+    -- GC
+    RX^code := "";
 end
 }
 
@@ -837,6 +888,8 @@ OPADD -> plus #type;
 #type {
 do
     OPADD^type := new DTYPE("OPADDPLUS");
+    -- SUBR op
+    OPADD^code := OPADD^machine.genOp("IAdd");     
 end
 }
 
@@ -844,6 +897,8 @@ OPADD -> moins #type;
 #type {
 do
     OPADD^type := new DTYPE("OPADDMOINS");
+    -- SUBR op
+    OPADD^code := OPADD^machine.genOp("ISub");     
 end
 }
 
@@ -851,11 +906,13 @@ OPADD -> ou #type;
 #type {
 do
     OPADD^type := new DTYPE("OPADDOU");
+    -- SUBR op
+    OPADD^code := OPADD^machine.genOp("BOr");     
 end
 }
 
 -- multiplication, ...
-T -> #tds F #aff #type TX  ;
+T -> #tds F #aff #type TX #gen ;
 #tds {
 do
     F^tds := T^tds;
@@ -872,6 +929,21 @@ do
     TX^htype := F^type;
     -- on remonte le type
     T^type := F^type;
+end
+}
+#gen {
+local
+    est_adresse : BOOL;
+do
+    -- generation du code qui renvoie la valeur correspond a la relation
+    T^code := F^code + TX^code;
+    est_adresse := (F^code_est_adresse && TX^code_est_adresse);
+    T^code_est_adresse := est_adresse;
+    if est_adresse then
+        T^adresse := F^adresse;
+    else
+        T^adresse := "";
+    end        
 end
 }
 
@@ -891,7 +963,10 @@ do
     else
     -- on remonte le type
         TX^type := F^type;     
-    end 
+    end
+    
+    -- opmul donc ce n est plus une adresse
+    TX^code_est_adresse := false; 
   
 end
 }
@@ -908,6 +983,9 @@ TX -> #type ;
 do
     TX^type := TX^htype;
     TX^code := "";
+    
+    -- pas de opmul donc le code peut etre une adresse
+    TX^code_est_adresse := true;
 end
 }
 
@@ -1015,8 +1093,8 @@ end
 #type {
 do
     -- controle de type
-    if ~F^htype.compareTo(OPUN^type, F1^type) then
-        error(B_10, F^htype.getNom(), OPUN^type.getNom(), F1^type.getNom());
+    if ~F1^type.compareTo(OPUN^type) then
+        error(B_10, OPUN^type.getNom(), F1^type.getNom());
     else
     -- on remonte le type
         F^type := F1^type;         
