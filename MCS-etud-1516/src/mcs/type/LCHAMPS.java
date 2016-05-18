@@ -15,6 +15,18 @@ public class LCHAMPS extends ArrayList<CHAMP> {
 
 	}
 
+	// Recuperer le deplacement d'un champ dans un struct
+	public int getDep(String nom){
+		int dep = 0;
+		for(CHAMP c : this){
+			if (c.getNom().equals(nom)) {
+				break;
+			}
+			dep = dep + c.getType().getTaille();
+		}
+		return dep;
+	}
+	
 	public int getTaille() {
 		int t = 0;
 		for (CHAMP c : this) {

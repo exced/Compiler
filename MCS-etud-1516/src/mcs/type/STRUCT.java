@@ -11,11 +11,10 @@ public class STRUCT extends DTYPEImpl {
 		this.champs = champs;
 	}
 
-
-
 	public LCHAMPS getChamps() {
 		return champs;
 	}
+	
 	public boolean compareTo(DTYPE autre) {
 		if (autre instanceof STRUCT)
 			return champs.compareTo(((STRUCT) autre).champs);
@@ -23,8 +22,7 @@ public class STRUCT extends DTYPEImpl {
 			return getTypes().compareTo(((TUPLE) autre).getTypes());
 		return false;
 	}
-
-
+	
 	public String toString(){
 		return super.toString() + " champs = " + champs;
 	}
