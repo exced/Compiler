@@ -32,13 +32,13 @@ syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMU
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP,FX;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
-syn code_est_adresse : BOOLEAN for  F, FX, A,AX,R,RX,T,TX ;
+syn code_est_adresse : BOOLEAN for  F, FX, A,AX,R,RX,T,TX,E ;
 inh hcode_est_adresse : BOOLEAN for FX,AFFX ;
 -- Cet attribut sert a calculer les adresses STATIQUEMENT
 -- lorsque cela est possible. Vaut 0 si valeur non significative.
 -- Cet attribut est calcule systématiquement en attendant de
 -- savoir s'il est utile ou non ...
-syn adresse : INTEGER for  F, FX, A,R,T; 
+syn adresse : INTEGER for  F, FX, A,R,T,E; 
 inh hadresse : INTEGER for FX ,AFFX;
 
 -- gestion des types pour les opérateurs, affectation etc
@@ -597,6 +597,12 @@ end
 }
 #aff {
 do
+    E^code_est_adresse := A^code_est_adresse;
+    if A^code_est_adresse then
+        E^adresse := A^adresse;
+    else
+        E^adresse := "";
+    end    
     -- transmission du bool hcode est adresse
     AFFX^hcode_est_adresse := A^code_est_adresse;
     -- transmission de l adresse de A pour la GC lors de l affectation
@@ -1159,7 +1165,7 @@ end
 
 
 -- expression parenthesee
-F ->  paro E parf FX #aff #type;
+F ->  paro E parf FX #aff #type #gen;
 #aff {
 do
     F^est_affectable := (E^est_affectable && FX^est_affectable);
@@ -1175,6 +1181,22 @@ do
         F^type := E^type;         
     end 
   
+end
+}
+#gen {
+local
+    est_adresse : BOOL;
+do
+    est_adresse := (E^code_est_adresse && FX^code_est_adresse);
+    F^code_est_adresse := est_adresse;
+    if est_adresse then
+        F^adresse := E^adresse;
+    else
+        F^adresse := "";
+    end        
+    
+    -- GC
+    F^code := E^code + FX^code;
 end
 }
 
@@ -1300,14 +1322,12 @@ do
     else
       FX1^htype := c.getType();
       --FX1^hcode_est_adresse := FX^hcode_est_adresse;
-      if ! FX^hadresse_utile then
+      if ! FX^hcode_est_adresse then
         FX1^hadresse := 0;
-        FX1^hadresse_utile := false;
         FX1^hcode :=FX^hcode + FX^machine.genComment("acces champ : " + ident^txt) +
                   FX^machine.genAdrField(c.getDep())  ;
       else
         FX1^hadresse := FX^hadresse + c.getDep();
-        FX1^hadresse_utile := true;
         FX1^hcode := FX^machine.genComment("acces champ : " + ident^txt);
       end
     end    
