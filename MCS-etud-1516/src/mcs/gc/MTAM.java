@@ -124,6 +124,10 @@ public class MTAM extends AbstractMachine {
 	public String genComment(String c) {
 		return "; " + c + "\n";
 	}	
+	
+	public String genOp(String op) {
+		return "\tSUBR " + op + "\n";
+	}
 
 	@Override
 	public String getSuffixe() {
