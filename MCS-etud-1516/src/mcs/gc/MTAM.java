@@ -14,6 +14,8 @@ import mcs.tds.INFOVAR;
 public class MTAM extends AbstractMachine {
 	
 	private String nom;
+	
+	private int ST;
 
 	public MTAM(String fname) {
 		if (fname.endsWith(".mcs")) {
@@ -22,6 +24,18 @@ public class MTAM extends AbstractMachine {
 			nom = fname;
 		}
 	}
+	
+
+	public int manageDep(int dep){
+		int r = ST;
+		// deplacement de la position actuelle
+		ST += dep;
+		return r;
+	}
+	
+	
+	
+	// GENERATION DE CODE
 	
 
 	public String genFonction(String etiquette, int taillepars,
@@ -70,6 +84,10 @@ public class MTAM extends AbstractMachine {
 		}
 	}
 
+	public String genVar(int taille){
+		return "\tPUSH " + taille + "\n";
+	}
+	
 	public String genCst(String v) {
 		return "\tLOADL " + v + "\n";
 	}

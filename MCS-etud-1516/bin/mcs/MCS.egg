@@ -18,33 +18,38 @@ inh machine : IMachine for
 --       , BASE, DEFS, DEF
 --         -- fin extension MCS
          ;
--- ces attributs permettent de recuperer les instructions du code ASM inline       
-syn code_asm : STRING for ASM;
--- attributs relatifs fonction
-inh etiquette : STRING for DECL, FONCTION;
+              
 
--- la TDS courante
-inh tds_asm : TDS for ASM;
-inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
-syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
---inh hcode : STRING for ;
+-- attributs relatifs fonction
+inh ident : STRING for DECL, FONCTION;
+
+--      TYPE
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
+inh htype : DTYPE for  DECL,FONCTION,PTRS,AFFX,AX,FX,RX,TX,F;
+
+
+--      TDS
+inh tds_asm : TDS for ASM;
+inh tds    : TDS     for    BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
+                            SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
+                            
+--      GC                            
+syn code : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
+--inh hcode : STRING for ;
+syn code_asm : STRING for ASM;
+
 inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
+
+--      ADRESSE
 syn code_est_adresse : BOOLEAN for  F, FX, A,AX,R,RX,T,TX,E ;
 inh hcode_est_adresse : BOOLEAN for FX,AFFX ;
--- Cet attribut sert a calculer les adresses STATIQUEMENT
--- lorsque cela est possible. Vaut 0 si valeur non significative.
--- Cet attribut est calcule systématiquement en attendant de
--- savoir s'il est utile ou non ...
 syn adresse : INTEGER for  F,FX, A,R,T,E; 
 inh hadresse : INTEGER for FX ,AFFX;
 
--- gestion des types pour les opérateurs, affectation etc
-inh htype : DTYPE for  AFFX,AX,FX,RX,TX,F;
 
--- gestion de l'affectation
+--      AFFECTATION
 syn est_affectable : BOOLEAN for A,T,R,F,E,FX;
 
 
@@ -129,7 +134,7 @@ end
 }
 #tds {
 do
-    --init de la TDS
+    --init de la TDS ( sans parente )
     ENTITES^tds := new TDS(nil);
 end
 }
@@ -146,6 +151,7 @@ do
 end
 }
 
+------------------------------------------------------------------------
 ENTITES -> #gen ;
 #gen {
 do
@@ -153,29 +159,23 @@ do
 end
 }
 
-
+------------------------------------------------------------------------
 ENTITES ->  ENTITE ENTITES #gen;
 #gen {
 do
     ENTITES^code := ENTITE^code + ENTITES1^code;
 end
 }    
--- TDS Done
 
+------------------------------------------------------------------------
 -- definition d'un nom de type (commence par une majuscule)
 ENTITE -> typedef TYPE identc pv #tds #gen;
 #tds {
 local
-    i : INFO ;
+    i : INFOTYPE ;
 do
     i := ENTITE^tds.chercherGlobalement(identc^txt);
-    if i /= null then
-       error(B_01, identc^txt);
-    else    
-      -- creer un type
-      i := new INFOTYPE(TYPE^type);
-      ENTITE^tds.inserer(identc^txt,  i);
-    end
+    ENTITE^tds.inserer(identc^txt,  i);
 end
 }
 #gen {
@@ -184,29 +184,13 @@ do
 end
 }
 
-
--- definition d'une variable globale ou d'une fonction
--- (commence par une minuscule)
-ENTITE ->  TYPE ident #tds #nomFonction DECL #gen;
-#tds {
-local
-    i : INFO ;
+------------------------------------------------------------------------
+-- definition d'une variable globale ou d'une fonction (commence par une minuscule)
+ENTITE ->  TYPE ident #decl DECL #gen;
+#decl {
 do
-    i := ENTITE^tds.chercherGlobalement(ident^txt);
-    if i /= null then
-       error(B_02, ident^txt);
-    else    
-      -- creer un type
-      i := new INFOTYPE(TYPE^type);
-      ENTITE^tds.inserer(ident^txt,  i);
-    end
-    -- transmission tds
-    DECL^tds := ENTITE^tds;
-end
-}
-#nomFonction {
-do
-    DECL^etiquette := ident^txt;
+    DECL^ident := ident^txt;
+    DECL^htype := TYPE^type;
 end
 }
 #gen {
@@ -215,36 +199,46 @@ do
 end
 }
 
-
 -- Variable
-DECL -> pv ;
-
--- déclaration d'une fonction
-DECL -> FONCTION ;
---TDS Done
-
--- Fonction
-FONCTION -> #tailleRetour paro #tds PARFS parf BLOC #gen;
+DECL -> pv #tds #gen;
 global
-    tdsParam : TDS;
-    tam : IMachine;
-    tailleRetour : INTEGER;
-#tailleRetour {
- local
-    i : INFO ;
-    it : INFOTYPE;
-    t : DTYPE;
- do
-    -- rechercher l'ident   
-    i := FONCTION^tds.chercherGlobalement(FONCTION^etiquette);
-    if i = nil then
-      error(B_05, FONCTION^etiquette);
-    else
-        tailleRetour := i.getTaille();
-    end
-end
-}    
+    i : INFOVAR ;
+    type : DTYPE;
 #tds {
+do
+    type := DECL^htype;
+    i := new INFOVAR(type, DECL^machine.manageDep(type.getTaille()));
+    DECL^tds.inserer(DECL^ident,  i);
+end
+}
+#gen {
+do
+    DECL^code := DECL^machine.genVar(type.getTaille());
+end
+}
+
+------------------------------------------------------------------------
+-- déclaration d'une fonction
+DECL -> #ident FONCTION #gen;
+#ident {
+do
+    FONCTION^ident := DECL^ident;
+    FONCTION^htype := DECL^htype;
+end
+}
+#gen {
+do
+    DECL^code := FONCTION^code;
+end
+}
+
+------------------------------------------------------------------------
+-- Fonction
+FONCTION -> paro #init PARFS parf BLOC #gen;
+global
+    i : INFOFONC; 
+    tdsParam : TDS;
+#init {
 do
     tdsParam := new TDS(FONCTION^tds);
     PARFS^tds := tdsParam; 
@@ -253,22 +247,24 @@ do
 end
 }
 #gen{
-local
-  cp : STRING ; -- code sous la forme d'une fonction
 do
-    tam := FONCTION^machine;
+    -- TDS
+    i := new INFOFONC(FONCTION^htype, tdsParam);
+    FONCTION^tds.inserer(FONCTION^ident,  i);
+    
+    
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
-    cp := tam.genFonction(FONCTION^etiquette, tdsParam.getTailleParams(), tailleRetour, BLOC^code);
+    FONCTION^code := FONCTION^machine.genFonction(FONCTION^ident, tdsParam.getTailleParams(), tdsParam.getTailleRetour(), BLOC^code);
 end
 }
 
+------------------------------------------------------------------------
 -- parametres de fonctions
 PARFS ->  ;
--- Done
 
 
--- 
+------------------------------------------------------------------------
 -- multi paramètres
 PARFS -> #tds PARF PARFSX ;
 global
@@ -281,11 +277,12 @@ do
 end
 }
 
-
+------------------------------------------------------------------------
+-- fin parametre
 PARFSX ->  ;
 -- Done
 
-
+-- multi parametres
 PARFSX -> #tds virg PARF PARFSX ;
 #tds {
 do 
@@ -295,50 +292,54 @@ do
 end
 }
 
--- type
+------------------------------------------------------------------------
+-- parametre fonction
 PARF -> TYPE ident #tds;
 #tds {
 local
     i : INFO ;
 do
-    -- inserer les autres param dans la tds des param
-    i := PARF^tds.chercherGlobalement(ident^txt);
-    if i /= null then
-       error(B_02, ident^txt);
-    else    
-      -- creer un type
-      i := new INFOTYPE(TYPE^type);
-      PARF^tds.inserer(ident^txt,  i);
-    end
+    -- creer un type
+    i := new INFOVAR(TYPE^type);
+    PARF^tds.inserer(ident^txt, i);
 end
 }
 
+------------------------------------------------------------------------
 -- les types (de base, noms, struct et pointeurs)
-TYPE -> STYPE PTRS #type;
+TYPE -> STYPE #htype PTRS #type;
+#htype {
+do
+    PTRS^htype := STYPE^type; 
+end
+}
 #type {
 do
-    if PTRS^type = nil then
-        TYPE^type := STYPE^type;
-    else
-        TYPE^type := new POINTEUR(PTRS^type) ;
-    end    
+    TYPE^type := PTRS^type;
 end
 }
 
+------------------------------------------------------------------------
 -- type de base
 -- des * pour definir un pointeur
 PTRS -> #type;
 #type {
 do
-    PTRS^type := nil;
+    PTRS^type := PTRS^htype;
 end
 }
 
+------------------------------------------------------------------------
 -- variable qualifiee 
-PTRS -> mult PTRS #type;
+PTRS -> mult #htype PTRS #type;
+#htype {
+do
+    PTRS1^htype := new POINTEUR(PTRS^htype, 1);
+end
+}
 #type {
 do
-    PTRS^type := new POINTEUR(PTRS1^type);
+    PTRS^type := PTRS1^type;
 end
 }
 
@@ -346,21 +347,21 @@ end
 STYPE-> void #type ;
 #type {
 do
-    STYPE^type := new DTYPE("void");
+    STYPE^type := new VOID();
 end
 }
 
 STYPE-> int #type;
 #type {
 do
-    STYPE^type := new DTYPE("int");
+    STYPE^type := new INT();
 end
 }
 
 STYPE-> char #type;
 #type {
 do
-    STYPE^type := new DTYPE("char");
+    STYPE^type := new CHAR();
 end
 }
 
@@ -1264,7 +1265,7 @@ do
     F^adresse := F1^adresse;
     F^code_est_adresse := F1^code_est_adresse;
     -- code acces a un pointeur
-    F^code := 
+    F^code := "";
 end
 }
 
@@ -1511,3 +1512,4 @@ end
 --F -> null2;
 --F -> new identc IDC paro ES parf ;
 end
+

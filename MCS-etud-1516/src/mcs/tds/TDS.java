@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import mcs.exception.*;
+
 /**
  * une TDS hiérarchique.
  */
@@ -67,11 +69,22 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	 * 
 	 * @param n
 	 * @param i
+	 * @throws Exception 
 	 */
-	public void inserer(String n, INFO i) {
-		put(n, i);
+	public void inserer(String n, INFO i) throws Exception{
+		if(get(n) != null){
+			put(n, i);
+		}else{
+			throw EExistantArgument(n + "variable already defined");
+		}
+			
 	}
 	
+	private Exception EExistantArgument(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public int getTailleParams() {
 		int taille = 0;
 		Set<Map.Entry<String, INFO>> s = entrySet();
