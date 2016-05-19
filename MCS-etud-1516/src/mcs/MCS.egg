@@ -175,12 +175,22 @@ local
     i : INFOTYPE ;
 do
     i := ENTITE^tds.chercherGlobalement(identc^txt);
+<<<<<<< HEAD
     ENTITE^tds.inserer(identc^txt,  i);
+=======
+    if i /= null then
+       error(type_deja_existant, identc^txt);
+    else    
+      -- creer un type
+      i := new INFOTYPE(TYPE^type);
+      ENTITE^tds.inserer(identc^txt,  i);
+    end
+>>>>>>> 566dc861a6dad7923be4a5157d0a826b8f2e912f
 end
 }
 #gen {
 do
-    ENTITE^code := "";        
+    ENTITE^code := "";     
 end
 }
 
@@ -189,8 +199,26 @@ end
 ENTITE ->  TYPE ident #decl DECL #gen;
 #decl {
 do
+<<<<<<< HEAD
     DECL^ident := ident^txt;
     DECL^htype := TYPE^type;
+=======
+    i := ENTITE^tds.chercherGlobalement(ident^txt);
+    if i /= null then
+       error(B_02, ident^txt);
+    else    
+      -- creer un type
+      i := new INFOVAR(TYPE^type);
+      ENTITE^tds.inserer(ident^txt,  i);
+    end
+    -- transmission tds
+    DECL^tds := ENTITE^tds;
+end
+}
+#nomFonction {
+do
+    DECL^etiquette := ident^txt;
+>>>>>>> 566dc861a6dad7923be4a5157d0a826b8f2e912f
 end
 }
 #gen {
