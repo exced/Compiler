@@ -29,7 +29,7 @@ inh tds    : TDS     for BLOC, ENTITE,ENTITES, INSTS, INST, FONCTION, DECL, PARF
 syn code : STRING for ENTITE , ENTITES, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
 --inh hcode : STRING for ;
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
-inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP,FX;
+inh hdep : INTEGER for BLOC, INSTS, INST , CHAMPS, CHAMP;
 syn dep : INTEGER for INST , INSTS;
 inh champs : LCHAMPS for CHAMPS, CHAMP;
 syn code_est_adresse : BOOLEAN for  F, FX, A,AX,R,RX,T,TX,E ;
@@ -38,11 +38,11 @@ inh hcode_est_adresse : BOOLEAN for FX,AFFX ;
 -- lorsque cela est possible. Vaut 0 si valeur non significative.
 -- Cet attribut est calcule systématiquement en attendant de
 -- savoir s'il est utile ou non ...
-syn adresse : INTEGER for  F, FX, A,R,T,E; 
+syn adresse : INTEGER for  F,FX, A,R,T,E; 
 inh hadresse : INTEGER for FX ,AFFX;
 
 -- gestion des types pour les opérateurs, affectation etc
-inh htype : DTYPE for  AFFX,AX,FX,RX,TX;
+inh htype : DTYPE for  AFFX,AX,FX,RX,TX,F;
 
 -- gestion de l'affectation
 syn est_affectable : BOOLEAN for A,T,R,F,E,FX;
@@ -954,10 +954,15 @@ do
 end
 }
 
-TX -> OPMUL #tds F TX  #type #gen;
+TX -> OPMUL #tds #htype F TX  #type #gen;
 #tds {
 do
     TX1^tds := TX^tds;
+end
+}
+#htype {
+do
+    F^htype := TX^htype;
 end
 }
 #type {
@@ -1166,7 +1171,15 @@ end
 
 
 -- expression parenthesee
-F ->  paro E parf FX #aff #type #gen;
+F ->  paro E parf #addr FX #aff #type #gen;
+#addr {
+do
+    FX^hadresse := E^adresse;
+    FX^hcode_est_adresse := E^code_est_adresse;
+    -- type de FX est le type de l expression de gauche
+    FX^htype := E^type;
+end
+}
 #aff {
 do
     F^est_affectable := (E^est_affectable && FX^est_affectable);
@@ -1202,7 +1215,7 @@ end
 }
 
 
-F ->  paro TYPE parf  F #aff #type;
+F ->  paro TYPE parf  F #aff #type #gen;
 #aff {
 do
     F^est_affectable := F1^est_affectable;
@@ -1211,13 +1224,20 @@ end
 #type {
 do
     -- controle de type
-    if ~TYPE^type.compareTo(F^type) then
-        error(B_12, TYPE^type.getNom(), F^type.getNom());
+    if ~TYPE^type.compareTo(F1^type) then
+        error(B_12, TYPE^type.getNom(), F1^type.getNom());
     else
     -- on remonte le type
         F^type := TYPE^type;         
     end 
-  
+end
+}
+#gen {
+do
+    -- remontee des infos
+    F^code := F1^code;
+    F^code_est_adresse := F1^code_est_adresse;
+    F^adresse := F1^adresse;
 end
 }
 
@@ -1231,8 +1251,8 @@ end
 #type {
 do
     -- controle de type
-    if ~F1^type.compareTo(F^type) then
-        error(B_12, F^type.getNom(), F1^type.getNom());
+    if ~F^htype.compareTo(F1^type) then
+        error(B_12, F^htype.getNom(), F1^type.getNom());
     else
     -- on remonte le type
         F^type := new POINTEUR(F1^type);         
@@ -1242,6 +1262,9 @@ end
 #addr {
 do
     F^adresse := F1^adresse;
+    F^code_est_adresse := F1^code_est_adresse;
+    -- code acces a un pointeur
+    F^code := 
 end
 }
 
@@ -1286,9 +1309,8 @@ end
 #gen {
 do
   FX^type := FX^htype;
-  FX^code_est_adresse := FX^hcode_est_adresse;
-  FX^code := FX^hcode;
-  FX^adresse := FX^hadresse;
+  FX^code_est_adresse := true;
+  FX^code := "";
 end
 }
 
@@ -1323,13 +1345,15 @@ do
     else
       FX1^htype := c.getType();
       --FX1^hcode_est_adresse := FX^hcode_est_adresse;
-      if ! FX^hcode_est_adresse then
+      if ! FX^hadresse_utile then
         FX1^hadresse := 0;
-        FX1^hcode :=FX^hcode + FX^machine.genComment("acces champ : " + ident^txt) +
-                  FX^machine.genAdrField(c.getDep())  ;
+        FX1^hadresse_utile := false;
+        FX1^hcode :=FX^hcode + FX^tam.genComment("acces champ : " + ident^txt) +
+                  FX^tam.genAdrField(c.getDep())  ;
       else
         FX1^hadresse := FX^hadresse + c.getDep();
-        FX1^hcode := FX^machine.genComment("acces champ : " + ident^txt);
+        FX1^hadresse_utile := true;
+        FX1^hcode := FX^tam.genComment("acces champ : " + ident^txt);
       end
     end    
   else
