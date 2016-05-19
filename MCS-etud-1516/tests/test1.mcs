@@ -1,0 +1,6 @@
+// point d'entree du programme.
+int main(){
+    int a = 3;
+
+    return 0;
+}
