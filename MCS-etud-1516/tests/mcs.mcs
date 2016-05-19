@@ -1,0 +1,117 @@
+// NB. Ce programme ne sert qu'a illustrer les concepts de mCS
+// et ne calcule rien de particulier ! 
+
+// Le namespace System est en C# predefini et contient les classes
+// et les types de base
+
+namespace System {
+  // la classe mere de toutes les classes.
+  class Object {
+  // attributs
+  // methodes
+  }
+}
+
+// import de System
+using System;
+
+// on peut definir des entites mC dans un programme mCS
+typedef struct {
+  int x;
+  int y;
+  } Point;
+  
+int estRouge(int c){
+  return c == 42;
+  }
+  
+// les modes de passages de parametres en mCS sont plus riches qu'en mC
+ void swap(ref int a, ref int b){
+   int tmp = a;
+   a = b;
+   b = tmp;
+   }
+   
+namespace Geometry {
+  typedef struct {
+    int x;
+    int y;
+    } Point;
+   // sous-namespace : Geometry.A
+   namespace A {
+    // un point : le nom complet de cette classe est Geometry.A.Point2D
+    class Point2D : Object{
+      // attributs
+      int x;
+      int y;
+      // Constructeur
+      public Point2D(int a, int b){
+        x = a;
+        y = b;
+        }
+      
+      // methodes
+      public int getX() {
+        return x;
+        }
+      public int getY() {
+        return this.y;
+        }
+      public void afficher(){
+        // ...
+        }
+      } // classe Point2D
+    }
+    // un autre sous-namespace
+    namespace B { 
+      // un point colore sous-classe de Point2D.
+      // le nom complet de cette classe est Geometry.B.Point2DCol
+      public class Point2DCol:Geometry.A.Point2D{
+        // attributs
+        int col;
+        // Constructeur avec appel du constructeur de Point2D
+        public Point2DCol(int a, int b, int c) : base(a,b){
+          col = c;
+          }
+        // methode
+        public int getCol() {
+          return col;
+          }
+        private bool isRed(){
+          return estRouge(col) != 0;
+          }
+        // redefinition
+        public void afficher(){
+          // appel a la methode de la classe parente.
+          base.afficher();
+        // ...
+        }
+ 
+      } // classe Point2DCol
+    }
+
+    // suite du namespace A
+    namespace A {
+      // ...
+    }
+
+  } // namespace Geometry
+  
+using Geometry;
+
+// point d'entree du programme
+int main(){
+    Point2D p2d = new Point2D(3,4);
+    Point p ;
+    p.x = p2d.x +1;
+    p.y = p2d.y +2;
+    swap(p.x,p.y);
+    p2d = p;
+    bool b = ((Point2DCol) p2d).isRed();
+    Point2DCol pc = null;
+    pc = p; // incorrect
+    p  = pc ; // correct
+    
+    return 0;
+}
+

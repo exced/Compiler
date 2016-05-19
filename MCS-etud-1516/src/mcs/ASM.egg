@@ -1,0 +1,270 @@
+option version = 1.0.1 ;
+option k = 2;
+option auto = true;
+-- attributs
+syn code_asm :STRING  for TAM, INST, CINST, ADR, INSTS, CSTE;
+inh tds_asm : TDS for TAM, INST, INSTS, ADR, CSTE;
+
+space  separ  is "[\t ]+";
+sugar  dpts   is "\:";
+sugar  cro    is "\[";
+sugar  crf    is "\]";
+sugar  paro   is "\(";
+sugar  parf   is "\)"; 
+sugar  moins  is "\-";
+sugar  aco    is "\{";
+sugar  acf    is "\}"; 
+sugar  load   is "LOAD";
+sugar  loada  is "LOADA";
+sugar  loadi  is "LOADI";
+sugar  loadl  is "LOADL";
+sugar  store  is "STORE";
+sugar  storei is "STOREI";
+sugar  call   is "CALL"; 
+sugar  calli  is "CALLI";
+sugar  return is "RETURN";
+sugar  subr   is "SUBR";
+sugar  push   is "PUSH";
+sugar  pop    is "POP";
+sugar  jump   is "JUMP";
+sugar  jumpi  is "JUMPI";
+sugar  jumpif is "JUMPIF"; 
+sugar  halt   is "HALT";
+sugar  nl     is "(\n|\r)";
+term   chaine is "\"([^\"]|\\.)*\""; 
+term   car    is "\'([^\']|\\.)\'";
+term   nb     is "\-?[0-9]+";
+term   var    is "%[A-Za-z][A-Za-z0-9_]*"; -- %<nom> pour designer la variable <nom> de MC
+term   ident  is "[0-9a-zA-Z_\$@#\.\?\<\>]+";
+term   info   is "\;[^\n\r]*";
+
+TAM ->  aco INSTS acf #gen;
+#gen {
+do
+  TAM^code_asm := "; inline code_asm\n" + INSTS^code_asm;
+end
+}
+
+INSTS -> INST INSTS #gen;
+#gen {
+do
+  INSTS^code_asm :=   INST^code_asm + "\n" + INSTS1^code_asm;
+end
+}
+
+INSTS -> #gen;
+#gen {
+do
+  INSTS^code_asm := "";
+end
+}
+
+ADR -> paro nb parf nb cro ident crf  #gen;
+#gen {
+do
+  ADR^code_asm := "(" + nb^txt + ") " + nb^txt + '[' + ident^txt+ ']';
+end
+}
+
+ADR -> var  #gen;
+#gen {
+local
+  i : INFO;
+  v : INFOVAR;
+  e : Emplacement;
+  r : Register;
+  t : DTYPE;
+do
+-- remplace var^txt par l'emplacement de la variable
+  if ADR^tds_asm = null then
+    -- write "pas de TDS\n"
+  else
+    i := ADR^tds_asm.chercherGlobalement(var^txt.substring(1));
+    if i /= nil then
+      match i 
+        with INFOVAR then 
+          v := i;
+          t := v.getType();
+          e := v.getEmpl();
+          r := e.getReg();
+          ADR^code_asm := "("+ t.getTaille() + ") " +  e.getDep() + "["+ r.getName()+ "]";
+       else
+         error(NOT_A_VAR, var^txt);
+       end
+     else
+       error(UNKNOWN, var^txt);
+     end
+   end
+end
+}
+INST -> nl #gen;
+#gen {
+do
+  INST^code_asm := "\n";
+end
+}
+
+INST -> info nl #gen;
+#gen {
+do
+  INST^code_asm := "\t" + info^txt + "\n";
+end
+}
+
+INST -> load ADR #gen;
+#gen {
+do
+  INST^code_asm := "\tLOAD "+ ADR^code_asm;
+end
+}
+
+INST -> loada  CINST #gen;
+#gen {
+do
+  INST^code_asm := "\tLOADA " + CINST^code_asm;
+end
+}
+
+INST -> loadi paro nb parf #gen;
+#gen {
+do
+  INST^code_asm := "\tLOADI (" + nb^txt + ")";
+end
+}
+
+INST -> loadl CSTE #gen;
+#gen {
+do
+  INST^code_asm := "\tLOADL " + CSTE^code_asm;
+end
+}
+
+CSTE -> nb #gen;
+#gen {
+do
+  CSTE^code_asm := nb^txt;
+end
+}
+ 
+CSTE -> chaine #gen;
+#gen {
+do
+  CSTE^code_asm := chaine^txt; 
+end
+}
+
+CSTE -> car #gen;
+#gen {
+do
+  CSTE^code_asm := car^txt;
+end
+}
+
+
+INST -> store  ADR #gen;
+#gen {
+do
+  INST^code_asm := "\tSTORE " + ADR^code_asm;
+end
+}
+
+INST -> storei paro nb parf #gen;
+#gen {
+do
+  INST^code_asm := "\tSTOREI (" + nb^txt + ")";
+end
+}
+
+INST -> call paro ident parf CINST #gen;
+#gen {
+do
+  INST^code_asm := "\tCALL (" + ident^txt + ") " + CINST^code_asm;
+end
+}
+
+INST -> calli #gen;
+#gen {
+do
+  INST^code_asm := "\tCALLI";
+end
+}
+
+INST -> return paro nb parf nb #gen;
+#gen {
+do
+  INST^code_asm := "\tRETURN (" + nb^txt + ") " + nb1^txt;
+end
+}
+
+INST -> subr ident #gen;
+#gen {
+do
+  INST^code_asm := "\tSUBR " + ident^txt;
+end
+}
+
+INST -> ident #gen;
+#gen {
+do
+  INST^code_asm := ident^txt;
+end
+}
+
+INST -> push nb #gen;
+#gen {
+do
+  INST^code_asm := "\tPUSH " + nb^txt;
+end
+}
+
+INST -> pop paro nb parf nb #gen;
+#gen {
+do
+  INST^code_asm := "\tPOP (" + nb^txt + ") " + nb1^txt;
+end
+}
+
+INST -> jump CINST #gen;
+#gen {
+do
+  INST^code_asm := "\tJUMP " + CINST^code_asm;
+end
+}
+
+INST -> jumpi #gen;
+#gen {
+do
+  INST^code_asm := "\tJUMPI";
+end
+}
+
+INST -> jumpif paro nb parf CINST #gen;
+#gen {
+do
+  INST^code_asm := "\tJUMPIF (" + nb^txt +") " + CINST^code_asm;
+end
+}
+
+INST -> halt #gen;
+#gen {
+do
+  INST^code_asm := "\tHALT";
+end
+}
+
+CINST -> nb cro ident crf #gen;
+#gen {
+do
+  CINST^code_asm := nb^txt + '[' + ident^txt+ ']';
+end
+}
+
+CINST -> ident #gen;
+#gen {
+do
+  CINST^code_asm := ident^txt;
+end
+}
+
+end
+
