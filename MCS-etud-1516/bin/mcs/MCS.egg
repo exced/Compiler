@@ -170,7 +170,7 @@ local
 do
     i := ENTITE^tds.chercherGlobalement(identc^txt);
     if i /= null then
-       error(B_01, identc^txt);
+       error(type_deja_existant, identc^txt);
     else    
       -- creer un type
       i := new INFOTYPE(TYPE^type);
@@ -180,7 +180,7 @@ end
 }
 #gen {
 do
-    ENTITE^code := "";        
+    ENTITE^code := "";     
 end
 }
 
@@ -197,7 +197,7 @@ do
        error(B_02, ident^txt);
     else    
       -- creer un type
-      i := new INFOTYPE(TYPE^type);
+      i := new INFOVAR(TYPE^type);
       ENTITE^tds.inserer(ident^txt,  i);
     end
     -- transmission tds
