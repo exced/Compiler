@@ -239,6 +239,8 @@ global
 #init {
 do
     tdsParam := new TDS(FONCTION^tds);
+    -- 1er param = retour de fonction
+    tdsParam.inserer("TOKEN_retourFonction", FONCTION^htype);
     PARFS^tds := tdsParam; 
     BLOC^tds := new TDS(tdsParam);
 end
