@@ -1,4 +1,4 @@
-package mcs.type;
+package mcs.exception;
 
 public class EExistantChamp extends Exception {
 

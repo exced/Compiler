@@ -15,8 +15,8 @@ public class MCSMessages extends NLS {
   return RESOURCE_BUNDLE;
   }		
 
+  public static  String notAff;
   public static  String MCS_unexpected_token;
-  public static  String B_14;
   public static  String B_12;
   public static  String not_int;
   public static  String B_11;

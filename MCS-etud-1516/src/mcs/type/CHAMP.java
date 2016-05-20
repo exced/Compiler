@@ -2,6 +2,7 @@ package mcs.type;
 
 public class CHAMP {
 	private String nom;
+	private int dep;
 	private DTYPE type;
 
 	public String getNom() {
@@ -12,13 +13,23 @@ public class CHAMP {
 		return type;
 	}
 
-	public CHAMP(String nom, DTYPE type) {
+	public int getDep() {
+		return dep;
+	}
+	
+	public void setDep(int dep) {
+		this.dep = dep;
+	}
+
+	public CHAMP(String nom, DTYPE type, int dep) {
 		super();
 		this.nom = nom;
 		this.type = type;
+		this.dep = dep;
 	}
-	public String toString(){
-		return nom + ": " + type;
+
+	public String toString() {
+		return nom + ": " + type + " dep = " + dep;
 	}
 
 }

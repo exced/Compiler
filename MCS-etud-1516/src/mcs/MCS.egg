@@ -46,7 +46,7 @@ inh hcode_est_adresse : BOOLEAN for AFFX,AX,RX,TX ;
 
 
 --      AFFECTATION
-syn est_affectable : BOOLEAN for A,T,R,F,E,FX;
+syn est_affectable : BOOLEAN for A,T,R,F;
 
 
 
@@ -591,9 +591,7 @@ do
     
     --gestion d'erreur en cas de probleme d affectation
     if ~A^est_affectable then
-        error(B_14);
-    else
-        E^est_affectable := A^est_affectable;
+        error(notAff, A^type.getNom());
     end
 end
 }
@@ -690,7 +688,7 @@ AX -> OPREL R #type #gen;
 #type {
 do
     -- controle de type
-    if ~AX^htype.compareTo(OPREL^type, R^type) then
+    if ~AX^htype.compareOpBin(OPREL^type, R^type) then
         error(B_10, AX^htype.getNom());
     else
     -- on remonte le type
@@ -818,9 +816,9 @@ RX ->   OPADD  T RX  #type #gen;
 #type {
 do
     -- controle de type
-    if ~RX^htype.compareTo(OPADD^type, T^type) then
+    if ~RX^htype.compareOpBin(OPADD^type, T^type) then
         error(B_10, RX^htype.getNom(), OPADD^type, T^type);    
-    elseif ~RX^htype.compareTo(OPADD^type, RX1^type) then
+    elseif ~RX^htype.compareOpBin(OPADD^type, RX1^type) then
         error(B_10, RX^htype.getNom(), OPADD^type, RX1^type);
     else
     -- on remonte le type
@@ -919,9 +917,9 @@ end
 #type {
 do
     -- controle de type
-    if ~TX^htype.compareTo(OPMUL^type, F^type) then
+    if ~TX^htype.compareOpBin(OPMUL^type, F^type) then
         error(B_10, TX^htype.getNom(), OPMUL^type, F^type);    
-    elseif ~TX^htype.compareTo(OPMUL^type, TX1^type) then
+    elseif ~TX^htype.compareOpBin(OPMUL^type, TX1^type) then
         error(B_10, TX^htype.getNom(), OPMUL^type, TX1^type);
     else
     -- on remonte le type
@@ -1057,7 +1055,7 @@ end
 #type {
 do
     -- controle de type
-    if ~F1^type.compareTo(OPUN^type) then
+    if ~F1^type.compareOpUn(OPUN^type) then
         error(B_10, OPUN^type.getNom(), F1^type.getNom());
     else
     -- on remonte le type
@@ -1135,7 +1133,7 @@ end
 }
 #aff {
 do
-    F^est_affectable := (E^est_affectable && FX^est_affectable);
+    F^est_affectable := true;
 end
 }
 #type {
@@ -1242,7 +1240,7 @@ end
 }  
 #aff {
 do
-    F^est_affectable := FX^est_affectable;
+    F^est_affectable := true;
 end
 }  
 #gen{
@@ -1253,12 +1251,7 @@ end
 }
 
 ------------------------------------------------------------------------
-FX -> #aff #gen;
-#aff {
-do
-    FX^est_affectable := true;
-end
-}
+FX -> #gen;
 #gen {
 do
   FX^type := FX^htype;
@@ -1268,12 +1261,7 @@ end
 
 ------------------------------------------------------------------------
 -- acces champ
-FX ->   pt  ident #a FX #aff #gen;
-#aff {
-do
-    FX^est_affectable := FX1^est_affectable;
-end
-}
+FX ->   pt  ident #a FX #gen;
 #gen {
 do
   FX^type := FX1^type;
@@ -1293,12 +1281,7 @@ end
 
 ------------------------------------------------------------------------
 -- acces champ pointeur
-FX ->   arrow  ident FX #aff #type #gen;
-#aff {
-do
-    FX^est_affectable := FX1^est_affectable;
-end
-}
+FX ->   arrow  ident FX #type #gen;
 #type {
 do
     FX^type := FX1^type;    
@@ -1312,7 +1295,7 @@ end
 
 ------------------------------------------------------------------------
 -- appel de sous-programme
-FX ->   paro #tds ES parf FX #aff #type #gen;
+FX ->   paro #tds ES parf FX #type #gen;
 global 
     tdsParam :  TDS; 
 #tds {
@@ -1323,12 +1306,6 @@ do
     FX1^tds := new TDS(tdsParam);
 end
 }
-#aff {
-do
-    -- pour l instant on ne gere pas l affectation multiple
-    FX^est_affectable := false;
-end
-}
 #type {
 do
     FX^type := FX1^type;
@@ -1337,6 +1314,7 @@ end
 #gen {
 do
     -- appel du sous-programme à partir de l'étiquette
+    -- TODO : push tous les arguments avant de call
     FX^code := FX^machine.genCall();
 end
 }

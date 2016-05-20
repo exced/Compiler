@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import mcs.exception.*;
 
 public class LCHAMPS extends ArrayList<CHAMP> {
+	
+	private int currentDep = 0;
 
 	private static final long serialVersionUID = 1L;
 
@@ -39,6 +41,8 @@ public class LCHAMPS extends ArrayList<CHAMP> {
 
 	public void inserer(CHAMP c) throws EExistantChamp {
 		if (this.chercher(c.getNom()) == null) {
+			currentDep += c.getType().getTaille();
+			c.setDep(currentDep);
 			add(c);
 		}
 		else {

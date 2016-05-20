@@ -18,6 +18,10 @@ public interface DTYPE {
 	 * @return
 	 */
 	public boolean compareTo(DTYPE autre);
+	
+	public boolean compareOpUn(DTYPE op);
+	
+	public boolean compareOpBin(DTYPE op, DTYPE b);
 
 	public String toString();
 }

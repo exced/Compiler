@@ -74,7 +74,7 @@ x_3.att_tds=this.att_tds;
 private void action_type_38(S_OPREL_MCS x_2, S_R_MCS x_3) throws Exception {
 try {
 // instructions
-if (!(this.att_htype.compareTo(x_2.att_type, x_3.att_type))){
+if (!(this.att_htype.compareOpBin(x_2.att_type, x_3.att_type))){
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_B_10, MCSMessages.B_10,new Object[]{""+this.att_htype.getNom()});
 
 }
@@ -95,34 +95,34 @@ this.att_code_est_adresse=this.att_hcode_est_adresse;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_inf : // 870
+      case LEX_MCS.token_inf : // 352
         regle38 () ;
       break ;
-      case LEX_MCS.token_sup : // 872
+      case LEX_MCS.token_sup : // 354
         regle38 () ;
       break ;
-      case LEX_MCS.token_infeg : // 871
+      case LEX_MCS.token_infeg : // 353
         regle38 () ;
       break ;
-      case LEX_MCS.token_supeg : // 873
+      case LEX_MCS.token_supeg : // 355
         regle38 () ;
       break ;
-      case LEX_MCS.token_eg : // 874
+      case LEX_MCS.token_eg : // 356
         regle38 () ;
       break ;
-      case LEX_MCS.token_neg : // 875
+      case LEX_MCS.token_neg : // 357
         regle38 () ;
       break ;
-      case LEX_MCS.token_affect : // 858
+      case LEX_MCS.token_affect : // 340
         regle39 () ;
       break ;
-      case LEX_MCS.token_virg : // 855
+      case LEX_MCS.token_virg : // 337
         regle39 () ;
       break ;
-      case LEX_MCS.token_pv : // 857
+      case LEX_MCS.token_pv : // 339
         regle39 () ;
       break ;
-      case LEX_MCS.token_parf : // 852
+      case LEX_MCS.token_parf : // 334
         regle39 () ;
       break ;
       default :
