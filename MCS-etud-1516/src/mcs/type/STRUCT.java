@@ -7,7 +7,7 @@ public class STRUCT extends DTYPEImpl {
 	private LCHAMPS champs;
 
 	public STRUCT(LCHAMPS champs) {
-		super("struct", champs.getTaille());
+		super("struct", champs.getCurrentDep());
 		this.champs = champs;
 	}
 

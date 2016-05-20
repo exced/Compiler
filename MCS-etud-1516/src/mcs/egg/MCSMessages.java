@@ -15,21 +15,23 @@ public class MCSMessages extends NLS {
   return RESOURCE_BUNDLE;
   }		
 
-  public static  String notAff;
-  public static  String MCS_unexpected_token;
-  public static  String B_12;
-  public static  String not_int;
   public static  String B_11;
-  public static  String B_08;
   public static  String B_10;
-  public static  String type_undefined;
-  public static  String not_infotype;
   public static  String MCS_expected_eof;
+  public static  String type_declared;
+  public static  String type_undefined;
   public static  String MCS_expected_token;
-  public static  String affect_notCompatible;
-  public static  String B_01;
+  public static  String B_08;
   public static  String returnType_notCompatible;
+  public static  String B_01;
+  public static  String champ_declared;
   public static  String var_declared;
-  public static  String not_pointeur;
+  public static  String notAff;
+  public static  String not_infotype;
   public static  String NO_MACH;
+  public static  String not_int;
+  public static  String not_pointeur;
+  public static  String MCS_unexpected_token;
+  public static  String affect_notCompatible;
+  public static  String B_12;
   }

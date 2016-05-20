@@ -48,8 +48,14 @@ try {
 // locales
 CHAMP loc_c;
 // instructions
-loc_c= new CHAMP(x_3.att_txt, x_2.att_type, this.att_champs.getTaille());
-this.att_champs.inserer(loc_c);
+loc_c=this.att_champs.chercherChamp(x_3.att_txt);
+if (loc_c!=null){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_champ_declared, MCSMessages.champ_declared,new Object[]{""+x_3.att_txt, ""+this.att_champs});
+
+}
+else {
+this.att_champs.inserer( new CHAMP(x_3.att_txt, x_2.att_type, this.att_champs.getCurrentDep()));
+}
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#champ","CHAMP -> TYPE ident pv #champ ;"});
 }
   }

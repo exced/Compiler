@@ -78,10 +78,16 @@ this.att_code=x_4.att_code_asm;
 private void action_tds_3(S_TYPE_MCS x_3, T_MCS x_4) throws Exception {
 try {
 // locales
-INFOTYPE loc_i;
+INFO loc_i;
 // instructions
 loc_i=this.att_tds.chercherGlobalement(x_4.att_txt);
-this.att_tds.inserer(x_4.att_txt, loc_i);
+if (loc_i!=null){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_type_declared, MCSMessages.type_declared,new Object[]{""+x_4.att_txt, ""+this.att_tds});
+
+}
+else {
+this.att_tds.inserer(x_4.att_txt,  new INFOTYPE(x_3.att_type));
+}
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","ENTITE -> typedef TYPE identc pv #tds #gen ;"});
 }
   }
@@ -133,25 +139,25 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 348
+      case LEX_MCS.token_typedef : // 12188
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 343
+      case LEX_MCS.token_void : // 12183
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 345
+      case LEX_MCS.token_int : // 12185
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 346
+      case LEX_MCS.token_char : // 12186
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 370
+      case LEX_MCS.token_identc : // 12210
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 347
+      case LEX_MCS.token_struct : // 12187
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 344
+      case LEX_MCS.token_asm : // 12184
         regle79 () ;
       break ;
       default :

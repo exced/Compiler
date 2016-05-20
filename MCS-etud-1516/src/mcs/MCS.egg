@@ -168,11 +168,15 @@ end
 -- definition d'un nom de type (commence par une majuscule)
 ENTITE -> typedef TYPE identc pv #tds #gen;
 #tds {
-local
-    i : INFOTYPE ;
+local 
+    i : INFO;
 do
     i := ENTITE^tds.chercherGlobalement(identc^txt);
-    ENTITE^tds.inserer(identc^txt,  i);
+    if i != nil then
+        error(type_declared, identc^txt, ENTITE^tds);
+    else    
+        ENTITE^tds.inserer(identc^txt, new INFOTYPE(TYPE^type));
+    end    
 end
 }
 #gen {
@@ -199,16 +203,20 @@ end
 -- Variable
 DECL -> pv #tds #gen;
 global
-    i : INFOVAR ;
+    i : INFO;
     type : DTYPE;
     e : Emplacement;
 #tds {
 do
-    type := DECL^htype;
-    e := new Emplacement(DECL^machine.getCurrentDep(), DECL^machine.getSB());
-    DECL^machine.addCurrentDep(type.getTaille());
-    i := new INFOVAR(type, e);
-    DECL^tds.inserer(DECL^ident,  i);
+    i := DECL^tds.chercherGlobalement(DECL^ident);
+    if i /= nil then
+        error(var_declared, DECL^ident);
+    else
+        type := DECL^htype;
+        e := new Emplacement(DECL^machine.getCurrentDep(), DECL^machine.getSB());
+        DECL^machine.addCurrentDep(type.getTaille());
+        DECL^tds.inserer(DECL^ident,  new INFOVAR(type, e));
+    end    
 end
 }
 #gen {
@@ -419,8 +427,13 @@ CHAMP -> TYPE ident pv #champ;
  local
   c : CHAMP ;
  do
-     c := new CHAMP(ident^txt, TYPE^type, CHAMP^champs.getTaille());
-     CHAMP^champs.inserer(c);
+    
+    c := CHAMP^champs.chercherChamp(ident^txt);
+    if c /= nil then
+        error(champ_declared, ident^txt, CHAMP^champs);
+    else    
+        CHAMP^champs.inserer(new CHAMP(ident^txt, TYPE^type, CHAMP^champs.getCurrentDep()));
+    end    
  end
 }
 
@@ -1113,7 +1126,7 @@ do
     F^est_affectable := false;
 end
 }
-#type {
+#type {  
 do
     F^type := new DTYPEImpl("PNULL", 1);
     F^code_est_adresse := false;
@@ -1230,7 +1243,7 @@ do
     with INFOFONC then
        infofonc := i;
        tdsParam := infofonc.getParams();   
-       t := tdsParam.get(1);
+       t := tdsParam.getTypeRetour();
        F^code_est_adresse := false;  
     else
         error(B_08, ident^txt);

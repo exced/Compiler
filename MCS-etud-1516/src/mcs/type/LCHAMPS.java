@@ -2,52 +2,32 @@ package mcs.type;
 
 import java.util.ArrayList;
 
-import mcs.exception.*;
 
 public class LCHAMPS extends ArrayList<CHAMP> {
 	
 	private int currentDep = 0;
 
 	private static final long serialVersionUID = 1L;
-
-	public CHAMP chercher(String nom) {
-		for (CHAMP c : this) {
-			if (c.getNom().equals(nom))
-				return c;
-		}
-		return null;
-
-	}
-
-	// Recuperer le deplacement d'un champ dans un struct
-	public int getDep(String nom){
-		int dep = 0;
-		for(CHAMP c : this){
-			if (c.getNom().equals(nom)) {
-				break;
-			}
-			dep = dep + c.getType().getTaille();
-		}
-		return dep;
+	
+	public int getCurrentDep(){
+		return currentDep;
 	}
 	
-	public int getTaille() {
-		int t = 0;
-		for (CHAMP c : this) {
-			t += c.getType().getTaille();
+	public CHAMP chercherChamp(String nom){
+		CHAMP c = null;
+		for(CHAMP ch : this){
+			if(ch.getNom().equals(nom)){
+				c = ch;
+			}
+			break;
 		}
-		return t;
+		return c;
 	}
 
-	public void inserer(CHAMP c) throws EExistantChamp {
-		if (this.chercher(c.getNom()) == null) {
-			currentDep += c.getType().getTaille();
-			c.setDep(currentDep);
-			add(c);
-		}
-		else {
-			throw new EExistantChamp(c + "champ deja present");
-		}
+	public void inserer(CHAMP c) {
+		currentDep += c.getType().getTaille();
+		c.setDep(currentDep);
+		add(c);
 	}
 
 	public String toString() {

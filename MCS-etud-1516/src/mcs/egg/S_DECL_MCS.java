@@ -28,7 +28,7 @@ int [] sync= new int[0];
   LEX_MCS att_scanner;
   DTYPE glob_5_type;
   Emplacement glob_5_e;
-  INFOVAR glob_5_i;
+  INFO glob_5_i;
   private void regle6() throws Exception {
 
     //declaration
@@ -67,11 +67,17 @@ x_3.att_tds=this.att_tds;
 private void action_tds_5() throws Exception {
 try {
 // instructions
+glob_5_i=this.att_tds.chercherGlobalement(this.att_ident);
+if (glob_5_i!=null){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_declared, MCSMessages.var_declared,new Object[]{""+this.att_ident});
+
+}
+else {
 glob_5_type=this.att_htype;
 glob_5_e= new Emplacement(this.att_machine.getCurrentDep(), this.att_machine.getSB());
 this.att_machine.addCurrentDep(glob_5_type.getTaille());
-glob_5_i= new INFOVAR(glob_5_type, glob_5_e);
-this.att_tds.inserer(this.att_ident, glob_5_i);
+this.att_tds.inserer(this.att_ident,  new INFOVAR(glob_5_type, glob_5_e));
+}
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","DECL -> pv #tds #gen ;"});
 }
   }
@@ -92,10 +98,10 @@ this.att_code=this.att_machine.genVar(glob_5_type.getTaille());
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_pv : // 339
+      case LEX_MCS.token_pv : // 12179
         regle5 () ;
       break ;
-      case LEX_MCS.token_paro : // 333
+      case LEX_MCS.token_paro : // 12173
         regle6 () ;
       break ;
       default :
