@@ -89,7 +89,7 @@ this.att_type= new STRUCT(glob_20_lc);
 private void action_type_18() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("CHAR");
+this.att_type= new DTYPEImpl("CHAR", 1);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","STYPE -> char #type ;"});
 }
   }
@@ -127,33 +127,33 @@ x_5.att_champs=glob_20_lc;
 private void action_type_16() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("VOID");
+this.att_type= new DTYPEImpl("VOID", 0);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","STYPE -> void #type ;"});
 }
   }
 private void action_type_17() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("INT");
+this.att_type= new DTYPEImpl("INT", 1);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","STYPE -> int #type ;"});
 }
   }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 50437
+      case LEX_MCS.token_void : // 12850
         regle16 () ;
       break ;
-      case LEX_MCS.token_int : // 50439
+      case LEX_MCS.token_int : // 12852
         regle17 () ;
       break ;
-      case LEX_MCS.token_char : // 50440
+      case LEX_MCS.token_char : // 12853
         regle18 () ;
       break ;
-      case LEX_MCS.token_identc : // 50464
+      case LEX_MCS.token_identc : // 12877
         regle19 () ;
       break ;
-      case LEX_MCS.token_struct : // 50441
+      case LEX_MCS.token_struct : // 12854
         regle20 () ;
       break ;
       default :

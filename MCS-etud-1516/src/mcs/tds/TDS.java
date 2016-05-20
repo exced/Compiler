@@ -94,6 +94,10 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		}
 		return taille;
 	}
+	
+	public int getTailleRetour() {
+		return (get("TOKEN_retourFonction") == null) ? 0 : get("TOKEN_retourFonction").getType().getTaille();
+	}
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();

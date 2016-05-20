@@ -1,6 +1,11 @@
 package mcs.gc;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+
 import mcs.compiler.MCSException;
+import mcs.tds.INFOVAR;
 
 /**
  * Cette interface décrit une machine cible. A compléter, selon votre modèle
@@ -26,5 +31,52 @@ public interface IMachine {
 	 */
 
 	void writeCode(String fileName, String code) throws MCSException;
+	
+	public Register getSB();
+	
+	public int getCurrentDep();
+
+	public void addCurrentDep(int dep);
+	
+	public void resetCurrentDep();
+
+	public String genFonction(String etiquette, int taillepars,
+			int tailleretour, String code);
+
+	public String genCall(String etiquette);
+
+	public String genDecl(String n, INFOVAR i, String t);
+
+	public String genEtiq();
+
+	public String genFin();
+
+	public void genAsm(String nomf, String code);
+
+	public String genVar(int taille);
+	
+	public String genCst(String v);
+
+	public String genFree();
+
+	public String genReadMem(int dep, int taille);
+
+	public String genWriteMem(int dep, int taille);
+
+	public String genReadIndirectMem(int taille);
+
+	public String genWriteIndirectMem(int taille);
+
+	public String genIf(String code, String code2, String code3);
+
+	public String genMalloc(int taille);
+
+	public String genAdr(int dep);
+
+	public String genAdrField(int dep);
+
+	public String genComment(String c);
+	
+	public String genOp(String op);
 
 }

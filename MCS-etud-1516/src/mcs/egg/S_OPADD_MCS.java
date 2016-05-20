@@ -51,7 +51,7 @@ if  (att_eval)      action_type_51();
 private void action_type_50() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPADDMOINS");
+this.att_type= new DTYPEImpl("OPADDMOINS", 1);
 this.att_code=this.att_machine.genOp("ISub");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPADD -> moins #type ;"});
 }
@@ -59,7 +59,7 @@ this.att_code=this.att_machine.genOp("ISub");
 private void action_type_51() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPADDOU");
+this.att_type= new DTYPEImpl("OPADDOU", 1);
 this.att_code=this.att_machine.genOp("BOr");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPADD -> ou #type ;"});
 }
@@ -67,7 +67,7 @@ this.att_code=this.att_machine.genOp("BOr");
 private void action_type_49() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPADDPLUS");
+this.att_type= new DTYPEImpl("OPADDPLUS", 1);
 this.att_code=this.att_machine.genOp("IAdd");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPADD -> plus #type ;"});
 }
@@ -75,13 +75,13 @@ this.att_code=this.att_machine.genOp("IAdd");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_plus : // 50452
+      case LEX_MCS.token_plus : // 12865
         regle49 () ;
       break ;
-      case LEX_MCS.token_moins : // 50453
+      case LEX_MCS.token_moins : // 12866
         regle50 () ;
       break ;
-      case LEX_MCS.token_ou : // 50454
+      case LEX_MCS.token_ou : // 12867
         regle51 () ;
       break ;
       default :

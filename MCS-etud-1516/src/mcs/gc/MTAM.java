@@ -15,6 +15,8 @@ public class MTAM extends AbstractMachine {
 	
 	private String nom;
 	
+	private Register SB;
+	
 	// déplacement courant dans un bloc
 	private int currentDep;
 
@@ -24,8 +26,14 @@ public class MTAM extends AbstractMachine {
 		} else {
 			nom = fname;
 		}
+		SB = new Register("SB", 0);
 		currentDep = 0;
 	}
+	
+	public Register getSB(){
+		return SB;
+	}
+	
 
 	public int getCurrentDep() {
 		return currentDep;

@@ -59,7 +59,7 @@ if  (att_eval)      action_type_55();
 private void action_type_56() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPMULDIV");
+this.att_type= new DTYPEImpl("OPMULDIV", 1);
 this.att_code=this.att_machine.genOp("IDiv");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPMUL -> div #type ;"});
 }
@@ -67,7 +67,7 @@ this.att_code=this.att_machine.genOp("IDiv");
 private void action_type_57() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPMULMOD");
+this.att_type= new DTYPEImpl("OPMULMOD", 1);
 this.att_code=this.att_machine.genOp("IMod");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPMUL -> mod #type ;"});
 }
@@ -75,7 +75,7 @@ this.att_code=this.att_machine.genOp("IMod");
 private void action_type_55() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPMULMULT");
+this.att_type= new DTYPEImpl("OPMULMULT", 1);
 this.att_code=this.att_machine.genOp("IMul");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPMUL -> mult #type ;"});
 }
@@ -83,7 +83,7 @@ this.att_code=this.att_machine.genOp("IMul");
 private void action_type_58() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPMULET");
+this.att_type= new DTYPEImpl("OPMULET", 1);
 this.att_code=this.att_machine.genOp("BAnd");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPMUL -> et #type ;"});
 }
@@ -91,16 +91,16 @@ this.att_code=this.att_machine.genOp("BAnd");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_mult : // 50455
+      case LEX_MCS.token_mult : // 12868
         regle55 () ;
       break ;
-      case LEX_MCS.token_div : // 50456
+      case LEX_MCS.token_div : // 12869
         regle56 () ;
       break ;
-      case LEX_MCS.token_mod : // 50457
+      case LEX_MCS.token_mod : // 12870
         regle57 () ;
       break ;
-      case LEX_MCS.token_et : // 50458
+      case LEX_MCS.token_et : // 12871
         regle58 () ;
       break ;
       default :

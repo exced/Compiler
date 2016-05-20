@@ -39,7 +39,7 @@ try {
 // locales
 INFO loc_i;
 // instructions
-loc_i= new INFOVAR(x_2.att_type);
+loc_i= new INFOTYPE(x_2.att_type);
 this.att_tds.inserer(x_3.att_txt, loc_i);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","PARF -> TYPE ident #tds ;"});
 }

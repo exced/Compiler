@@ -1,0 +1,5 @@
+; Generated code for tests/test1.mcs.
+; Do not modify by hand
+; Appel a main
+	CALL(SB) _main
+	HALT

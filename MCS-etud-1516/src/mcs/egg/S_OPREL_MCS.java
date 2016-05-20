@@ -75,7 +75,7 @@ if  (att_eval)      action_type_45();
 private void action_type_45() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPRELNEG");
+this.att_type= new DTYPEImpl("OPRELNEG", 1);
 this.att_code=this.att_machine.genOp("INeq");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> neg #type ;"});
 }
@@ -83,7 +83,7 @@ this.att_code=this.att_machine.genOp("INeq");
 private void action_type_43() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPRELSUPEG");
+this.att_type= new DTYPEImpl("OPRELSUPEG", 1);
 this.att_code=this.att_machine.genOp("IGeq");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> supeg #type ;"});
 }
@@ -91,7 +91,7 @@ this.att_code=this.att_machine.genOp("IGeq");
 private void action_type_44() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPRELEG");
+this.att_type= new DTYPEImpl("OPRELEG", 1);
 this.att_code=this.att_machine.genOp("IEq");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> eg #type ;"});
 }
@@ -99,7 +99,7 @@ this.att_code=this.att_machine.genOp("IEq");
 private void action_type_41() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPRELSUP");
+this.att_type= new DTYPEImpl("OPRELSUP", 1);
 this.att_code=this.att_machine.genOp("IGtr");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> sup #type ;"});
 }
@@ -107,7 +107,7 @@ this.att_code=this.att_machine.genOp("IGtr");
 private void action_type_42() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPRELINFEG");
+this.att_type= new DTYPEImpl("OPRELINFEG", 1);
 this.att_code=this.att_machine.genOp("ILeq");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> infeg #type ;"});
 }
@@ -115,7 +115,7 @@ this.att_code=this.att_machine.genOp("ILeq");
 private void action_type_40() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPRELINF");
+this.att_type= new DTYPEImpl("OPRELINF", 1);
 this.att_code=this.att_machine.genOp("ILss");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> inf #type ;"});
 }
@@ -123,22 +123,22 @@ this.att_code=this.att_machine.genOp("ILss");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_inf : // 50446
+      case LEX_MCS.token_inf : // 12859
         regle40 () ;
       break ;
-      case LEX_MCS.token_sup : // 50448
+      case LEX_MCS.token_sup : // 12861
         regle41 () ;
       break ;
-      case LEX_MCS.token_infeg : // 50447
+      case LEX_MCS.token_infeg : // 12860
         regle42 () ;
       break ;
-      case LEX_MCS.token_supeg : // 50449
+      case LEX_MCS.token_supeg : // 12862
         regle43 () ;
       break ;
-      case LEX_MCS.token_eg : // 50450
+      case LEX_MCS.token_eg : // 12863
         regle44 () ;
       break ;
-      case LEX_MCS.token_neg : // 50451
+      case LEX_MCS.token_neg : // 12864
         regle45 () ;
       break ;
       default :

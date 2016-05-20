@@ -201,11 +201,13 @@ DECL -> pv #tds #gen;
 global
     i : INFOVAR ;
     type : DTYPE;
+    e : Emplacement;
 #tds {
 do
     type := DECL^htype;
+    e := new Emplacement(DECL^machine.getCurrentDep(), DECL^machine.getSB());
     DECL^machine.addCurrentDep(type.getTaille());
-    i := new INFOVAR(type, DECL^machine.getCurrentDep());
+    i := new INFOVAR(type, e);
     DECL^tds.inserer(DECL^ident,  i);
 end
 }
@@ -240,7 +242,7 @@ global
 do
     tdsParam := new TDS(FONCTION^tds);
     -- 1er param = retour de fonction
-    tdsParam.inserer("TOKEN_retourFonction", FONCTION^htype);
+    tdsParam.inserer("TOKEN_retourFonction", new INFOTYPE(FONCTION^htype));
     PARFS^tds := tdsParam; 
     BLOC^tds := new TDS(tdsParam);
 end
@@ -299,7 +301,7 @@ local
     i : INFO ;
 do
     -- creer un type
-    i := new INFOVAR(TYPE^type);
+    i := new INFOTYPE(TYPE^type);
     PARF^tds.inserer(ident^txt, i);
 end
 }
@@ -347,7 +349,7 @@ end
 STYPE-> void #type ;
 #type {
 do
-    STYPE^type := new DTYPE("VOID");
+    STYPE^type := new DTYPEImpl("VOID",0);
 end
 }
 
@@ -355,7 +357,7 @@ end
 STYPE-> int #type;
 #type {
 do
-    STYPE^type := new DTYPE("INT");
+    STYPE^type := new DTYPEImpl("INT",1);
 end
 }
 
@@ -363,7 +365,7 @@ end
 STYPE-> char #type;
 #type {
 do
-    STYPE^type := new DTYPE("CHAR");
+    STYPE^type := new DTYPEImpl("CHAR",1);
 end
 }
 
@@ -463,15 +465,16 @@ INST ->  TYPE ident #htype AFFX pv #tds #type #gen ;
 #tds {
 local
     i : INFO ;
+    e : Emplacement;
 do
     i := INST^tds.chercherGlobalement(ident^txt);
     if i /= nil then
        error(var_declared, ident^txt);
-    else    
+    else 
+        e := new Emplacement(INST^machine.getCurrentDep(), INST^machine.getSB());   
         INST^machine.addCurrentDep(TYPE^type.getTaille());
-        i := new INFOVAR(TYPE^type, INST^machine.getCurrentDep());
+        i := new INFOVAR(TYPE^type, e);
         INST^tds.inserer(ident^txt, i);
-        
     end
 end
 }
@@ -522,7 +525,7 @@ end
 INST ->  si paro E #type parf BLOC SIX #gen;
 #type {
 do
-   if ~E^type.compareTo(new DTYPE("INT", 1)) then
+   if ~E^type.compareTo(new DTYPEImpl("INT", 1)) then
       error(not_int, E^type);
    end
 end
@@ -726,7 +729,7 @@ end
 OPREL -> inf #type;
 #type {
 do
-    OPREL^type := new DTYPE("OPRELINF");
+    OPREL^type := new DTYPEImpl("OPRELINF",1);
     -- SUBR op
     OPREL^code := OPREL^machine.genOp("ILss");
 end
@@ -736,7 +739,7 @@ end
 OPREL -> sup #type;
 #type {
 do
-    OPREL^type := new DTYPE("OPRELSUP");
+    OPREL^type := new DTYPEImpl("OPRELSUP",1);
     -- SUBR op
     OPREL^code := OPREL^machine.genOp("IGtr");    
 end
@@ -746,7 +749,7 @@ end
 OPREL -> infeg #type;
 #type {
 do
-    OPREL^type := new DTYPE("OPRELINFEG");
+    OPREL^type := new DTYPEImpl("OPRELINFEG",1);
     -- SUBR op
     OPREL^code := OPREL^machine.genOp("ILeq");    
 end
@@ -756,7 +759,7 @@ end
 OPREL -> supeg #type;
 #type {
 do
-    OPREL^type := new DTYPE("OPRELSUPEG");
+    OPREL^type := new DTYPEImpl("OPRELSUPEG",1);
     -- SUBR op
     OPREL^code := OPREL^machine.genOp("IGeq");    
 end
@@ -766,7 +769,7 @@ end
 OPREL -> eg #type;
 #type {
 do
-    OPREL^type := new DTYPE("OPRELEG");
+    OPREL^type := new DTYPEImpl("OPRELEG",1);
     -- SUBR op
     OPREL^code := OPREL^machine.genOp("IEq");    
 end
@@ -776,7 +779,7 @@ end
 OPREL -> neg #type;
 #type {
 do
-    OPREL^type := new DTYPE("OPRELNEG");
+    OPREL^type := new DTYPEImpl("OPRELNEG",1);
     -- SUBR op
     OPREL^code := OPREL^machine.genOp("INeq");    
 end
@@ -853,7 +856,7 @@ end
 OPADD -> plus #type;
 #type {
 do
-    OPADD^type := new DTYPE("OPADDPLUS");
+    OPADD^type := new DTYPEImpl("OPADDPLUS",1);
     -- SUBR op
     OPADD^code := OPADD^machine.genOp("IAdd");     
 end
@@ -863,7 +866,7 @@ end
 OPADD -> moins #type;
 #type {
 do
-    OPADD^type := new DTYPE("OPADDMOINS");
+    OPADD^type := new DTYPEImpl("OPADDMOINS",1);
     -- SUBR op
     OPADD^code := OPADD^machine.genOp("ISub");     
 end
@@ -873,7 +876,7 @@ end
 OPADD -> ou #type;
 #type {
 do
-    OPADD^type := new DTYPE("OPADDOU");
+    OPADD^type := new DTYPEImpl("OPADDOU",1);
     -- SUBR op
     OPADD^code := OPADD^machine.genOp("BOr");     
 end
@@ -953,7 +956,7 @@ end
 OPMUL -> mult #type;
 #type {
 do
-    OPMUL^type := new DTYPE("OPMULMULT");
+    OPMUL^type := new DTYPEImpl("OPMULMULT",1);
     -- SUBR op 
     OPMUL^code := OPMUL^machine.genOp("IMul");    
 end
@@ -963,7 +966,7 @@ end
 OPMUL -> div #type;
 #type {
 do
-    OPMUL^type := new DTYPE("OPMULDIV");
+    OPMUL^type := new DTYPEImpl("OPMULDIV",1);
     -- SUBR op 
     OPMUL^code := OPMUL^machine.genOp("IDiv");      
 end
@@ -973,7 +976,7 @@ end
 OPMUL -> mod #type;
 #type {
 do
-    OPMUL^type := new DTYPE("OPMULMOD");
+    OPMUL^type := new DTYPEImpl("OPMULMOD",1);
     -- SUBR op 
     OPMUL^code := OPMUL^machine.genOp("IMod");      
 end
@@ -983,7 +986,7 @@ end
 OPMUL -> et #type;
 #type {
 do
-    OPMUL^type := new DTYPE("OPMULET");
+    OPMUL^type := new DTYPEImpl("OPMULET",1);
     -- SUBR op 
     OPMUL^code := OPMUL^machine.genOp("BAnd");      
 end
@@ -1002,7 +1005,7 @@ end
 }
 #gen {
 do
-    F^type := new DTYPE("INT", 1);
+    F^type := new DTYPEImpl("INT", 1);
     F^code_est_adresse := false;
     F^code := F^machine.genCst(entier^txt);
 end
@@ -1019,7 +1022,7 @@ end
 }
 #gen {
 do
-    F^type := new DTYPE("CHAINE", 1);
+    F^type := new DTYPEImpl("CHAINE", 3);
     F^code_est_adresse := false;
     F^code := F^machine.genChaine(chaine^txt);
 end
@@ -1036,7 +1039,7 @@ end
 }
 #gen {
 do
-    F^type := new DTYPE("CHAR", 1);
+    F^type := new DTYPEImpl("CHAR", 1);
     F^code_est_adresse := false;
     F^code := F^machine.genCaractere(caractere^txt);
 end
@@ -1077,7 +1080,7 @@ end
 OPUN -> plus #type;
 #type {
 do
-    OPUN^type := new DTYPE("OPUNPLUS");
+    OPUN^type := new DTYPEImpl("OPUNPLUS",1);
     -- SUBR op
     OPUN^code := "";
 end
@@ -1087,7 +1090,7 @@ end
 OPUN -> moins #type;
 #type {
 do
-    OPUN^type := new DTYPE("OPUNMOINS");
+    OPUN^type := new DTYPEImpl("OPUNMOINS",1);
     -- SUBR op
     OPUN^code := OPUN^machine.genOp("Ineg");
 end
@@ -1097,7 +1100,7 @@ end
 OPUN -> non #type;
 #type {
 do
-    OPUN^type := new DTYPE("OPUNNON");
+    OPUN^type := new DTYPEImpl("OPUNNON",1);
     -- SUBR op
     OPUN^code := OPUN^machine.genOp("BNeg");    
 end
@@ -1114,7 +1117,7 @@ end
 }
 #type {
 do
-    F^type := new DTYPE("int", 1);
+    F^type := new DTYPEImpl("PNULL", 1);
     F^code_est_adresse := false;
     F^code := "";
 end

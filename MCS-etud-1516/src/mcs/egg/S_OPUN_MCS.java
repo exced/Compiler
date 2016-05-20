@@ -51,7 +51,7 @@ if  (att_eval)      action_type_63();
 private void action_type_65() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPUNNON");
+this.att_type= new DTYPEImpl("OPUNNON", 1);
 this.att_code=this.att_machine.genOp("BNeg");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPUN -> non #type ;"});
 }
@@ -59,7 +59,7 @@ this.att_code=this.att_machine.genOp("BNeg");
 private void action_type_63() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPUNPLUS");
+this.att_type= new DTYPEImpl("OPUNPLUS", 1);
 this.att_code="";
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPUN -> plus #type ;"});
 }
@@ -67,7 +67,7 @@ this.att_code="";
 private void action_type_64() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPE("OPUNMOINS");
+this.att_type= new DTYPEImpl("OPUNMOINS", 1);
 this.att_code=this.att_machine.genOp("Ineg");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPUN -> moins #type ;"});
 }
@@ -75,13 +75,13 @@ this.att_code=this.att_machine.genOp("Ineg");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_plus : // 50452
+      case LEX_MCS.token_plus : // 12865
         regle63 () ;
       break ;
-      case LEX_MCS.token_moins : // 50453
+      case LEX_MCS.token_moins : // 12866
         regle64 () ;
       break ;
-      case LEX_MCS.token_non : // 50459
+      case LEX_MCS.token_non : // 12872
         regle65 () ;
       break ;
       default :

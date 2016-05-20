@@ -133,25 +133,25 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 50442
+      case LEX_MCS.token_typedef : // 12855
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 50437
+      case LEX_MCS.token_void : // 12850
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 50439
+      case LEX_MCS.token_int : // 12852
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 50440
+      case LEX_MCS.token_char : // 12853
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 50464
+      case LEX_MCS.token_identc : // 12877
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 50441
+      case LEX_MCS.token_struct : // 12854
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 50438
+      case LEX_MCS.token_asm : // 12851
         regle79 () ;
       break ;
       default :
