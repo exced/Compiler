@@ -1,0 +1,97 @@
+\documentclass{report}
+
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{parallel}
+\usepackage{float}
+\restylefloat{table}
+
+\usepackage[linesnumbered,algoruled,boxed,lined]{algorithm2e}
+
+\setlength\parindent{24pt} % indentation paragraphes
+
+\begin{document}
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE ENSEEIHT}\\[1.5cm] % Name of your university/college
+\textsc{\Large Sémantique et TDL}\\[0.5cm] % Major heading such as course name
+\textsc{\large Projet}\\[0.5cm] % Minor heading such as course title
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \huge \bfseries  Compilateur du langage $\mu$C^{\#}}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\emph{auteurs:}\\
+\textsc{achard} - \textsc{vincent} \\
+\textsc{barras} - \textsc{thomas} \\
+\textsc{bouqsimi} - \textsc{amine} \\
+\textsc{rigondaud} - \textsc{clément} \\
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+\date{} %enleve la date
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+\vspace{7.2cm}
+\begin{center}
+%\includegraphics[width=5]{N7.png}
+\end{center}
+
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\tableofcontents %table des matières.
+
+\vfill
+
+\part{Langage $\mu$C}
+
+\chapter{Choix de conception}
+
+\begin{itemize}
+	\item Nous avons choisi de gérer le problème d'insertion de doublons directement dans la TDS afin de rendre plus clair le contenu des actions sémantiques.
+	\item La TDS d'un bloc est créée à l'"extérieur" de celui-ci (1\iere{} apparition du non-terminal BLOC).
+	\item Nous avons choisi de rajouter des méthodes à la machine TAM, celles-ci permettant de faciliter la gestion du déplacement dans le bloc courant.
+	\item La classe INFOFONC a été créée afin de faciliter la manipulation des fonctions: paramètres et retour.
+	\item Nous stockons les paramètres d'une fonction à la déclaration dans une unique TDS pour relever les erreurs de paramètres qui ont le même nom lors de l'appel d'une fonction.
+	\item de nouvelles fonctions compareTo ont été définies afin de simplifier la vérification de type entre opérateurs et types.  
+\end{itemize}
+
+\chapter{Limitations}
+\begin{itemize}
+	\item La génération de code n'est pas terminée, nous nous sommes focalisés sur la bonne gestion de la TDS et des types.
+	\item Des exemples simples de code sont en cours de création et de traduction en assembleur, pour simplifier le travail de vérification de génération de code dans le futur.
+	
+\end{itemize}
+
+
+
+\end{document}

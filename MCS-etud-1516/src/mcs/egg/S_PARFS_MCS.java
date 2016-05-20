@@ -60,22 +60,22 @@ x_4.att_tds=glob_9_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 12841
+      case LEX_MCS.token_parf : // 852
         regle8 () ;
       break ;
-      case LEX_MCS.token_void : // 12850
+      case LEX_MCS.token_void : // 861
         regle9 () ;
       break ;
-      case LEX_MCS.token_int : // 12852
+      case LEX_MCS.token_int : // 863
         regle9 () ;
       break ;
-      case LEX_MCS.token_char : // 12853
+      case LEX_MCS.token_char : // 864
         regle9 () ;
       break ;
-      case LEX_MCS.token_identc : // 12877
+      case LEX_MCS.token_identc : // 888
         regle9 () ;
       break ;
-      case LEX_MCS.token_struct : // 12854
+      case LEX_MCS.token_struct : // 865
         regle9 () ;
       break ;
       default :

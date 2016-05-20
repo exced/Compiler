@@ -68,67 +68,67 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_sinon : // 12849
+      case LEX_MCS.token_sinon : // 860
         regle31 () ;
       break ;
-      case LEX_MCS.token_void : // 12850
+      case LEX_MCS.token_void : // 861
         regle32 () ;
       break ;
-      case LEX_MCS.token_int : // 12852
+      case LEX_MCS.token_int : // 863
         regle32 () ;
       break ;
-      case LEX_MCS.token_char : // 12853
+      case LEX_MCS.token_char : // 864
         regle32 () ;
       break ;
-      case LEX_MCS.token_identc : // 12877
+      case LEX_MCS.token_identc : // 888
         regle32 () ;
       break ;
-      case LEX_MCS.token_struct : // 12854
+      case LEX_MCS.token_struct : // 865
         regle32 () ;
       break ;
-      case LEX_MCS.token_entier : // 12873
+      case LEX_MCS.token_entier : // 884
         regle32 () ;
       break ;
-      case LEX_MCS.token_chaine : // 12875
+      case LEX_MCS.token_chaine : // 886
         regle32 () ;
       break ;
-      case LEX_MCS.token_caractere : // 12874
+      case LEX_MCS.token_caractere : // 885
         regle32 () ;
       break ;
-      case LEX_MCS.token_plus : // 12865
+      case LEX_MCS.token_plus : // 876
         regle32 () ;
       break ;
-      case LEX_MCS.token_moins : // 12866
+      case LEX_MCS.token_moins : // 877
         regle32 () ;
       break ;
-      case LEX_MCS.token_non : // 12872
+      case LEX_MCS.token_non : // 883
         regle32 () ;
       break ;
-      case LEX_MCS.token_null : // 12858
+      case LEX_MCS.token_null : // 869
         regle32 () ;
       break ;
-      case LEX_MCS.token_paro : // 12840
+      case LEX_MCS.token_paro : // 851
         regle32 () ;
       break ;
-      case LEX_MCS.token_mult : // 12868
+      case LEX_MCS.token_mult : // 879
         regle32 () ;
       break ;
-      case LEX_MCS.token_ident : // 12876
+      case LEX_MCS.token_ident : // 887
         regle32 () ;
       break ;
-      case LEX_MCS.token_aco : // 12842
+      case LEX_MCS.token_aco : // 853
         regle32 () ;
       break ;
-      case LEX_MCS.token_si : // 12848
+      case LEX_MCS.token_si : // 859
         regle32 () ;
       break ;
-      case LEX_MCS.token_retour : // 12856
+      case LEX_MCS.token_retour : // 867
         regle32 () ;
       break ;
-      case LEX_MCS.token_asm : // 12851
+      case LEX_MCS.token_asm : // 862
         regle32 () ;
       break ;
-      case LEX_MCS.token_acf : // 12843
+      case LEX_MCS.token_acf : // 854
         regle32 () ;
       break ;
       default :

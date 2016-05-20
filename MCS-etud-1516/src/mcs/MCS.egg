@@ -349,7 +349,7 @@ end
 STYPE-> void #type ;
 #type {
 do
-    STYPE^type := new DTYPEImpl("VOID",0);
+    STYPE^type := new DTYPEImpl("void",0);
 end
 }
 
@@ -357,7 +357,7 @@ end
 STYPE-> int #type;
 #type {
 do
-    STYPE^type := new DTYPEImpl("INT",1);
+    STYPE^type := new DTYPEImpl("int",1);
 end
 }
 
@@ -365,7 +365,7 @@ end
 STYPE-> char #type;
 #type {
 do
-    STYPE^type := new DTYPEImpl("CHAR",1);
+    STYPE^type := new DTYPEImpl("char",1);
 end
 }
 
@@ -525,7 +525,7 @@ end
 INST ->  si paro E #type parf BLOC SIX #gen;
 #type {
 do
-   if ~E^type.compareTo(new DTYPEImpl("INT", 1)) then
+   if ~E^type.compareTo(new DTYPEImpl("int", 1)) then
       error(not_int, E^type);
    end
 end
@@ -1005,7 +1005,7 @@ end
 }
 #gen {
 do
-    F^type := new DTYPEImpl("INT", 1);
+    F^type := new DTYPEImpl("int", 1);
     F^code_est_adresse := false;
     F^code := F^machine.genCst(entier^txt);
 end
@@ -1022,7 +1022,7 @@ end
 }
 #gen {
 do
-    F^type := new DTYPEImpl("CHAINE", 3);
+    F^type := new DTYPEImpl("chaine", 3);
     F^code_est_adresse := false;
     F^code := F^machine.genChaine(chaine^txt);
 end
@@ -1039,7 +1039,7 @@ end
 }
 #gen {
 do
-    F^type := new DTYPEImpl("CHAR", 1);
+    F^type := new DTYPEImpl("char", 1);
     F^code_est_adresse := false;
     F^code := F^machine.genCaractere(caractere^txt);
 end
