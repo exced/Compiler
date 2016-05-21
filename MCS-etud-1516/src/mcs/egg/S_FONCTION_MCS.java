@@ -46,10 +46,13 @@ if  (att_eval)      action_gen_7(x_4, x_6);
   }
 private void action_gen_7(S_PARFS_MCS x_4, S_BLOC_MCS x_6) throws Exception {
 try {
+// locales
+DTYPE loc_typeRetour;
 // instructions
 glob_7_i= new INFOFONC(this.att_htype, glob_7_tdsParam);
 this.att_tds.inserer(this.att_ident, glob_7_i);
-this.att_code=this.att_machine.genFonction(this.att_ident, glob_7_tdsParam.getTailleParams(), glob_7_tdsParam.getTailleRetour(), x_6.att_code);
+loc_typeRetour=glob_7_tdsParam.getTypeRetour();
+this.att_code=this.att_machine.genFonction(this.att_ident, glob_7_tdsParam.getTailleParams(), loc_typeRetour.getTaille(), x_6.att_code);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","FONCTION -> paro #init PARFS parf BLOC #gen ;"});
 }
   }
@@ -57,7 +60,7 @@ private void action_init_7(S_PARFS_MCS x_4, S_BLOC_MCS x_6) throws Exception {
 try {
 // instructions
 glob_7_tdsParam= new TDS(this.att_tds);
-glob_7_tdsParam.inserer("TOKEN_retourFonction",  new INFOTYPE(this.att_htype));
+glob_7_tdsParam.setTypeRetour(this.att_htype);
 x_4.att_tds=glob_7_tdsParam;
 x_6.att_tds= new TDS(glob_7_tdsParam);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#init","FONCTION -> paro #init PARFS parf BLOC #gen ;"});

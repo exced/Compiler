@@ -21,7 +21,7 @@ inh machine : IMachine for
               
 
 --      IDENT
-inh ident : STRING for DECL, FONCTION;
+inh ident : STRING for DECL, FONCTION,FX;
 
 --      TYPE
 syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
@@ -249,22 +249,24 @@ global
 #init {
 do
     tdsParam := new TDS(FONCTION^tds);
-    -- 1er param = retour de fonction
-    tdsParam.inserer("TOKEN_retourFonction", new INFOTYPE(FONCTION^htype));
+    -- retour de fonction
+    tdsParam.setTypeRetour(FONCTION^htype);
     PARFS^tds := tdsParam; 
     BLOC^tds := new TDS(tdsParam);
 end
 }
 #gen{
+local
+    typeRetour : DTYPE;
 do
     -- TDS
     i := new INFOFONC(FONCTION^htype, tdsParam);
     FONCTION^tds.inserer(FONCTION^ident,  i);
     
-    
+    typeRetour :=tdsParam.getTypeRetour();
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
-    FONCTION^code := FONCTION^machine.genFonction(FONCTION^ident, tdsParam.getTailleParams(), tdsParam.getTailleRetour(), BLOC^code);
+    FONCTION^code := FONCTION^machine.genFonction(FONCTION^ident, tdsParam.getTailleParams(), typeRetour.getTaille(), BLOC^code);
 end
 }
 
@@ -1052,7 +1054,7 @@ end
 do
     F^type := new DTYPEImpl("char", 1);
     F^code_est_adresse := false;
-    F^code := F^machine.genCaractere(caractere^txt);
+    F^code := F^machine.genChar(caractere^txt);
 end
 }
 
@@ -1139,6 +1141,8 @@ end
 F ->  paro E parf #addr FX #aff #type #gen;
 #addr {
 do
+    FX^ident := "";
+
     F^code_est_adresse := E^code_est_adresse;
     -- type de FX est le type de l expression de gauche
     FX^htype := E^type;
@@ -1231,6 +1235,9 @@ local
     i:INFO;
     code : STRING;
 do
+    -- ident pour l'appel de fonction
+    FX^ident := ident^txt;
+
     i := F^tds.chercherGlobalement(ident^txt);
     if i = null then
         error(B_01, ident^txt);
@@ -1327,8 +1334,7 @@ end
 #gen {
 do
     -- appel du sous-programme à partir de l'étiquette
-    -- TODO : push tous les arguments avant de call
-    FX^code := FX^machine.genCall();
+    FX^code := FX^machine.genArgs(tdsParam) + FX^machine.genCall(FX^ident);
 end
 }
 

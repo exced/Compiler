@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
 import mcs.compiler.MCSException;
-import mcs.tds.INFOVAR;
+import mcs.tds.*;
 
 /**
  * Cette interface décrit une machine cible. A compléter, selon votre modèle
@@ -39,9 +39,15 @@ public interface IMachine {
 	public void addCurrentDep(int dep);
 	
 	public void resetCurrentDep();
+	
+	public String genChaine(String s);
+	
+	public String genChar(String s);
 
 	public String genFonction(String etiquette, int taillepars,
 			int tailleretour, String code);
+	
+	public String genArgs(TDS t);
 
 	public String genCall(String etiquette);
 

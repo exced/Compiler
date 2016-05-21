@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import mcs.type.*;
+
 
 /**
  * une TDS hiérarchique.
@@ -17,6 +19,8 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	 * La TDS parente
 	 */
 	private TDS parente;
+	
+	private DTYPE typeRetour;
 
 	/**
 	 * Constructeur pour une TDS sans parente
@@ -74,10 +78,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		put(n, i);
 	}
 	
-	private Exception EExistantArgument(String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public int getTailleParams() {
 		int taille = 0;
@@ -89,8 +89,12 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return taille;
 	}
 	
-	public int getTailleRetour() {
-		return (get("TOKEN_retourFonction") == null) ? 0 : get("TOKEN_retourFonction").getType().getTaille();
+	public DTYPE getTypeRetour() {
+		return typeRetour;
+	}
+	
+	public void setTypeRetour(DTYPE t ){
+		typeRetour = t;
 	}
 
 	public String toString() {

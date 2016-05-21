@@ -268,7 +268,7 @@ try {
 // instructions
 this.att_type= new DTYPEImpl("char", 1);
 this.att_code_est_adresse=false;
-this.att_code=this.att_machine.genCaractere(x_2.att_txt);
+this.att_code=this.att_machine.genChar(x_2.att_txt);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","F -> caractere #aff #gen ;"});
 }
   }
@@ -419,73 +419,73 @@ x_4.att_tds=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_entier : // 12206
+      case LEX_MCS.token_entier : // 1920
         regle59 () ;
       break ;
-      case LEX_MCS.token_chaine : // 12208
+      case LEX_MCS.token_chaine : // 1922
         regle60 () ;
       break ;
-      case LEX_MCS.token_caractere : // 12207
+      case LEX_MCS.token_caractere : // 1921
         regle61 () ;
       break ;
-      case LEX_MCS.token_plus : // 12198
+      case LEX_MCS.token_plus : // 1912
         regle62 () ;
       break ;
-      case LEX_MCS.token_moins : // 12199
+      case LEX_MCS.token_moins : // 1913
         regle62 () ;
       break ;
-      case LEX_MCS.token_non : // 12205
+      case LEX_MCS.token_non : // 1919
         regle62 () ;
       break ;
-      case LEX_MCS.token_null : // 12191
+      case LEX_MCS.token_null : // 1905
         regle66 () ;
       break ;
-      case LEX_MCS.token_paro : // 12173
+      case LEX_MCS.token_paro : // 1887
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_entier : // 12206
+          case LEX_MCS.token_entier : // 1920
             regle67 () ;
           break ;
-          case LEX_MCS.token_chaine : // 12208
+          case LEX_MCS.token_chaine : // 1922
             regle67 () ;
           break ;
-          case LEX_MCS.token_caractere : // 12207
+          case LEX_MCS.token_caractere : // 1921
             regle67 () ;
           break ;
-          case LEX_MCS.token_plus : // 12198
+          case LEX_MCS.token_plus : // 1912
             regle67 () ;
           break ;
-          case LEX_MCS.token_moins : // 12199
+          case LEX_MCS.token_moins : // 1913
             regle67 () ;
           break ;
-          case LEX_MCS.token_non : // 12205
+          case LEX_MCS.token_non : // 1919
             regle67 () ;
           break ;
-          case LEX_MCS.token_null : // 12191
+          case LEX_MCS.token_null : // 1905
             regle67 () ;
           break ;
-          case LEX_MCS.token_paro : // 12173
+          case LEX_MCS.token_paro : // 1887
             regle67 () ;
           break ;
-          case LEX_MCS.token_mult : // 12201
+          case LEX_MCS.token_mult : // 1915
             regle67 () ;
           break ;
-          case LEX_MCS.token_ident : // 12209
+          case LEX_MCS.token_ident : // 1923
             regle67 () ;
           break ;
-          case LEX_MCS.token_void : // 12183
+          case LEX_MCS.token_void : // 1897
             regle68 () ;
           break ;
-          case LEX_MCS.token_int : // 12185
+          case LEX_MCS.token_int : // 1899
             regle68 () ;
           break ;
-          case LEX_MCS.token_char : // 12186
+          case LEX_MCS.token_char : // 1900
             regle68 () ;
           break ;
-          case LEX_MCS.token_identc : // 12210
+          case LEX_MCS.token_identc : // 1924
             regle68 () ;
           break ;
-          case LEX_MCS.token_struct : // 12187
+          case LEX_MCS.token_struct : // 1901
             regle68 () ;
           break ;
           default :
@@ -493,10 +493,10 @@ x_4.att_tds=this.att_tds;
 scanner.accepter_sucre(LEX_MCS.token_paro);
         }
       break ;
-      case LEX_MCS.token_mult : // 12201
+      case LEX_MCS.token_mult : // 1915
         regle69 () ;
       break ;
-      case LEX_MCS.token_ident : // 12209
+      case LEX_MCS.token_ident : // 1923
         regle70 () ;
       break ;
       default :

@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
 import mcs.tds.INFOVAR;
+import mcs.tds.TDS;
 
 /**
  * La machine TAM et ses fonctions de generation
@@ -47,15 +48,17 @@ public class MTAM extends AbstractMachine {
 		currentDep = 0;
 	}	
 	
-	
-	// GENERATION DE CODE
-	
-
 	public String genFonction(String etiquette, int taillepars,
 			int tailleretour, String code) {
 		return "_" + etiquette + ":\n" + code + "\tRETURN (" + taillepars + ") "
 				+ tailleretour + "\n";
 
+	}
+	
+	public String genArgs(TDS t){
+		String s = "";
+		
+		return s;
 	}
 
 	public String genCall(String etiquette) {
@@ -103,6 +106,14 @@ public class MTAM extends AbstractMachine {
 	
 	public String genCst(String v) {
 		return "\tLOADL " + v + "\n";
+	}
+	
+	public String genChar(String v) {
+		return "\tLOADL " + v + "\n";
+	}
+	
+	public String genChaine(String v) {
+		return "\tLOADL " + v + "\n" + genOp("SAlloc");
 	}
 
 	public String genFree(){
