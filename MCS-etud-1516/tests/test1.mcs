@@ -1,4 +1,5 @@
 // point d'entree du programme.
+typedef int Entier ; 
 int main(){
     int a = 3;
 

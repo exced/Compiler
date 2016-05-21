@@ -1,3 +1,14 @@
 ; Generated code for tests/mc.mcs.
 ; Do not modify by hand
-; no code
+; Appel a main
+	CALL(SB) _main
+; inline code_asm
+
+
+	CALL (LB) _main
+	; appel au point d'entree du programme
+
+	HALT
+	; arret de la machine
+
+	HALT
