@@ -222,7 +222,7 @@ try {
 // instructions
 this.att_type= new DTYPEImpl("chaine", 3);
 this.att_code_est_adresse=false;
-this.att_code=this.att_machine.genChaine(x_2.att_txt);
+this.att_code=this.att_machine.genCst(x_2.att_txt);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","F -> chaine #aff #gen ;"});
 }
   }
@@ -268,7 +268,7 @@ try {
 // instructions
 this.att_type= new DTYPEImpl("char", 1);
 this.att_code_est_adresse=false;
-this.att_code=this.att_machine.genChar(x_2.att_txt);
+this.att_code=this.att_machine.genCst(x_2.att_txt);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","F -> caractere #aff #gen ;"});
 }
   }
@@ -333,6 +333,7 @@ x_3.att_tds=this.att_tds;
 private void action_addr_67(S_E_MCS x_3, S_FX_MCS x_6) throws Exception {
 try {
 // instructions
+x_6.att_ident="";
 this.att_code_est_adresse=x_3.att_code_est_adresse;
 x_6.att_htype=x_3.att_type;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#addr","F -> paro E parf #addr FX #aff #type #gen ;"});
@@ -382,6 +383,7 @@ try {
 INFO loc_i;
 String loc_code;
 // instructions
+x_4.att_ident=x_2.att_txt;
 loc_i=this.att_tds.chercherGlobalement(x_2.att_txt);
 if (loc_i==null){
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_B_01, MCSMessages.B_01,new Object[]{""+x_2.att_txt});
@@ -419,73 +421,73 @@ x_4.att_tds=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_entier : // 1920
+      case LEX_MCS.token_entier : // 366
         regle59 () ;
       break ;
-      case LEX_MCS.token_chaine : // 1922
+      case LEX_MCS.token_chaine : // 368
         regle60 () ;
       break ;
-      case LEX_MCS.token_caractere : // 1921
+      case LEX_MCS.token_caractere : // 367
         regle61 () ;
       break ;
-      case LEX_MCS.token_plus : // 1912
+      case LEX_MCS.token_plus : // 358
         regle62 () ;
       break ;
-      case LEX_MCS.token_moins : // 1913
+      case LEX_MCS.token_moins : // 359
         regle62 () ;
       break ;
-      case LEX_MCS.token_non : // 1919
+      case LEX_MCS.token_non : // 365
         regle62 () ;
       break ;
-      case LEX_MCS.token_null : // 1905
+      case LEX_MCS.token_null : // 351
         regle66 () ;
       break ;
-      case LEX_MCS.token_paro : // 1887
+      case LEX_MCS.token_paro : // 333
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_entier : // 1920
+          case LEX_MCS.token_entier : // 366
             regle67 () ;
           break ;
-          case LEX_MCS.token_chaine : // 1922
+          case LEX_MCS.token_chaine : // 368
             regle67 () ;
           break ;
-          case LEX_MCS.token_caractere : // 1921
+          case LEX_MCS.token_caractere : // 367
             regle67 () ;
           break ;
-          case LEX_MCS.token_plus : // 1912
+          case LEX_MCS.token_plus : // 358
             regle67 () ;
           break ;
-          case LEX_MCS.token_moins : // 1913
+          case LEX_MCS.token_moins : // 359
             regle67 () ;
           break ;
-          case LEX_MCS.token_non : // 1919
+          case LEX_MCS.token_non : // 365
             regle67 () ;
           break ;
-          case LEX_MCS.token_null : // 1905
+          case LEX_MCS.token_null : // 351
             regle67 () ;
           break ;
-          case LEX_MCS.token_paro : // 1887
+          case LEX_MCS.token_paro : // 333
             regle67 () ;
           break ;
-          case LEX_MCS.token_mult : // 1915
+          case LEX_MCS.token_mult : // 361
             regle67 () ;
           break ;
-          case LEX_MCS.token_ident : // 1923
+          case LEX_MCS.token_ident : // 369
             regle67 () ;
           break ;
-          case LEX_MCS.token_void : // 1897
+          case LEX_MCS.token_void : // 343
             regle68 () ;
           break ;
-          case LEX_MCS.token_int : // 1899
+          case LEX_MCS.token_int : // 345
             regle68 () ;
           break ;
-          case LEX_MCS.token_char : // 1900
+          case LEX_MCS.token_char : // 346
             regle68 () ;
           break ;
-          case LEX_MCS.token_identc : // 1924
+          case LEX_MCS.token_identc : // 370
             regle68 () ;
           break ;
-          case LEX_MCS.token_struct : // 1901
+          case LEX_MCS.token_struct : // 347
             regle68 () ;
           break ;
           default :
@@ -493,10 +495,10 @@ x_4.att_tds=this.att_tds;
 scanner.accepter_sucre(LEX_MCS.token_paro);
         }
       break ;
-      case LEX_MCS.token_mult : // 1915
+      case LEX_MCS.token_mult : // 361
         regle69 () ;
       break ;
-      case LEX_MCS.token_ident : // 1923
+      case LEX_MCS.token_ident : // 369
         regle70 () ;
       break ;
       default :

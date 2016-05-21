@@ -345,7 +345,7 @@ end
 PTRS -> mult #htype PTRS #type;
 #htype {
 do
-    PTRS1^htype := new POINTEUR(PTRS^htype, 1);
+    PTRS1^htype := new POINTEUR(PTRS^htype);
 end
 }
 #type {
@@ -1037,7 +1037,7 @@ end
 do
     F^type := new DTYPEImpl("chaine", 3);
     F^code_est_adresse := false;
-    F^code := F^machine.genChaine(chaine^txt);
+    F^code := F^machine.genCst(chaine^txt);
 end
 }
 
@@ -1054,7 +1054,7 @@ end
 do
     F^type := new DTYPEImpl("char", 1);
     F^code_est_adresse := false;
-    F^code := F^machine.genChar(caractere^txt);
+    F^code := F^machine.genCst(caractere^txt);
 end
 }
 

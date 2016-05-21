@@ -43,7 +43,7 @@ if  (att_eval)      action_type_14();
 private void action_htype_15(S_PTRS_MCS x_4) throws Exception {
 try {
 // instructions
-x_4.att_htype= new POINTEUR(this.att_htype, 1);
+x_4.att_htype= new POINTEUR(this.att_htype);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#htype","PTRS -> mult #htype PTRS1 #type ;"});
 }
   }
@@ -64,16 +64,16 @@ this.att_type=x_4.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_identc : // 1924
+      case LEX_MCS.token_identc : // 370
         regle14 () ;
       break ;
-      case LEX_MCS.token_ident : // 1923
+      case LEX_MCS.token_ident : // 369
         regle14 () ;
       break ;
-      case LEX_MCS.token_parf : // 1888
+      case LEX_MCS.token_parf : // 334
         regle14 () ;
       break ;
-      case LEX_MCS.token_mult : // 1915
+      case LEX_MCS.token_mult : // 361
         regle15 () ;
       break ;
       default :

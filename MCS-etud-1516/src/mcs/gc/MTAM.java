@@ -57,7 +57,7 @@ public class MTAM extends AbstractMachine {
 	
 	public String genArgs(TDS t){
 		String s = "";
-		
+		// TODO
 		return s;
 	}
 
@@ -121,22 +121,18 @@ public class MTAM extends AbstractMachine {
 	}
 
 	public String genReadMem(int dep, int taille) {
-		// TODO Auto-generated method stub
 		return "\tLOAD(" + taille + ") " + dep + "[LB]\n";
 	}
 
 	public String genWriteMem(int dep, int taille) {
-		// TODO Auto-generated method stub
 		return "\tSTORE(" + taille + ") " + dep + "[LB]\n";
 	}
 
 	public String genReadIndirectMem(int taille) {
-		// TODO Auto-generated method stub
 		return "\tLOADI(" + taille + ")\n";
 	}
 
 	public String genWriteIndirectMem(int taille) {
-		// TODO Auto-generated method stub
 		return "\tSTOREI(" + taille + ")\n";
 	}
 
