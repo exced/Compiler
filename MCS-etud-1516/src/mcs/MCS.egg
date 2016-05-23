@@ -33,7 +33,7 @@ inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX
 inh tds_asm : TDS for ASM;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
                             SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
-syn stds    : TDS for PARFS,PARFSX;                                                    
+syn stds    : TDS for PARFS,PARFSX,ES,ESX;                                                    
                             
 -- GC                            
 syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
@@ -1255,15 +1255,10 @@ end
 
 ------------------------------------------------------------------------
 -- appel de sous-programme
-FX ->   paro #tds ES parf FX #type #gen;
-global 
-    tdsParam :  TDS; 
-#tds {
+FX ->   paro ES parf #htds FX #type #gen;
+#htds {
 do
-    --création d'une TDS pour stocker les param de l'appel
-    tdsParam := new TDS(FX^tds);
-    ES^tds := tdsParam; 
-    FX1^tds := new TDS(tdsParam);
+    FX1^tds := ES^stds;
 end
 }
 #type {
@@ -1274,14 +1269,18 @@ end
 #gen {
 do
     -- appel du sous-programme à partir de l'étiquette
-    FX^code := FX^machine.genArgs(tdsParam) + FX^machine.genCall(FX^ident);
+    FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident);
 end
 }
 
 ------------------------------------------------------------------------
 -- arguments appel de sous-programme
-ES -> ;
--- Done
+ES -> #tds;
+#tds {
+do
+    ES^stds := new TDS(nil);
+end
+}
 
 ------------------------------------------------------------------------
 ES -> #tds E ESX  ;
@@ -1289,25 +1288,37 @@ global
     tds:TDS;
 #tds {
 do
-    tds := new TDS(ES^tds);
-    E^tds := tds;
-    ESX^tds := tds;
-    
+    tds := ES^tds;
+    -- INFOPARAM : evaluation de l'expression a l'appel
+    -- appel : <"argn", INFOPARAM>
+    tds.inserer();
 end
 }
 
 ------------------------------------------------------------------------
-ESX ->  ;
--- Tds done
+ESX -> #stds ;
+#stds {
+do
+    ESX^stds := new TDS(nil);
+end
+}
 
 
 ------------------------------------------------------------------------
-ESX -> #tds virg E ESX ;
+ESX -> virg E #tds ESX #stds;
 #tds {
+local
+    tds : TDS;
 do 
     -- transmission des tds;
-    E^tds := ESX^tds;
-    ESX1^tds := ESX^tds;
+    tds := ESX^tds;
+    tds.inserer("arg" + n, new INFOPARAM(E^eval, E^type));
+    ESX1^tds := tds;
+end
+}
+#stds {
+do
+    ESX^stds := ESX1^stds;
 end
 }
 

@@ -83,7 +83,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
 			taille+=e.getValue().getType().getTaille();
-
 		}
 		return taille;
 	}

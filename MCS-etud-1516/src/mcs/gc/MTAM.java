@@ -3,7 +3,10 @@ package mcs.gc;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.util.Map;
+import java.util.Set;
 
+import mcs.tds.INFO;
 import mcs.tds.INFOVAR;
 import mcs.tds.TDS;
 
@@ -55,9 +58,12 @@ public class MTAM extends AbstractMachine {
 	}
 	
 	public String genArgs(TDS t){
-		String s = "";
-		// TODO
-		return s;
+		StringBuffer sb = new StringBuffer();
+		Set<Map.Entry<String, INFO>> s = t.entrySet();
+		for (Map.Entry<String, INFO> e : s) {  
+			sb.append( genCst(e.getKey()) );
+		}
+		return sb.toString();
 	}
 
 	public String genCall(String etiquette) {
