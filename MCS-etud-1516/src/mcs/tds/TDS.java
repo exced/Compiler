@@ -20,7 +20,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	 */
 	private TDS parente;
 	
-	private DTYPE typeRetour;
 
 	/**
 	 * Constructeur pour une TDS sans parente
@@ -89,19 +88,22 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return taille;
 	}
 	
-	public DTYPE getTypeRetour() {
-		return typeRetour;
-	}
 	
-	public void setTypeRetour(DTYPE t ){
-		typeRetour = t;
+	public String parenteToString(StringBuffer s, int i){
+		StringBuffer sb = s;
+		if (parente != null) {
+			sb.append("parente" + i + " : " + parente);
+			parente.parenteToString(sb, ++i);
+		}	
+		return sb.toString();
 	}
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
+		sb.append("parente : " + parente);
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
-			sb.append("; " + e.getKey() + " : " + e.getValue() + '\n');
+			sb.append("; " + e.getKey() + " : " + e.getValue().toString() + '\n');
 
 		}
 		return sb.toString();

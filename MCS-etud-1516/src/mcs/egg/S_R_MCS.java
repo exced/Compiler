@@ -23,7 +23,6 @@ int [] sync= new int[0];
   boolean att_eval;
   String att_code;
   IMachine att_machine;
-  boolean att_est_affectable;
   LEX_MCS att_scanner;
   boolean att_code_est_adresse;
   DTYPE att_type;
@@ -52,7 +51,6 @@ x_5.att_hcode_est_adresse=x_2.att_code_est_adresse;
 private void action_aff_46(S_T_MCS x_2, S_RX_MCS x_5) throws Exception {
 try {
 // instructions
-this.att_est_affectable=x_2.att_est_affectable;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#aff","R -> T #aff #type RX #gen ;"});
 }
   }

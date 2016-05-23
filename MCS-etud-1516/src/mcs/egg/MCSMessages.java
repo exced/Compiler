@@ -23,10 +23,9 @@ public class MCSMessages extends NLS {
   public static  String MCS_expected_token;
   public static  String B_08;
   public static  String returnType_notCompatible;
-  public static  String B_01;
   public static  String champ_declared;
+  public static  String B_01;
   public static  String var_declared;
-  public static  String notAff;
   public static  String not_infotype;
   public static  String NO_MACH;
   public static  String not_int;

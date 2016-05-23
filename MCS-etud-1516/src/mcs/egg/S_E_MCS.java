@@ -30,51 +30,39 @@ int [] sync= new int[0];
 
     //declaration
     S_A_MCS x_2 = new S_A_MCS(scanner,att_eval) ;
-    S_AFFX_MCS x_5 = new S_AFFX_MCS(scanner,att_eval) ;
+    S_AFFX_MCS x_4 = new S_AFFX_MCS(scanner,att_eval) ;
     //appel
-if  (att_eval)      action_auto_inh_34(x_2, x_5);
+if  (att_eval)      action_auto_inh_34(x_2, x_4);
     x_2.analyser() ;
-if  (att_eval)      action_aff_34(x_2, x_5);
-if  (att_eval)      action_type_34(x_2, x_5);
-    x_5.analyser() ;
-if  (att_eval)      action_gen_34(x_2, x_5);
+if  (att_eval)      action_type_34(x_2, x_4);
+    x_4.analyser() ;
+if  (att_eval)      action_gen_34(x_2, x_4);
   }
-private void action_type_34(S_A_MCS x_2, S_AFFX_MCS x_5) throws Exception {
+private void action_type_34(S_A_MCS x_2, S_AFFX_MCS x_4) throws Exception {
 try {
 // instructions
+x_4.att_hcode_est_adresse=x_2.att_code_est_adresse;
 this.att_type=x_2.att_type;
-x_5.att_htype=x_2.att_type;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","E -> A #aff #type AFFX #gen ;"});
+x_4.att_htype=x_2.att_type;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","E -> A #type AFFX #gen ;"});
 }
   }
-private void action_auto_inh_34(S_A_MCS x_2, S_AFFX_MCS x_5) throws Exception {
+private void action_auto_inh_34(S_A_MCS x_2, S_AFFX_MCS x_4) throws Exception {
 try {
 // instructions
 x_2.att_machine=this.att_machine;
-x_5.att_machine=this.att_machine;
+x_4.att_machine=this.att_machine;
 x_2.att_tds=this.att_tds;
-x_5.att_tds=this.att_tds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","E -> A #aff #type AFFX #gen ;"});
+x_4.att_tds=this.att_tds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","E -> A #type AFFX #gen ;"});
 }
   }
-private void action_gen_34(S_A_MCS x_2, S_AFFX_MCS x_5) throws Exception {
+private void action_gen_34(S_A_MCS x_2, S_AFFX_MCS x_4) throws Exception {
 try {
 // instructions
-this.att_code_est_adresse=x_5.att_code_est_adresse;
-this.att_code=x_5.att_code;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","E -> A #aff #type AFFX #gen ;"});
-}
-  }
-private void action_aff_34(S_A_MCS x_2, S_AFFX_MCS x_5) throws Exception {
-try {
-// instructions
-x_5.att_hcode_est_adresse=x_2.att_code_est_adresse;
-if (!(x_2.att_est_affectable)){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_notAff, MCSMessages.notAff,new Object[]{""+x_2.att_type.getNom()});
-
-}
-
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#aff","E -> A #aff #type AFFX #gen ;"});
+this.att_code_est_adresse=x_4.att_code_est_adresse;
+this.att_code=x_4.att_code;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","E -> A #type AFFX #gen ;"});
 }
   }
   public void analyser () throws Exception {

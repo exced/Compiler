@@ -51,12 +51,13 @@ private void action_type_35(S_A_MCS x_3) throws Exception {
 try {
 // instructions
 this.att_code_est_adresse=false;
-this.att_type=this.att_htype;
 if (!(this.att_htype.compareTo(x_3.att_type))){
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_affect_notCompatible, MCSMessages.affect_notCompatible,new Object[]{""+this.att_htype.getNom(), ""+x_3.att_type.getNom()});
 
 }
-
+else {
+this.att_type=x_3.att_type;
+}
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","AFFX -> affect A #type #gen ;"});
 }
   }
@@ -102,16 +103,16 @@ this.att_type=this.att_htype;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_affect : // 636
+      case LEX_MCS.token_affect : // 40699
         regle35 () ;
       break ;
-      case LEX_MCS.token_pv : // 635
+      case LEX_MCS.token_pv : // 40698
         regle36 () ;
       break ;
-      case LEX_MCS.token_virg : // 633
+      case LEX_MCS.token_virg : // 40696
         regle36 () ;
       break ;
-      case LEX_MCS.token_parf : // 630
+      case LEX_MCS.token_parf : // 40693
         regle36 () ;
       break ;
       default :

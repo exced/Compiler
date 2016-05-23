@@ -21,21 +21,22 @@ inh machine : IMachine for
               
 
 --      IDENT
-inh ident : STRING for DECL, FONCTION,FX;
+inh ident   : STRING for DECL, FONCTION,FX;
+syn sident  : STRING for PARF;
 
 --      TYPE
-syn type : DTYPE for F,FX, TYPE,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
-inh htype : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX;
+syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
+inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX;
 
 
 --      TDS
 inh tds_asm : TDS for ASM;
-inh tds    : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
+inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
                             SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
+syn stds    : TDS for PARFS,PARFSX;                                                    
                             
 --      GC                            
-syn code : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
---inh hcode : STRING for ;
+syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
 syn code_asm : STRING for ASM;
 
 inh champs : LCHAMPS for CHAMPS, CHAMP;
@@ -44,9 +45,6 @@ inh champs : LCHAMPS for CHAMPS, CHAMP;
 syn code_est_adresse : BOOLEAN for  AFFX,F, A,AX,R,RX,T,TX,E ;
 inh hcode_est_adresse : BOOLEAN for AFFX,AX,RX,TX ;
 
-
---      AFFECTATION
-syn est_affectable : BOOLEAN for A,T,R,F;
 
 
 
@@ -144,7 +142,7 @@ do
    -- on suppose la methode "int main()" existante, et sans parametres
    code := machine.genCall("main") + ENTITES^code + machine.genFin();
    -- generation du code de fin du programme
-   machine.writeCode(PROGRAMME^source.getFileName(), code);  
+   machine.writeCode(PROGRAMME^source.getFileName(), code);
 end
 }
 
@@ -159,7 +157,7 @@ end
 ------------------------------------------------------------------------
 ENTITES ->  ENTITE ENTITES #gen;
 #gen {
-do
+do    
     ENTITES^code := ENTITE^code + ENTITES1^code;
 end
 }    
@@ -242,28 +240,25 @@ end
 
 ------------------------------------------------------------------------
 -- Fonction
-FONCTION -> paro #init PARFS parf BLOC #gen;
+FONCTION -> paro #tds PARFS parf BLOC #gen;
 global
-    i : INFOFONC; 
-    tdsParam : TDS;
-#init {
+    i : INFOFONC;
+#tds {
 do
-    tdsParam := new TDS(FONCTION^tds);
-    -- retour de fonction
-    tdsParam.setTypeRetour(FONCTION^htype);
-    PARFS^tds := tdsParam; 
-    BLOC^tds := new TDS(tdsParam);
+    BLOC^tds := new TDS(FONCTION^tds);
 end
 }
 #gen{
 local
     typeRetour : DTYPE;
+    tdsParam : TDS; 
 do
     -- TDS
+    tdsParam := PARFS^stds;
     i := new INFOFONC(FONCTION^htype, tdsParam);
     FONCTION^tds.inserer(FONCTION^ident,  i);
+    typeRetour :=i.getType();
     
-    typeRetour :=tdsParam.getTypeRetour();
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
     FONCTION^code := FONCTION^machine.genFonction(FONCTION^ident, tdsParam.getTailleParams(), typeRetour.getTaille(), BLOC^code);
@@ -272,34 +267,56 @@ end
 
 ------------------------------------------------------------------------
 -- parametres de fonctions
-PARFS ->  ;
+PARFS ->  #tds;
+#tds{
+do
+    PARFS^stds := new TDS(nil);
+end
+}
 
 
 ------------------------------------------------------------------------
 -- multi paramètres
-PARFS -> #tds PARF PARFSX ;
+PARFS -> PARF #tds PARFSX #stds;
 global
     tds:TDS;
 #tds {
-do
-    tds := new TDS(PARFS^tds);
-    PARF^tds := tds;
+do    
+    tds := PARFS^tds;
+    tds.inserer(PARF^sident, new INFOTYPE(PARF^type));
     PARFSX^tds := tds;
+end
+}
+#stds {
+do
+    PARFS^stds := PARFSX^stds; 
 end
 }
 
 ------------------------------------------------------------------------
 -- fin parametre
-PARFSX ->  ;
--- Done
+PARFSX -> #stds ;
+#stds {
+do
+    PARFSX^stds := new TDS(nil);
+end
+}
 
 -- multi parametres
-PARFSX -> #tds virg PARF PARFSX ;
+PARFSX -> virg PARF #tds PARFSX #stds;
 #tds {
+local
+    tds : TDS;
 do 
     -- transmission des tds;
-    PARF^tds := PARFSX^tds;
-    PARFSX1^tds := PARFSX^tds;
+    tds := PARFSX^tds;
+    tds.inserer(PARF^sident, new INFOTYPE(PARF^type));
+    PARFSX1^tds := tds;
+end
+}
+#stds {
+do
+    PARFSX^stds := PARFSX1^stds;
 end
 }
 
@@ -307,12 +324,9 @@ end
 -- parametre fonction
 PARF -> TYPE ident #tds;
 #tds {
-local
-    i : INFO ;
 do
-    -- creer un type
-    i := new INFOTYPE(TYPE^type);
-    PARF^tds.inserer(ident^txt, i);
+    PARF^type := TYPE^type;
+    PARF^sident := ident^txt;
 end
 }
 
@@ -598,20 +612,11 @@ end
 -----------------------------------------------------------------------
 
 ------------------------------------------------------------------------
-E -> A #aff #type AFFX #gen;
-#aff {
-do
-    -- transmission du bool hcode est adresse
+E -> A #type AFFX #gen;
+#type {
+do    
     AFFX^hcode_est_adresse := A^code_est_adresse;
     
-    --gestion d'erreur en cas de probleme d affectation
-    if ~A^est_affectable then
-        error(notAff, A^type.getNom());
-    end
-end
-}
-#type {
-do
     E^type := A^type;
     -- type pour permettre le controle d'erreur au moment de l'affectation
     AFFX^htype := A^type;
@@ -631,13 +636,13 @@ AFFX -> affect A  #type #gen;
 #type {
 -- controle de type
 do
-    AFFX^code_est_adresse := false;
-    
-    -- remonter le type pour la declaration avec affectation
-    AFFX^type := AFFX^htype;
+    AFFX^code_est_adresse := false;    
     
     if ~AFFX^htype.compareTo(A^type) then
         error(affect_notCompatible, AFFX^htype.getNom() ,A^type.getNom());
+    else
+        -- remonter le type pour la declaration avec affectation
+        AFFX^type := A^type;    
     end
 end
 }
@@ -673,14 +678,9 @@ end
 
 ------------------------------------------------------------------------
 -- relation
-A -> R #aff #type AX #gen;
-#aff {
-do
-    A^est_affectable := R^est_affectable;
-end
-}
+A -> R #type AX #gen;
 #type{
-do
+do 
     -- transmission du type de R pour le controle de type
     AX^htype := R^type;
     -- on remonte le type
@@ -803,7 +803,7 @@ end
 R -> T #aff #type RX #gen;
 #aff {
 do
-    R^est_affectable := T^est_affectable;
+
 end
 }
 #type{
@@ -868,7 +868,7 @@ end
 -- operateurs additifs
 OPADD -> plus #type;
 #type {
-do
+do  
     OPADD^type := new DTYPEImpl("OPADDPLUS",1);
     -- SUBR op
     OPADD^code := OPADD^machine.genOp("IAdd");     
@@ -897,12 +897,7 @@ end
 
 ------------------------------------------------------------------------
 -- multiplication, ...
-T -> F #aff #type TX #gen ;
-#aff {
-do
-    T^est_affectable := F^est_affectable;
-end
-}
+T -> F #type TX #gen ;
 #type{
 do
     -- transmission du type de R pour le controle de type
@@ -1009,13 +1004,7 @@ end
 
 ------------------------------------------------------------------------
 -- Constante entiere --
-F -> entier #aff #gen ;
-#aff {
-do
-    -- non affectable car constante
-    F^est_affectable := false;
-end
-}
+F -> entier #gen ;
 #gen {
 do
     F^type := new DTYPEImpl("int", 1);
@@ -1026,13 +1015,7 @@ end
 
 ------------------------------------------------------------------------
 -- Constante chaine
-F -> chaine #aff #gen;
-#aff {
-do
-    -- non affectable car constante
-    F^est_affectable := false;
-end
-}
+F -> chaine #gen;
 #gen {
 do
     F^type := new DTYPEImpl("chaine", 3);
@@ -1043,13 +1026,7 @@ end
 
 ------------------------------------------------------------------------
 -- Constante caractere
-F -> caractere #aff #gen;
-#aff {
-do
-    -- non affectable car constante
-    F^est_affectable := false;
-end
-}
+F -> caractere #gen;
 #gen {
 do
     F^type := new DTYPEImpl("char", 1);
@@ -1060,13 +1037,7 @@ end
 
 ------------------------------------------------------------------------
 -- expression unaire
-F -> #aff OPUN  F #type #gen;
-#aff {
-do
-    -- non affectable car operation unaire
-    F^est_affectable := false;
-end
-}
+F -> OPUN  F #type #gen;
 #type {
 do
     -- controle de type
@@ -1121,13 +1092,7 @@ end
 
 ------------------------------------------------------------------------
 -- pointeur NULL
-F -> null #aff #type ;
-#aff {
-do
-    -- non affectable car pointeur null
-    F^est_affectable := false;
-end
-}
+F -> null #type ;
 #type {  
 do
     F^type := new DTYPEImpl("PNULL", 1);
@@ -1138,7 +1103,7 @@ end
 
 ------------------------------------------------------------------------
 -- expression parenthesee
-F ->  paro E parf #addr FX #aff #type #gen;
+F ->  paro E parf #addr FX #type #gen;
 #addr {
 do
     FX^ident := "";
@@ -1146,11 +1111,6 @@ do
     F^code_est_adresse := E^code_est_adresse;
     -- type de FX est le type de l expression de gauche
     FX^htype := E^type;
-end
-}
-#aff {
-do
-    F^est_affectable := true;
 end
 }
 #type {
@@ -1174,12 +1134,7 @@ end
 }
 
 ------------------------------------------------------------------------
-F ->  paro TYPE parf  F #aff #type #gen;
-#aff {
-do
-    F^est_affectable := F1^est_affectable;
-end
-}
+F ->  paro TYPE parf  F  #type #gen;
 #type {
 do
     -- controle de type
@@ -1200,12 +1155,7 @@ end
 }
 
 ------------------------------------------------------------------------
-F -> mult F #aff #type #addr;
-#aff {
-do
-    F^est_affectable := F1^est_affectable;
-end
-}
+F -> mult F #type #addr;
 #type {
 do
     match F1^type with POINTEUR then
@@ -1224,12 +1174,11 @@ end
 }
 
 ------------------------------------------------------------------------
-F -> ident #htype FX #aff #gen;
+F -> ident #htype FX #gen;
 global 
   iv : INFOVAR ;
   infofonc : INFOFONC;
   t : DTYPE;
-  tdsParam : TDS;
 #htype {
 local
     i:INFO;
@@ -1248,19 +1197,13 @@ do
         t := iv.getType();
         F^code_est_adresse := true;
     with INFOFONC then
-       infofonc := i;
-       tdsParam := infofonc.getParams();   
-       t := tdsParam.getTypeRetour();
+       infofonc := i;  
+       t := infofonc.getType();
        F^code_est_adresse := false;  
     else
         error(B_08, ident^txt);
     end
     FX^htype := t;
-end
-}  
-#aff {
-do
-    F^est_affectable := true;
 end
 }  
 #gen{

@@ -22,60 +22,78 @@ int [] sync= new int[0];
   TDS att_tds;
   boolean att_eval;
   IMachine att_machine;
+  TDS att_stds;
   LEX_MCS att_scanner;
   TDS glob_9_tds;
   private void regle8() throws Exception {
 
     //declaration
     //appel
+if  (att_eval)      action_tds_8();
   }
   private void regle9() throws Exception {
 
     //declaration
-    S_PARF_MCS x_3 = new S_PARF_MCS(scanner,att_eval) ;
+    S_PARF_MCS x_2 = new S_PARF_MCS(scanner,att_eval) ;
     S_PARFSX_MCS x_4 = new S_PARFSX_MCS(scanner,att_eval) ;
     //appel
-if  (att_eval)      action_auto_inh_9(x_3, x_4);
-if  (att_eval)      action_tds_9(x_3, x_4);
-    x_3.analyser() ;
+if  (att_eval)      action_auto_inh_9(x_2, x_4);
+    x_2.analyser() ;
+if  (att_eval)      action_tds_9(x_2, x_4);
     x_4.analyser() ;
+if  (att_eval)      action_stds_9(x_2, x_4);
   }
-private void action_auto_inh_9(S_PARF_MCS x_3, S_PARFSX_MCS x_4) throws Exception {
+private void action_auto_inh_9(S_PARF_MCS x_2, S_PARFSX_MCS x_4) throws Exception {
 try {
 // instructions
-x_3.att_machine=this.att_machine;
+x_2.att_machine=this.att_machine;
 x_4.att_machine=this.att_machine;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","PARFS -> #tds PARF PARFSX ;"});
+x_2.att_tds=this.att_tds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","PARFS -> PARF #tds PARFSX #stds ;"});
 }
   }
-private void action_tds_9(S_PARF_MCS x_3, S_PARFSX_MCS x_4) throws Exception {
+private void action_stds_9(S_PARF_MCS x_2, S_PARFSX_MCS x_4) throws Exception {
 try {
 // instructions
-glob_9_tds= new TDS(this.att_tds);
-x_3.att_tds=glob_9_tds;
+this.att_stds=x_4.att_stds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#stds","PARFS -> PARF #tds PARFSX #stds ;"});
+}
+  }
+private void action_tds_9(S_PARF_MCS x_2, S_PARFSX_MCS x_4) throws Exception {
+try {
+// instructions
+glob_9_tds=this.att_tds;
+glob_9_tds.inserer(x_2.att_sident,  new INFOTYPE(x_2.att_type));
 x_4.att_tds=glob_9_tds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","PARFS -> #tds PARF PARFSX ;"});
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","PARFS -> PARF #tds PARFSX #stds ;"});
+}
+  }
+private void action_tds_8() throws Exception {
+try {
+// instructions
+this.att_stds= new TDS(null);
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","PARFS -> #tds ;"});
 }
   }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 630
+      case LEX_MCS.token_parf : // 40693
         regle8 () ;
       break ;
-      case LEX_MCS.token_void : // 639
+      case LEX_MCS.token_void : // 40702
         regle9 () ;
       break ;
-      case LEX_MCS.token_int : // 641
+      case LEX_MCS.token_int : // 40704
         regle9 () ;
       break ;
-      case LEX_MCS.token_char : // 642
+      case LEX_MCS.token_char : // 40705
         regle9 () ;
       break ;
-      case LEX_MCS.token_identc : // 666
+      case LEX_MCS.token_identc : // 40729
         regle9 () ;
       break ;
-      case LEX_MCS.token_struct : // 643
+      case LEX_MCS.token_struct : // 40706
         regle9 () ;
       break ;
       default :

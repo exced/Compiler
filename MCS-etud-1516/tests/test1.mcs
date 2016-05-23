@@ -1,7 +1,9 @@
-// point d'entree du programme.
 typedef int Entier ; 
-int main(){
-    int a = 3;
+
+int main(int x){
+
+    int a;
+    int b = 3;
 
     return 0;
 }

@@ -27,7 +27,6 @@ int [] sync= new int[0];
   String att_ident;
   LEX_MCS att_scanner;
   INFOFONC glob_7_i;
-  TDS glob_7_tdsParam;
   private void regle7() throws Exception {
 
     //declaration
@@ -38,7 +37,7 @@ int [] sync= new int[0];
     //appel
 if  (att_eval)      action_auto_inh_7(x_4, x_6);
     x_2.analyser(LEX_MCS.token_paro);
-if  (att_eval)      action_init_7(x_4, x_6);
+if  (att_eval)      action_tds_7(x_4, x_6);
     x_4.analyser() ;
     x_5.analyser(LEX_MCS.token_parf);
     x_6.analyser() ;
@@ -48,22 +47,14 @@ private void action_gen_7(S_PARFS_MCS x_4, S_BLOC_MCS x_6) throws Exception {
 try {
 // locales
 DTYPE loc_typeRetour;
+TDS loc_tdsParam;
 // instructions
-glob_7_i= new INFOFONC(this.att_htype, glob_7_tdsParam);
+loc_tdsParam=x_4.att_stds;
+glob_7_i= new INFOFONC(this.att_htype, loc_tdsParam);
 this.att_tds.inserer(this.att_ident, glob_7_i);
-loc_typeRetour=glob_7_tdsParam.getTypeRetour();
-this.att_code=this.att_machine.genFonction(this.att_ident, glob_7_tdsParam.getTailleParams(), loc_typeRetour.getTaille(), x_6.att_code);
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","FONCTION -> paro #init PARFS parf BLOC #gen ;"});
-}
-  }
-private void action_init_7(S_PARFS_MCS x_4, S_BLOC_MCS x_6) throws Exception {
-try {
-// instructions
-glob_7_tdsParam= new TDS(this.att_tds);
-glob_7_tdsParam.setTypeRetour(this.att_htype);
-x_4.att_tds=glob_7_tdsParam;
-x_6.att_tds= new TDS(glob_7_tdsParam);
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#init","FONCTION -> paro #init PARFS parf BLOC #gen ;"});
+loc_typeRetour=glob_7_i.getType();
+this.att_code=this.att_machine.genFonction(this.att_ident, loc_tdsParam.getTailleParams(), loc_typeRetour.getTaille(), x_6.att_code);
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","FONCTION -> paro #tds PARFS parf BLOC #gen ;"});
 }
   }
 private void action_auto_inh_7(S_PARFS_MCS x_4, S_BLOC_MCS x_6) throws Exception {
@@ -72,7 +63,15 @@ try {
 x_4.att_machine=this.att_machine;
 x_6.att_machine=this.att_machine;
 x_6.att_htype=this.att_htype;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","FONCTION -> paro #init PARFS parf BLOC #gen ;"});
+x_4.att_tds=this.att_tds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","FONCTION -> paro #tds PARFS parf BLOC #gen ;"});
+}
+  }
+private void action_tds_7(S_PARFS_MCS x_4, S_BLOC_MCS x_6) throws Exception {
+try {
+// instructions
+x_6.att_tds= new TDS(this.att_tds);
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","FONCTION -> paro #tds PARFS parf BLOC #gen ;"});
 }
   }
   public void analyser () throws Exception {

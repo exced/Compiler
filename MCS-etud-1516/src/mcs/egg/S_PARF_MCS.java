@@ -23,6 +23,8 @@ int [] sync= new int[0];
   boolean att_eval;
   IMachine att_machine;
   LEX_MCS att_scanner;
+  DTYPE att_type;
+  String att_sident;
   private void regle12() throws Exception {
 
     //declaration
@@ -36,11 +38,9 @@ if  (att_eval)      action_tds_12(x_2, x_3);
   }
 private void action_tds_12(S_TYPE_MCS x_2, T_MCS x_3) throws Exception {
 try {
-// locales
-INFO loc_i;
 // instructions
-loc_i= new INFOTYPE(x_2.att_type);
-this.att_tds.inserer(x_3.att_txt, loc_i);
+this.att_type=x_2.att_type;
+this.att_sident=x_3.att_txt;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","PARF -> TYPE ident #tds ;"});
 }
   }

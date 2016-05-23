@@ -123,22 +123,22 @@ this.att_code=this.att_machine.genOp("ILss");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_inf : // 648
+      case LEX_MCS.token_inf : // 40711
         regle40 () ;
       break ;
-      case LEX_MCS.token_sup : // 650
+      case LEX_MCS.token_sup : // 40713
         regle41 () ;
       break ;
-      case LEX_MCS.token_infeg : // 649
+      case LEX_MCS.token_infeg : // 40712
         regle42 () ;
       break ;
-      case LEX_MCS.token_supeg : // 651
+      case LEX_MCS.token_supeg : // 40714
         regle43 () ;
       break ;
-      case LEX_MCS.token_eg : // 652
+      case LEX_MCS.token_eg : // 40715
         regle44 () ;
       break ;
-      case LEX_MCS.token_neg : // 653
+      case LEX_MCS.token_neg : // 40716
         regle45 () ;
       break ;
       default :

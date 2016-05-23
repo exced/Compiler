@@ -5,20 +5,15 @@ package mcs.tds;
 import mcs.type.*;
 
 public class INFO {
-	// le type
+
 	protected DTYPE type;
-
-	public DTYPE getType() {
-		return type;
-	}
-
-	// constructeur
+	
 	public INFO(DTYPE t) {
 		type = t;
 	}
 
-	//
-	// affichage
+	public DTYPE getType() { return type; }
+
 	public String toString() {
 		return "; INFO : " + "type=" + type ;
 	}
