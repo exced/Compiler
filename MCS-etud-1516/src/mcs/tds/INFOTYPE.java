@@ -9,7 +9,7 @@ public class INFOTYPE extends INFO {
 	}
 	
 	public String toString() {
-		return "; INFOTYPE alias sur : " + "type=" + type.getNom() ;
+		return "; INFOTYPE alias sur : " + "type=" + type.getNom();
 	}
 	
 }

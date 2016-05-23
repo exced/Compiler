@@ -18,6 +18,9 @@ public class MTAM extends AbstractMachine {
 	
 	private Register SB;
 	
+	// compteur pour le generateur d'etiquettes
+	private static int cpt = 0;
+	
 	// déplacement courant dans un bloc
 	private int currentDep;
 
@@ -27,18 +30,14 @@ public class MTAM extends AbstractMachine {
 		} else {
 			nom = fname;
 		}
-		SB = new Register("SB", 0);
 		currentDep = 0;
-	}
-	
-	public Register getSB(){
-		return SB;
+		SB = new Register("SB", 0);
 	}
 	
 
-	public int getCurrentDep() {
-		return currentDep;
-	}
+	public int getCurrentDep() { return currentDep; }
+	
+	public Register getSB() { return SB; }
 
 	public void addCurrentDep(int dep){
 		currentDep += dep;
@@ -73,9 +72,6 @@ public class MTAM extends AbstractMachine {
 				+ " taille = " + taille + "\n" + t + "; fin de declaration de "
 				+ n + "\n";
 	}
-
-	// compteur pour le generateur d'etiquettes
-	private static int cpt = 0;
 
 	// genere une etiquette differente des autres
 	public String genEtiq() {
@@ -117,7 +113,7 @@ public class MTAM extends AbstractMachine {
 	}
 
 	public String genFree(){
-		return "\tPOP (0)" + currentDep + "\n"; 
+		return "\tPOP (0) " + currentDep + "\n"; 
 	}
 
 	public String genReadMem(int dep, int taille) {

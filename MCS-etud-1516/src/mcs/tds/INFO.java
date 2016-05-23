@@ -15,6 +15,6 @@ public class INFO {
 	public DTYPE getType() { return type; }
 
 	public String toString() {
-		return "; INFO : " + "type=" + type ;
+		return "; INFO : " + "type=" + type;
 	}
 }

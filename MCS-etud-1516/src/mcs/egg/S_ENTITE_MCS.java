@@ -125,7 +125,7 @@ x_5.att_htype=x_2.att_type;
 private void action_gen_4(S_TYPE_MCS x_2, T_MCS x_3, S_DECL_MCS x_5) throws Exception {
 try {
 // instructions
-this.att_code="";
+this.att_code=x_5.att_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","ENTITE -> TYPE ident #decl DECL #gen ;"});
 }
   }
@@ -139,25 +139,25 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 40707
+      case LEX_MCS.token_typedef : // 60453
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 40702
+      case LEX_MCS.token_void : // 60448
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 40704
+      case LEX_MCS.token_int : // 60450
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 40705
+      case LEX_MCS.token_char : // 60451
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 40729
+      case LEX_MCS.token_identc : // 60490
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 40706
+      case LEX_MCS.token_struct : // 60452
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 40703
+      case LEX_MCS.token_asm : // 60449
         regle79 () ;
       break ;
       default :

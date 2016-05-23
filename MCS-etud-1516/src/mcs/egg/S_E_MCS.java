@@ -44,6 +44,7 @@ try {
 x_4.att_hcode_est_adresse=x_2.att_code_est_adresse;
 this.att_type=x_2.att_type;
 x_4.att_htype=x_2.att_type;
+x_4.att_hcode=x_2.att_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","E -> A #type AFFX #gen ;"});
 }
   }

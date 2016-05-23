@@ -2,6 +2,53 @@
 ; Do not modify by hand
 ; Appel a main
 	CALL(SB) _main
+	PUSH 1
+	PUSH 2
+_foo:
+	LOADL 100
+	STOREI(1)
+	SUBR IAdd
+	STORE(1) 1[LB]
+; Appel a malloc
+	CALL(SB) _malloc
+	STORE(1) 2[LB]
+	LOADI(1)
+	LOADL 666
+	SUBR IAdd
+	STOREI(1)
+; Appel a malloc
+	CALL(SB) _malloc
+	STORE(1) 2[LB]
+	LOADI(1)
+	STOREI(1)
+	LOADI(1)
+; Appel a malloc
+	CALL(SB) _malloc
+	STOREI(1)
+	LOADI(1)
+	LOADL 12
+	STOREI(1)
+	LOADI(1)
+	LOADL 9999
+	SUBR IAdd
+	STORE(1) 3[LB]
+null	POP (0) 4
+	RETURN (0) 1
+_bar:
+	LOADI(1)
+	LOADL 3
+	STOREI(1)
+	LOADL 3
+	STOREI(1)
+	LOADL 301
+	STORE(1) 1[LB]
+	LOADL 401
+	STORE(1) 2[LB]
+; Appel a foo
+	CALL(SB) _foo
+	STOREI(1)
+	POP (0) 4
+	RETURN (0) 1
 ; inline code_asm
 
 
@@ -11,4 +58,90 @@
 	HALT
 	; arret de la machine
 
+_malloc:
+; inline code_asm
+
+
+	LOAD null
+	; acces au parametre taille
+
+	SUBR Malloc
+	; allocation
+
+	STORE (1) 0[SB]
+	; resultat dans adr
+
+	POP (0) 1
+	RETURN (0) 1
+_pointeur:
+; Appel a malloc
+	CALL(SB) _malloc
+	STORE(1) 0[LB]
+null	POP (0) 0
+	RETURN (0) 1
+_log:
+	LOADL 12
+	STORE(1) 0[LB]
+; inline code_asm
+
+
+	LOAD null
+	; acces au premier parametre
+
+	SUBR Sout
+
+
+	LOAD null
+	; acces au deuxieme parametre
+
+	LOAD null
+	; acces a la variable x
+
+	SUBR IAdd
+
+
+	SUBR IOUT
+
+
+	SUBR LN
+
+
+	POP (0) 0
+	RETURN (0) 0
+_main:
+	LOADL 3
+	STORE(1) 0[LB]
+	LOADL 'a'
+	STORE(1) 0[LB]
+	LOADL 999
+	STORE(1) 1[LB]
+	LOADL 'a'
+	STORE(1) 2[LB]
+	LOADL 999
+	STORE(1) 2[LB]
+; Appel a foo2
+	CALL(SB) _foo2
+	STORE(1) 2[LB]
+; Appel a log
+	CALL(SB) _log
+	; if
+	LOADL 0
+	SUBR IEq
+
+	JUMPIF(0) X0
+; Appel a log
+	CALL(SB) _log
+	POP (0) 0
+
+	JUMP X1
+X0
+; Appel a log
+	CALL(SB) _log
+	POP (0) 0
+
+X1
+	; fin if
+	LOADL 0
+	POP (0) 0
+	RETURN (0) 1
 	HALT

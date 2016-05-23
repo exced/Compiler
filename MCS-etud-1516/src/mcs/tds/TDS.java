@@ -100,12 +100,13 @@ public class TDS extends LinkedHashMap<String, INFO> {
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("parente : " + parente);
+		sb.append("TDS\n parente : " + parente +"\n");
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
-			sb.append("; " + e.getKey() + " : " + e.getValue().toString() + '\n');
+			sb.append("; " + e.getKey() + " ::: " + e.getValue().toString() + '\n');
 
 		}
+		sb.append("fin TDS\n");
 		return sb.toString();
 	}
 

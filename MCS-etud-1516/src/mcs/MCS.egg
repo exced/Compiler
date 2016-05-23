@@ -20,28 +20,29 @@ inh machine : IMachine for
          ;
               
 
---      IDENT
+-- IDENT
 inh ident   : STRING for DECL, FONCTION,FX;
 syn sident  : STRING for PARF;
 
---      TYPE
+-- TYPE
 syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
 inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX;
 
 
---      TDS
+-- TDS
 inh tds_asm : TDS for ASM;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
                             SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
 syn stds    : TDS for PARFS,PARFSX;                                                    
                             
---      GC                            
+-- GC                            
 syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
+inh hcode   : STRING for AFFX,AX,RX,FX,TX;
 syn code_asm : STRING for ASM;
 
 inh champs : LCHAMPS for CHAMPS, CHAMP;
 
---      ADRESSE
+-- ADRESSE
 syn code_est_adresse : BOOLEAN for  AFFX,F, A,AX,R,RX,T,TX,E ;
 inh hcode_est_adresse : BOOLEAN for AFFX,AX,RX,TX ;
 
@@ -69,21 +70,21 @@ sugar char is  "char";
 sugar struct is "struct";
 sugar typedef is "typedef";
 -- decommenter pour MCS
---sugar ref is "ref" ;
---sugar out is "out";
---sugar namespace is "namespace";
---sugar using is "using";
---sugar class is "class";
---sugar public is "public" ;
---sugar private is "private";
---sugar dpts is "\:";
---sugar bool is "bool";
---sugar true is "true";
---sugar false is "false";
---sugar this is "this";
---sugar new is "new" ;
---sugar null2 is "null";
---sugar base is "base" ;
+sugar ref is "ref" ;
+sugar out is "out";
+sugar namespace is "namespace";
+sugar using is "using";
+sugar class is "class";
+sugar public is "public" ;
+sugar private is "private";
+sugar dpts is "\:";
+sugar bool is "bool";
+sugar true is "true";
+sugar false is "false";
+sugar this is "this";
+sugar new is "new" ;
+sugar null2 is "null";
+sugar base is "base" ;
 -- 
 sugar retour is  "return";
 sugar arrow is "\-\>";
@@ -194,7 +195,7 @@ end
 }
 #gen {
 do 
-    ENTITE^code := "";
+    ENTITE^code := DECL^code;
 end
 }
 
@@ -491,6 +492,15 @@ end
 ------------------------------------------------------------------------
 -- declaration de variable locale avec ou sans init 
 INST ->  TYPE ident #htype AFFX pv #tds #type #gen ;
+#htype {
+do
+    -- transmission de type
+    AFFX^htype := TYPE^type;
+    -- transmission de l adresse
+    AFFX^hcode_est_adresse := false;
+    AFFX^hcode := "";
+end
+}
 #tds {
 local
     i : INFO ;
@@ -505,14 +515,6 @@ do
         i := new INFOVAR(TYPE^type, e);
         INST^tds.inserer(ident^txt, i);
     end
-end
-}
-#htype {
-do
-    -- transmission de type
-    AFFX^htype := TYPE^type;
-    -- transmission de l adresse
-    AFFX^hcode_est_adresse := false;
 end
 }
 #type {
@@ -620,6 +622,7 @@ do
     E^type := A^type;
     -- type pour permettre le controle d'erreur au moment de l'affectation
     AFFX^htype := A^type;
+    AFFX^hcode := A^code;
 end
 }
 #gen {
@@ -650,14 +653,12 @@ end
 local 
   code : STRING;
 do  
-      code :=  AFFX^machine.genComment("Valeur") + A^code ;
-      if AFFX^hcode_est_adresse then
-        code := code + AFFX^machine.genComment("Adresse") +
-                     A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
-      else
-        code := code + AFFX^machine.genWriteMem(AFFX^machine.getCurrentDep(), AFFX^htype.getTaille());
+    if AFFX^hcode_est_adresse then
+        code := AFFX^hcode +A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+    else
+        code := AFFX^hcode + A^code + AFFX^machine.genWriteMem(AFFX^machine.getCurrentDep(), AFFX^htype.getTaille());
        end 
-      AFFX^code := code; 
+      AFFX^code := code;
   end
 }
 
@@ -672,7 +673,7 @@ end
 }
 #gen {
 do
-    AFFX^code := "";
+    AFFX^code := AFFX^hcode;
 end
 }
 
@@ -686,6 +687,7 @@ do
     -- on remonte le type
     A^type := R^type;
     
+    AX^hcode := R^code;
     AX^hcode_est_adresse := R^code_est_adresse;
 end
 }
@@ -800,12 +802,7 @@ end
 
 ------------------------------------------------------------------------
 -- additions multiples
-R -> T #aff #type RX #gen;
-#aff {
-do
-
-end
-}
+R -> T #type RX #gen;
 #type{
 do
     -- transmission du type de R pour le controle de type
@@ -813,6 +810,7 @@ do
     -- on remonte le type
     R^type := T^type;
     
+    RX^hcode := T^code;
     RX^hcode_est_adresse := T^code_est_adresse;
 end
 }
@@ -905,6 +903,7 @@ do
     -- on remonte le type
     T^type := F^type;
     
+    TX^hcode := F^code;
     TX^hcode_est_adresse := F^code_est_adresse;
 end
 }
@@ -918,12 +917,7 @@ end
 }
 
 ------------------------------------------------------------------------
-TX -> OPMUL #tds F TX  #type #gen;
-#tds {
-do
-    TX1^tds := TX^tds;
-end
-}
+TX -> OPMUL F TX  #type #gen;
 #type {
 do
     -- controle de type
@@ -1110,6 +1104,7 @@ do
 
     F^code_est_adresse := E^code_est_adresse;
     -- type de FX est le type de l expression de gauche
+    FX^hcode := E^code;
     FX^htype := E^type;
 end
 }
@@ -1195,10 +1190,12 @@ do
     with INFOVAR then
         iv := i;
         t := iv.getType();
+        FX^hcode := F^machine.genAdr(iv.getTaille());
         F^code_est_adresse := true;
     with INFOFONC then
        infofonc := i;  
        t := infofonc.getType();
+       FX^hcode := "";
        F^code_est_adresse := false;  
     else
         error(B_08, ident^txt);

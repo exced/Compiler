@@ -28,6 +28,7 @@ int [] sync= new int[0];
   boolean att_code_est_adresse;
   DTYPE att_type;
   boolean att_hcode_est_adresse;
+  String att_hcode;
   private void regle48() throws Exception {
 
     //declaration
@@ -57,6 +58,7 @@ x_4.att_machine=this.att_machine;
 x_4.att_htype=this.att_htype;
 x_3.att_tds=this.att_tds;
 x_4.att_tds=this.att_tds;
+x_4.att_hcode=this.att_hcode;
 x_4.att_hcode_est_adresse=this.att_hcode_est_adresse;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","RX -> OPADD T RX1 #type #gen ;"});
 }
@@ -98,43 +100,43 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_plus : // 40717
+      case LEX_MCS.token_plus : // 60478
         regle47 () ;
       break ;
-      case LEX_MCS.token_moins : // 40718
+      case LEX_MCS.token_moins : // 60479
         regle47 () ;
       break ;
-      case LEX_MCS.token_ou : // 40719
+      case LEX_MCS.token_ou : // 60480
         regle47 () ;
       break ;
-      case LEX_MCS.token_inf : // 40711
+      case LEX_MCS.token_inf : // 60472
         regle48 () ;
       break ;
-      case LEX_MCS.token_sup : // 40713
+      case LEX_MCS.token_sup : // 60474
         regle48 () ;
       break ;
-      case LEX_MCS.token_infeg : // 40712
+      case LEX_MCS.token_infeg : // 60473
         regle48 () ;
       break ;
-      case LEX_MCS.token_supeg : // 40714
+      case LEX_MCS.token_supeg : // 60475
         regle48 () ;
       break ;
-      case LEX_MCS.token_eg : // 40715
+      case LEX_MCS.token_eg : // 60476
         regle48 () ;
       break ;
-      case LEX_MCS.token_neg : // 40716
+      case LEX_MCS.token_neg : // 60477
         regle48 () ;
       break ;
-      case LEX_MCS.token_affect : // 40699
+      case LEX_MCS.token_affect : // 60445
         regle48 () ;
       break ;
-      case LEX_MCS.token_virg : // 40696
+      case LEX_MCS.token_virg : // 60442
         regle48 () ;
       break ;
-      case LEX_MCS.token_pv : // 40698
+      case LEX_MCS.token_pv : // 60444
         regle48 () ;
       break ;
-      case LEX_MCS.token_parf : // 40693
+      case LEX_MCS.token_parf : // 60439
         regle48 () ;
       break ;
       default :

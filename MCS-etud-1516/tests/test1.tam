@@ -2,4 +2,10 @@
 ; Do not modify by hand
 ; Appel a main
 	CALL(SB) _main
+_main:
+	LOADL 3
+	STORE(1) 1[LB]
+	LOADL 0
+	POP (0) 2
+	RETURN (0) 1
 	HALT

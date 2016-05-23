@@ -28,6 +28,7 @@ int [] sync= new int[0];
   boolean att_code_est_adresse;
   DTYPE att_type;
   boolean att_hcode_est_adresse;
+  String att_hcode;
   private void regle38() throws Exception {
 
     //declaration
@@ -95,34 +96,34 @@ this.att_code_est_adresse=this.att_hcode_est_adresse;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_inf : // 40711
+      case LEX_MCS.token_inf : // 60472
         regle38 () ;
       break ;
-      case LEX_MCS.token_sup : // 40713
+      case LEX_MCS.token_sup : // 60474
         regle38 () ;
       break ;
-      case LEX_MCS.token_infeg : // 40712
+      case LEX_MCS.token_infeg : // 60473
         regle38 () ;
       break ;
-      case LEX_MCS.token_supeg : // 40714
+      case LEX_MCS.token_supeg : // 60475
         regle38 () ;
       break ;
-      case LEX_MCS.token_eg : // 40715
+      case LEX_MCS.token_eg : // 60476
         regle38 () ;
       break ;
-      case LEX_MCS.token_neg : // 40716
+      case LEX_MCS.token_neg : // 60477
         regle38 () ;
       break ;
-      case LEX_MCS.token_affect : // 40699
+      case LEX_MCS.token_affect : // 60445
         regle39 () ;
       break ;
-      case LEX_MCS.token_virg : // 40696
+      case LEX_MCS.token_virg : // 60442
         regle39 () ;
       break ;
-      case LEX_MCS.token_pv : // 40698
+      case LEX_MCS.token_pv : // 60444
         regle39 () ;
       break ;
-      case LEX_MCS.token_parf : // 40693
+      case LEX_MCS.token_parf : // 60439
         regle39 () ;
       break ;
       default :

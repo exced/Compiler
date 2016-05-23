@@ -274,14 +274,14 @@ public class JLEX_MCS implements  LEX_ANALYZER  {
 		/* 40 */ YY_NO_ANCHOR,
 		/* 41 */ YY_NO_ANCHOR,
 		/* 42 */ YY_NO_ANCHOR,
-		/* 43 */ YY_NOT_ACCEPT,
+		/* 43 */ YY_NO_ANCHOR,
 		/* 44 */ YY_NO_ANCHOR,
 		/* 45 */ YY_NO_ANCHOR,
 		/* 46 */ YY_NO_ANCHOR,
-		/* 47 */ YY_NOT_ACCEPT,
+		/* 47 */ YY_NO_ANCHOR,
 		/* 48 */ YY_NO_ANCHOR,
 		/* 49 */ YY_NO_ANCHOR,
-		/* 50 */ YY_NOT_ACCEPT,
+		/* 50 */ YY_NO_ANCHOR,
 		/* 51 */ YY_NO_ANCHOR,
 		/* 52 */ YY_NO_ANCHOR,
 		/* 53 */ YY_NO_ANCHOR,
@@ -289,14 +289,14 @@ public class JLEX_MCS implements  LEX_ANALYZER  {
 		/* 55 */ YY_NO_ANCHOR,
 		/* 56 */ YY_NO_ANCHOR,
 		/* 57 */ YY_NO_ANCHOR,
-		/* 58 */ YY_NO_ANCHOR,
+		/* 58 */ YY_NOT_ACCEPT,
 		/* 59 */ YY_NO_ANCHOR,
 		/* 60 */ YY_NO_ANCHOR,
 		/* 61 */ YY_NO_ANCHOR,
-		/* 62 */ YY_NO_ANCHOR,
+		/* 62 */ YY_NOT_ACCEPT,
 		/* 63 */ YY_NO_ANCHOR,
 		/* 64 */ YY_NO_ANCHOR,
-		/* 65 */ YY_NO_ANCHOR,
+		/* 65 */ YY_NOT_ACCEPT,
 		/* 66 */ YY_NO_ANCHOR,
 		/* 67 */ YY_NO_ANCHOR,
 		/* 68 */ YY_NO_ANCHOR,
@@ -312,16 +312,74 @@ public class JLEX_MCS implements  LEX_ANALYZER  {
 		/* 78 */ YY_NO_ANCHOR,
 		/* 79 */ YY_NO_ANCHOR,
 		/* 80 */ YY_NO_ANCHOR,
-		/* 81 */ YY_NO_ANCHOR
+		/* 81 */ YY_NO_ANCHOR,
+		/* 82 */ YY_NO_ANCHOR,
+		/* 83 */ YY_NO_ANCHOR,
+		/* 84 */ YY_NO_ANCHOR,
+		/* 85 */ YY_NO_ANCHOR,
+		/* 86 */ YY_NO_ANCHOR,
+		/* 87 */ YY_NO_ANCHOR,
+		/* 88 */ YY_NO_ANCHOR,
+		/* 89 */ YY_NO_ANCHOR,
+		/* 90 */ YY_NO_ANCHOR,
+		/* 91 */ YY_NO_ANCHOR,
+		/* 92 */ YY_NO_ANCHOR,
+		/* 93 */ YY_NO_ANCHOR,
+		/* 94 */ YY_NO_ANCHOR,
+		/* 95 */ YY_NO_ANCHOR,
+		/* 96 */ YY_NO_ANCHOR,
+		/* 97 */ YY_NO_ANCHOR,
+		/* 98 */ YY_NO_ANCHOR,
+		/* 99 */ YY_NO_ANCHOR,
+		/* 100 */ YY_NO_ANCHOR,
+		/* 101 */ YY_NO_ANCHOR,
+		/* 102 */ YY_NO_ANCHOR,
+		/* 103 */ YY_NO_ANCHOR,
+		/* 104 */ YY_NO_ANCHOR,
+		/* 105 */ YY_NO_ANCHOR,
+		/* 106 */ YY_NO_ANCHOR,
+		/* 107 */ YY_NO_ANCHOR,
+		/* 108 */ YY_NO_ANCHOR,
+		/* 109 */ YY_NO_ANCHOR,
+		/* 110 */ YY_NO_ANCHOR,
+		/* 111 */ YY_NO_ANCHOR,
+		/* 112 */ YY_NO_ANCHOR,
+		/* 113 */ YY_NO_ANCHOR,
+		/* 114 */ YY_NO_ANCHOR,
+		/* 115 */ YY_NO_ANCHOR,
+		/* 116 */ YY_NO_ANCHOR,
+		/* 117 */ YY_NO_ANCHOR,
+		/* 118 */ YY_NO_ANCHOR,
+		/* 119 */ YY_NO_ANCHOR,
+		/* 120 */ YY_NO_ANCHOR,
+		/* 121 */ YY_NO_ANCHOR,
+		/* 122 */ YY_NO_ANCHOR,
+		/* 123 */ YY_NO_ANCHOR,
+		/* 124 */ YY_NO_ANCHOR,
+		/* 125 */ YY_NO_ANCHOR,
+		/* 126 */ YY_NO_ANCHOR,
+		/* 127 */ YY_NO_ANCHOR,
+		/* 128 */ YY_NO_ANCHOR,
+		/* 129 */ YY_NO_ANCHOR,
+		/* 130 */ YY_NO_ANCHOR,
+		/* 131 */ YY_NO_ANCHOR,
+		/* 132 */ YY_NO_ANCHOR,
+		/* 133 */ YY_NO_ANCHOR,
+		/* 134 */ YY_NO_ANCHOR,
+		/* 135 */ YY_NO_ANCHOR,
+		/* 136 */ YY_NO_ANCHOR,
+		/* 137 */ YY_NO_ANCHOR,
+		/* 138 */ YY_NO_ANCHOR,
+		/* 139 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,258,
-"3:9,4,1,3:2,4,3:18,4,37,45,3:2,41,42,44,5,6,40,38,9,31,10,2,43:10,3,11,36,1" +"2,32,3:2,48:11,35,48,33,48:6,34,48:5,3:4,47,3,21,46,25,20,15,14,46,26,13,46" +":2,16,22,23,19,30,46,27,17,24,28,18,46:2,29,46,7,39,8,3:130,0:2")[0];
+"3:9,4,1,3:2,4,3:18,4,41,49,3:2,45,46,48,5,6,44,42,9,35,10,2,47:10,33,11,40," +"12,36,3:2,52:11,39,52,37,52:6,38,52:5,3:4,51,3,21,32,25,20,15,14,31,26,13,5" +"0:2,16,22,23,19,30,50,27,17,24,28,18,34,50,29,50,7,43,8,3:130,0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,82,
-"0,1,2,3,1:8,4,5,6,7,8,9,10,1:3,11,1,12,1:8,12:2,1,12:3,13,12:3,14,15,12,16," +"17,18,19,20,21,22,20,23,24,25,26,27,28,29,30,31,32,33,34,35,36,13,37,38,39," +"40,41,42,43,44,45,46,47,48,49")[0];
+	private int yy_rmap[] = unpackFromString(1,140,
+"0,1,2,3,1:8,4,5,1,6,7,8,9,10,1:3,11,1,12,1:8,12:5,1,12:8,13,12:9,14,15,16,1" +"7,18,19,20,21,22,23,21,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,4" +"1,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,1" +"3,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,12,8" +"9,90,91,92")[0];
 
-	private int yy_nxt[][] = unpackFromString(50,49,
-"1,2,3,4,2,5,6,7,8,9,10,11,12,13,45,69,45,78,70,45:2,61,45:2,81,71,45,79,45:" +"3,14,15,16,68:2,17,18,19,44,20,21,48,22,51,53,45,4,68,-1:50,2,-1:2,2,-1:46," +"43,-1:58,23,-1:49,45,24,45:8,49,45:7,-1:2,45:3,-1:7,45,-1:2,45:3,-1:32,25,-" +"1:28,26,-1:49,68:18,-1:2,68,60,68,-1:7,68,-1:2,68:3,-1:12,27,-1:48,28,-1:79" +",22,-1:18,45:18,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,68:18,-1:2,68:3,-1:7,68,-" +"1:2,68:3,-1,32,43:47,-1:39,29,-1:22,68:18,-1:2,68:2,39,-1:7,68,-1:2,68:3,-1" +":44,35,-1:46,30,-1:19,45:11,33,45:6,-1:2,45:3,-1:7,45,-1:2,45:3,-1,50:44,31" +",50:3,-1,47:43,-1,47:4,-1:13,45:9,34,45:8,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13" +",45:2,36,45:15,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:7,37,45:10,-1:2,45:3,-1" +":7,45,-1:2,45:3,-1:13,45:14,38,45:3,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:11" +",40,45:6,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:10,41,45:7,-1:2,45:3,-1:7,45," +"-1:2,45:3,-1:13,45,42,45:16,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,68:18,-1:2,68" +":2,46,-1:7,68,-1:2,68:3,-1:13,45:4,52,45:13,-1:2,45:3,-1:7,45,-1:2,45:3,-1:" +"13,45:4,54,45:13,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,55,45:17,-1:2,45:3,-1:7," +"45,-1:2,45:3,-1:13,45:8,56,45:9,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:12,57," +"45:5,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:14,58,45:3,-1:2,45:3,-1:7,45,-1:2" +",45:3,-1:13,45:2,59,45:15,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:3,62,45:14,-" +"1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:6,63,45:11,-1:2,45:3,-1:7,45,-1:2,45:3," +"-1:13,45:13,64,45:4,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:15,65,45:2,-1:2,45" +":3,-1:7,45,-1:2,45:3,-1:13,45:15,66,45:2,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13," +"45:7,67,45:10,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:14,72,45:3,-1:2,45:3,-1:" +"7,45,-1:2,45:3,-1:13,45:11,73,45:6,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:2,7" +"4,45:15,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:11,75,45:6,-1:2,45:3,-1:7,45,-" +"1:2,45:3,-1:13,45:2,76,45:15,-1:2,45:3,-1:7,45,-1:2,45:3,-1:13,45:17,77,-1:" +"2,45:3,-1:7,45,-1:2,45:3,-1:13,45:16,80,45,-1:2,45:3,-1:7,45,-1:2,45:3");
+	private int yy_nxt[][] = unpackFromString(93,53,
+"1,2,3,4,2,5,6,7,8,9,10,11,12,13,60,112,135,137,113,90,135,91,135,92,114,115" +",135,93,138,135,139,135,116,14,135,15,16,17,111:2,18,19,20,59,21,22,63,23,6" +"6,68,135,4,111,-1:54,2,-1:2,2,-1:50,58,-1:62,24,-1:53,135,25,135:8,64,135:9" +",-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:36,26,-1:28,27,-1:53,111:20,-1,11" +"1,-1:2,111,89,111,-1:7,111,-1:2,111:3,-1:12,28,-1:52,29,-1:87,23,-1:18,135:" +"20,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,111:20,-1,111,-1:2,111:3,-1:" +"7,111,-1:2,111:3,-1,33,58:51,-1:43,30,-1:22,135:8,117,135:11,-1,135,-1:2,13" +"5:3,-1:7,135,-1:2,135:3,-1:13,111:20,-1,111,-1:2,111:2,48,-1:7,111,-1:2,111" +":3,-1:48,39,-1:50,31,-1:19,135:11,34,135:8,-1,135,-1:2,135:3,-1:7,135,-1:2," +"135:3,-1,65:48,32,65:3,-1,62:47,-1,62:4,-1:13,135:11,35,135:8,-1,135,-1:2,1" +"35:3,-1:7,135,-1:2,135:3,-1:13,135:9,36,135:10,-1,135,-1:2,135:3,-1:7,135,-" +"1:2,135:3,-1:13,135:20,-1,37,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135,38,13" +"5:9,127,135:8,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:2,40,135:17,-" +"1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:7,41,135:12,-1,135,-1:2,135:" +"3,-1:7,135,-1:2,135:3,-1:13,135:3,42,135:16,-1,135,-1:2,135:3,-1:7,135,-1:2" +",135:3,-1:13,135:4,43,135:15,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,13" +"5:2,44,135:17,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:14,45,135:5,-" +"1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:3,46,135:16,-1,135,-1:2,135:" +"3,-1:7,135,-1:2,135:3,-1:13,135:2,47,135:17,-1,135,-1:2,135:3,-1:7,135,-1:2" +",135:3,-1:13,135:2,49,135:17,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,13" +"5:4,50,135:15,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:18,51,135,-1," +"135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:11,52,135:8,-1,135,-1:2,135:3," +"-1:7,135,-1:2,135:3,-1:13,135:10,53,135:9,-1,135,-1:2,135:3,-1:7,135,-1:2,1" +"35:3,-1:13,135:12,54,135:7,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135," +"55,135:18,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:2,56,135:17,-1,13" +"5,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:2,57,135:17,-1,135,-1:2,135:3,-1" +":7,135,-1:2,135:3,-1:13,111:20,-1,111,-1:2,111:2,61,-1:7,111,-1:2,111:3,-1:" +"13,135:15,67,135:4,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:4,69,135" +":15,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:2,70,135:5,119,135:6,96" +",135:4,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:2,71,135:17,-1,135,-" +"1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:4,72,135:15,-1,135,-1:2,135:3,-1:7," +"135,-1:2,135:3,-1:13,73,135:19,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13," +"135:3,74,135:16,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,75,135:19,-1,13" +"5,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:15,76,135:4,-1,135,-1:2,135:3,-1" +":7,135,-1:2,135:3,-1:13,135:8,77,135:11,-1,135,-1:2,135:3,-1:7,135,-1:2,135" +":3,-1:13,135:6,78,135:13,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:4," +"79,135:15,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:4,80,135:15,-1,13" +"5,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:4,81,135:15,-1,135,-1:2,135:3,-1" +":7,135,-1:2,135:3,-1:13,135:10,82,135:9,-1,135,-1:2,135:3,-1:7,135,-1:2,135" +":3,-1:13,135:12,83,135:7,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:14" +",84,135:5,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,85,135:19,-1,135,-1:2" +",135:3,-1:7,135,-1:2,135:3,-1:13,135:2,86,135:17,-1,135,-1:2,135:3,-1:7,135" +",-1:2,135:3,-1:13,135:11,87,135:8,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:" +"13,135:12,88,135:7,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:3,94,135" +":16,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:6,95,135:13,-1,135,-1:2" +",135:3,-1:7,135,-1:2,135:3,-1:13,135:13,97,98,135,120,135:3,-1,135,-1:2,135" +":3,-1:7,135,-1:2,135:3,-1:13,135:3,121,135:9,99,135:6,-1,135,-1:2,135:3,-1:" +"7,135,-1:2,135:3,-1:13,135:6,100,135,101,135:11,-1,135,-1:2,135:3,-1:7,135," +"-1:2,135:3,-1:13,135:3,102,135:16,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:" +"13,135:14,125,135:5,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:9,126,1" +"35:10,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:17,136,135:2,-1,135,-" +"1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:8,103,135:11,-1,135,-1:2,135:3,-1:7" +",135,-1:2,135:3,-1:13,104,135:19,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:1" +"3,128,135:19,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:19,129,-1,135," +"-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:15,105,135:4,-1,135,-1:2,135:3,-1:" +"7,135,-1:2,135:3,-1:13,135:2,130,135:17,-1,135,-1:2,135:3,-1:7,135,-1:2,135" +":3,-1:13,135:15,106,135:4,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:5" +",132,135:14,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:3,107,135:16,-1" +",135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:4,133,135:15,-1,135,-1:2,135:" +"3,-1:7,135,-1:2,135:3,-1:13,135:7,108,135:12,-1,135,-1:2,135:3,-1:7,135,-1:" +"2,135:3,-1:13,135:8,109,135:11,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13," +"135:17,134,135:2,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:8,110,135:" +"11,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-1:13,135:2,131,135:17,-1,135,-1:2" +",135:3,-1:7,135,-1:2,135:3,-1:13,135:11,118,135:8,-1,135,-1:2,135:3,-1:7,13" +"5,-1:2,135:3,-1:13,135:4,122,135:15,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3,-" +"1:13,135:14,123,124,135:4,-1,135,-1:2,135:3,-1:7,135,-1:2,135:3");
 
 	public Yytoken yylex ()
 		throws java.io.IOException {
@@ -475,7 +533,7 @@ case -14:
 					
 case 14:
 					
-	{return new Yytoken(LEX_MCS.token_moins, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_dpts, yytext(), yyline, yychar, yychar+1);}
 					
 case -15:
 					
@@ -483,7 +541,7 @@ case -15:
 					
 case 15:
 					
-	{return new Yytoken(LEX_MCS.token_sup, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_moins, yytext(), yyline, yychar, yychar+1);}
 					
 case -16:
 					
@@ -491,7 +549,7 @@ case -16:
 					
 case 16:
 					
-	{return new Yytoken(LEX_MCS.token_identc, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_sup, yytext(), yyline, yychar, yychar+1);}
 					
 case -17:
 					
@@ -499,7 +557,7 @@ case -17:
 					
 case 17:
 					
-	{return new Yytoken(LEX_MCS.token_inf, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_identc, yytext(), yyline, yychar, yychar+1);}
 					
 case -18:
 					
@@ -507,7 +565,7 @@ case -18:
 					
 case 18:
 					
-	{return new Yytoken(LEX_MCS.token_non, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_inf, yytext(), yyline, yychar, yychar+1);}
 					
 case -19:
 					
@@ -515,7 +573,7 @@ case -19:
 					
 case 19:
 					
-	{return new Yytoken(LEX_MCS.token_plus, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_non, yytext(), yyline, yychar, yychar+1);}
 					
 case -20:
 					
@@ -523,7 +581,7 @@ case -20:
 					
 case 20:
 					
-	{return new Yytoken(LEX_MCS.token_mult, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_plus, yytext(), yyline, yychar, yychar+1);}
 					
 case -21:
 					
@@ -531,7 +589,7 @@ case -21:
 					
 case 21:
 					
-	{return new Yytoken(LEX_MCS.token_mod, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_mult, yytext(), yyline, yychar, yychar+1);}
 					
 case -22:
 					
@@ -539,7 +597,7 @@ case -22:
 					
 case 22:
 					
-	{return new Yytoken(LEX_MCS.token_entier, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_mod, yytext(), yyline, yychar, yychar+1);}
 					
 case -23:
 					
@@ -547,7 +605,7 @@ case -23:
 					
 case 23:
 					
-	{return new Yytoken(LEX_MCS.token_eg, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_entier, yytext(), yyline, yychar, yychar+1);}
 					
 case -24:
 					
@@ -555,7 +613,7 @@ case -24:
 					
 case 24:
 					
-	{return new Yytoken(LEX_MCS.token_si, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_eg, yytext(), yyline, yychar, yychar+1);}
 					
 case -25:
 					
@@ -563,7 +621,7 @@ case -25:
 					
 case 25:
 					
-	{return new Yytoken(LEX_MCS.token_arrow, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_si, yytext(), yyline, yychar, yychar+1);}
 					
 case -26:
 					
@@ -571,7 +629,7 @@ case -26:
 					
 case 26:
 					
-	{return new Yytoken(LEX_MCS.token_supeg, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_arrow, yytext(), yyline, yychar, yychar+1);}
 					
 case -27:
 					
@@ -579,7 +637,7 @@ case -27:
 					
 case 27:
 					
-	{return new Yytoken(LEX_MCS.token_infeg, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_supeg, yytext(), yyline, yychar, yychar+1);}
 					
 case -28:
 					
@@ -587,7 +645,7 @@ case -28:
 					
 case 28:
 					
-	{return new Yytoken(LEX_MCS.token_neg, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_infeg, yytext(), yyline, yychar, yychar+1);}
 					
 case -29:
 					
@@ -595,7 +653,7 @@ case -29:
 					
 case 29:
 					
-	{return new Yytoken(LEX_MCS.token_ou, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_neg, yytext(), yyline, yychar, yychar+1);}
 					
 case -30:
 					
@@ -603,7 +661,7 @@ case -30:
 					
 case 30:
 					
-	{return new Yytoken(LEX_MCS.token_et, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_ou, yytext(), yyline, yychar, yychar+1);}
 					
 case -31:
 					
@@ -611,7 +669,7 @@ case -31:
 					
 case 31:
 					
-	{return new Yytoken(LEX_MCS.token_chaine, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_et, yytext(), yyline, yychar, yychar+1);}
 					
 case -32:
 					
@@ -619,7 +677,7 @@ case -32:
 					
 case 32:
 					
-	{return new Yytoken(LEX_MCS.token_comm, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_chaine, yytext(), yyline, yychar, yychar+1);}
 					
 case -33:
 					
@@ -627,7 +685,7 @@ case -33:
 					
 case 33:
 					
-	{return new Yytoken(LEX_MCS.token_int, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_comm, yytext(), yyline, yychar, yychar+1);}
 					
 case -34:
 					
@@ -635,7 +693,7 @@ case -34:
 					
 case 34:
 					
-	{return new Yytoken(LEX_MCS.token_asm, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_int, yytext(), yyline, yychar, yychar+1);}
 					
 case -35:
 					
@@ -643,7 +701,7 @@ case -35:
 					
 case 35:
 					
-	{return new Yytoken(LEX_MCS.token_caractere, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_out, yytext(), yyline, yychar, yychar+1);}
 					
 case -36:
 					
@@ -651,7 +709,7 @@ case -36:
 					
 case 36:
 					
-	{return new Yytoken(LEX_MCS.token_sinon, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_asm, yytext(), yyline, yychar, yychar+1);}
 					
 case -37:
 					
@@ -659,7 +717,7 @@ case -37:
 					
 case 37:
 					
-	{return new Yytoken(LEX_MCS.token_void, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_new, yytext(), yyline, yychar, yychar+1);}
 					
 case -38:
 					
@@ -667,7 +725,7 @@ case -38:
 					
 case 38:
 					
-	{return new Yytoken(LEX_MCS.token_char, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_ref, yytext(), yyline, yychar, yychar+1);}
 					
 case -39:
 					
@@ -675,7 +733,7 @@ case -39:
 					
 case 39:
 					
-	{return new Yytoken(LEX_MCS.token_null, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_caractere, yytext(), yyline, yychar, yychar+1);}
 					
 case -40:
 					
@@ -683,7 +741,7 @@ case -40:
 					
 case 40:
 					
-	{return new Yytoken(LEX_MCS.token_struct, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_sinon, yytext(), yyline, yychar, yychar+1);}
 					
 case -41:
 					
@@ -691,7 +749,7 @@ case -41:
 					
 case 41:
 					
-	{return new Yytoken(LEX_MCS.token_retour, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_void, yytext(), yyline, yychar, yychar+1);}
 					
 case -42:
 					
@@ -699,141 +757,141 @@ case -42:
 					
 case 42:
 					
-	{return new Yytoken(LEX_MCS.token_typedef, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_null2, yytext(), yyline, yychar, yychar+1);}
 					
 case -43:
 					
 	break;
 					
-case 44:
+case 43:
 					
-	{return new Yytoken(LEX_MCS.token_autre, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_this, yytext(), yyline, yychar, yychar+1);}
 					
 case -44:
 					
 	break;
 					
-case 45:
+case 44:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_true, yytext(), yyline, yychar, yychar+1);}
 					
 case -45:
 					
 	break;
 					
-case 46:
+case 45:
 					
-	{return new Yytoken(LEX_MCS.token_identc, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_char, yytext(), yyline, yychar, yychar+1);}
 					
 case -46:
 					
 	break;
 					
-case 48:
+case 46:
 					
-	{return new Yytoken(LEX_MCS.token_autre, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_bool, yytext(), yyline, yychar, yychar+1);}
 					
 case -47:
 					
 	break;
 					
-case 49:
+case 47:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_base, yytext(), yyline, yychar, yychar+1);}
 					
 case -48:
 					
 	break;
 					
-case 51:
+case 48:
 					
-	{return new Yytoken(LEX_MCS.token_autre, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_null, yytext(), yyline, yychar, yychar+1);}
 					
 case -49:
 					
 	break;
 					
-case 52:
+case 49:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_false, yytext(), yyline, yychar, yychar+1);}
 					
 case -50:
 					
 	break;
 					
-case 53:
+case 50:
 					
-	{return new Yytoken(LEX_MCS.token_autre, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_class, yytext(), yyline, yychar, yychar+1);}
 					
 case -51:
 					
 	break;
 					
-case 54:
+case 51:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_using, yytext(), yyline, yychar, yychar+1);}
 					
 case -52:
 					
 	break;
 					
-case 55:
+case 52:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_struct, yytext(), yyline, yychar, yychar+1);}
 					
 case -53:
 					
 	break;
 					
-case 56:
+case 53:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_retour, yytext(), yyline, yychar, yychar+1);}
 					
 case -54:
 					
 	break;
 					
-case 57:
+case 54:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_public, yytext(), yyline, yychar, yychar+1);}
 					
 case -55:
 					
 	break;
 					
-case 58:
+case 55:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_typedef, yytext(), yyline, yychar, yychar+1);}
 					
 case -56:
 					
 	break;
 					
-case 59:
+case 56:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_private, yytext(), yyline, yychar, yychar+1);}
 					
 case -57:
 					
 	break;
 					
-case 60:
+case 57:
 					
-	{return new Yytoken(LEX_MCS.token_identc, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_namespace, yytext(), yyline, yychar, yychar+1);}
 					
 case -58:
 					
 	break;
 					
-case 61:
+case 59:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_autre, yytext(), yyline, yychar, yychar+1);}
 					
 case -59:
 					
 	break;
 					
-case 62:
+case 60:
 					
 	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
 					
@@ -841,23 +899,23 @@ case -60:
 					
 	break;
 					
-case 63:
+case 61:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_identc, yytext(), yyline, yychar, yychar+1);}
 					
 case -61:
 					
 	break;
 					
-case 64:
+case 63:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_autre, yytext(), yyline, yychar, yychar+1);}
 					
 case -62:
 					
 	break;
 					
-case 65:
+case 64:
 					
 	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
 					
@@ -867,7 +925,7 @@ case -63:
 					
 case 66:
 					
-	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_autre, yytext(), yyline, yychar, yychar+1);}
 					
 case -64:
 					
@@ -883,7 +941,7 @@ case -65:
 					
 case 68:
 					
-	{return new Yytoken(LEX_MCS.token_identc, yytext(), yyline, yychar, yychar+1);}
+	{return new Yytoken(LEX_MCS.token_autre, yytext(), yyline, yychar, yychar+1);}
 					
 case -66:
 					
@@ -990,6 +1048,470 @@ case 81:
 	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
 					
 case -79:
+					
+	break;
+					
+case 82:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -80:
+					
+	break;
+					
+case 83:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -81:
+					
+	break;
+					
+case 84:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -82:
+					
+	break;
+					
+case 85:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -83:
+					
+	break;
+					
+case 86:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -84:
+					
+	break;
+					
+case 87:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -85:
+					
+	break;
+					
+case 88:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -86:
+					
+	break;
+					
+case 89:
+					
+	{return new Yytoken(LEX_MCS.token_identc, yytext(), yyline, yychar, yychar+1);}
+					
+case -87:
+					
+	break;
+					
+case 90:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -88:
+					
+	break;
+					
+case 91:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -89:
+					
+	break;
+					
+case 92:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -90:
+					
+	break;
+					
+case 93:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -91:
+					
+	break;
+					
+case 94:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -92:
+					
+	break;
+					
+case 95:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -93:
+					
+	break;
+					
+case 96:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -94:
+					
+	break;
+					
+case 97:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -95:
+					
+	break;
+					
+case 98:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -96:
+					
+	break;
+					
+case 99:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -97:
+					
+	break;
+					
+case 100:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -98:
+					
+	break;
+					
+case 101:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -99:
+					
+	break;
+					
+case 102:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -100:
+					
+	break;
+					
+case 103:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -101:
+					
+	break;
+					
+case 104:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -102:
+					
+	break;
+					
+case 105:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -103:
+					
+	break;
+					
+case 106:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -104:
+					
+	break;
+					
+case 107:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -105:
+					
+	break;
+					
+case 108:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -106:
+					
+	break;
+					
+case 109:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -107:
+					
+	break;
+					
+case 110:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -108:
+					
+	break;
+					
+case 111:
+					
+	{return new Yytoken(LEX_MCS.token_identc, yytext(), yyline, yychar, yychar+1);}
+					
+case -109:
+					
+	break;
+					
+case 112:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -110:
+					
+	break;
+					
+case 113:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -111:
+					
+	break;
+					
+case 114:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -112:
+					
+	break;
+					
+case 115:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -113:
+					
+	break;
+					
+case 116:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -114:
+					
+	break;
+					
+case 117:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -115:
+					
+	break;
+					
+case 118:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -116:
+					
+	break;
+					
+case 119:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -117:
+					
+	break;
+					
+case 120:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -118:
+					
+	break;
+					
+case 121:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -119:
+					
+	break;
+					
+case 122:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -120:
+					
+	break;
+					
+case 123:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -121:
+					
+	break;
+					
+case 124:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -122:
+					
+	break;
+					
+case 125:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -123:
+					
+	break;
+					
+case 126:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -124:
+					
+	break;
+					
+case 127:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -125:
+					
+	break;
+					
+case 128:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -126:
+					
+	break;
+					
+case 129:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -127:
+					
+	break;
+					
+case 130:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -128:
+					
+	break;
+					
+case 131:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -129:
+					
+	break;
+					
+case 132:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -130:
+					
+	break;
+					
+case 133:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -131:
+					
+	break;
+					
+case 134:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -132:
+					
+	break;
+					
+case 135:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -133:
+					
+	break;
+					
+case 136:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -134:
+					
+	break;
+					
+case 137:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -135:
+					
+	break;
+					
+case 138:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -136:
+					
+	break;
+					
+case 139:
+					
+	{return new Yytoken(LEX_MCS.token_ident, yytext(), yyline, yychar, yychar+1);}
+					
+case -137:
 					
 	break;
 					default:
