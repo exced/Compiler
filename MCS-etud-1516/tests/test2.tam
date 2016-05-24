@@ -1,0 +1,13 @@
+; Generated code for tests/test2.mcs.
+; Do not modify by hand
+; Appel a main
+	CALL(SB) _main
+_main:
+	LOADL 3
+	STORE(1) 2[LB]
+	LOADL 2
+	STORE(1) 3[LB]
+	STOREI(2)
+	POP (0) 4
+	RETURN (0) 1
+	HALT

@@ -1,0 +1,16 @@
+// nom de type donne a un struct
+typedef struct {
+  int x;
+  int y;
+} Point ;
+
+
+int main(){
+
+	Point p;
+	int a = 3;
+	int b = 2;
+	p.x = a;
+
+    return a;
+}

@@ -1184,7 +1184,7 @@ do
 
     i := F^tds.chercherGlobalement(ident^txt);
     if i = null then
-        error(B_01, ident^txt);
+        error(var_not_found, ident^txt);
     end
     match i 
     with INFOVAR then
