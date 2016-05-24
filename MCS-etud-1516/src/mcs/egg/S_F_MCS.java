@@ -28,6 +28,7 @@ int [] sync= new int[0];
   DTYPE att_type;
   INFOFONC glob_70_infofonc;
   DTYPE glob_70_t;
+  DTYPE glob_70_t2;
   INFOVAR glob_70_iv;
   private void regle61() throws Exception {
 
@@ -134,7 +135,7 @@ private void action_type_67(S_E_MCS x_3, S_FX_MCS x_6) throws Exception {
 try {
 // instructions
 if (!(x_3.att_type.compareTo(x_6.att_type))){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_B_12, MCSMessages.B_12,new Object[]{""+x_3.att_type.getNom(), ""+x_6.att_type.getNom()});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_castError, MCSMessages.castError,new Object[]{""+x_3.att_type.getNom(), ""+x_6.att_type.getNom()});
 
 }
 else {
@@ -301,9 +302,11 @@ INFO loc_i;
 String loc_code;
 // instructions
 x_4.att_ident=x_2.att_txt;
+System.out.print(""+this.att_tds.toString());
 loc_i=this.att_tds.chercherGlobalement(x_2.att_txt);
+glob_70_t2=loc_i.getType();
 if (loc_i==null){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_not_found, MCSMessages.var_not_found,new Object[]{""+x_2.att_txt});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_not_found, MCSMessages.var_not_found,new Object[]{""+x_2.att_txt, ""+"null"});
 
 }
 
@@ -320,7 +323,7 @@ x_4.att_hcode="";
 this.att_code_est_adresse=false;
 }
 else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_B_08, MCSMessages.B_08,new Object[]{""+x_2.att_txt});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_type_unknown, MCSMessages.type_unknown,new Object[]{""+x_2.att_txt, ""+loc_i.getType(), ""+glob_70_t2.getNom()});
 
 
 }
@@ -349,73 +352,73 @@ x_4.att_tds=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_entier : // 2711
+      case LEX_MCS.token_entier : // 18209
         regle59 () ;
       break ;
-      case LEX_MCS.token_chaine : // 2713
+      case LEX_MCS.token_chaine : // 18211
         regle60 () ;
       break ;
-      case LEX_MCS.token_caractere : // 2712
+      case LEX_MCS.token_caractere : // 18210
         regle61 () ;
       break ;
-      case LEX_MCS.token_plus : // 2703
+      case LEX_MCS.token_plus : // 18201
         regle62 () ;
       break ;
-      case LEX_MCS.token_moins : // 2704
+      case LEX_MCS.token_moins : // 18202
         regle62 () ;
       break ;
-      case LEX_MCS.token_non : // 2710
+      case LEX_MCS.token_non : // 18208
         regle62 () ;
       break ;
-      case LEX_MCS.token_null : // 2696
+      case LEX_MCS.token_null : // 18194
         regle66 () ;
       break ;
-      case LEX_MCS.token_paro : // 2663
+      case LEX_MCS.token_paro : // 18161
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_entier : // 2711
+          case LEX_MCS.token_entier : // 18209
             regle67 () ;
           break ;
-          case LEX_MCS.token_chaine : // 2713
+          case LEX_MCS.token_chaine : // 18211
             regle67 () ;
           break ;
-          case LEX_MCS.token_caractere : // 2712
+          case LEX_MCS.token_caractere : // 18210
             regle67 () ;
           break ;
-          case LEX_MCS.token_plus : // 2703
+          case LEX_MCS.token_plus : // 18201
             regle67 () ;
           break ;
-          case LEX_MCS.token_moins : // 2704
+          case LEX_MCS.token_moins : // 18202
             regle67 () ;
           break ;
-          case LEX_MCS.token_non : // 2710
+          case LEX_MCS.token_non : // 18208
             regle67 () ;
           break ;
-          case LEX_MCS.token_null : // 2696
+          case LEX_MCS.token_null : // 18194
             regle67 () ;
           break ;
-          case LEX_MCS.token_paro : // 2663
+          case LEX_MCS.token_paro : // 18161
             regle67 () ;
           break ;
-          case LEX_MCS.token_mult : // 2706
+          case LEX_MCS.token_mult : // 18204
             regle67 () ;
           break ;
-          case LEX_MCS.token_ident : // 2714
+          case LEX_MCS.token_ident : // 18212
             regle67 () ;
           break ;
-          case LEX_MCS.token_void : // 2673
+          case LEX_MCS.token_void : // 18171
             regle68 () ;
           break ;
-          case LEX_MCS.token_int : // 2675
+          case LEX_MCS.token_int : // 18173
             regle68 () ;
           break ;
-          case LEX_MCS.token_char : // 2676
+          case LEX_MCS.token_char : // 18174
             regle68 () ;
           break ;
-          case LEX_MCS.token_identc : // 2715
+          case LEX_MCS.token_identc : // 18213
             regle68 () ;
           break ;
-          case LEX_MCS.token_struct : // 2677
+          case LEX_MCS.token_struct : // 18175
             regle68 () ;
           break ;
           default :
@@ -423,10 +426,10 @@ x_4.att_tds=this.att_tds;
 scanner.accepter_sucre(LEX_MCS.token_paro);
         }
       break ;
-      case LEX_MCS.token_mult : // 2706
+      case LEX_MCS.token_mult : // 18204
         regle69 () ;
       break ;
-      case LEX_MCS.token_ident : // 2714
+      case LEX_MCS.token_ident : // 18212
         regle70 () ;
       break ;
       default :

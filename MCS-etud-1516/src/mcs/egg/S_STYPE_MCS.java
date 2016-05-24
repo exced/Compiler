@@ -141,19 +141,19 @@ this.att_type= new DTYPEImpl("int", 1);
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 2673
+      case LEX_MCS.token_void : // 18171
         regle16 () ;
       break ;
-      case LEX_MCS.token_int : // 2675
+      case LEX_MCS.token_int : // 18173
         regle17 () ;
       break ;
-      case LEX_MCS.token_char : // 2676
+      case LEX_MCS.token_char : // 18174
         regle18 () ;
       break ;
-      case LEX_MCS.token_identc : // 2715
+      case LEX_MCS.token_identc : // 18213
         regle19 () ;
       break ;
-      case LEX_MCS.token_struct : // 2677
+      case LEX_MCS.token_struct : // 18175
         regle20 () ;
       break ;
       default :

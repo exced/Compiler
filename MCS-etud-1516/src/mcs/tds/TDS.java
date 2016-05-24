@@ -88,25 +88,40 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	}
 	
 	
-	public String parenteToString(StringBuffer s, int i){
-		StringBuffer sb = s;
-		if (parente != null) {
-			sb.append("parente" + i + " : " + parente);
-			parente.parenteToString(sb, ++i);
-		}	
-		return sb.toString();
+	public String indent( int indent){
+		StringBuffer sindent = new StringBuffer();
+		for (int i = 0; i < indent; i++){
+			sindent.append("\t");
+		}
+		return sindent.toString();
 	}
 
-	public String toString() {
+	public String toString(int indent) {
+		
 		StringBuffer sb = new StringBuffer();
-		sb.append("TDS\n parente : " + parente +"\n");
+		sb.append(indent(indent) +"Debut TDS \n");
+		
+		String p = (parente == null) ? indent(indent) + "parente null\n" : parente.toString(++indent) + "\n";
+		sb.append( p );
+		
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
-			sb.append("; " + e.getKey() + " ::: " + e.getValue().toString() + '\n');
-
+			sb.append(indent(indent) + "Ident : " + e.getKey() + "  Type : " + e.getValue().toString() + '\n');
 		}
-		sb.append("fin TDS\n");
+		sb.append(indent(indent) + "Fin TDS\n");
 		return sb.toString();
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Debut TDS \n");
+		Set<Map.Entry<String, INFO>> s = entrySet();
+		for (Map.Entry<String, INFO> e : s) {
+			sb.append("Ident : " + e.getKey() + "  Type : " + e.getValue().toString() + '\n');
+		}
+		sb.append("Fin TDS\n");
+		return sb.toString();
+		
 	}
 
 }

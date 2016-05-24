@@ -241,21 +241,27 @@ end
 
 ------------------------------------------------------------------------
 -- Fonction
-FONCTION -> paro #tds PARFS parf BLOC #gen;
+FONCTION -> paro #tds PARFS #stds parf BLOC #gen;
 global
     i : INFOFONC;
+    tdsParam : TDS;
 #tds {
 do
-    BLOC^tds := new TDS(FONCTION^tds);
+    PARFS^tds := new TDS(nil);
+end
+}     
+#stds {
+do
+    tdsParam := PARFS^stds;
+    BLOC^tds := new TDS(tdsParam);
 end
 }
 #gen{
 local
     typeRetour : DTYPE;
-    tdsParam : TDS; 
 do
     -- TDS
-    tdsParam := PARFS^stds;
+    
     i := new INFOFONC(FONCTION^htype, tdsParam);
     FONCTION^tds.inserer(FONCTION^ident,  i);
     typeRetour :=i.getType();
@@ -271,7 +277,7 @@ end
 PARFS ->  #tds;
 #tds{
 do
-    PARFS^stds := new TDS(nil);
+    PARFS^stds := PARFS^tds;
 end
 }
 
@@ -1112,7 +1118,7 @@ end
 do
     -- controle de type
     if ~E^type.compareTo(FX^type) then
-        error(B_12, E^type.getNom(), FX^type.getNom());
+        error(castError, E^type.getNom(), FX^type.getNom());
     else
     -- on remonte le type
         F^type := E^type;         
@@ -1174,17 +1180,23 @@ global
   iv : INFOVAR ;
   infofonc : INFOFONC;
   t : DTYPE;
+  t2 : DTYPE;
 #htype {
 local
     i:INFO;
     code : STRING;
 do
+     
+    
     -- ident pour l'appel de fonction
     FX^ident := ident^txt;
+    
+    write F^tds.toString();
 
     i := F^tds.chercherGlobalement(ident^txt);
+    t2 := i.getType();
     if i = null then
-        error(var_not_found, ident^txt);
+        error(var_not_found, ident^txt, "null");
     end
     match i 
     with INFOVAR then
@@ -1198,7 +1210,7 @@ do
        FX^hcode := "";
        F^code_est_adresse := false;  
     else
-        error(B_08, ident^txt);
+        error(type_unknown, ident^txt, i.getType(), t2.getNom());
     end
     FX^htype := t;
 end

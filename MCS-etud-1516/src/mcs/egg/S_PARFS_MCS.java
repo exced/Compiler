@@ -71,29 +71,29 @@ x_4.att_tds=glob_9_tds;
 private void action_tds_8() throws Exception {
 try {
 // instructions
-this.att_stds= new TDS(null);
+this.att_stds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","PARFS -> #tds ;"});
 }
   }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 2664
+      case LEX_MCS.token_parf : // 18162
         regle8 () ;
       break ;
-      case LEX_MCS.token_void : // 2673
+      case LEX_MCS.token_void : // 18171
         regle9 () ;
       break ;
-      case LEX_MCS.token_int : // 2675
+      case LEX_MCS.token_int : // 18173
         regle9 () ;
       break ;
-      case LEX_MCS.token_char : // 2676
+      case LEX_MCS.token_char : // 18174
         regle9 () ;
       break ;
-      case LEX_MCS.token_identc : // 2715
+      case LEX_MCS.token_identc : // 18213
         regle9 () ;
       break ;
-      case LEX_MCS.token_struct : // 2677
+      case LEX_MCS.token_struct : // 18175
         regle9 () ;
       break ;
       default :

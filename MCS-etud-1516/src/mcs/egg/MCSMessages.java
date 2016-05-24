@@ -19,14 +19,15 @@ public class MCSMessages extends NLS {
   public static  String B_10;
   public static  String MCS_expected_eof;
   public static  String type_declared;
+  public static  String castError;
   public static  String type_undefined;
   public static  String MCS_expected_token;
-  public static  String B_08;
   public static  String returnType_notCompatible;
   public static  String champ_declared;
   public static  String var_declared;
-  public static  String not_infotype;
+  public static  String type_unknown;
   public static  String var_not_found;
+  public static  String not_infotype;
   public static  String NO_MACH;
   public static  String not_int;
   public static  String not_pointeur;
