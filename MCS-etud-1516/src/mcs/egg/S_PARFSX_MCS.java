@@ -74,17 +74,17 @@ this.att_stds=x_5.att_stds;
 private void action_stds_10() throws Exception {
 try {
 // instructions
-this.att_stds= new TDS(null);
+this.att_stds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#stds","PARFSX -> #stds ;"});
 }
   }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 18162
+      case LEX_MCS.token_parf : // 2353
         regle10 () ;
       break ;
-      case LEX_MCS.token_virg : // 18165
+      case LEX_MCS.token_virg : // 2356
         regle11 () ;
       break ;
       default :

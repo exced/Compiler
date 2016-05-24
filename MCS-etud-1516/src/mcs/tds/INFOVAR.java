@@ -1,6 +1,5 @@
 package mcs.tds;
 
-import mcs.gc.Emplacement;
 import mcs.type.DTYPE;
 
 /**
@@ -10,22 +9,22 @@ import mcs.type.DTYPE;
  */
 public class INFOVAR extends INFO {
 	
-	protected Emplacement empl;
+	protected int dep;
 	
-	public INFOVAR(DTYPE t, Emplacement e) {
+	public INFOVAR(DTYPE t, int d) {
 		super(t);
-		empl = e;
+		dep = d;
 	}
 
 	public DTYPE getType() { return super.getType(); }
 
-	public Emplacement getEmpl() { return empl; }
+	public int getDep() { return dep; }
 
 	public int getTaille() { return this.getType().getTaille(); }
 
 	@Override
 	public String toString() {
-		return "INFOVAR [type=" + type.getNom() + ", empl=" + empl + "]";
+		return "INFOVAR [type=" + type.getNom() + ", dep=" + dep + "]";
 	}
 
 }

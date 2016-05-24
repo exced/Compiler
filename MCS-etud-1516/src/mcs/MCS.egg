@@ -44,7 +44,7 @@ inh champs : LCHAMPS for CHAMPS, CHAMP;
 
 -- ADRESSE
 syn code_est_adresse : BOOLEAN for  AFFX,F, A,AX,R,RX,T,TX,E ;
-inh hcode_est_adresse : BOOLEAN for AFFX,AX,RX,TX ;
+inh hcode_est_adresse : BOOLEAN for AFFX,AX,RX,TX ,F;
 
 
 
@@ -204,7 +204,6 @@ DECL -> pv #tds #gen;
 global
     i : INFO;
     type : DTYPE;
-    e : Emplacement;
 #tds {
 do
     i := DECL^tds.chercherGlobalement(DECL^ident);
@@ -212,9 +211,8 @@ do
         error(var_declared, DECL^ident);
     else
         type := DECL^htype;
-        e := new Emplacement(DECL^machine.getCurrentDep(), DECL^machine.getSB());
         DECL^machine.addCurrentDep(type.getTaille());
-        DECL^tds.inserer(DECL^ident,  new INFOVAR(type, e));
+        DECL^tds.inserer(DECL^ident,  new INFOVAR(type, DECL^machine.getCurrentDep()));
     end    
 end
 }
@@ -246,14 +244,20 @@ global
     i : INFOFONC;
     tdsParam : TDS;
 #tds {
-do
-    PARFS^tds := new TDS(nil);
+do  
+    PARFS^tds := new TDS(FONCTION^tds);
 end
 }     
 #stds {
 do
     tdsParam := PARFS^stds;
+    
+    write "PARAM" + tdsParam.toString();
+    
     BLOC^tds := new TDS(tdsParam);
+    
+   -- deplacement de LB au debut du Bloc
+   FONCTION^machine.addRegisterDep(FONCTION^machine.getLB(), FONCTION^machine.getCurrentDep());    
 end
 }
 #gen{
@@ -290,7 +294,7 @@ global
 #tds {
 do    
     tds := PARFS^tds;
-    tds.inserer(PARF^sident, new INFOTYPE(PARF^type));
+    tds.inserer(PARF^sident, new INFOVAR(PARF^type, PARFS^machine.getCurrentDep()));
     PARFSX^tds := tds;
 end
 }
@@ -305,7 +309,7 @@ end
 PARFSX -> #stds ;
 #stds {
 do
-    PARFSX^stds := new TDS(nil);
+    PARFSX^stds := PARFSX^tds;
 end
 }
 
@@ -465,7 +469,8 @@ CHAMP -> TYPE ident pv #champ;
 BLOC ->  aco #tds INSTS acf #gen;
 #tds {
 do
-   INSTS^tds := new TDS(BLOC^tds);
+
+   INSTS^tds := BLOC^tds;
    
    -- debut de BLOC : currentDep reset
    BLOC^machine.resetCurrentDep();
@@ -510,15 +515,13 @@ end
 #tds {
 local
     i : INFO ;
-    e : Emplacement;
 do
     i := INST^tds.chercherGlobalement(ident^txt);
     if i /= nil then
        error(var_declared, ident^txt);
-    else 
-        e := new Emplacement(INST^machine.getCurrentDep(), INST^machine.getSB());   
+    else  
         INST^machine.addCurrentDep(TYPE^type.getTaille());
-        i := new INFOVAR(TYPE^type, e);
+        i := new INFOVAR(TYPE^type, INST^machine.getCurrentDep());
         INST^tds.inserer(ident^txt, i);
     end
 end
@@ -565,6 +568,9 @@ do
    if ~E^type.compareTo(new DTYPEImpl("int", 1)) then
       error(not_int, E^type);
    end
+   
+   -- deplacement de LB au debut du Bloc
+   INST^machine.addRegisterDep(INST^machine.getLB(), INST^machine.getCurrentDep());
 end
 }
 #gen {
@@ -575,7 +581,13 @@ end
 
 ------------------------------------------------------------------------
 -- bloc sinon 
-SIX ->    sinon BLOC #gen;
+SIX ->    sinon #dep BLOC #gen;
+#dep {
+do
+   -- deplacement de LB au debut du Bloc
+   SIX^machine.addRegisterDep(SIX^machine.getLB(), SIX^machine.getCurrentDep());
+end
+}
 #gen {
 do
     SIX^code := BLOC^code;
@@ -901,7 +913,12 @@ end
 
 ------------------------------------------------------------------------
 -- multiplication, ...
-T -> F #type TX #gen ;
+T -> #haddr F #type TX #gen ;
+#haddr {
+do
+    F^hcode_est_adresse := false;
+end
+}
 #type{
 do
     -- transmission du type de R pour le controle de type
@@ -1180,37 +1197,42 @@ global
   iv : INFOVAR ;
   infofonc : INFOFONC;
   t : DTYPE;
-  t2 : DTYPE;
+  code : STRING;
 #htype {
 local
     i:INFO;
-    code : STRING;
-do
-     
-    
+do    
+
     -- ident pour l'appel de fonction
     FX^ident := ident^txt;
-    
-    write F^tds.toString();
 
     i := F^tds.chercherGlobalement(ident^txt);
-    t2 := i.getType();
+    
     if i = null then
         error(var_not_found, ident^txt, "null");
     end
+
     match i 
     with INFOVAR then
         iv := i;
         t := iv.getType();
         FX^hcode := F^machine.genAdr(iv.getTaille());
-        F^code_est_adresse := true;
+        F^code_est_adresse := false;
+        if F^hcode_est_adresse then
+            write "hcode_est_adresse";
+            code := F^machine.genReadIndirectMem(iv.getTaille());
+        else
+            write "NOT hcode_est_adresse";
+            code := F^machine.genReadMem(F^machine.getCurrentDep(), iv.getTaille());
+        end    
     with INFOFONC then
        infofonc := i;  
        t := infofonc.getType();
        FX^hcode := "";
-       F^code_est_adresse := false;  
+       F^code_est_adresse := false;
+       code := "";
     else
-        error(type_unknown, ident^txt, i.getType(), t2.getNom());
+        error(type_unknown, ident^txt, i.getType());
     end
     FX^htype := t;
 end
@@ -1218,7 +1240,7 @@ end
 #gen{
 do
     F^type := FX^type;
-    F^code := FX^code;    
+    F^code := code + FX^code;    
 end
 }
 
@@ -1281,6 +1303,8 @@ end
 #gen {
 do
     -- appel du sous-programme à partir de l'étiquette
+    -- deplacement de currentDep de 3
+    FX^machine.addCurrentDep(3);
     FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident);
 end
 }

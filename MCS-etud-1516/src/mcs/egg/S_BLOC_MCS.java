@@ -57,7 +57,7 @@ x_4.att_htype=this.att_htype;
 private void action_tds_24(S_INSTS_MCS x_4) throws Exception {
 try {
 // instructions
-x_4.att_tds= new TDS(this.att_tds);
+x_4.att_tds=this.att_tds;
 this.att_machine.resetCurrentDep();
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","BLOC -> aco #tds INSTS acf #gen ;"});
 }

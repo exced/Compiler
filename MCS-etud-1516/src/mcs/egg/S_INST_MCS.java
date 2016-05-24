@@ -146,6 +146,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 
+this.att_machine.addRegisterDep(this.att_machine.getLB(), this.att_machine.getCurrentDep());
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","INST -> si paro E #type parf BLOC SIX #gen ;"});
 }
   }
@@ -153,7 +154,6 @@ private void action_tds_27(S_TYPE_MCS x_2, T_MCS x_3, S_AFFX_MCS x_5) throws Exc
 try {
 // locales
 INFO loc_i;
-Emplacement loc_e;
 // instructions
 loc_i=this.att_tds.chercherGlobalement(x_3.att_txt);
 if (loc_i!=null){
@@ -161,9 +161,8 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 else {
-loc_e= new Emplacement(this.att_machine.getCurrentDep(), this.att_machine.getSB());
 this.att_machine.addCurrentDep(x_2.att_type.getTaille());
-loc_i= new INFOVAR(x_2.att_type, loc_e);
+loc_i= new INFOVAR(x_2.att_type, this.att_machine.getCurrentDep());
 this.att_tds.inserer(x_3.att_txt, loc_i);
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","INST -> TYPE ident #htype AFFX pv #tds #type #gen ;"});
@@ -273,61 +272,61 @@ x_4.att_tds_asm=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 18171
+      case LEX_MCS.token_void : // 2362
         regle27 () ;
       break ;
-      case LEX_MCS.token_int : // 18173
+      case LEX_MCS.token_int : // 2364
         regle27 () ;
       break ;
-      case LEX_MCS.token_char : // 18174
+      case LEX_MCS.token_char : // 2365
         regle27 () ;
       break ;
-      case LEX_MCS.token_identc : // 18213
+      case LEX_MCS.token_identc : // 2404
         regle27 () ;
       break ;
-      case LEX_MCS.token_struct : // 18175
+      case LEX_MCS.token_struct : // 2366
         regle27 () ;
       break ;
-      case LEX_MCS.token_entier : // 18209
+      case LEX_MCS.token_entier : // 2400
         regle28 () ;
       break ;
-      case LEX_MCS.token_chaine : // 18211
+      case LEX_MCS.token_chaine : // 2402
         regle28 () ;
       break ;
-      case LEX_MCS.token_caractere : // 18210
+      case LEX_MCS.token_caractere : // 2401
         regle28 () ;
       break ;
-      case LEX_MCS.token_plus : // 18201
+      case LEX_MCS.token_plus : // 2392
         regle28 () ;
       break ;
-      case LEX_MCS.token_moins : // 18202
+      case LEX_MCS.token_moins : // 2393
         regle28 () ;
       break ;
-      case LEX_MCS.token_non : // 18208
+      case LEX_MCS.token_non : // 2399
         regle28 () ;
       break ;
-      case LEX_MCS.token_null : // 18194
+      case LEX_MCS.token_null : // 2385
         regle28 () ;
       break ;
-      case LEX_MCS.token_paro : // 18161
+      case LEX_MCS.token_paro : // 2352
         regle28 () ;
       break ;
-      case LEX_MCS.token_mult : // 18204
+      case LEX_MCS.token_mult : // 2395
         regle28 () ;
       break ;
-      case LEX_MCS.token_ident : // 18212
+      case LEX_MCS.token_ident : // 2403
         regle28 () ;
       break ;
-      case LEX_MCS.token_aco : // 18163
+      case LEX_MCS.token_aco : // 2354
         regle29 () ;
       break ;
-      case LEX_MCS.token_si : // 18169
+      case LEX_MCS.token_si : // 2360
         regle30 () ;
       break ;
-      case LEX_MCS.token_retour : // 18192
+      case LEX_MCS.token_retour : // 2383
         regle33 () ;
       break ;
-      case LEX_MCS.token_asm : // 18172
+      case LEX_MCS.token_asm : // 2363
         regle80 () ;
       break ;
       default :

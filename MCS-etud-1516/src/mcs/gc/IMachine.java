@@ -34,18 +34,23 @@ public interface IMachine {
 	
 	public Register getSB();
 	
+	public Register getLB();
+	
+	public Register getST();
+	
 	public int getCurrentDep();
 
 	public void addCurrentDep(int dep);
 	
 	public void resetCurrentDep();
 	
+	public void addRegisterDep(Register r, int d);
+	
 	public String genChaine(String s);
 	
 	public String genChar(String s);
 
-	public String genFonction(String etiquette, int taillepars,
-			int tailleretour, String code);
+	public String genFonction(String etiquette, int taillepars,int tailleretour, String code);
 	
 	public String genArgs(TDS t);
 

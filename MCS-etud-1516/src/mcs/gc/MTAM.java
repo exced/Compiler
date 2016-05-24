@@ -20,6 +20,8 @@ public class MTAM extends AbstractMachine {
 	private String nom;
 	
 	private Register SB;
+	private Register LB;
+	private Register ST;
 	
 	// compteur pour le generateur d'etiquettes
 	private static int cpt = 0;
@@ -35,12 +37,17 @@ public class MTAM extends AbstractMachine {
 		}
 		currentDep = 0;
 		SB = new Register("SB", 0);
+		LB = new Register("LB", 0);
+		ST = new Register("ST", 0);
 	}
 	
-
 	public int getCurrentDep() { return currentDep; }
 	
 	public Register getSB() { return SB; }
+	
+	public Register getLB() { return LB; }
+	
+	public Register getST() { return ST; }
 
 	public void addCurrentDep(int dep){
 		currentDep += dep;
@@ -49,6 +56,10 @@ public class MTAM extends AbstractMachine {
 	public void resetCurrentDep(){
 		currentDep = 0;
 	}	
+	
+	public void addRegisterDep(Register r, int d){
+		r.depRegister(d);
+	}
 	
 	public String genFonction(String etiquette, int taillepars,
 			int tailleretour, String code) {
@@ -74,7 +85,7 @@ public class MTAM extends AbstractMachine {
 	// genere le code pour une declaration (avec initialisation)
 	public String genDecl(String n, INFOVAR i, String t) {
 		int taille = i.getType().getTaille();
-		return "   ; declaration de " + n + " en " + i.getEmpl().getDep() + "/LB"
+		return "   ; declaration de " + n + " en " + i.getDep() + "/LB"
 				+ " taille = " + taille + "\n" + t + "; fin de declaration de "
 				+ n + "\n";
 	}

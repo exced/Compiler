@@ -78,37 +78,37 @@ this.att_stds=x_4.att_stds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 18162
+      case LEX_MCS.token_parf : // 2353
         regle75 () ;
       break ;
-      case LEX_MCS.token_entier : // 18209
+      case LEX_MCS.token_entier : // 2400
         regle76 () ;
       break ;
-      case LEX_MCS.token_chaine : // 18211
+      case LEX_MCS.token_chaine : // 2402
         regle76 () ;
       break ;
-      case LEX_MCS.token_caractere : // 18210
+      case LEX_MCS.token_caractere : // 2401
         regle76 () ;
       break ;
-      case LEX_MCS.token_plus : // 18201
+      case LEX_MCS.token_plus : // 2392
         regle76 () ;
       break ;
-      case LEX_MCS.token_moins : // 18202
+      case LEX_MCS.token_moins : // 2393
         regle76 () ;
       break ;
-      case LEX_MCS.token_non : // 18208
+      case LEX_MCS.token_non : // 2399
         regle76 () ;
       break ;
-      case LEX_MCS.token_null : // 18194
+      case LEX_MCS.token_null : // 2385
         regle76 () ;
       break ;
-      case LEX_MCS.token_paro : // 18161
+      case LEX_MCS.token_paro : // 2352
         regle76 () ;
       break ;
-      case LEX_MCS.token_mult : // 18204
+      case LEX_MCS.token_mult : // 2395
         regle76 () ;
       break ;
-      case LEX_MCS.token_ident : // 18212
+      case LEX_MCS.token_ident : // 2403
         regle76 () ;
       break ;
       default :

@@ -19,12 +19,12 @@ public class Register {
 		this.num = num;
 	}
 
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
-	public int getNum() {
-		return num;
+	public int getNum() { return num; }
+	
+	public void depRegister(int d) {
+		num += d;
 	}
 
 	@Override

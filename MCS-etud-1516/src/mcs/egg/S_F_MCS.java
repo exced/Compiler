@@ -26,9 +26,10 @@ int [] sync= new int[0];
   LEX_MCS att_scanner;
   boolean att_code_est_adresse;
   DTYPE att_type;
+  boolean att_hcode_est_adresse;
   INFOFONC glob_70_infofonc;
   DTYPE glob_70_t;
-  DTYPE glob_70_t2;
+  String glob_70_code;
   INFOVAR glob_70_iv;
   private void regle61() throws Exception {
 
@@ -199,7 +200,7 @@ private void action_gen_70(T_MCS x_2, S_FX_MCS x_4) throws Exception {
 try {
 // instructions
 this.att_type=x_4.att_type;
-this.att_code=x_4.att_code;
+this.att_code=glob_70_code+x_4.att_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","F -> ident #htype FX #gen ;"});
 }
   }
@@ -241,6 +242,7 @@ try {
 x_2.att_machine=this.att_machine;
 x_3.att_machine=this.att_machine;
 x_3.att_tds=this.att_tds;
+x_3.att_hcode_est_adresse=this.att_hcode_est_adresse;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","F -> OPUN F1 #type #gen ;"});
 }
   }
@@ -284,6 +286,7 @@ try {
 x_5.att_machine=this.att_machine;
 x_3.att_tds=this.att_tds;
 x_5.att_tds=this.att_tds;
+x_5.att_hcode_est_adresse=this.att_hcode_est_adresse;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","F -> paro TYPE parf F1 #type #gen ;"});
 }
   }
@@ -292,6 +295,7 @@ try {
 // instructions
 x_3.att_machine=this.att_machine;
 x_3.att_tds=this.att_tds;
+x_3.att_hcode_est_adresse=this.att_hcode_est_adresse;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","F -> mult F1 #type #addr ;"});
 }
   }
@@ -299,12 +303,9 @@ private void action_htype_70(T_MCS x_2, S_FX_MCS x_4) throws Exception {
 try {
 // locales
 INFO loc_i;
-String loc_code;
 // instructions
 x_4.att_ident=x_2.att_txt;
-System.out.print(""+this.att_tds.toString());
 loc_i=this.att_tds.chercherGlobalement(x_2.att_txt);
-glob_70_t2=loc_i.getType();
 if (loc_i==null){
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_not_found, MCSMessages.var_not_found,new Object[]{""+x_2.att_txt, ""+"null"});
 
@@ -314,16 +315,25 @@ if (loc_i instanceof INFOVAR ){
 glob_70_iv=((INFOVAR)loc_i);
 glob_70_t=glob_70_iv.getType();
 x_4.att_hcode=this.att_machine.genAdr(glob_70_iv.getTaille());
-this.att_code_est_adresse=true;
+this.att_code_est_adresse=false;
+if (this.att_hcode_est_adresse){
+System.out.print(""+"hcode_est_adresse");
+glob_70_code=this.att_machine.genReadIndirectMem(glob_70_iv.getTaille());
+}
+else {
+System.out.print(""+"NOT hcode_est_adresse");
+glob_70_code=this.att_machine.genReadMem(this.att_machine.getCurrentDep(), glob_70_iv.getTaille());
+}
 }
 else if (loc_i instanceof INFOFONC ){
 glob_70_infofonc=((INFOFONC)loc_i);
 glob_70_t=glob_70_infofonc.getType();
 x_4.att_hcode="";
 this.att_code_est_adresse=false;
+glob_70_code="";
 }
 else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_type_unknown, MCSMessages.type_unknown,new Object[]{""+x_2.att_txt, ""+loc_i.getType(), ""+glob_70_t2.getNom()});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_type_unknown, MCSMessages.type_unknown,new Object[]{""+x_2.att_txt, ""+loc_i.getType()});
 
 
 }
@@ -352,73 +362,73 @@ x_4.att_tds=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_entier : // 18209
+      case LEX_MCS.token_entier : // 2400
         regle59 () ;
       break ;
-      case LEX_MCS.token_chaine : // 18211
+      case LEX_MCS.token_chaine : // 2402
         regle60 () ;
       break ;
-      case LEX_MCS.token_caractere : // 18210
+      case LEX_MCS.token_caractere : // 2401
         regle61 () ;
       break ;
-      case LEX_MCS.token_plus : // 18201
+      case LEX_MCS.token_plus : // 2392
         regle62 () ;
       break ;
-      case LEX_MCS.token_moins : // 18202
+      case LEX_MCS.token_moins : // 2393
         regle62 () ;
       break ;
-      case LEX_MCS.token_non : // 18208
+      case LEX_MCS.token_non : // 2399
         regle62 () ;
       break ;
-      case LEX_MCS.token_null : // 18194
+      case LEX_MCS.token_null : // 2385
         regle66 () ;
       break ;
-      case LEX_MCS.token_paro : // 18161
+      case LEX_MCS.token_paro : // 2352
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_entier : // 18209
+          case LEX_MCS.token_entier : // 2400
             regle67 () ;
           break ;
-          case LEX_MCS.token_chaine : // 18211
+          case LEX_MCS.token_chaine : // 2402
             regle67 () ;
           break ;
-          case LEX_MCS.token_caractere : // 18210
+          case LEX_MCS.token_caractere : // 2401
             regle67 () ;
           break ;
-          case LEX_MCS.token_plus : // 18201
+          case LEX_MCS.token_plus : // 2392
             regle67 () ;
           break ;
-          case LEX_MCS.token_moins : // 18202
+          case LEX_MCS.token_moins : // 2393
             regle67 () ;
           break ;
-          case LEX_MCS.token_non : // 18208
+          case LEX_MCS.token_non : // 2399
             regle67 () ;
           break ;
-          case LEX_MCS.token_null : // 18194
+          case LEX_MCS.token_null : // 2385
             regle67 () ;
           break ;
-          case LEX_MCS.token_paro : // 18161
+          case LEX_MCS.token_paro : // 2352
             regle67 () ;
           break ;
-          case LEX_MCS.token_mult : // 18204
+          case LEX_MCS.token_mult : // 2395
             regle67 () ;
           break ;
-          case LEX_MCS.token_ident : // 18212
+          case LEX_MCS.token_ident : // 2403
             regle67 () ;
           break ;
-          case LEX_MCS.token_void : // 18171
+          case LEX_MCS.token_void : // 2362
             regle68 () ;
           break ;
-          case LEX_MCS.token_int : // 18173
+          case LEX_MCS.token_int : // 2364
             regle68 () ;
           break ;
-          case LEX_MCS.token_char : // 18174
+          case LEX_MCS.token_char : // 2365
             regle68 () ;
           break ;
-          case LEX_MCS.token_identc : // 18213
+          case LEX_MCS.token_identc : // 2404
             regle68 () ;
           break ;
-          case LEX_MCS.token_struct : // 18175
+          case LEX_MCS.token_struct : // 2366
             regle68 () ;
           break ;
           default :
@@ -426,10 +436,10 @@ x_4.att_tds=this.att_tds;
 scanner.accepter_sucre(LEX_MCS.token_paro);
         }
       break ;
-      case LEX_MCS.token_mult : // 18204
+      case LEX_MCS.token_mult : // 2395
         regle69 () ;
       break ;
-      case LEX_MCS.token_ident : // 18212
+      case LEX_MCS.token_ident : // 2403
         regle70 () ;
       break ;
       default :

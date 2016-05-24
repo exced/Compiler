@@ -6,7 +6,7 @@ int inc(int c){
 
 int main(){
 
-	int b;
+	int b = 0;
 
     return 0;
 }
