@@ -52,7 +52,7 @@ this.att_code_asm="; inline code_asm\n"+x_3.att_code_asm;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_ASM.token_aco : // 88
+      case LEX_ASM.token_aco : // 230
         regle0 () ;
       break ;
       default :

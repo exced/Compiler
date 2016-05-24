@@ -33,7 +33,7 @@ inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX
 inh tds_asm : TDS for ASM;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
                             SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
-syn stds    : TDS for PARFS,PARFSX,ES,ESX;                                                    
+syn stds    : TDS for PARFS,PARFSX;                                                    
                             
 -- GC                            
 syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
@@ -1255,10 +1255,15 @@ end
 
 ------------------------------------------------------------------------
 -- appel de sous-programme
-FX ->   paro ES parf #htds FX #type #gen;
-#htds {
+FX ->   paro #tds ES parf FX #type #gen;
+global 
+    tdsParam :  TDS; 
+#tds {
 do
-    FX1^tds := ES^stds;
+    --création d'une TDS pour stocker les param de l'appel
+    tdsParam := new TDS(FX^tds);
+    ES^tds := tdsParam; 
+    FX1^tds := new TDS(tdsParam);
 end
 }
 #type {
@@ -1269,63 +1274,40 @@ end
 #gen {
 do
     -- appel du sous-programme à partir de l'étiquette
-    FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident);
+    FX^code := FX^machine.genArgs(tdsParam) + FX^machine.genCall(FX^ident);
 end
 }
 
 ------------------------------------------------------------------------
 -- arguments appel de sous-programme
-ES -> #tds;
-#tds {
-do
-    ES^stds := new TDS(nil);
-end
-}
+ES -> ;
+-- Done
 
 ------------------------------------------------------------------------
-ES -> E #tds ESX #stds ;
+ES -> #tds E ESX  ;
 global
     tds:TDS;
 #tds {
 do
-    tds := ES^tds;
-    -- appel : <"code", INFOTYPE>
-    -- Rappel: la LinkedHashMap garantie l'ordre des get = l'ordre des put
-    tds.inserer(E^code, new INFOTYPE(E^type));
+    tds := new TDS(ES^tds);
+    E^tds := tds;
     ESX^tds := tds;
-end  
-}
-#stds {
-do
-    ES^stds := ESX^stds;
+    
 end
 }
 
 ------------------------------------------------------------------------
-ESX -> #stds ;
-#stds {
-do
-    ESX^stds := ESX^tds;
-end
-}
+ESX ->  ;
+-- Tds done
 
 
 ------------------------------------------------------------------------
-ESX -> virg E #tds ESX #stds;
+ESX -> #tds virg E ESX ;
 #tds {
-local
-    tds : TDS;
 do 
-    tds := ESX^tds;
-    -- appel : <"code", INFOTYPE>
-    -- Rappel: la LinkedHashMap garantie l'ordre des get = l'ordre des put
-    tds.inserer(E^code, new INFOTYPE(E^type));
-    ESX1^tds := tds;
-end
-}
-#stds {
-do
-    ESX^stds := ESX1^stds;
+    -- transmission des tds;
+    E^tds := ESX^tds;
+    ESX1^tds := ESX^tds;
 end
 }
 

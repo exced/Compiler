@@ -61,7 +61,7 @@ public class MTAM extends AbstractMachine {
 		StringBuffer sb = new StringBuffer();
 		Set<Map.Entry<String, INFO>> s = t.entrySet();
 		for (Map.Entry<String, INFO> e : s) {  
-			sb.append( genCst(e.getKey()) );
+			sb.append( e.getKey() );
 		}
 		return sb.toString();
 	}
