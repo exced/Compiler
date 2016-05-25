@@ -30,7 +30,7 @@ public class DTYPEImpl implements DTYPE {
 		boolean res = false;
 		
 		if(op.getNom().equals("OPUNPLUS") || op.getNom().equals("OPUNMOINS") || op.getNom().equals("OPUNNON")){
-			res = this.getNom().equals("INT");
+			res = this.getNom().equals("int");
 		}
 		
 		return res;
@@ -46,16 +46,16 @@ public class DTYPEImpl implements DTYPE {
 
 		else if (op.getNom().equals("OPRELSUPEG") || op.getNom().equals("OPRELINFEG") || op.getNom().equals("OPRELSUP")
 				|| op.getNom().equals("OPRELINF")) {
-			res = (this.getNom().equals("INT") && this.compareTo(b));
+			res = (this.getNom().equals("int") && this.compareTo(b));
 		}
 
 		else if (op.getNom().equals("OPADDPLUS") || op.getNom().equals("OPADDMOINS") || op.getNom().equals("OPADDOU")) {
-			res = (this.getNom().equals("INT") && this.compareTo(b));
+			res = (this.getNom().equals("int") && this.compareTo(b));
 		} 
 		
 		else if (op.getNom().equals("OPMULMULT") || op.getNom().equals("OPMULDIV") || op.getNom().equals("OPMULMOD")
 				|| op.getNom().equals("OPMULET")) {
-			res = (this.getNom().equals("INT") && this.compareTo(b));
+			res = (this.getNom().equals("int") && this.compareTo(b));
 		}
 
 		return res;

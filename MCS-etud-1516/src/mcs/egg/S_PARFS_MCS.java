@@ -63,6 +63,7 @@ private void action_tds_9(S_PARF_MCS x_2, S_PARFSX_MCS x_4) throws Exception {
 try {
 // instructions
 glob_9_tds=this.att_tds;
+this.att_machine.addCurrentDep(x_2.att_type.getTaille());
 glob_9_tds.inserer(x_2.att_sident,  new INFOVAR(x_2.att_type, this.att_machine.getCurrentDep()));
 x_4.att_tds=glob_9_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","PARFS -> PARF #tds PARFSX #stds ;"});
@@ -78,22 +79,22 @@ this.att_stds=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 3420
+      case LEX_MCS.token_parf : // 26667
         regle8 () ;
       break ;
-      case LEX_MCS.token_void : // 3429
+      case LEX_MCS.token_void : // 26676
         regle9 () ;
       break ;
-      case LEX_MCS.token_int : // 3431
+      case LEX_MCS.token_int : // 26678
         regle9 () ;
       break ;
-      case LEX_MCS.token_char : // 3432
+      case LEX_MCS.token_char : // 26679
         regle9 () ;
       break ;
-      case LEX_MCS.token_identc : // 3471
+      case LEX_MCS.token_identc : // 26718
         regle9 () ;
       break ;
-      case LEX_MCS.token_struct : // 3433
+      case LEX_MCS.token_struct : // 26680
         regle9 () ;
       break ;
       default :

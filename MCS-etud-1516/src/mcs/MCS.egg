@@ -144,7 +144,7 @@ global
 local
 do
    -- on suppose la methode "int main()" existante, et sans parametres
-   code := machine.genCall("main") + ENTITES^code + machine.genFin();
+   code := "\n" + ENTITES^code + machine.genCall("main") + machine.genFin();
    -- generation du code de fin du programme
    machine.writeCode(PROGRAMME^source.getFileName(), code);
 end
@@ -260,11 +260,14 @@ do
     tdsParam := PARFS^stds;
     BLOC^tds := new TDS(tdsParam);
     
+    write "Fonction : " + FONCTION^ident + tdsParam.toString();
+    
    -- deplacement de LB au debut du Bloc
    LB := FONCTION^machine.getLB();
    FONCTION^machine.saveLB(new Register("LB", LB.getDep() + FONCTION^machine.getCurrentDep(), FONCTION^machine.getLB()));
-       -- debut de BLOC : currentDep reset
+   -- debut de BLOC : currentDep reset
    FONCTION^machine.resetCurrentDep();
+   -- ajout de 3 pour les variables utilisees par TAM
    FONCTION^machine.addCurrentDep(3);
     
 end
@@ -272,21 +275,16 @@ end
 #gen{
 local
     typeRetour : DTYPE;
-    code : String;
 do
+
     -- TDS
-    
     i := new INFOFONC(FONCTION^htype, tdsParam);
-    FONCTION^tds.inserer(FONCTION^ident,  i);
+    FONCTION^tds.inserer(FONCTION^ident, i);
     typeRetour :=i.getType();
     
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
-    
-    -- fin de BLOC : POP currentDep dans le BLOC 
-    code := FONCTION^machine.genFree(FONCTION^machine.getCurrentDep() - 3);
-
-    FONCTION^code := FONCTION^machine.genFonction(FONCTION^ident, tdsParam.getTailleParams(), typeRetour.getTaille(), BLOC^code) + code;
+    FONCTION^code := FONCTION^machine.genFonction(FONCTION^ident, tdsParam.getTailleParams(), typeRetour.getTaille(), BLOC^code);
 end
 }
 
@@ -308,7 +306,10 @@ global
 #tds {
 do    
     tds := PARFS^tds;
+    -- deplacement avant ajout de var
+    PARFS^machine.addCurrentDep(PARF^type.getTaille());    
     tds.inserer(PARF^sident, new INFOVAR(PARF^type, PARFS^machine.getCurrentDep()));
+    
     PARFSX^tds := tds;
 end
 }
@@ -333,9 +334,13 @@ PARFSX -> virg PARF #tds PARFSX #stds;
 local
     tds : TDS;
 do 
+
     -- transmission des tds;
     tds := PARFSX^tds;
-    tds.inserer(PARF^sident, new INFOTYPE(PARF^type));
+    -- deplacement avant ajout de var
+    PARFSX^machine.addCurrentDep(PARF^type.getTaille());
+    tds.inserer(PARF^sident, new INFOVAR(PARF^type, PARFSX^machine.getCurrentDep()));
+        
     PARFSX1^tds := tds;
 end
 }
@@ -482,9 +487,6 @@ CHAMP -> TYPE ident pv #champ;
 -- corps de fonction et bloc d'instructions
 BLOC ->  aco #tds INSTS acf #gen;
 #tds {
-local
-    dep : int;
-    LB : Register;
 do
 
    INSTS^tds := BLOC^tds;
@@ -747,7 +749,7 @@ AX -> OPREL R #type #gen;
 do
     -- controle de type
     if ~AX^htype.compareOpBin(OPREL^type, R^type) then
-        error(B_10, AX^htype.getNom());
+        error(typeError_opBin, AX^htype.getNom(), OPREL^type.getNom(), R^type.getNom());
     else
     -- on remonte le type
         AX^type := R^type;         
@@ -871,9 +873,9 @@ RX ->   OPADD  T RX  #type #gen;
 do
     -- controle de type
     if ~RX^htype.compareOpBin(OPADD^type, T^type) then
-        error(B_10, RX^htype.getNom(), OPADD^type, T^type);    
+        error(typeError_opBin, RX^htype.getNom(), OPADD^type.getNom(), T^type.getNom());    
     elseif ~RX^htype.compareOpBin(OPADD^type, RX1^type) then
-        error(B_10, RX^htype.getNom(), OPADD^type, RX1^type);
+        error(typeError_opBin, RX^htype.getNom(), OPADD^type.getNom(), RX1^type.getNom());
     else
     -- on remonte le type
         RX^type := T^type;         
@@ -968,9 +970,9 @@ TX -> OPMUL F TX  #type #gen;
 do
     -- controle de type
     if ~TX^htype.compareOpBin(OPMUL^type, F^type) then
-        error(B_10, TX^htype.getNom(), OPMUL^type, F^type);    
+        error(typeError_opBin, TX^htype.getNom(), OPMUL^type, F^type);    
     elseif ~TX^htype.compareOpBin(OPMUL^type, TX1^type) then
-        error(B_10, TX^htype.getNom(), OPMUL^type, TX1^type);
+        error(typeError_opBin, TX^htype.getNom(), OPMUL^type, TX1^type);
     else
     -- on remonte le type
         TX^type := F^type;     
@@ -1082,7 +1084,7 @@ F -> OPUN  F #type #gen;
 do
     -- controle de type
     if ~F1^type.compareOpUn(OPUN^type) then
-        error(B_10, OPUN^type.getNom(), F1^type.getNom());
+        error(typeError_opUn, F1^type.getNom(), OPUN^type.getNom());
     else
     -- on remonte le type
         F^type := F1^type;         
@@ -1242,10 +1244,8 @@ do
         FX^hcode := F^machine.genAdr(iv.getTaille());
         F^code_est_adresse := false;
         if F^hcode_est_adresse then
-            write "hcode_est_adresse";
             code := F^machine.genReadIndirectMem(iv.getTaille());
         else
-            write "NOT hcode_est_adresse";
             code := F^machine.genReadMem(F^machine.getCurrentDep(), iv.getTaille());
         end    
     with INFOFONC then

@@ -1,0 +1,21 @@
+int a;
+
+
+int inc(int b, int c){
+
+	return b+c;
+}
+
+
+int main(){
+
+	int x = 2;
+	int y = 1;
+
+	int c = inc(0,1);
+	
+    return 0;
+}
+
+
+

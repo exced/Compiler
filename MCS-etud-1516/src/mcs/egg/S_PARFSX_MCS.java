@@ -59,7 +59,8 @@ try {
 TDS loc_tds;
 // instructions
 loc_tds=this.att_tds;
-loc_tds.inserer(x_3.att_sident,  new INFOTYPE(x_3.att_type));
+this.att_machine.addCurrentDep(x_3.att_type.getTaille());
+loc_tds.inserer(x_3.att_sident,  new INFOVAR(x_3.att_type, this.att_machine.getCurrentDep()));
 x_5.att_tds=loc_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","PARFSX -> virg PARF #tds PARFSX1 #stds ;"});
 }
@@ -81,10 +82,10 @@ this.att_stds=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 3420
+      case LEX_MCS.token_parf : // 26667
         regle10 () ;
       break ;
-      case LEX_MCS.token_virg : // 3423
+      case LEX_MCS.token_virg : // 26670
         regle11 () ;
       break ;
       default :

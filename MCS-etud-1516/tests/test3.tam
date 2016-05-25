@@ -1,0 +1,24 @@
+; Generated code for tests/test3.mcs.
+; Do not modify by hand
+
+	PUSH 1
+_inc:
+	LOAD(1) 3[LB]
+	LOAD(1) 3[LB]
+	SUBR IAdd
+	RETURN (2) 1
+_main:
+	LOADL 2
+	STORE(1) 3[LB]
+	LOADL 1
+	STORE(1) 4[LB]
+xy	LOADL 0
+	LOADL 1
+; Appel a inc
+	CALL(SB) _inc
+	STORE(1) 8[LB]
+	LOADL 0
+	RETURN (0) 1
+; Appel a main
+	CALL(SB) _main
+	HALT

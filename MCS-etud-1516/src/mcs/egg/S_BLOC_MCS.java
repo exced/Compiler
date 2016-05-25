@@ -42,16 +42,8 @@ if  (att_eval)      action_gen_24(x_4);
   }
 private void action_gen_24(S_INSTS_MCS x_4) throws Exception {
 try {
-// locales
-int loc_dep;
 // instructions
-if ((this.att_hbloc_est_fonction)){
-loc_dep=3;
-}
-else {
-loc_dep=0;
-}
-this.att_code=x_4.att_code+this.att_machine.genFree(this.att_machine.getCurrentDep()-loc_dep);
+this.att_code=x_4.att_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","BLOC -> aco #tds INSTS acf #gen ;"});
 }
   }
@@ -65,21 +57,8 @@ x_4.att_htype=this.att_htype;
   }
 private void action_tds_24(S_INSTS_MCS x_4) throws Exception {
 try {
-// locales
-int loc_dep;
-Register loc_LB;
 // instructions
 x_4.att_tds=this.att_tds;
-if ((this.att_hbloc_est_fonction)){
-loc_dep=3;
-}
-else {
-loc_dep=0;
-}
-loc_LB=this.att_machine.getLB();
-this.att_machine.saveLB( new Register("LB", loc_LB.getDep()+this.att_machine.getCurrentDep(), this.att_machine.getLB()));
-this.att_machine.resetCurrentDep();
-this.att_machine.addCurrentDep(loc_dep);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","BLOC -> aco #tds INSTS acf #gen ;"});
 }
   }

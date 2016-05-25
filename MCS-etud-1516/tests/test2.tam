@@ -1,7 +1,6 @@
 ; Generated code for tests/test2.mcs.
 ; Do not modify by hand
-; Appel a main
-	CALL(SB) _main
+
 	PUSH 1
 _main:
 	LOADL 2
@@ -11,6 +10,7 @@ _main:
 	SUBR IAdd
 	STORE(1) 4[LB]
 	LOADL 0
-	POP (0) 2
 	RETURN (0) 1
+; Appel a main
+	CALL(SB) _main
 	HALT

@@ -45,7 +45,7 @@ private void action_gen_0(S_ENTITES_MCS x_4) throws Exception {
 try {
 // locales
 // instructions
-glob_0_code=glob_0_machine.genCall("main")+x_4.att_code+glob_0_machine.genFin();
+glob_0_code="\n"+x_4.att_code+glob_0_machine.genCall("main")+glob_0_machine.genFin();
 glob_0_machine.writeCode(this.att_source.getFileName(), glob_0_code);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","PROGRAMME -> #init #tds ENTITES #gen ;"});
 }
@@ -68,25 +68,25 @@ x_4.att_machine=glob_0_machine;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 3434
+      case LEX_MCS.token_typedef : // 26681
         regle0 () ;
       break ;
-      case LEX_MCS.token_void : // 3429
+      case LEX_MCS.token_void : // 26676
         regle0 () ;
       break ;
-      case LEX_MCS.token_int : // 3431
+      case LEX_MCS.token_int : // 26678
         regle0 () ;
       break ;
-      case LEX_MCS.token_char : // 3432
+      case LEX_MCS.token_char : // 26679
         regle0 () ;
       break ;
-      case LEX_MCS.token_identc : // 3471
+      case LEX_MCS.token_identc : // 26718
         regle0 () ;
       break ;
-      case LEX_MCS.token_struct : // 3433
+      case LEX_MCS.token_struct : // 26680
         regle0 () ;
       break ;
-      case LEX_MCS.token_asm : // 3430
+      case LEX_MCS.token_asm : // 26677
         regle0 () ;
       break ;
       case LEX_MCS.EOF :

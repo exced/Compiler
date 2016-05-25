@@ -68,10 +68,17 @@ x_7.att_htype=this.att_htype;
   }
 private void action_stds_7(S_PARFS_MCS x_4, S_BLOC_MCS x_7) throws Exception {
 try {
+// locales
+Register loc_LB;
 // instructions
 x_7.att_hbloc_est_fonction=true;
 glob_7_tdsParam=x_4.att_stds;
 x_7.att_tds= new TDS(glob_7_tdsParam);
+System.out.print(""+"Fonction : "+this.att_ident+glob_7_tdsParam.toString());
+loc_LB=this.att_machine.getLB();
+this.att_machine.saveLB( new Register("LB", loc_LB.getDep()+this.att_machine.getCurrentDep(), this.att_machine.getLB()));
+this.att_machine.resetCurrentDep();
+this.att_machine.addCurrentDep(3);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#stds","FONCTION -> paro #tds PARFS #stds parf BLOC #gen ;"});
 }
   }

@@ -75,11 +75,11 @@ private void action_type_47(S_OPADD_MCS x_2, S_T_MCS x_3, S_RX_MCS x_4) throws E
 try {
 // instructions
 if (!(this.att_htype.compareOpBin(x_2.att_type, x_3.att_type))){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_B_10, MCSMessages.B_10,new Object[]{""+this.att_htype.getNom(), ""+x_2.att_type, ""+x_3.att_type});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_typeError_opBin, MCSMessages.typeError_opBin,new Object[]{""+this.att_htype.getNom(), ""+x_2.att_type.getNom(), ""+x_3.att_type.getNom()});
 
 }
 else if (!(this.att_htype.compareOpBin(x_2.att_type, x_4.att_type))){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_B_10, MCSMessages.B_10,new Object[]{""+this.att_htype.getNom(), ""+x_2.att_type, ""+x_4.att_type});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_typeError_opBin, MCSMessages.typeError_opBin,new Object[]{""+this.att_htype.getNom(), ""+x_2.att_type.getNom(), ""+x_4.att_type.getNom()});
 
 }
 else {
@@ -100,43 +100,43 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_plus : // 3459
+      case LEX_MCS.token_plus : // 26706
         regle47 () ;
       break ;
-      case LEX_MCS.token_moins : // 3460
+      case LEX_MCS.token_moins : // 26707
         regle47 () ;
       break ;
-      case LEX_MCS.token_ou : // 3461
+      case LEX_MCS.token_ou : // 26708
         regle47 () ;
       break ;
-      case LEX_MCS.token_inf : // 3453
+      case LEX_MCS.token_inf : // 26700
         regle48 () ;
       break ;
-      case LEX_MCS.token_sup : // 3455
+      case LEX_MCS.token_sup : // 26702
         regle48 () ;
       break ;
-      case LEX_MCS.token_infeg : // 3454
+      case LEX_MCS.token_infeg : // 26701
         regle48 () ;
       break ;
-      case LEX_MCS.token_supeg : // 3456
+      case LEX_MCS.token_supeg : // 26703
         regle48 () ;
       break ;
-      case LEX_MCS.token_eg : // 3457
+      case LEX_MCS.token_eg : // 26704
         regle48 () ;
       break ;
-      case LEX_MCS.token_neg : // 3458
+      case LEX_MCS.token_neg : // 26705
         regle48 () ;
       break ;
-      case LEX_MCS.token_affect : // 3426
+      case LEX_MCS.token_affect : // 26673
         regle48 () ;
       break ;
-      case LEX_MCS.token_virg : // 3423
+      case LEX_MCS.token_virg : // 26670
         regle48 () ;
       break ;
-      case LEX_MCS.token_pv : // 3425
+      case LEX_MCS.token_pv : // 26672
         regle48 () ;
       break ;
-      case LEX_MCS.token_parf : // 3420
+      case LEX_MCS.token_parf : // 26667
         regle48 () ;
       break ;
       default :
