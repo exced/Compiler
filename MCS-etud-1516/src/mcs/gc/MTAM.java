@@ -26,7 +26,7 @@ public class MTAM extends AbstractMachine {
 	// compteur pour le generateur d'etiquettes
 	private static int cpt = 0;
 	
-	// déplacement courant dans un bloc
+	// déplacement courant dans un bloc (relatif par rapport à LB)
 	private int currentDep;
 
 	public MTAM(String fname) {
@@ -36,9 +36,9 @@ public class MTAM extends AbstractMachine {
 			nom = fname;
 		}
 		currentDep = 0;
-		SB = new Register("SB", 0);
-		LB = new Register("LB", 0);
-		ST = new Register("ST", 0);
+		SB = new Register("SB", 0, null);
+		LB = new Register("LB", 0, SB);
+		ST = new Register("ST", 0, null);
 	}
 	
 	public int getCurrentDep() { return currentDep; }
@@ -48,7 +48,16 @@ public class MTAM extends AbstractMachine {
 	public Register getLB() { return LB; }
 	
 	public Register getST() { return ST; }
+	
+	public void saveLB(Register newLB){
+		this.LB = newLB;
+	}
 
+	public void restoreLB(){
+		this.currentDep = this.LB.getDep() - this.LB.getPrevious().getDep();
+		this.LB = this.LB.getPrevious();
+	}
+	
 	public void addCurrentDep(int dep){
 		currentDep += dep;
 	}

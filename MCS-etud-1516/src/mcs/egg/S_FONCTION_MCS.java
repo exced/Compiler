@@ -69,10 +69,9 @@ x_7.att_htype=this.att_htype;
 private void action_stds_7(S_PARFS_MCS x_4, S_BLOC_MCS x_7) throws Exception {
 try {
 // instructions
+x_7.att_hbloc_est_fonction=true;
 glob_7_tdsParam=x_4.att_stds;
-System.out.print(""+"PARAM"+glob_7_tdsParam.toString());
 x_7.att_tds= new TDS(glob_7_tdsParam);
-this.att_machine.addRegisterDep(this.att_machine.getLB(), this.att_machine.getCurrentDep());
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#stds","FONCTION -> paro #tds PARFS #stds parf BLOC #gen ;"});
 }
   }

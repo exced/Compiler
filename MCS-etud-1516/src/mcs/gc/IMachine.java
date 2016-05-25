@@ -38,6 +38,10 @@ public interface IMachine {
 	
 	public Register getST();
 	
+	public void saveLB(Register newLB);
+	
+	public void restoreLB();
+	
 	public int getCurrentDep();
 
 	public void addCurrentDep(int dep);

@@ -94,11 +94,12 @@ if  (att_eval)      action_gen_80(x_4);
   private void regle29() throws Exception {
 
     //declaration
-    S_BLOC_MCS x_2 = new S_BLOC_MCS(scanner,att_eval) ;
+    S_BLOC_MCS x_3 = new S_BLOC_MCS(scanner,att_eval) ;
     //appel
-if  (att_eval)      action_auto_inh_29(x_2);
-    x_2.analyser() ;
-if  (att_eval)      action_code_29(x_2);
+if  (att_eval)      action_auto_inh_29(x_3);
+if  (att_eval)      action_bloc_29(x_3);
+    x_3.analyser() ;
+if  (att_eval)      action_code_29(x_3);
   }
   private void regle28() throws Exception {
 
@@ -146,6 +147,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 
+x_7.att_hbloc_est_fonction=false;
 this.att_machine.addRegisterDep(this.att_machine.getLB(), this.att_machine.getCurrentDep());
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","INST -> si paro E #type parf BLOC SIX #gen ;"});
 }
@@ -199,13 +201,13 @@ this.att_code=x_3.att_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","INST -> retour E pv #type #gen ;"});
 }
   }
-private void action_auto_inh_29(S_BLOC_MCS x_2) throws Exception {
+private void action_auto_inh_29(S_BLOC_MCS x_3) throws Exception {
 try {
 // instructions
-x_2.att_machine=this.att_machine;
-x_2.att_htype=this.att_htype;
-x_2.att_tds=this.att_tds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> BLOC #code ;"});
+x_3.att_machine=this.att_machine;
+x_3.att_htype=this.att_htype;
+x_3.att_tds=this.att_tds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> #bloc BLOC #code ;"});
 }
   }
 private void action_type_27(S_TYPE_MCS x_2, T_MCS x_3, S_AFFX_MCS x_5) throws Exception {
@@ -224,6 +226,13 @@ try {
 // instructions
 this.att_code=x_2.att_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","INST -> E pv #gen ;"});
+}
+  }
+private void action_bloc_29(S_BLOC_MCS x_3) throws Exception {
+try {
+// instructions
+x_3.att_hbloc_est_fonction=false;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#bloc","INST -> #bloc BLOC #code ;"});
 }
   }
 private void action_gen_27(S_TYPE_MCS x_2, T_MCS x_3, S_AFFX_MCS x_5) throws Exception {
@@ -255,11 +264,11 @@ x_3.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> retour E pv #type #gen ;"});
 }
   }
-private void action_code_29(S_BLOC_MCS x_2) throws Exception {
+private void action_code_29(S_BLOC_MCS x_3) throws Exception {
 try {
 // instructions
-this.att_code=x_2.att_code;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#code","INST -> BLOC #code ;"});
+this.att_code=x_3.att_code;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#code","INST -> #bloc BLOC #code ;"});
 }
   }
 private void action_tds_80(ASM x_4) throws Exception {
@@ -272,61 +281,61 @@ x_4.att_tds_asm=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 2362
+      case LEX_MCS.token_void : // 18217
         regle27 () ;
       break ;
-      case LEX_MCS.token_int : // 2364
+      case LEX_MCS.token_int : // 18219
         regle27 () ;
       break ;
-      case LEX_MCS.token_char : // 2365
+      case LEX_MCS.token_char : // 18220
         regle27 () ;
       break ;
-      case LEX_MCS.token_identc : // 2404
+      case LEX_MCS.token_identc : // 18259
         regle27 () ;
       break ;
-      case LEX_MCS.token_struct : // 2366
+      case LEX_MCS.token_struct : // 18221
         regle27 () ;
       break ;
-      case LEX_MCS.token_entier : // 2400
+      case LEX_MCS.token_entier : // 18255
         regle28 () ;
       break ;
-      case LEX_MCS.token_chaine : // 2402
+      case LEX_MCS.token_chaine : // 18257
         regle28 () ;
       break ;
-      case LEX_MCS.token_caractere : // 2401
+      case LEX_MCS.token_caractere : // 18256
         regle28 () ;
       break ;
-      case LEX_MCS.token_plus : // 2392
+      case LEX_MCS.token_plus : // 18247
         regle28 () ;
       break ;
-      case LEX_MCS.token_moins : // 2393
+      case LEX_MCS.token_moins : // 18248
         regle28 () ;
       break ;
-      case LEX_MCS.token_non : // 2399
+      case LEX_MCS.token_non : // 18254
         regle28 () ;
       break ;
-      case LEX_MCS.token_null : // 2385
+      case LEX_MCS.token_null : // 18240
         regle28 () ;
       break ;
-      case LEX_MCS.token_paro : // 2352
+      case LEX_MCS.token_paro : // 18207
         regle28 () ;
       break ;
-      case LEX_MCS.token_mult : // 2395
+      case LEX_MCS.token_mult : // 18250
         regle28 () ;
       break ;
-      case LEX_MCS.token_ident : // 2403
+      case LEX_MCS.token_ident : // 18258
         regle28 () ;
       break ;
-      case LEX_MCS.token_aco : // 2354
+      case LEX_MCS.token_aco : // 18209
         regle29 () ;
       break ;
-      case LEX_MCS.token_si : // 2360
+      case LEX_MCS.token_si : // 18215
         regle30 () ;
       break ;
-      case LEX_MCS.token_retour : // 2383
+      case LEX_MCS.token_retour : // 18238
         regle33 () ;
       break ;
-      case LEX_MCS.token_asm : // 2363
+      case LEX_MCS.token_asm : // 18218
         regle80 () ;
       break ;
       default :

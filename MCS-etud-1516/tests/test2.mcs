@@ -1,12 +1,9 @@
 int a;
 
-int inc(int c){
-	return c+1;
-}	
 
 int main(){
 
-	int b = 0;
+	int b = 2;
 
     return 0;
 }

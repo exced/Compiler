@@ -46,6 +46,9 @@ inh champs : LCHAMPS for CHAMPS, CHAMP;
 syn code_est_adresse : BOOLEAN for  AFFX,F, A,AX,R,RX,T,TX,E ;
 inh hcode_est_adresse : BOOLEAN for AFFX,AX,RX,TX ,F;
 
+-- FONCTION
+inh hbloc_est_fonction : BOOLEAN for BLOC;
+
 
 
 
@@ -250,14 +253,11 @@ end
 }     
 #stds {
 do
+    BLOC^hbloc_est_fonction := true;
+
     tdsParam := PARFS^stds;
-    
-    write "PARAM" + tdsParam.toString();
-    
     BLOC^tds := new TDS(tdsParam);
     
-   -- deplacement de LB au debut du Bloc
-   FONCTION^machine.addRegisterDep(FONCTION^machine.getLB(), FONCTION^machine.getCurrentDep());    
 end
 }
 #gen{
@@ -468,12 +468,27 @@ CHAMP -> TYPE ident pv #champ;
 -- corps de fonction et bloc d'instructions
 BLOC ->  aco #tds INSTS acf #gen;
 #tds {
+local
+    dep : int;
+    LB : Register;
 do
 
    INSTS^tds := BLOC^tds;
    
-   -- debut de BLOC : currentDep reset
+   if (BLOC^hbloc_est_fonction) then
+       dep := 3;
+   else
+       dep := 0;
+   end
+   
+   -- deplacement de LB au debut du Bloc
+   LB := BLOC^machine.getLB();
+   BLOC^machine.saveLB(new Register("LB", LB.getDep() + BLOC^machine.getCurrentDep(), BLOC^machine.getLB()));
+
+       -- debut de BLOC : currentDep reset
    BLOC^machine.resetCurrentDep();
+   BLOC^machine.addCurrentDep(dep);
+   
 end
 }
 #gen {
@@ -552,7 +567,12 @@ end
 
 ------------------------------------------------------------------------
 -- bloc d'instructions
-INST -> BLOC  #code;
+INST ->#bloc BLOC  #code;
+#bloc {
+do
+    BLOC^hbloc_est_fonction := false;
+end
+}
 #code {
 do
     INST^code := BLOC^code;        
@@ -569,6 +589,8 @@ do
       error(not_int, E^type);
    end
    
+   BLOC^hbloc_est_fonction := false;
+   
    -- deplacement de LB au debut du Bloc
    INST^machine.addRegisterDep(INST^machine.getLB(), INST^machine.getCurrentDep());
 end
@@ -584,6 +606,8 @@ end
 SIX ->    sinon #dep BLOC #gen;
 #dep {
 do
+   BLOC^hbloc_est_fonction := false;
+
    -- deplacement de LB au debut du Bloc
    SIX^machine.addRegisterDep(SIX^machine.getLB(), SIX^machine.getCurrentDep());
 end
@@ -674,6 +698,7 @@ do
     if AFFX^hcode_est_adresse then
         code := AFFX^hcode +A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
     else
+        write "current dep" + AFFX^machine.getCurrentDep() + "\n";
         code := AFFX^hcode + A^code + AFFX^machine.genWriteMem(AFFX^machine.getCurrentDep(), AFFX^htype.getTaille());
        end 
       AFFX^code := code;

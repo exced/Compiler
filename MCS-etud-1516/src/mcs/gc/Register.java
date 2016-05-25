@@ -7,29 +7,37 @@ package mcs.gc;
  */
 public class Register {
 	private String name;
-	private int num;
+	// position absolue ( par rapport à SB )
+	private int dep;
+	private Register previous;
 
 	/**
 	 * @param name
-	 * @param num
+	 * @param dep
+	 * @param previous
 	 */
-	public Register(String name, int num) {
+	public Register(String name, int dep, Register previous) {
 		super();
 		this.name = name;
-		this.num = num;
+		this.dep = dep;
+		this.previous = previous;
 	}
 
 	public String getName() { return name; }
 
-	public int getNum() { return num; }
+	public int getDep() { return dep; }
+	
+	public Register getPrevious(){
+		return this.previous;
+	}
 	
 	public void depRegister(int d) {
-		num += d;
+		dep += d;
 	}
 
 	@Override
 	public String toString() {
-		return "Register [name=" + name + ", num=" + num + "]";
+		return "Register [name=" + name + ", dep=" + dep + "]";
 	}
 
 }
