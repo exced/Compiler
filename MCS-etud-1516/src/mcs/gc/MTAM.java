@@ -138,8 +138,8 @@ public class MTAM extends AbstractMachine {
 		return "\tLOADL " + v + "\n" + genOp("SAlloc");
 	}
 
-	public String genFree(){
-		return "\tPOP (0) " + currentDep + "\n"; 
+	public String genFree(int dep){
+		return "\tPOP (0) " + dep + "\n"; 
 	}
 
 	public String genReadMem(int dep, int taille) {

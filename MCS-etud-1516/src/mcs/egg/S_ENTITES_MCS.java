@@ -71,25 +71,25 @@ this.att_code="";
       case LEX_MCS.EOF :
         regle1 () ;
       break ;
-      case LEX_MCS.token_typedef : // 18222
+      case LEX_MCS.token_typedef : // 3434
         regle2 () ;
       break ;
-      case LEX_MCS.token_void : // 18217
+      case LEX_MCS.token_void : // 3429
         regle2 () ;
       break ;
-      case LEX_MCS.token_int : // 18219
+      case LEX_MCS.token_int : // 3431
         regle2 () ;
       break ;
-      case LEX_MCS.token_char : // 18220
+      case LEX_MCS.token_char : // 3432
         regle2 () ;
       break ;
-      case LEX_MCS.token_identc : // 18259
+      case LEX_MCS.token_identc : // 3471
         regle2 () ;
       break ;
-      case LEX_MCS.token_struct : // 18221
+      case LEX_MCS.token_struct : // 3433
         regle2 () ;
       break ;
-      case LEX_MCS.token_asm : // 18218
+      case LEX_MCS.token_asm : // 3430
         regle2 () ;
       break ;
       default :

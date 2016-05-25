@@ -252,17 +252,27 @@ do
 end
 }     
 #stds {
+local
+    LB : Register;
 do
     BLOC^hbloc_est_fonction := true;
 
     tdsParam := PARFS^stds;
     BLOC^tds := new TDS(tdsParam);
     
+   -- deplacement de LB au debut du Bloc
+   LB := FONCTION^machine.getLB();
+   FONCTION^machine.saveLB(new Register("LB", LB.getDep() + FONCTION^machine.getCurrentDep(), FONCTION^machine.getLB()));
+       -- debut de BLOC : currentDep reset
+   FONCTION^machine.resetCurrentDep();
+   FONCTION^machine.addCurrentDep(3);
+    
 end
 }
 #gen{
 local
     typeRetour : DTYPE;
+    code : String;
 do
     -- TDS
     
@@ -272,7 +282,11 @@ do
     
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
-    FONCTION^code := FONCTION^machine.genFonction(FONCTION^ident, tdsParam.getTailleParams(), typeRetour.getTaille(), BLOC^code);
+    
+    -- fin de BLOC : POP currentDep dans le BLOC 
+    code := FONCTION^machine.genFree(FONCTION^machine.getCurrentDep() - 3);
+
+    FONCTION^code := FONCTION^machine.genFonction(FONCTION^ident, tdsParam.getTailleParams(), typeRetour.getTaille(), BLOC^code) + code;
 end
 }
 
@@ -475,26 +489,11 @@ do
 
    INSTS^tds := BLOC^tds;
    
-   if (BLOC^hbloc_est_fonction) then
-       dep := 3;
-   else
-       dep := 0;
-   end
-   
-   -- deplacement de LB au debut du Bloc
-   LB := BLOC^machine.getLB();
-   BLOC^machine.saveLB(new Register("LB", LB.getDep() + BLOC^machine.getCurrentDep(), BLOC^machine.getLB()));
-
-       -- debut de BLOC : currentDep reset
-   BLOC^machine.resetCurrentDep();
-   BLOC^machine.addCurrentDep(dep);
-   
 end
 }
 #gen {
 do
-    -- fin de BLOC : POP currentDep dans le BLOC
-    BLOC^code := INSTS^code + BLOC^machine.genFree();
+    BLOC^code := INSTS^code;
 end
 }
 
@@ -698,7 +697,6 @@ do
     if AFFX^hcode_est_adresse then
         code := AFFX^hcode +A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
     else
-        write "current dep" + AFFX^machine.getCurrentDep() + "\n";
         code := AFFX^hcode + A^code + AFFX^machine.genWriteMem(AFFX^machine.getCurrentDep(), AFFX^htype.getTaille());
        end 
       AFFX^code := code;

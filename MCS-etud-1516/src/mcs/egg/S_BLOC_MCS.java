@@ -42,8 +42,16 @@ if  (att_eval)      action_gen_24(x_4);
   }
 private void action_gen_24(S_INSTS_MCS x_4) throws Exception {
 try {
+// locales
+int loc_dep;
 // instructions
-this.att_code=x_4.att_code+this.att_machine.genFree();
+if ((this.att_hbloc_est_fonction)){
+loc_dep=3;
+}
+else {
+loc_dep=0;
+}
+this.att_code=x_4.att_code+this.att_machine.genFree(this.att_machine.getCurrentDep()-loc_dep);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","BLOC -> aco #tds INSTS acf #gen ;"});
 }
   }

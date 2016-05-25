@@ -72,7 +72,7 @@ public interface IMachine {
 	
 	public String genCst(String v);
 
-	public String genFree();
+	public String genFree(int dep);
 
 	public String genReadMem(int dep, int taille);
 

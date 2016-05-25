@@ -71,7 +71,6 @@ if (this.att_hcode_est_adresse){
 loc_code=this.att_hcode+x_3.att_code+this.att_machine.genWriteIndirectMem(this.att_htype.getTaille());
 }
 else {
-System.out.print(""+"current dep"+this.att_machine.getCurrentDep()+"\n");
 loc_code=this.att_hcode+x_3.att_code+this.att_machine.genWriteMem(this.att_machine.getCurrentDep(), this.att_htype.getTaille());
 }
 this.att_code=loc_code;
@@ -104,16 +103,16 @@ this.att_type=this.att_htype;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_affect : // 18214
+      case LEX_MCS.token_affect : // 3426
         regle35 () ;
       break ;
-      case LEX_MCS.token_pv : // 18213
+      case LEX_MCS.token_pv : // 3425
         regle36 () ;
       break ;
-      case LEX_MCS.token_virg : // 18211
+      case LEX_MCS.token_virg : // 3423
         regle36 () ;
       break ;
-      case LEX_MCS.token_parf : // 18208
+      case LEX_MCS.token_parf : // 3420
         regle36 () ;
       break ;
       default :
