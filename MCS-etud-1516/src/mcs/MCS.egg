@@ -695,10 +695,11 @@ end
 local 
   code : STRING;
 do  
-    if AFFX^hcode_est_adresse then
+    TODO gerer si hcode_est_adresse ou pas
+    if AFFX^hest_declare then
         code := AFFX^hcode +A^code ;
     else
-        code := AFFX^hcode + A^code ;
+        code := AFFX^hcode + A^code AFFX^machine.genWriteMem;
     end 
       AFFX^code := code;
   end
@@ -1233,14 +1234,7 @@ do
     -- utile uniquement pour savoir si la var est un param de fonction ou non  
     tdsParam := F^tds.getParente();
     i2 := tdsParam.chercherLocalement(ident^txt);
-    estParam := ~(i2 = null);
-    if estParam then
-        dep := 3 - F^machine.getCurrentDep();
-    else
-        dep := F^machine.getCurrentDep();
-    end    
-    
-
+    estParam := ~(i2 = null);   
 
     -- ident pour l'appel de fonction
     FX^ident := ident^txt;
@@ -1260,8 +1254,13 @@ do
         
         if F^hcode_est_adresse then
             code := F^machine.genReadIndirectMem(iv.getTaille());
-        else  
-            code := F^machine.genReadMem(dep - iv.getTaille(), iv.getTaille()); 
+        else
+            if estParam then
+                dep := 3 - iv.getDep();
+            else
+                dep := F^machine.getCurrentDep();
+            end
+            code := F^machine.genReadMem(dep- iv.getTaille() , iv.getTaille()); 
         end
         
         -- dep CurrentDep

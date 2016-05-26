@@ -5,8 +5,8 @@
 _inc:
 	LOAD(1) 3[LB]
 	LOADL 3
-	LOAD(1) -3[LB]
-	LOAD(1) -4[LB]
+	LOAD(1) 0[LB]
+	LOAD(1) -1[LB]
 	SUBR IAdd
 	RETURN (2) 1
 _main:
