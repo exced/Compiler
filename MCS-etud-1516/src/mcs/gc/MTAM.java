@@ -9,6 +9,7 @@ import java.util.Set;
 import mcs.tds.INFO;
 import mcs.tds.INFOVAR;
 import mcs.tds.TDS;
+import mcs.type.*;
 
 /**
  * La machine TAM et ses fonctions de generation
@@ -80,7 +81,7 @@ public class MTAM extends AbstractMachine {
 	public String genArgs(TDS t){
 		StringBuffer sb = new StringBuffer();
 		Set<Map.Entry<String, INFO>> s = t.entrySet();
-		for (Map.Entry<String, INFO> e : s) {  
+		for (Map.Entry<String, INFO> e : s) {
 			sb.append( e.getKey() );
 		}
 		return sb.toString();
@@ -186,6 +187,10 @@ public class MTAM extends AbstractMachine {
 	
 	public String genOp(String op) {
 		return "\tSUBR " + op + "\n";
+	}
+	
+	public String genJump(String etq){
+		return "\tJUMP " + etq + "\n";
 	}
 
 	@Override

@@ -51,22 +51,22 @@ x_3.att_champs=this.att_champs;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 26669
+      case LEX_MCS.token_acf : // 1731
         regle21 () ;
       break ;
-      case LEX_MCS.token_void : // 26676
+      case LEX_MCS.token_void : // 1738
         regle22 () ;
       break ;
-      case LEX_MCS.token_int : // 26678
+      case LEX_MCS.token_int : // 1740
         regle22 () ;
       break ;
-      case LEX_MCS.token_char : // 26679
+      case LEX_MCS.token_char : // 1741
         regle22 () ;
       break ;
-      case LEX_MCS.token_identc : // 26718
+      case LEX_MCS.token_identc : // 1780
         regle22 () ;
       break ;
-      case LEX_MCS.token_struct : // 26680
+      case LEX_MCS.token_struct : // 1742
         regle22 () ;
       break ;
       default :

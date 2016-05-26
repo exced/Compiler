@@ -74,7 +74,6 @@ Register loc_LB;
 x_7.att_hbloc_est_fonction=true;
 glob_7_tdsParam=x_4.att_stds;
 x_7.att_tds= new TDS(glob_7_tdsParam);
-System.out.print(""+"Fonction : "+this.att_ident+glob_7_tdsParam.toString());
 loc_LB=this.att_machine.getLB();
 this.att_machine.saveLB( new Register("LB", loc_LB.getDep()+this.att_machine.getCurrentDep(), this.att_machine.getLB()));
 this.att_machine.resetCurrentDep();

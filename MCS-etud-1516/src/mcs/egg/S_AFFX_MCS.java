@@ -68,10 +68,10 @@ try {
 String loc_code;
 // instructions
 if (this.att_hcode_est_adresse){
-loc_code=this.att_hcode+x_3.att_code+this.att_machine.genWriteIndirectMem(this.att_htype.getTaille());
+loc_code=this.att_hcode+x_3.att_code;
 }
 else {
-loc_code=this.att_hcode+x_3.att_code+this.att_machine.genWriteMem(this.att_machine.getCurrentDep(), this.att_htype.getTaille());
+loc_code=this.att_hcode+x_3.att_code;
 }
 this.att_code=loc_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","AFFX -> affect A #type #gen ;"});
@@ -103,16 +103,16 @@ this.att_type=this.att_htype;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_affect : // 26673
+      case LEX_MCS.token_affect : // 1735
         regle35 () ;
       break ;
-      case LEX_MCS.token_pv : // 26672
+      case LEX_MCS.token_pv : // 1734
         regle36 () ;
       break ;
-      case LEX_MCS.token_virg : // 26670
+      case LEX_MCS.token_virg : // 1732
         regle36 () ;
       break ;
-      case LEX_MCS.token_parf : // 26667
+      case LEX_MCS.token_parf : // 1729
         regle36 () ;
       break ;
       default :

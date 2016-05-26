@@ -144,7 +144,7 @@ global
 local
 do
    -- on suppose la methode "int main()" existante, et sans parametres
-   code := "\n" + ENTITES^code + machine.genCall("main") + machine.genFin();
+   code := "\n" + ENTITES^code + machine.genCall("main")+ machine.genFin();
    -- generation du code de fin du programme
    machine.writeCode(PROGRAMME^source.getFileName(), code);
 end
@@ -260,8 +260,6 @@ do
     tdsParam := PARFS^stds;
     BLOC^tds := new TDS(tdsParam);
     
-    write "Fonction : " + FONCTION^ident + tdsParam.toString();
-    
    -- deplacement de LB au debut du Bloc
    LB := FONCTION^machine.getLB();
    FONCTION^machine.saveLB(new Register("LB", LB.getDep() + FONCTION^machine.getCurrentDep(), FONCTION^machine.getLB()));
@@ -279,6 +277,7 @@ do
 
     -- TDS
     i := new INFOFONC(FONCTION^htype, tdsParam);
+    
     FONCTION^tds.inserer(FONCTION^ident, i);
     typeRetour :=i.getType();
     
@@ -697,10 +696,10 @@ local
   code : STRING;
 do  
     if AFFX^hcode_est_adresse then
-        code := AFFX^hcode +A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+        code := AFFX^hcode +A^code ;
     else
-        code := AFFX^hcode + A^code + AFFX^machine.genWriteMem(AFFX^machine.getCurrentDep(), AFFX^htype.getTaille());
-       end 
+        code := AFFX^hcode + A^code ;
+    end 
       AFFX^code := code;
   end
 }
@@ -1226,7 +1225,9 @@ global
 #htype {
 local
     i:INFO;
+    tdsParam:String;
 do    
+    tdsParam := F^tds.getParente();
 
     -- ident pour l'appel de fonction
     FX^ident := ident^txt;
@@ -1243,11 +1244,23 @@ do
         t := iv.getType();
         FX^hcode := F^machine.genAdr(iv.getTaille());
         F^code_est_adresse := false;
+        
         if F^hcode_est_adresse then
             code := F^machine.genReadIndirectMem(iv.getTaille());
         else
+        
+            -- si la variable est un param de fonction i.e si elle est dans la tdsParam:
+            TODO    
+        
             code := F^machine.genReadMem(F^machine.getCurrentDep(), iv.getTaille());
-        end    
+            
+            
+            
+        end
+        
+        -- dep CurrentDep
+        F^machine.addCurrentDep(iv.getTaille());
+        
     with INFOFONC then
        infofonc := i;  
        t := infofonc.getType();
@@ -1324,11 +1337,36 @@ do
 end
 }   
 #gen {
+local
+    i:INFO;
+    infofonc : INFOFONC;
+    tdsParam : TDS;
+    parente : TDS;
 do
     -- appel du sous-programme à partir de l'étiquette
     -- deplacement de currentDep de 3
     FX^machine.addCurrentDep(3);
-    FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident);
+    
+    parente := FX^tds.getParente();
+    
+    i := FX^tds.chercherGlobalement(FX^ident);
+    
+    if i = null then
+        error(var_not_found, FX^ident, "null");
+    end
+
+    match i     
+    with INFOFONC then
+        infofonc := i;
+        tdsParam := infofonc.getParams();
+        if parente.compareTypeTo(tdsParam) then
+            error(call_nomatch, FX^ident);
+        else
+            FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident) ;
+        end
+    else
+        error(wrong_typeFonc, FX^ident, i.getType());
+    end        
 end
 }
 
@@ -1348,7 +1386,7 @@ global
 #tds {
 do
     tds := ES^tds;
-    -- appel : <"code", INFOTYPE>
+    -- TDSPARAM rappel : <"code", INFOTYPE>
     -- Rappel: la LinkedHashMap garantie l'ordre des get = l'ordre des put
     tds.inserer(E^code, new INFOTYPE(E^type));
     ESX^tds := tds;

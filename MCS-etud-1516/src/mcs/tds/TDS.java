@@ -77,6 +77,18 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		put(n, i);
 	}
 	
+	public boolean compareTypeTo(TDS tdsParam){
+		boolean b = true;
+		boolean aux = false;
+		DTYPE self;
+		DTYPE param;
+		Set<Map.Entry<String, INFO>> s = entrySet();
+		for (Map.Entry<String, INFO> e : s) {
+			
+		}
+		return b;
+	}
+	
 
 	public int getTailleParams() {
 		int taille = 0;

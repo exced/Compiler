@@ -89,6 +89,8 @@ public interface IMachine {
 	public String genAdr(int dep);
 
 	public String genAdrField(int dep);
+	
+	public String genJump(String etq);
 
 	public String genComment(String c);
 	
