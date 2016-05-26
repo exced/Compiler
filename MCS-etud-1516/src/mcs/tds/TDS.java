@@ -1,6 +1,7 @@
 package mcs.tds;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -79,11 +80,17 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	
 	public boolean compareTypeTo(TDS tdsParam){
 		boolean b = true;
-		boolean aux = false;
-		DTYPE self;
-		DTYPE param;
+		DTYPE t = null;
+		Iterator it = tdsParam.values().iterator();
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
+			if (it.hasNext()){
+				t = (DTYPE) it.next();
+				b = b && e.getValue().getType().compareTo(t);
+			}else{
+				b = false;
+				break;
+			}
 			
 		}
 		return b;

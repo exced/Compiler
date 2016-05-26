@@ -17,7 +17,9 @@ public class MCSMessages extends NLS {
 
   public static  String B_11;
   public static  String MCS_expected_eof;
+  public static  String call_nomatch;
   public static  String type_declared;
+  public static  String wrong_typeFonc;
   public static  String castError;
   public static  String typeError_opUn;
   public static  String type_undefined;

@@ -1225,9 +1225,22 @@ global
 #htype {
 local
     i:INFO;
-    tdsParam:String;
-do    
+    i2:INFO;
+    tdsParam:TDS;
+    estParam:boolean;
+    dep:int;
+do  
+    -- utile uniquement pour savoir si la var est un param de fonction ou non  
     tdsParam := F^tds.getParente();
+    i2 := tdsParam.chercherLocalement(ident^txt);
+    estParam := ~(i2 = null);
+    if estParam then
+        dep := 3 - F^machine.getCurrentDep();
+    else
+        dep := F^machine.getCurrentDep();
+    end    
+    
+
 
     -- ident pour l'appel de fonction
     FX^ident := ident^txt;
@@ -1247,15 +1260,8 @@ do
         
         if F^hcode_est_adresse then
             code := F^machine.genReadIndirectMem(iv.getTaille());
-        else
-        
-            -- si la variable est un param de fonction i.e si elle est dans la tdsParam:
-            TODO    
-        
-            code := F^machine.genReadMem(F^machine.getCurrentDep(), iv.getTaille());
-            
-            
-            
+        else  
+            code := F^machine.genReadMem(dep - iv.getTaille(), iv.getTaille()); 
         end
         
         -- dep CurrentDep

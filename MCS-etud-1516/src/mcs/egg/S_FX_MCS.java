@@ -135,9 +135,36 @@ this.att_type=x_4.att_type;
   }
 private void action_gen_74(S_ES_MCS x_3, S_FX_MCS x_6) throws Exception {
 try {
+// locales
+INFO loc_i;
+INFOFONC loc_infofonc;
+TDS loc_tdsParam;
+TDS loc_parente;
 // instructions
 this.att_machine.addCurrentDep(3);
+loc_parente=this.att_tds.getParente();
+loc_i=this.att_tds.chercherGlobalement(this.att_ident);
+if (loc_i==null){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_not_found, MCSMessages.var_not_found,new Object[]{""+this.att_ident, ""+"null"});
+
+}
+
+if (loc_i instanceof INFOFONC ){
+loc_infofonc=((INFOFONC)loc_i);
+loc_tdsParam=loc_infofonc.getParams();
+if (loc_parente.compareTypeTo(loc_tdsParam)){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_call_nomatch, MCSMessages.call_nomatch,new Object[]{""+this.att_ident});
+
+}
+else {
 this.att_code=this.att_machine.genArgs(x_3.att_stds)+this.att_machine.genCall(this.att_ident);
+}
+}
+else {
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_wrong_typeFonc, MCSMessages.wrong_typeFonc,new Object[]{""+this.att_ident, ""+loc_i.getType()});
+
+
+}
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","FX -> paro ES parf #htds FX1 #type #gen ;"});
 }
   }
@@ -178,64 +205,64 @@ this.att_code=x_5.att_code;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_mult : // 1771
+      case LEX_MCS.token_mult : // 7547
         regle71 () ;
       break ;
-      case LEX_MCS.token_div : // 1772
+      case LEX_MCS.token_div : // 7548
         regle71 () ;
       break ;
-      case LEX_MCS.token_mod : // 1773
+      case LEX_MCS.token_mod : // 7549
         regle71 () ;
       break ;
-      case LEX_MCS.token_et : // 1774
+      case LEX_MCS.token_et : // 7550
         regle71 () ;
       break ;
-      case LEX_MCS.token_plus : // 1768
+      case LEX_MCS.token_plus : // 7544
         regle71 () ;
       break ;
-      case LEX_MCS.token_moins : // 1769
+      case LEX_MCS.token_moins : // 7545
         regle71 () ;
       break ;
-      case LEX_MCS.token_ou : // 1770
+      case LEX_MCS.token_ou : // 7546
         regle71 () ;
       break ;
-      case LEX_MCS.token_inf : // 1762
+      case LEX_MCS.token_inf : // 7538
         regle71 () ;
       break ;
-      case LEX_MCS.token_sup : // 1764
+      case LEX_MCS.token_sup : // 7540
         regle71 () ;
       break ;
-      case LEX_MCS.token_infeg : // 1763
+      case LEX_MCS.token_infeg : // 7539
         regle71 () ;
       break ;
-      case LEX_MCS.token_supeg : // 1765
+      case LEX_MCS.token_supeg : // 7541
         regle71 () ;
       break ;
-      case LEX_MCS.token_eg : // 1766
+      case LEX_MCS.token_eg : // 7542
         regle71 () ;
       break ;
-      case LEX_MCS.token_neg : // 1767
+      case LEX_MCS.token_neg : // 7543
         regle71 () ;
       break ;
-      case LEX_MCS.token_affect : // 1735
+      case LEX_MCS.token_affect : // 7511
         regle71 () ;
       break ;
-      case LEX_MCS.token_virg : // 1732
+      case LEX_MCS.token_virg : // 7508
         regle71 () ;
       break ;
-      case LEX_MCS.token_pv : // 1734
+      case LEX_MCS.token_pv : // 7510
         regle71 () ;
       break ;
-      case LEX_MCS.token_parf : // 1729
+      case LEX_MCS.token_parf : // 7505
         regle71 () ;
       break ;
-      case LEX_MCS.token_pt : // 1733
+      case LEX_MCS.token_pt : // 7509
         regle72 () ;
       break ;
-      case LEX_MCS.token_arrow : // 1760
+      case LEX_MCS.token_arrow : // 7536
         regle73 () ;
       break ;
-      case LEX_MCS.token_paro : // 1728
+      case LEX_MCS.token_paro : // 7504
         regle74 () ;
       break ;
       default :
