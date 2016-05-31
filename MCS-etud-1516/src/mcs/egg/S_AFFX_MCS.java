@@ -24,6 +24,7 @@ int [] sync= new int[0];
   boolean att_eval;
   String att_code;
   IMachine att_machine;
+  boolean att_hest_decl;
   LEX_MCS att_scanner;
   boolean att_code_est_adresse;
   DTYPE att_type;
@@ -67,11 +68,17 @@ try {
 // locales
 String loc_code;
 // instructions
-if (this.att_hcode_est_adresse){
-loc_code=this.att_hcode+x_3.att_code;
+if (this.att_hest_decl){
+loc_code=x_3.att_code;
 }
 else {
-loc_code=this.att_hcode+x_3.att_code;
+if (this.att_hcode_est_adresse){
+loc_code=x_3.att_code+this.att_machine.genWriteIndirectMem(this.att_htype.getTaille());
+}
+else {
+loc_code=this.att_machine.genWriteMem(this.att_machine.getCurrentDep(), this.att_htype.getTaille());
+}
+loc_code=loc_code+this.att_machine.genVar(this.att_htype.getTaille());
 }
 this.att_code=loc_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","AFFX -> affect A #type #gen ;"});
@@ -103,16 +110,16 @@ this.att_type=this.att_htype;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_affect : // 10092
+      case LEX_MCS.token_affect : // 9381
         regle35 () ;
       break ;
-      case LEX_MCS.token_pv : // 10091
+      case LEX_MCS.token_pv : // 9380
         regle36 () ;
       break ;
-      case LEX_MCS.token_virg : // 10089
+      case LEX_MCS.token_virg : // 9378
         regle36 () ;
       break ;
-      case LEX_MCS.token_parf : // 10086
+      case LEX_MCS.token_parf : // 9375
         regle36 () ;
       break ;
       default :

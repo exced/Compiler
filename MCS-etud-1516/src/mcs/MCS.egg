@@ -33,7 +33,11 @@ inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX
 inh tds_asm : TDS for ASM;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
                             SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
-syn stds    : TDS for PARFS,PARFSX,ES,ESX;                                                    
+syn stds    : TDS for PARFS,PARFSX,ES,ESX;      
+
+
+-- INST
+inh hest_decl : BOOLEAN for AFFX;                                              
                             
 -- GC                            
 syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
@@ -525,6 +529,8 @@ do
     -- transmission de l adresse
     AFFX^hcode_est_adresse := false;
     AFFX^hcode := "";
+    
+    AFFX^hest_decl := true;
 end
 }
 #tds {
@@ -665,6 +671,8 @@ do
     -- type pour permettre le controle d'erreur au moment de l'affectation
     AFFX^htype := A^type;
     AFFX^hcode := A^code;
+    
+    AFFX^hest_decl := false;
 end
 }
 #gen {
@@ -695,14 +703,18 @@ end
 local 
   code : STRING;
 do  
-    TODO gerer si hcode_est_adresse ou pas
-    if AFFX^hest_declare then
-        code := AFFX^hcode +A^code ;
+    if AFFX^hest_decl then
+        code := A^code;
     else
-        code := AFFX^hcode + A^code AFFX^machine.genWriteMem;
-    end 
-      AFFX^code := code;
-  end
+        if AFFX^hcode_est_adresse then
+            code := A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+        else
+            code := AFFX^machine.genWriteMem(AFFX^machine.getCurrentDep(), AFFX^htype.getTaille());    
+        end
+        code := code + AFFX^machine.genVar(AFFX^htype.getTaille()); 
+    end
+    AFFX^code := code;
+end  
 }
 
 ------------------------------------------------------------------------
@@ -716,7 +728,7 @@ end
 }
 #gen {
 do
-    AFFX^code := AFFX^hcode;
+    AFFX^code := AFFX^hcode ;
 end
 }
 
