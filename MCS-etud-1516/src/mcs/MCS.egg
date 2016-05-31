@@ -707,11 +707,10 @@ do
         code := A^code;
     else
         if AFFX^hcode_est_adresse then
-            code := A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+            code := AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
         else
             code := AFFX^machine.genWriteMem(AFFX^machine.getCurrentDep(), AFFX^htype.getTaille());    
         end
-        code := code + AFFX^machine.genVar(AFFX^htype.getTaille()); 
     end
     AFFX^code := code;
 end  
