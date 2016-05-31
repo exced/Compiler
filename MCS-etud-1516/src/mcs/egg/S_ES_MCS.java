@@ -55,7 +55,7 @@ x_4.att_tds=glob_76_tds;
 private void action_tds_75() throws Exception {
 try {
 // instructions
-this.att_stds= new TDS(null);
+this.att_stds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","ES -> #tds ;"});
 }
   }
@@ -78,37 +78,37 @@ this.att_stds=x_4.att_stds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 10977
+      case LEX_MCS.token_parf : // 13307
         regle75 () ;
       break ;
-      case LEX_MCS.token_entier : // 11024
+      case LEX_MCS.token_entier : // 13354
         regle76 () ;
       break ;
-      case LEX_MCS.token_chaine : // 11026
+      case LEX_MCS.token_chaine : // 13356
         regle76 () ;
       break ;
-      case LEX_MCS.token_caractere : // 11025
+      case LEX_MCS.token_caractere : // 13355
         regle76 () ;
       break ;
-      case LEX_MCS.token_plus : // 11016
+      case LEX_MCS.token_plus : // 13346
         regle76 () ;
       break ;
-      case LEX_MCS.token_moins : // 11017
+      case LEX_MCS.token_moins : // 13347
         regle76 () ;
       break ;
-      case LEX_MCS.token_non : // 11023
+      case LEX_MCS.token_non : // 13353
         regle76 () ;
       break ;
-      case LEX_MCS.token_null : // 11009
+      case LEX_MCS.token_null : // 13339
         regle76 () ;
       break ;
-      case LEX_MCS.token_paro : // 10976
+      case LEX_MCS.token_paro : // 13306
         regle76 () ;
       break ;
-      case LEX_MCS.token_mult : // 11019
+      case LEX_MCS.token_mult : // 13349
         regle76 () ;
       break ;
-      case LEX_MCS.token_ident : // 11027
+      case LEX_MCS.token_ident : // 13357
         regle76 () ;
       break ;
       default :

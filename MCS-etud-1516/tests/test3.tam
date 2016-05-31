@@ -10,7 +10,13 @@ _inc:
 	RETURN (2) 1
 _main:
 	LOADL 2
-null	STORE(1) 10[LB]
+	LOADL 0
+	LOADL 1
+; Appel a inc
+	CALL(SB) _inc
+	PUSH 1
+	LOADL 4
+	STORE(1) 10[LB]
 	LOADL 0
 	RETURN (0) 1
 ; Appel a main

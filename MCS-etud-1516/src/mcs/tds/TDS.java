@@ -85,7 +85,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
 			if (it.hasNext()){
-				t = (DTYPE) it.next();
+				t = ((INFO) it.next()).getType();
 				b = b && e.getValue().getType().compareTo(t);
 			}else{
 				b = false;

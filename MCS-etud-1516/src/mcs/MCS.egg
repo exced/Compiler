@@ -707,9 +707,9 @@ do
         code := A^code;
     else
         if AFFX^hcode_est_adresse then
-            code := AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+            code := A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
         else
-            code := AFFX^machine.genWriteMem(AFFX^machine.getCurrentDep(), AFFX^htype.getTaille());    
+            code := A^code + AFFX^machine.genWriteMem(AFFX^machine.getCurrentDep(), AFFX^htype.getTaille());    
         end
     end
     AFFX^code := code;
@@ -727,7 +727,11 @@ end
 }
 #gen {
 do
-    AFFX^code := AFFX^hcode ;
+    if AFFX^hest_decl then
+        AFFX^code := AFFX^hcode + AFFX^machine.genVar(AFFX^htype.getTaille());    
+    else
+        AFFX^code := AFFX^hcode;
+    end    
 end
 }
 
@@ -1341,10 +1345,15 @@ end
 
 ------------------------------------------------------------------------
 -- appel de sous-programme
-FX ->   paro ES parf #htds FX #type #gen;
+FX ->  #tds paro ES parf #htds FX #type #gen;
+#tds {
+do
+    ES^tds := new TDS(nil);
+end
+}
 #htds {
 do
-    FX1^tds := ES^stds;
+    FX1^tds := FX^tds;
 end
 }
 #type {
@@ -1357,13 +1366,12 @@ local
     i:INFO;
     infofonc : INFOFONC;
     tdsParam : TDS;
-    parente : TDS;
 do
+write "Appel fonction : " + FX^ident + "\n";
+
     -- appel du sous-programme à partir de l'étiquette
     -- deplacement de currentDep de 3
-    FX^machine.addCurrentDep(3);
-    
-    parente := FX^tds.getParente();
+    FX^machine.addCurrentDep(3); 
     
     i := FX^tds.chercherGlobalement(FX^ident);
     
@@ -1375,8 +1383,9 @@ do
     with INFOFONC then
         infofonc := i;
         tdsParam := infofonc.getParams();
-        if parente.compareTypeTo(tdsParam) then
-            error(call_nomatch, FX^ident);
+        
+        if ~ES^stds.compareTypeTo(tdsParam) then
+            error(call_nomatch, FX^ident);  
         else
             FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident) ;
         end
@@ -1391,7 +1400,7 @@ end
 ES -> #tds;
 #tds {
 do
-    ES^stds := new TDS(nil);
+    ES^stds := ES^tds;
 end
 }
 

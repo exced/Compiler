@@ -73,10 +73,10 @@ loc_code=x_3.att_code;
 }
 else {
 if (this.att_hcode_est_adresse){
-loc_code=this.att_machine.genWriteIndirectMem(this.att_htype.getTaille());
+loc_code=x_3.att_code+this.att_machine.genWriteIndirectMem(this.att_htype.getTaille());
 }
 else {
-loc_code=this.att_machine.genWriteMem(this.att_machine.getCurrentDep(), this.att_htype.getTaille());
+loc_code=x_3.att_code+this.att_machine.genWriteMem(this.att_machine.getCurrentDep(), this.att_htype.getTaille());
 }
 }
 this.att_code=loc_code;
@@ -94,7 +94,12 @@ x_3.att_tds=this.att_tds;
 private void action_gen_36() throws Exception {
 try {
 // instructions
+if (this.att_hest_decl){
+this.att_code=this.att_hcode+this.att_machine.genVar(this.att_htype.getTaille());
+}
+else {
 this.att_code=this.att_hcode;
+}
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","AFFX -> #type #gen ;"});
 }
   }
@@ -109,16 +114,16 @@ this.att_type=this.att_htype;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_affect : // 10983
+      case LEX_MCS.token_affect : // 13313
         regle35 () ;
       break ;
-      case LEX_MCS.token_pv : // 10982
+      case LEX_MCS.token_pv : // 13312
         regle36 () ;
       break ;
-      case LEX_MCS.token_virg : // 10980
+      case LEX_MCS.token_virg : // 13310
         regle36 () ;
       break ;
-      case LEX_MCS.token_parf : // 10977
+      case LEX_MCS.token_parf : // 13307
         regle36 () ;
       break ;
       default :
