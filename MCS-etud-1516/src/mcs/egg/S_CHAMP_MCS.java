@@ -21,8 +21,10 @@ LEX_MCS scanner;
 int [] sync= new int[0];
   TDS att_tds;
   boolean att_eval;
-  LCHAMPS att_champs;
+  LCHAMPS att_hchamps;
   LEX_MCS att_scanner;
+  DTYPE att_type;
+  String att_sident;
   private void regle23() throws Exception {
 
     //declaration
@@ -45,17 +47,9 @@ x_2.att_tds=this.att_tds;
   }
 private void action_champ_23(S_TYPE_MCS x_2, T_MCS x_3) throws Exception {
 try {
-// locales
-CHAMP loc_c;
 // instructions
-loc_c=this.att_champs.chercherChamp(x_3.att_txt);
-if (loc_c!=null){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_champ_declared, MCSMessages.champ_declared,new Object[]{""+x_3.att_txt, ""+this.att_champs});
-
-}
-else {
-this.att_champs.inserer( new CHAMP(x_3.att_txt, x_2.att_type, this.att_champs.getCurrentDep()));
-}
+this.att_type=x_2.att_type;
+this.att_sident=x_3.att_txt;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#champ","CHAMP -> TYPE ident pv #champ ;"});
 }
   }

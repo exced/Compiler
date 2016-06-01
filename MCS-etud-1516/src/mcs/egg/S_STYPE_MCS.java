@@ -120,7 +120,7 @@ private void action_ch_20(S_CHAMPS_MCS x_5) throws Exception {
 try {
 // instructions
 glob_20_lc= new LCHAMPS();
-x_5.att_champs=glob_20_lc;
+x_5.att_hchamps=glob_20_lc;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#ch","STYPE -> struct aco #ch CHAMPS acf #type ;"});
 }
   }
@@ -141,19 +141,19 @@ this.att_type= new DTYPEImpl("int", 1);
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 759
+      case LEX_MCS.token_void : // 5743
         regle16 () ;
       break ;
-      case LEX_MCS.token_int : // 761
+      case LEX_MCS.token_int : // 5745
         regle17 () ;
       break ;
-      case LEX_MCS.token_char : // 762
+      case LEX_MCS.token_char : // 5746
         regle18 () ;
       break ;
-      case LEX_MCS.token_identc : // 801
+      case LEX_MCS.token_identc : // 5785
         regle19 () ;
       break ;
-      case LEX_MCS.token_struct : // 763
+      case LEX_MCS.token_struct : // 5747
         regle20 () ;
       break ;
       default :

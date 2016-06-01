@@ -18,8 +18,8 @@ public class LCHAMPS extends ArrayList<CHAMP> {
 		for(CHAMP ch : this){
 			if(ch.getNom().equals(nom)){
 				c = ch;
+				break;
 			}
-			break;
 		}
 		return c;
 	}

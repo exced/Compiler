@@ -1210,6 +1210,7 @@ do
 end
 }
 
+-- cast
 ------------------------------------------------------------------------
 F ->  paro TYPE parf  F  #type #gen;
 #type {
@@ -1236,7 +1237,7 @@ F -> mult F #type #addr;
 #type {
 do
     match F1^type with POINTEUR then
-        F^type := F1^type;
+        F^type := F1^type;      
         F^code_est_adresse := true;
     else
         error(not_pointeur, F1^type.getNom());
@@ -1322,29 +1323,46 @@ FX -> #gen;
 #gen {
 do
   FX^type := FX^htype;
-  FX^code := "";
+  
+  FX^code := FX^hcode;
 end
 }
 
 ------------------------------------------------------------------------
 -- acces champ
 FX ->   pt  ident #a FX #gen;
-#gen {
-do
-  FX^type := FX1^type;
-  FX^code :=FX1^code;
-end
-}
 #a {
 local
  s : STRUCT ;
  c : CHAMP;
  lc : LCHAMPS;
 do
-
+    match FX^htype with
+    STRUCT then
+        s := FX^htype;
+        lc := s.getChamps();
+        c := lc.chercherChamp(ident^txt);
+        if c = nil then
+            error(champ_not_found, lc, ident^txt);
+        else
+            FX1^htype := c.getType();
+            
+            FX1^hcode := FX^hcode + FX^machine.genAdrField(c.getDep());
+        end    
+    else
+        error(type_not_struct, FX^htype.getNom());
+    end    
 
 end
 }
+#gen {
+do
+  FX^type := FX1^type;
+  
+  FX^code :=FX1^code;
+end
+}
+
 
 ------------------------------------------------------------------------
 -- acces champ pointeur

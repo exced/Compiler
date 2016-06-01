@@ -21,52 +21,86 @@ LEX_MCS scanner;
 int [] sync= new int[0];
   TDS att_tds;
   boolean att_eval;
+  LCHAMPS att_hchamps;
   LCHAMPS att_champs;
   LEX_MCS att_scanner;
   private void regle22() throws Exception {
 
     //declaration
     S_CHAMP_MCS x_2 = new S_CHAMP_MCS(scanner,att_eval) ;
-    S_CHAMPS_MCS x_3 = new S_CHAMPS_MCS(scanner,att_eval) ;
+    S_CHAMPS_MCS x_4 = new S_CHAMPS_MCS(scanner,att_eval) ;
     //appel
-if  (att_eval)      action_auto_inh_22(x_2, x_3);
+if  (att_eval)      action_auto_inh_22(x_2, x_4);
     x_2.analyser() ;
-    x_3.analyser() ;
+if  (att_eval)      action_hch_22(x_2, x_4);
+    x_4.analyser() ;
+if  (att_eval)      action_ch_22(x_2, x_4);
   }
   private void regle21() throws Exception {
 
     //declaration
     //appel
+if  (att_eval)      action_ch_21();
   }
-private void action_auto_inh_22(S_CHAMP_MCS x_2, S_CHAMPS_MCS x_3) throws Exception {
+private void action_auto_inh_22(S_CHAMP_MCS x_2, S_CHAMPS_MCS x_4) throws Exception {
 try {
 // instructions
 x_2.att_tds=this.att_tds;
-x_3.att_tds=this.att_tds;
-x_2.att_champs=this.att_champs;
-x_3.att_champs=this.att_champs;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","CHAMPS -> CHAMP CHAMPS1 ;"});
+x_4.att_tds=this.att_tds;
+x_2.att_hchamps=this.att_hchamps;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","CHAMPS -> CHAMP #hch CHAMPS1 #ch ;"});
+}
+  }
+private void action_hch_22(S_CHAMP_MCS x_2, S_CHAMPS_MCS x_4) throws Exception {
+try {
+// locales
+CHAMP loc_c;
+// instructions
+loc_c=this.att_hchamps.chercherChamp(x_2.att_sident);
+if (loc_c!=null){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_champ_declared, MCSMessages.champ_declared,new Object[]{""+x_2.att_sident, ""+this.att_hchamps});
+
+}
+else {
+x_2.att_hchamps.inserer( new CHAMP(x_2.att_sident, x_2.att_type, this.att_hchamps.getCurrentDep()));
+}
+x_4.att_hchamps=this.att_hchamps;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#hch","CHAMPS -> CHAMP #hch CHAMPS1 #ch ;"});
+}
+  }
+private void action_ch_22(S_CHAMP_MCS x_2, S_CHAMPS_MCS x_4) throws Exception {
+try {
+// instructions
+this.att_champs=x_4.att_champs;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#ch","CHAMPS -> CHAMP #hch CHAMPS1 #ch ;"});
+}
+  }
+private void action_ch_21() throws Exception {
+try {
+// instructions
+this.att_champs=this.att_hchamps;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#ch","CHAMPS -> #ch ;"});
 }
   }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 752
+      case LEX_MCS.token_acf : // 5736
         regle21 () ;
       break ;
-      case LEX_MCS.token_void : // 759
+      case LEX_MCS.token_void : // 5743
         regle22 () ;
       break ;
-      case LEX_MCS.token_int : // 761
+      case LEX_MCS.token_int : // 5745
         regle22 () ;
       break ;
-      case LEX_MCS.token_char : // 762
+      case LEX_MCS.token_char : // 5746
         regle22 () ;
       break ;
-      case LEX_MCS.token_identc : // 801
+      case LEX_MCS.token_identc : // 5785
         regle22 () ;
       break ;
-      case LEX_MCS.token_struct : // 763
+      case LEX_MCS.token_struct : // 5747
         regle22 () ;
       break ;
       default :
