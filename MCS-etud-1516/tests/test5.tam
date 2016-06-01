@@ -1,13 +1,13 @@
-; Generated code for tests/test4.mcs.
+; Generated code for tests/test5.mcs.
 ; Do not modify by hand
 
 _main:
-	PUSH 2
-	LOADL 3
-	LOADL 1
+	PUSH 1
+nullnullnullnull	LOADL 1
+	SUBR MAlloc
+	LOADI(1)
+	LOADL 666
 	SUBR IAdd
-	STORE(1) 5[LB]
-	LOADL 5
 	STORE(1) 5[LB]
 	LOADL 0
 	RETURN (0) 1

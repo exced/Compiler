@@ -96,10 +96,10 @@ this.att_code=this.att_machine.genVar(glob_5_type.getTaille());
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_pv : // 5739
+      case LEX_MCS.token_pv : // 23037
         regle5 () ;
       break ;
-      case LEX_MCS.token_paro : // 5733
+      case LEX_MCS.token_paro : // 23031
         regle6 () ;
       break ;
       default :

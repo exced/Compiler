@@ -70,13 +70,13 @@ this.att_code_asm=x_2.att_txt;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_ASM.token_nb : // 162
+      case LEX_ASM.token_nb : // 213
         regle11 () ;
       break ;
-      case LEX_ASM.token_chaine : // 160
+      case LEX_ASM.token_chaine : // 211
         regle12 () ;
       break ;
-      case LEX_ASM.token_car : // 161
+      case LEX_ASM.token_car : // 212
         regle13 () ;
       break ;
       default :

@@ -57,7 +57,7 @@ inh hbloc_est_fonction : BOOLEAN for BLOC;
 
 
 
-
+sugar malloc is "malloc";
 --terminals
 space separateur is  "[\r\n\t ]+";     
 space comm is  "\/\/[^\n]*\n";
@@ -570,7 +570,7 @@ end
 do
     -- controle de type
    if ~TYPE^type.compareTo(AFFX^type) then
-      error(B_11, TYPE^type, AFFX^type);
+      error(affect_notCompatible, TYPE^type.getNom(), AFFX^type.getNom());
    end
    
 end
@@ -774,6 +774,24 @@ do
     A^code := R^code + AX^code;
 
     A^code_est_adresse := AX^code_est_adresse;   
+end
+}
+
+------------------------------------------------------------------------
+-- allocation memoire d un pointeur
+A -> malloc paro E parf #gen;
+#gen {
+do
+    if ~E^type.compareTo(new DTYPEImpl("int",1)) then
+        error(malloc_need_int, E^type.getNom());
+    else
+        A^type := new DTYPEImpl("void",0);
+        A^code_est_adresse := false;
+        
+        
+        A^code := E^code + A^machine.genOp("MAlloc");
+    end
+     
 end
 }
 
@@ -1279,36 +1297,37 @@ do
     
     if i = null then
         error(var_not_found, ident^txt, "null");
-    end
-
-    match i 
-    with INFOVAR then
-        iv := i;
-        t := iv.getType();
-        FX^hcode := F^machine.genAdr(iv.getTaille());
-        F^code_est_adresse := false;
-        
-        if F^hcode_est_adresse then
-            code := F^machine.genReadIndirectMem(iv.getTaille());
-        else
-            if estParam then
-                dep := 2 - iv.getDep();
-            else
-                dep := F^machine.getCurrentDep();
-            end
-            code := F^machine.genReadMem(dep - iv.getTaille() , iv.getTaille()); 
-        end
-        
-    with INFOFONC then
-       infofonc := i;  
-       t := infofonc.getType();
-       FX^hcode := "";
-       F^code_est_adresse := false;
-       code := "";
     else
-        error(type_unknown, ident^txt, i.getType());
-    end
-    FX^htype := t;
+        match i 
+        with INFOVAR then
+            iv := i;
+            t := iv.getType();
+            FX^hcode := "";
+            F^code_est_adresse := false;
+        
+            if F^hcode_est_adresse then
+                code := F^machine.genReadIndirectMem(iv.getTaille());
+            else
+                if estParam then
+                    -- les param sont en dessous de LB
+                    dep := 2 - iv.getDep();
+                else
+                    dep := F^machine.getCurrentDep();
+                end
+                code := F^machine.genReadMem(dep - iv.getTaille() , iv.getTaille()); 
+            end
+        
+        with INFOFONC then
+            infofonc := i;  
+            t := infofonc.getType();
+            FX^hcode := "";
+            F^code_est_adresse := false;
+            code := "";
+        else
+            error(type_unknown, ident^txt, i.getType());
+        end
+        FX^htype := t;
+    end 
 end
 }  
 #gen{
@@ -1529,17 +1548,22 @@ end
 --ENTITE -> namespace identc aco ENTITES acf ;
 ---- donne l acces au contenu du 'namespace'
 --ENTITE -> using identc IDC pv ;
---IDC -> ;
---IDC -> pt identc IDC ;
+
+IDC -> ;
+
+IDC -> pt identc IDC ;
+
 ---- definition d'une classe (peut etre en dehors d'un namespace)
 --ENTITE -> ACCES class identc HERITAGE aco DEFS acf ;
+
 ---- acces 
---ACCES -> public;
---ACCES -> private;
---ACCES -> ;
+ACCES -> public;
+ACCES -> private;
+ACCES -> ;
+
 ---- heritage
---HERITAGE -> ;
---HERITAGE -> dpts identc IDC ;
+HERITAGE -> ;
+HERITAGE -> dpts identc IDC ;
 ---- membres d'une classe
 --DEFS -> ;
 --DEFS ->  ACCES DEF DEFS ;
@@ -1551,8 +1575,8 @@ end
 --BASE -> dpts base paro ES parf  ;
 ---- Mode de passage pour les fonctions et méthodes : rien : D, ref : D/R, out : R
 --PARF ->  MODE TYPE ident ;
---MODE -> ref ;
---MODE -> out ; 
+MODE -> ref ;
+MODE -> out ; 
 --F -> true;
 --F -> false;
 --F -> this FX;

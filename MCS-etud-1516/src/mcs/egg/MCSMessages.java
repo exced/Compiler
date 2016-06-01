@@ -15,7 +15,6 @@ public class MCSMessages extends NLS {
   return RESOURCE_BUNDLE;
   }		
 
-  public static  String B_11;
   public static  String MCS_expected_eof;
   public static  String call_nomatch;
   public static  String champ_not_found;
@@ -36,6 +35,7 @@ public class MCSMessages extends NLS {
   public static  String NO_MACH;
   public static  String not_int;
   public static  String not_pointeur;
+  public static  String malloc_need_int;
   public static  String MCS_unexpected_token;
   public static  String affect_notCompatible;
   public static  String B_12;

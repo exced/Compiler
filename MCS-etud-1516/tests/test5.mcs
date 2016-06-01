@@ -1,0 +1,12 @@
+
+
+// point d'entree du programme.
+int main(){
+
+    int a;
+    // declaration d'un pointeur et allocation de la zone pointee
+    int *m = (int *)malloc(1);
+    a = *m +666;
+    
+    return 0;
+}

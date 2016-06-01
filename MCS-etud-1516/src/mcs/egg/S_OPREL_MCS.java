@@ -24,20 +24,12 @@ int [] sync= new int[0];
   IMachine att_machine;
   LEX_MCS att_scanner;
   DTYPE att_type;
-  private void regle40() throws Exception {
-
-    //declaration
-    T_MCS x_2 = new T_MCS(scanner ) ;
-    //appel
-    x_2.analyser(LEX_MCS.token_inf);
-if  (att_eval)      action_type_40();
-  }
   private void regle41() throws Exception {
 
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_sup);
+    x_2.analyser(LEX_MCS.token_inf);
 if  (att_eval)      action_type_41();
   }
   private void regle42() throws Exception {
@@ -45,7 +37,7 @@ if  (att_eval)      action_type_41();
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_infeg);
+    x_2.analyser(LEX_MCS.token_sup);
 if  (att_eval)      action_type_42();
   }
   private void regle43() throws Exception {
@@ -53,7 +45,7 @@ if  (att_eval)      action_type_42();
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_supeg);
+    x_2.analyser(LEX_MCS.token_infeg);
 if  (att_eval)      action_type_43();
   }
   private void regle44() throws Exception {
@@ -61,7 +53,7 @@ if  (att_eval)      action_type_43();
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_eg);
+    x_2.analyser(LEX_MCS.token_supeg);
 if  (att_eval)      action_type_44();
   }
   private void regle45() throws Exception {
@@ -69,10 +61,26 @@ if  (att_eval)      action_type_44();
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_neg);
+    x_2.analyser(LEX_MCS.token_eg);
 if  (att_eval)      action_type_45();
   }
+  private void regle46() throws Exception {
+
+    //declaration
+    T_MCS x_2 = new T_MCS(scanner ) ;
+    //appel
+    x_2.analyser(LEX_MCS.token_neg);
+if  (att_eval)      action_type_46();
+  }
 private void action_type_45() throws Exception {
+try {
+// instructions
+this.att_type= new DTYPEImpl("OPRELEG", 1);
+this.att_code=this.att_machine.genOp("IEq");
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> eg #type ;"});
+}
+  }
+private void action_type_46() throws Exception {
 try {
 // instructions
 this.att_type= new DTYPEImpl("OPRELNEG", 1);
@@ -83,36 +91,20 @@ this.att_code=this.att_machine.genOp("INeq");
 private void action_type_43() throws Exception {
 try {
 // instructions
-this.att_type= new DTYPEImpl("OPRELSUPEG", 1);
-this.att_code=this.att_machine.genOp("IGeq");
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> supeg #type ;"});
-}
-  }
-private void action_type_44() throws Exception {
-try {
-// instructions
-this.att_type= new DTYPEImpl("OPRELEG", 1);
-this.att_code=this.att_machine.genOp("IEq");
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> eg #type ;"});
-}
-  }
-private void action_type_41() throws Exception {
-try {
-// instructions
-this.att_type= new DTYPEImpl("OPRELSUP", 1);
-this.att_code=this.att_machine.genOp("IGtr");
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> sup #type ;"});
-}
-  }
-private void action_type_42() throws Exception {
-try {
-// instructions
 this.att_type= new DTYPEImpl("OPRELINFEG", 1);
 this.att_code=this.att_machine.genOp("ILeq");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> infeg #type ;"});
 }
   }
-private void action_type_40() throws Exception {
+private void action_type_44() throws Exception {
+try {
+// instructions
+this.att_type= new DTYPEImpl("OPRELSUPEG", 1);
+this.att_code=this.att_machine.genOp("IGeq");
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> supeg #type ;"});
+}
+  }
+private void action_type_41() throws Exception {
 try {
 // instructions
 this.att_type= new DTYPEImpl("OPRELINF", 1);
@@ -120,26 +112,34 @@ this.att_code=this.att_machine.genOp("ILss");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> inf #type ;"});
 }
   }
+private void action_type_42() throws Exception {
+try {
+// instructions
+this.att_type= new DTYPEImpl("OPRELSUP", 1);
+this.att_code=this.att_machine.genOp("IGtr");
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPREL -> sup #type ;"});
+}
+  }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_inf : // 5767
-        regle40 () ;
-      break ;
-      case LEX_MCS.token_sup : // 5769
+      case LEX_MCS.token_inf : // 23065
         regle41 () ;
       break ;
-      case LEX_MCS.token_infeg : // 5768
+      case LEX_MCS.token_sup : // 23067
         regle42 () ;
       break ;
-      case LEX_MCS.token_supeg : // 5770
+      case LEX_MCS.token_infeg : // 23066
         regle43 () ;
       break ;
-      case LEX_MCS.token_eg : // 5771
+      case LEX_MCS.token_supeg : // 23068
         regle44 () ;
       break ;
-      case LEX_MCS.token_neg : // 5772
+      case LEX_MCS.token_eg : // 23069
         regle45 () ;
+      break ;
+      case LEX_MCS.token_neg : // 23070
+        regle46 () ;
       break ;
       default :
                scanner._interrompre(IProblem.Syntax, scanner.getBeginLine(), IMCSMessages.id_MCS_unexpected_token,MCSMessages.MCS_unexpected_token,new String[]{scanner.fenetre[0].getNom()});

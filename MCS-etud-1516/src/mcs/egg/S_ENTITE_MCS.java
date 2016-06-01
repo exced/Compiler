@@ -24,19 +24,19 @@ int [] sync= new int[0];
   String att_code;
   IMachine att_machine;
   LEX_MCS att_scanner;
-  private void regle79() throws Exception {
+  private void regle80() throws Exception {
 
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     ASM x_4 = new ASM(scanner.getReporter(), scanner.contexte);
     //appel
     x_2.analyser(LEX_MCS.token_asm);
-if  (att_eval)      action_tds_79(x_4);
+if  (att_eval)      action_tds_80(x_4);
     x_4.scanner.setSource(scanner) ;
     x_4.set_eval(true) ;
     x_4.compile() ;
       scanner.setSource(x_4.scanner) ;
-if  (att_eval)      action_gen_79(x_4);
+if  (att_eval)      action_gen_80(x_4);
   }
   private void regle3() throws Exception {
 
@@ -68,7 +68,7 @@ if  (att_eval)      action_decl_4(x_2, x_3, x_5);
     x_5.analyser() ;
 if  (att_eval)      action_gen_4(x_2, x_3, x_5);
   }
-private void action_gen_79(ASM x_4) throws Exception {
+private void action_gen_80(ASM x_4) throws Exception {
 try {
 // instructions
 this.att_code=x_4.att_code_asm;
@@ -100,13 +100,6 @@ x_5.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","ENTITE -> TYPE ident #decl DECL #gen ;"});
 }
   }
-private void action_tds_79(ASM x_4) throws Exception {
-try {
-// instructions
-x_4.att_tds_asm=null;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","ENTITE -> asm #tds ASM #gen ;"});
-}
-  }
 private void action_auto_inh_3(S_TYPE_MCS x_3, T_MCS x_4) throws Exception {
 try {
 // instructions
@@ -120,6 +113,13 @@ try {
 x_5.att_ident=x_3.att_txt;
 x_5.att_htype=x_2.att_type;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#decl","ENTITE -> TYPE ident #decl DECL #gen ;"});
+}
+  }
+private void action_tds_80(ASM x_4) throws Exception {
+try {
+// instructions
+x_4.att_tds_asm=null;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","ENTITE -> asm #tds ASM #gen ;"});
 }
   }
 private void action_gen_4(S_TYPE_MCS x_2, T_MCS x_3, S_DECL_MCS x_5) throws Exception {
@@ -139,26 +139,26 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 5748
+      case LEX_MCS.token_typedef : // 23046
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 5743
+      case LEX_MCS.token_void : // 23041
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 5745
+      case LEX_MCS.token_int : // 23043
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 5746
+      case LEX_MCS.token_char : // 23044
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 5785
+      case LEX_MCS.token_identc : // 23083
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 5747
+      case LEX_MCS.token_struct : // 23045
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 5744
-        regle79 () ;
+      case LEX_MCS.token_asm : // 23042
+        regle80 () ;
       break ;
       default :
                scanner._interrompre(IProblem.Syntax, scanner.getBeginLine(), IMCSMessages.id_MCS_unexpected_token,MCSMessages.MCS_unexpected_token,new String[]{scanner.fenetre[0].getNom()});
