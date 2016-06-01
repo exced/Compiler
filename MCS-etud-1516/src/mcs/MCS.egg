@@ -22,10 +22,10 @@ inh machine : IMachine for
 
 -- IDENT
 inh ident   : STRING for DECL, FONCTION,FX;
-syn sident  : STRING for PARF;
+syn sident  : STRING for PARF, CHAMP;
 
 -- TYPE
-syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
+syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,CHAMP,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
 inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX;
 
 
@@ -44,7 +44,8 @@ syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, 
 inh hcode   : STRING for AFFX,AX,RX,FX,TX;
 syn code_asm : STRING for ASM;
 
-inh champs : LCHAMPS for CHAMPS, CHAMP;
+inh hchamps : LCHAMPS for CHAMPS, CHAMP;
+syn champs : LCHAMPS for CHAMPS;
 
 -- ADRESSE
 syn code_est_adresse : BOOLEAN for  AFFX,F, A,AX,R,RX,T,TX,E ;
@@ -453,7 +454,7 @@ global
 #ch {
 do
   lc := new LCHAMPS();
-  CHAMPS^champs := lc;
+  CHAMPS^hchamps := lc;
 end
 }
 #type {
@@ -463,26 +464,45 @@ end
 }
 
 ------------------------------------------------------------------------
-CHAMPS -> ;
+CHAMPS -> #ch;
+#ch {
+do
+    CHAMPS^champs := CHAMPS^hchamps;
+end
+}
 
 ------------------------------------------------------------------------
 -- un nom de champ commence par une minuscule
-CHAMPS ->  CHAMP CHAMPS ;
+CHAMPS ->  CHAMP #hch CHAMPS #ch;
+#hch {
+    local
+    c : CHAMP ;
+do
+    -- insertion
+    c := CHAMPS^hchamps.chercherChamp(CHAMP^sident);
+    if c /= nil then
+        error(champ_declared, CHAMP^sident, CHAMPS^hchamps);
+    else    
+        CHAMP^hchamps.inserer(new CHAMP(CHAMP^sident, CHAMP^type, CHAMPS^hchamps.getCurrentDep()));
+    end  
+    
+    -- transmission
+    CHAMPS1^hchamps := CHAMPS^hchamps;
+end
+}
+#ch {
+do
+    CHAMPS^champs := CHAMPS1^champs;
+end
+}
 
 ------------------------------------------------------------------------
 CHAMP -> TYPE ident pv #champ;
 #champ {
- local
-  c : CHAMP ;
- do
-    
-    c := CHAMP^champs.chercherChamp(ident^txt);
-    if c /= nil then
-        error(champ_declared, ident^txt, CHAMP^champs);
-    else    
-        CHAMP^champs.inserer(new CHAMP(ident^txt, TYPE^type, CHAMP^champs.getCurrentDep()));
-    end    
- end
+do
+    CHAMP^type := TYPE^type;
+    CHAMP^sident := ident^txt;
+end
 }
 
 ------------------------------------------------------------------------

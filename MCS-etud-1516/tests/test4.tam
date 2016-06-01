@@ -1,0 +1,14 @@
+; Generated code for tests/test4.mcs.
+; Do not modify by hand
+
+_main:
+	PUSH 1
+	LOADL 3
+	STOREI(1)
+	LOADL 3
+	STORE(1) 4[LB]
+	LOADL 0
+	RETURN (0) 1
+; Appel a main
+	CALL(SB) _main
+	HALT
