@@ -3,7 +3,9 @@ int a;
 
 int inc(int b, int c){
 
-	int z = 3;
+	int z;
+	int j = b;
+	z = 18;
 	return b+c;
 }
 

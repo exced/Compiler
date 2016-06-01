@@ -3,9 +3,12 @@
 
 	PUSH 1
 _inc:
-	LOADL 3
-	LOAD(1) 0[LB]
+	PUSH 1
 	LOAD(1) -1[LB]
+	LOADL 18
+	STORE(1) 5[LB]
+	LOAD(1) -1[LB]
+	LOAD(1) -2[LB]
 	SUBR IAdd
 	RETURN (2) 1
 _main:
@@ -16,7 +19,7 @@ _main:
 	CALL(SB) _inc
 	PUSH 1
 	LOADL 4
-	STORE(1) 10[LB]
+	STORE(1) 6[LB]
 	LOADL 0
 	RETURN (0) 1
 ; Appel a main

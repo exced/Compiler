@@ -91,16 +91,16 @@ this.att_code=this.att_machine.genOp("BAnd");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_mult : // 13349
+      case LEX_MCS.token_mult : // 258
         regle55 () ;
       break ;
-      case LEX_MCS.token_div : // 13350
+      case LEX_MCS.token_div : // 259
         regle56 () ;
       break ;
-      case LEX_MCS.token_mod : // 13351
+      case LEX_MCS.token_mod : // 260
         regle57 () ;
       break ;
-      case LEX_MCS.token_et : // 13352
+      case LEX_MCS.token_et : // 261
         regle58 () ;
       break ;
       default :

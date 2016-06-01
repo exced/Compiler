@@ -38,9 +38,7 @@ public interface IMachine {
 	
 	public Register getST();
 	
-	public void saveLB(Register newLB);
-	
-	public void restoreLB();
+	public void depLB(int d);
 	
 	public int getCurrentDep();
 
