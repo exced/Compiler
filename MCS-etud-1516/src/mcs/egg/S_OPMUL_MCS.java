@@ -29,7 +29,7 @@ int [] sync= new int[0];
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_mult);
+    x_2.analyser(LEX_MCS.token_div);
 if  (att_eval)      action_type_56();
   }
   private void regle57() throws Exception {
@@ -37,7 +37,7 @@ if  (att_eval)      action_type_56();
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_div);
+    x_2.analyser(LEX_MCS.token_mod);
 if  (att_eval)      action_type_57();
   }
   private void regle58() throws Exception {
@@ -45,26 +45,18 @@ if  (att_eval)      action_type_57();
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_mod);
+    x_2.analyser(LEX_MCS.token_et);
 if  (att_eval)      action_type_58();
   }
-  private void regle59() throws Exception {
+  private void regle55() throws Exception {
 
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_et);
-if  (att_eval)      action_type_59();
+    x_2.analyser(LEX_MCS.token_mult);
+if  (att_eval)      action_type_55();
   }
 private void action_type_56() throws Exception {
-try {
-// instructions
-this.att_type= new DTYPEImpl("OPMULMULT", 1);
-this.att_code=this.att_machine.genOp("IMul");
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPMUL -> mult #type ;"});
-}
-  }
-private void action_type_57() throws Exception {
 try {
 // instructions
 this.att_type= new DTYPEImpl("OPMULDIV", 1);
@@ -72,7 +64,7 @@ this.att_code=this.att_machine.genOp("IDiv");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPMUL -> div #type ;"});
 }
   }
-private void action_type_58() throws Exception {
+private void action_type_57() throws Exception {
 try {
 // instructions
 this.att_type= new DTYPEImpl("OPMULMOD", 1);
@@ -80,7 +72,15 @@ this.att_code=this.att_machine.genOp("IMod");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPMUL -> mod #type ;"});
 }
   }
-private void action_type_59() throws Exception {
+private void action_type_55() throws Exception {
+try {
+// instructions
+this.att_type= new DTYPEImpl("OPMULMULT", 1);
+this.att_code=this.att_machine.genOp("IMul");
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","OPMUL -> mult #type ;"});
+}
+  }
+private void action_type_58() throws Exception {
 try {
 // instructions
 this.att_type= new DTYPEImpl("OPMULET", 1);
@@ -91,17 +91,17 @@ this.att_code=this.att_machine.genOp("BAnd");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_mult : // 23074
+      case LEX_MCS.token_mult : // 10311
+        regle55 () ;
+      break ;
+      case LEX_MCS.token_div : // 10312
         regle56 () ;
       break ;
-      case LEX_MCS.token_div : // 23075
+      case LEX_MCS.token_mod : // 10313
         regle57 () ;
       break ;
-      case LEX_MCS.token_mod : // 23076
+      case LEX_MCS.token_et : // 10314
         regle58 () ;
-      break ;
-      case LEX_MCS.token_et : // 23077
-        regle59 () ;
       break ;
       default :
                scanner._interrompre(IProblem.Syntax, scanner.getBeginLine(), IMCSMessages.id_MCS_unexpected_token,MCSMessages.MCS_unexpected_token,new String[]{scanner.fenetre[0].getNom()});

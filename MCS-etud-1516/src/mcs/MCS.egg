@@ -778,24 +778,6 @@ end
 }
 
 ------------------------------------------------------------------------
--- allocation memoire d un pointeur
-A -> malloc paro E parf #gen;
-#gen {
-do
-    if ~E^type.compareTo(new DTYPEImpl("int",1)) then
-        error(malloc_need_int, E^type.getNom());
-    else
-        A^type := new DTYPEImpl("void",0);
-        A^code_est_adresse := false;
-        
-        
-        A^code := E^code + A^machine.genOp("MAlloc");
-    end
-     
-end
-}
-
-------------------------------------------------------------------------
 AX -> OPREL R #type #gen;
 #type {
 do
@@ -1228,18 +1210,23 @@ do
 end
 }
 
--- cast
+
 ------------------------------------------------------------------------
+-- cast
 F ->  paro TYPE parf  F  #type #gen;
 #type {
-do
-    -- controle de type
-    if ~TYPE^type.compareTo(F1^type) then
-        error(B_12, TYPE^type.getNom(), F1^type.getNom());
-    else
-    -- on remonte le type
-        F^type := TYPE^type;         
-    end 
+do 
+    -- si MAlloc pas de probleme
+    if F1^type.compareTo(new DTYPEImpl("void",0)) then
+        F^type := TYPE^type;
+    else    
+    -- sinon verifier la castabilite
+        if ~F1^type.isCastableAs(TYPE^type) then
+            error(not_castable_as, F1^type.getNom(), TYPE^type.getNom());
+        else
+            F^type := TYPE^type;
+        end
+    end
 end
 }
 #gen {
@@ -1251,11 +1238,28 @@ end
 }
 
 ------------------------------------------------------------------------
+-- allocation memoire d un pointeur
+F -> malloc paro E parf #gen;
+#gen {
+do
+    if ~E^type.compareTo(new DTYPEImpl("int",1)) then
+        error(malloc_need_int, E^type.getNom());
+    else
+        F^type := new DTYPEImpl("void",0);
+        F^code_est_adresse := false;
+        
+        F^code := E^code + F^machine.genOp("MAlloc");
+    end
+     
+end
+}
+
+------------------------------------------------------------------------
 F -> mult F #type #addr;
 #type {
 do
     match F1^type with POINTEUR then
-        F^type := F1^type;      
+        F^type := F1^type.getType();      
         F^code_est_adresse := true;
     else
         error(not_pointeur, F1^type.getNom());

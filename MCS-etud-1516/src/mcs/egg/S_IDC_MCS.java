@@ -43,7 +43,7 @@ int [] sync= new int[0];
       case LEX_MCS.token_null : // 0
         regle82 () ;
       break ;
-      case LEX_MCS.token_pt : // 23036
+      case LEX_MCS.token_pt : // 10273
         regle83 () ;
       break ;
       default :

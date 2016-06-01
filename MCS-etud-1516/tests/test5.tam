@@ -2,13 +2,10 @@
 ; Do not modify by hand
 
 _main:
-	PUSH 1
-nullnullnullnull	LOADL 1
+	LOADL 1
 	SUBR MAlloc
-	LOADI(1)
 	LOADL 666
-	SUBR IAdd
-	STORE(1) 5[LB]
+	STOREI(1)
 	LOADL 0
 	RETURN (0) 1
 ; Appel a main

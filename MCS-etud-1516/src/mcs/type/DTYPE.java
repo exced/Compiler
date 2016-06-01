@@ -22,6 +22,8 @@ public interface DTYPE {
 	public boolean compareOpUn(DTYPE op);
 	
 	public boolean compareOpBin(DTYPE op, DTYPE b);
+	
+	public boolean isCastableAs(DTYPE t);
 
 	public String toString();
 }

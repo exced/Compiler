@@ -59,7 +59,14 @@ public class DTYPEImpl implements DTYPE {
 		}
 
 		return res;
-
+	}
+	
+	public boolean isCastableAs(DTYPE t){
+		boolean res = false;
+		
+		//TODO
+		
+		return true;
 	}
 
 }

@@ -27,6 +27,7 @@ public class MCSMessages extends NLS {
   public static  String MCS_expected_token;
   public static  String typeError_opBin;
   public static  String returnType_notCompatible;
+  public static  String not_castable_as;
   public static  String champ_declared;
   public static  String var_declared;
   public static  String type_unknown;
@@ -38,5 +39,4 @@ public class MCSMessages extends NLS {
   public static  String malloc_need_int;
   public static  String MCS_unexpected_token;
   public static  String affect_notCompatible;
-  public static  String B_12;
   }
