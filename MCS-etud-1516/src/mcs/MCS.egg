@@ -21,8 +21,8 @@ inh machine : IMachine for
               
 
 -- IDENT
-inh ident   : STRING for DECL, FONCTION,FX;
-syn sident  : STRING for PARF, CHAMP;
+inh ident   : STRING for DECL, FONCTION,FX,IDC;
+syn sident  : STRING for PARF, CHAMP,IDC;
 
 -- TYPE
 syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,CHAMP,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
@@ -33,7 +33,8 @@ inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX
 inh tds_asm : TDS for ASM;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
                             SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
-syn stds    : TDS for PARFS,PARFSX,ES,ESX;      
+inh tdsNameSpace : TDS for ENTITE,ENTITES;   
+syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES;      
 
 
 -- INST
@@ -53,6 +54,9 @@ inh hcode_est_adresse : BOOLEAN for AFFX,AX,RX,TX ,F;
 
 -- FONCTION
 inh hbloc_est_fonction : BOOLEAN for BLOC;
+
+-- ACCES
+syn acces : EACCES for ACCES;
 
 
 
@@ -138,6 +142,8 @@ end
 }
 #tds {
 do
+    ENTITES^tdsNameSpace := nil;
+
     --init de la TDS ( sans parente )
     ENTITES^tds := new TDS(nil);
 end
@@ -159,6 +165,8 @@ end
 ENTITES -> #gen ;
 #gen {
 do
+    ENTITES^stds := ENTITES^tds;
+
     ENTITES^code := "";
 end
 }
@@ -167,6 +175,8 @@ end
 ENTITES ->  ENTITE ENTITES #gen;
 #gen {
 do    
+    ENTITES^stds := ENTITES1^stds;
+
     ENTITES^code := ENTITE^code + ENTITES1^code;
 end
 }    
@@ -1556,30 +1566,124 @@ end
 ----------------- CS extension --------------------
 -- Decommenter les regles suivantes pour l'extension CS
 -------------------------------------------------
---TYPE -> bool;
+
+------------------------------------------------------------------------
+TYPE-> bool #type;
+#type {
+do
+    TYPE^type := new DTYPEImpl("bool",1);
+end
+}
+
+------------------------------------------------------------------------
 ---- definit un contenu d'un namespace
---ENTITE -> namespace identc aco ENTITES acf ;
+ENTITE -> namespace identc aco #tds ENTITES acf #namespace #gen;
+#tds{
+do
+    ENTITES^tdsNameSpace := new TDS(ENTITE^tds);
+end
+}
+#namespace{
+local 
+    i : INFO;
+do
+    i := ENTITE^tds.chercherGlobalement(identc^txt);
+    if i != nil then
+        error(namespace_declared, identc^txt, ENTITE^tds);
+    else    
+        ENTITE^tds.inserer(identc^txt, new INFONAMESPACE(ENTITES^stds));
+    end
+end       
+}
+#gen{
+do
+    ENTITE^code := ENTITES^code;
+end
+}
+
+------------------------------------------------------------------------
 ---- donne l acces au contenu du 'namespace'
---ENTITE -> using identc IDC pv ;
+ENTITE -> using identc #ident IDC pv #acces #gen;
+#ident{
+do
+    IDC^ident := identc^txt;
+end
+}
+#acces{
+local
+    name    : STRING;
+    i       : INFO;
+    ins     : INFONAMESPACE;
+do
+    i := ENTITE^tds.chercherGlobalement(identc^txt);
+    if i != nil then
+        error(namespace_unknown, identc^txt, ENTITE^tds);
+    else    
+        match i with
+        INFONAMESPACE then
+            
+        else
+            error(using_notNameSpace, identc^txt);
+        end      
+    end
 
-IDC -> ;
 
-IDC -> pt identc IDC ;
+end
+}
+#gen {
+do
+    ENTITE^code := "";
+end
+}
+
+IDC -> #ident;
+#ident {
+do
+    IDC^sident := IDC^ident;
+end
+}
+
+IDC -> pt identc #hident IDC #sident;
+#hident{
+do
+    IDC1^ident := IDC^ident + "." + identc^txt;
+end
+}
+#sident{
+do
+    IDC^sident := IDC1^sident;
+end
+}
 
 ---- definition d'une classe (peut etre en dehors d'un namespace)
 --ENTITE -> ACCES class identc HERITAGE aco DEFS acf ;
 
 ---- acces 
-ACCES -> public;
+ACCES -> public #acces;
+#acces{
+do
+    ACCES^acces := EACCES.PUBLIC;
+end
+}
 
-ACCES -> private;
+ACCES -> private #acces;
+#acces{
+do
+    ACCES^acces := EACCES.PRIVATE;
+end
+}
 
-ACCES -> ;
+ACCES -> #acces;
+#acces{
+do
+    ACCES^acces := EACCES.DEF;
+end
+}
 
 ---- heritage
 HERITAGE -> ;
 
-HERITAGE -> dpts identc IDC ;
+--HERITAGE -> dpts identc IDC ;
 
 ---- membres d'une classe
 DEFS -> ;
@@ -1603,9 +1707,25 @@ MODE -> ref ;
 
 MODE -> out ; 
 
---F -> true;
+F -> true #gen;
+#gen{
+do
+    F^type := new DTYPEImpl("bool",1);
+    F^code_est_adresse := false;
+    
+    F^code := F^machine.genCst("1");
+end
+}
 
---F -> false;
+F -> false #gen;
+#gen{
+do
+    F^type := new DTYPEImpl("bool",1);
+    F^code_est_adresse := false;
+    
+    F^code := F^machine.genCst("0");    
+end
+}
 
 --F -> this FX;
 
