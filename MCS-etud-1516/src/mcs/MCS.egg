@@ -1289,6 +1289,9 @@ local
     dep:int;
     LB : Register;
 do  
+
+write "ident : " + ident^txt + " TDS : \n" + F^tds + "\n";
+
     -- utile uniquement pour savoir si la var est un param de fonction ou non  
     tdsParam := F^tds.getParente();
     i2 := tdsParam.chercherLocalement(ident^txt);
@@ -1562,30 +1565,49 @@ IDC -> pt identc IDC ;
 
 ---- acces 
 ACCES -> public;
+
 ACCES -> private;
+
 ACCES -> ;
 
 ---- heritage
 HERITAGE -> ;
+
 HERITAGE -> dpts identc IDC ;
+
 ---- membres d'une classe
---DEFS -> ;
+DEFS -> ;
+
 --DEFS ->  ACCES DEF DEFS ;
+
 --DEF  ->  TYPE ident DECL ;
+
 ---- constructeur
 --DEF  ->  identc paro PARFS parf BASE BLOC;
+
 ---- appel eventuel au constructeur de la classe parente.
 --BASE -> ;
+
 --BASE -> dpts base paro ES parf  ;
+
 ---- Mode de passage pour les fonctions et méthodes : rien : D, ref : D/R, out : R
 --PARF ->  MODE TYPE ident ;
+
 MODE -> ref ;
+
 MODE -> out ; 
+
 --F -> true;
+
 --F -> false;
+
 --F -> this FX;
+
 --F -> base FX;
+
 --F -> null2;
+
 --F -> new identc IDC paro ES parf ;
+
 end
 

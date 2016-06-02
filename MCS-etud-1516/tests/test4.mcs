@@ -11,7 +11,9 @@ int main(){
 
    struct { int x; int y; } pt;
    
-   pt.y = 3 + 1;
+   int a;
+   
+   pt.y = 3;
    pt.x = 5;
    
     //pt->y = 3;

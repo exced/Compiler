@@ -26,23 +26,23 @@ int [] sync= new int[0];
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_out);
+    x_2.analyser(LEX_MCS.token_ref);
   }
-  private void regle89() throws Exception {
+  private void regle91() throws Exception {
 
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_ref);
+    x_2.analyser(LEX_MCS.token_out);
   }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_ref : // 10284
-        regle89 () ;
-      break ;
-      case LEX_MCS.token_out : // 10285
+      case LEX_MCS.token_ref : // 15196
         regle90 () ;
+      break ;
+      case LEX_MCS.token_out : // 15197
+        regle91 () ;
       break ;
       default :
                scanner._interrompre(IProblem.Syntax, scanner.getBeginLine(), IMCSMessages.id_MCS_unexpected_token,MCSMessages.MCS_unexpected_token,new String[]{scanner.fenetre[0].getNom()});

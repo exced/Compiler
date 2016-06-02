@@ -68,25 +68,25 @@ x_4.att_machine=glob_0_machine;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 10283
+      case LEX_MCS.token_typedef : // 15195
         regle0 () ;
       break ;
-      case LEX_MCS.token_void : // 10278
+      case LEX_MCS.token_void : // 15190
         regle0 () ;
       break ;
-      case LEX_MCS.token_int : // 10280
+      case LEX_MCS.token_int : // 15192
         regle0 () ;
       break ;
-      case LEX_MCS.token_char : // 10281
+      case LEX_MCS.token_char : // 15193
         regle0 () ;
       break ;
-      case LEX_MCS.token_identc : // 10320
+      case LEX_MCS.token_identc : // 15232
         regle0 () ;
       break ;
-      case LEX_MCS.token_struct : // 10282
+      case LEX_MCS.token_struct : // 15194
         regle0 () ;
       break ;
-      case LEX_MCS.token_asm : // 10279
+      case LEX_MCS.token_asm : // 15191
         regle0 () ;
       break ;
       case LEX_MCS.EOF :
