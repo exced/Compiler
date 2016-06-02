@@ -89,17 +89,26 @@ this.att_code=x_3.att_code;
 private void action_gen_5() throws Exception {
 try {
 // instructions
+if (glob_5_type instanceof POINTEUR ){
+this.att_code=this.att_machine.genMalloc(((POINTEUR)glob_5_type).getTaille());
+}
+else if (glob_5_type instanceof STRUCT ){
+this.att_code=this.att_machine.genMalloc(((STRUCT)glob_5_type).getTaille());
+}
+else {
 this.att_code=this.att_machine.genVar(glob_5_type.getTaille());
+
+}
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","DECL -> pv #tds #gen ;"});
 }
   }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_pv : // 15186
+      case LEX_MCS.token_pv : // 5347
         regle5 () ;
       break ;
-      case LEX_MCS.token_paro : // 15180
+      case LEX_MCS.token_paro : // 5341
         regle6 () ;
       break ;
       default :

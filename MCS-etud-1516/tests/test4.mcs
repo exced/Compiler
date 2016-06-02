@@ -1,10 +1,4 @@
 
-// nom de type donne a un struct
-typedef struct {
-  int x;
-  int y;
-} Point ;
-
 
 // point d'entree du programme.
 int main(){

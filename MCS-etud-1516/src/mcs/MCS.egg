@@ -226,7 +226,15 @@ end
 }
 #gen {
 do
-    DECL^code := DECL^machine.genVar(type.getTaille());
+    -- si pointeur ou struct
+    match type 
+    with POINTEUR then 
+        DECL^code := DECL^machine.genMalloc(type.getTaille());
+    with STRUCT then
+        DECL^code := DECL^machine.genMalloc(type.getTaille());
+    else
+        DECL^code := DECL^machine.genVar(type.getTaille());
+    end
 end
 }
 
@@ -1289,8 +1297,6 @@ local
     dep:int;
     LB : Register;
 do  
-
-write "ident : " + ident^txt + " TDS : \n" + F^tds + "\n";
 
     -- utile uniquement pour savoir si la var est un param de fonction ou non  
     tdsParam := F^tds.getParente();
