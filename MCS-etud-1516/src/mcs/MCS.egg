@@ -22,7 +22,7 @@ inh machine : IMachine for
 
 -- IDENT
 inh ident   : STRING for DECL, FONCTION,FX,IDC;
-syn sident  : STRING for PARF, CHAMP,IDC;
+syn sident  : STRING for PARF, CHAMP,IDC,HERITAGE;
 
 -- TYPE
 syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,CHAMP,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
@@ -56,7 +56,7 @@ inh hcode_est_adresse : BOOLEAN for AFFX,AX,RX,TX ,F;
 inh hbloc_est_fonction : BOOLEAN for BLOC;
 
 -- ACCES
-syn acces : EACCES for ACCES;
+syn acces : STRING for ACCES;
 
 
 
@@ -1656,52 +1656,68 @@ end
 }
 
 ---- definition d'une classe (peut etre en dehors d'un namespace)
---ENTITE -> ACCES class identc HERITAGE aco DEFS acf ;
+ENTITE -> ACCES class identc HERITAGE aco DEFS acf ;
 
 ---- acces 
 ACCES -> public #acces;
 #acces{
 do
-    ACCES^acces := EACCES.PUBLIC;
+    ACCES^acces := "public";
 end
 }
 
 ACCES -> private #acces;
 #acces{
 do
-    ACCES^acces := EACCES.PRIVATE;
+    ACCES^acces := "private";
 end
 }
 
 ACCES -> #acces;
 #acces{
 do
-    ACCES^acces := EACCES.DEF;
+    ACCES^acces := "def";
 end
 }
 
 ---- heritage
-HERITAGE -> ;
+HERITAGE -> #sident;
+#sident {
+do
+    HERITAGE^sident := "";
+end
+}
 
---HERITAGE -> dpts identc IDC ;
+
+HERITAGE -> dpts identc #ident IDC #sident;
+#ident{
+do
+    IDC^ident := identc^txt;
+end
+}
+#sident{
+do
+    HERITAGE^sident := IDC^sident;
+end
+}
 
 ---- membres d'une classe
 DEFS -> ;
 
---DEFS ->  ACCES DEF DEFS ;
+DEFS ->  ACCES DEF DEFS ;
 
---DEF  ->  TYPE ident DECL ;
+DEF  ->  TYPE ident DECL ;
 
 ---- constructeur
---DEF  ->  identc paro PARFS parf BASE BLOC;
+DEF  ->  identc paro PARFS parf BASE BLOC;
 
 ---- appel eventuel au constructeur de la classe parente.
---BASE -> ;
+BASE -> ;
 
---BASE -> dpts base paro ES parf  ;
+BASE -> dpts base paro ES parf  ;
 
 ---- Mode de passage pour les fonctions et méthodes : rien : D, ref : D/R, out : R
---PARF ->  MODE TYPE ident ;
+PARF ->  MODE TYPE ident ;
 
 MODE -> ref ;
 
@@ -1727,13 +1743,13 @@ do
 end
 }
 
---F -> this FX;
+F -> this FX;
 
---F -> base FX;
+F -> base FX;
 
---F -> null2;
+F -> null2;
 
---F -> new identc IDC paro ES parf ;
+F -> new identc IDC paro ES parf ;
 
 end
 
