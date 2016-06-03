@@ -13,26 +13,26 @@ inh source : MCSSourceFile for PROGRAMME;
 inh machine : IMachine for 
          ENTITES, ENTITE, DECL, FONCTION, INST, BLOC, INSTS, SIX,
          PARFS, PARF, PARFSX, ES, ESX, 
-         E, AFFX, A, AX, R, RX, T, TX, F,FX,OPUN,OPMUL,OPREL,OPADD
---         -- decommenter la ligne suivante pour MCS
---       , BASE, DEFS, DEF
---         -- fin extension MCS
-         ;
+         E, AFFX, A, AX, R, RX, T, TX, F,FX,OPUN,OPMUL,OPREL,OPADD,
+         BASE, DEFS, DEF;
               
 
 -- IDENT
 inh ident   : STRING for DECL, FONCTION,FX,IDC;
-syn sident  : STRING for PARF, CHAMP,IDC,HERITAGE;
+syn sident  : STRING for PARF, CHAMP,IDC,HERITAGE,DEF;
 
 -- TYPE
 syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,CHAMP,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
 inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX;
 
+-- INFO
+inh hinfo : INFO for AFFX;
+syn sinfo : INFO for DEF,DECL,FONCTION;
 
 -- TDS
 inh tds_asm : TDS for ASM;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
-                            SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX;
+                            SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX,DEFS,DEF;
 inh tdsNameSpace : TDS for ENTITE,ENTITES;   
 syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES;      
 
@@ -41,7 +41,7 @@ syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES;
 inh hest_decl : BOOLEAN for AFFX;                                              
                             
 -- GC                            
-syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX;
+syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX,DEFS,DEF;
 inh hcode   : STRING for AFFX,AX,RX,FX,TX;
 syn code_asm : STRING for ASM;
 
@@ -228,9 +228,12 @@ do
     if i /= nil then
         error(var_declared, DECL^ident);
     else
+        -- remontee de l'info pour la def
+        DECL^sinfo := i;
+        
         type := DECL^htype;
-        DECL^machine.addCurrentDep(type.getTaille());
         DECL^tds.inserer(DECL^ident,  new INFOVAR(type, DECL^machine.getCurrentDep()));
+        DECL^machine.addCurrentDep(type.getTaille());
     end    
 end
 }
@@ -250,7 +253,7 @@ end
 
 ------------------------------------------------------------------------
 -- déclaration d'une fonction
-DECL -> #ident FONCTION #gen;
+DECL -> #ident FONCTION #gen #sinfo;
 #ident {
 do
     FONCTION^ident := DECL^ident;
@@ -260,6 +263,11 @@ end
 #gen {
 do
     DECL^code := FONCTION^code;
+end
+}
+#sinfo{
+do
+    DECL^sinfo := FONCTION^sinfo;
 end
 }
 
@@ -300,6 +308,9 @@ do
     -- TDS
     i := new INFOFONC(FONCTION^htype, tdsParam);
     
+    -- remontee de l'info pour la def
+    FONCTION^sinfo := i;
+    
     FONCTION^tds.inserer(FONCTION^ident, i);
     typeRetour :=i.getType();
     
@@ -326,10 +337,9 @@ global
     tds:TDS;
 #tds {
 do    
-    tds := PARFS^tds;
-    -- deplacement avant ajout de var
-    PARFS^machine.addCurrentDep(PARF^type.getTaille());    
+    tds := PARFS^tds;  
     tds.inserer(PARF^sident, new INFOVAR(PARF^type, PARFS^machine.getCurrentDep()));
+    PARFS^machine.addCurrentDep(PARF^type.getTaille());  
     
     PARFSX^tds := tds;
 end
@@ -560,7 +570,17 @@ end
 -- declaration de variable locale avec ou sans init 
 INST ->  TYPE ident #htype AFFX pv #tds #type #gen ;
 #htype {
+local
+    i : INFO;
 do
+    i := INST^tds.chercherGlobalement(ident^txt);
+    if i /= nil then
+       error(var_declared, ident^txt);
+    else  
+        -- transmission de l'info
+        AFFX^hinfo := i;
+    end
+
     -- transmission de type
     AFFX^htype := TYPE^type;
     -- transmission de l adresse
@@ -578,9 +598,10 @@ do
     if i /= nil then
        error(var_declared, ident^txt);
     else  
-        INST^machine.addCurrentDep(TYPE^type.getTaille());
         i := new INFOVAR(TYPE^type, INST^machine.getCurrentDep());
         INST^tds.inserer(ident^txt, i);
+        -- deplacement de currentDep
+        INST^machine.addCurrentDep(TYPE^type.getTaille());
     end
 end
 }
@@ -701,7 +722,9 @@ end
 ------------------------------------------------------------------------
 E -> A #type AFFX #gen;
 #type {
-do    
+do  
+    AFFX^hinfo := nil;
+  
     AFFX^hcode_est_adresse := A^code_est_adresse;
     
     E^type := A^type;
@@ -746,7 +769,7 @@ do
         if AFFX^hcode_est_adresse then
             code := A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
         else
-            code := A^code + AFFX^machine.genWriteMem(AFFX^machine.getCurrentDep(), AFFX^htype.getTaille());    
+            code := A^code + AFFX^machine.genWriteMem(AFFX^hinfo.getDep(), AFFX^htype.getTaille());    
         end
     end
     AFFX^code := code;
@@ -1568,10 +1591,10 @@ end
 -------------------------------------------------
 
 ------------------------------------------------------------------------
-TYPE-> bool #type;
+STYPE-> bool #type;
 #type {
 do
-    TYPE^type := new DTYPEImpl("bool",1);
+    STYPE^type := new DTYPEImpl("bool",1);
 end
 }
 
@@ -1636,6 +1659,7 @@ do
 end
 }
 
+------------------------------------------------------------------------
 IDC -> #ident;
 #ident {
 do
@@ -1643,6 +1667,7 @@ do
 end
 }
 
+------------------------------------------------------------------------
 IDC -> pt identc #hident IDC #sident;
 #hident{
 do
@@ -1655,9 +1680,34 @@ do
 end
 }
 
+------------------------------------------------------------------------
 ---- definition d'une classe (peut etre en dehors d'un namespace)
-ENTITE -> ACCES class identc HERITAGE aco DEFS acf ;
+ENTITE -> ACCES class identc HERITAGE aco DEFS acf #classe #gen;
+global
+    i : INFO;
+    ic : INFOCLASSE;
+#classe {
+do
+    i := ENTITE^tds.chercherGlobalement(identc^txt);
+    if i != nil then
+        error(classe_defined, identc^txt, ENTITE^tds);
+    else    
+        -- definition de la classe
+        ic := new INFOCLASSE();
+        
+        -- insertion
+        ENTITE^tds.inserer(identc^txt, ic);  
+    end    
+end
+}
+#gen {
+do
+    -- table des variables pour le CALLI    
+    ENTITE^code := ENTITE^machine.genTable(ic.getTV()) +  DEFS^code;    
+end
+}
 
+------------------------------------------------------------------------
 ---- acces 
 ACCES -> public #acces;
 #acces{
@@ -1666,6 +1716,7 @@ do
 end
 }
 
+------------------------------------------------------------------------
 ACCES -> private #acces;
 #acces{
 do
@@ -1673,6 +1724,7 @@ do
 end
 }
 
+------------------------------------------------------------------------
 ACCES -> #acces;
 #acces{
 do
@@ -1680,6 +1732,7 @@ do
 end
 }
 
+------------------------------------------------------------------------
 ---- heritage
 HERITAGE -> #sident;
 #sident {
@@ -1688,7 +1741,7 @@ do
 end
 }
 
-
+------------------------------------------------------------------------
 HERITAGE -> dpts identc #ident IDC #sident;
 #ident{
 do
@@ -1701,28 +1754,127 @@ do
 end
 }
 
+------------------------------------------------------------------------
 ---- membres d'une classe
-DEFS -> ;
+DEFS -> #gen;
+#gen{
+do
+    DEFS^code := "";
+end
+}
 
-DEFS ->  ACCES DEF DEFS ;
+------------------------------------------------------------------------
+DEFS ->  ACCES DEF #def DEFS #gen;
+#def {
+local
+    i : INFO;
+    tds : TDS;
+do
+    -- ajout de la def a la tds
+    i := DEFS^tds.chercherLocalement(DEF^sident);
+    if i != nil then
+        error(def_defined, DEF^sident, DEFS^tds);
+    else   
+        -- ajout acces
+        i.setAcces(ACCES^acces);
+        -- insertion de l'infoclasse
+        tds := DEFS^tds;
+        tds.inserer(DEF^sident, i);
+        -- transmission de la TDS 
+        DEFS1^tds := tds;
+    end        
+end
+}
+#gen {
+do
+    DEFS^code := DEF^code + DEFS1^code;
+end
+}
 
-DEF  ->  TYPE ident DECL ;
 
+------------------------------------------------------------------------
+-- definition d'attribut ou de fonction
+DEF  ->  TYPE ident #sident #decl DECL #sinfo #gen;
+#decl {
+do
+    DECL^ident := ident^txt;
+    DECL^htype := TYPE^type;
+end
+}
+#sident{
+do
+    -- remontee de l'ident pour l'ajout dans la TDS
+    DEF^sident := ident^txt;
+end
+}
+#sinfo{
+do
+    -- remontee de l'info pour la definition
+    DEF^sinfo := DECL^sinfo;
+end
+}
+#gen {
+do
+    DEF^code := DECL^code;    
+end
+}
+
+------------------------------------------------------------------------
 ---- constructeur
-DEF  ->  identc paro PARFS parf BASE BLOC;
+DEF  ->  identc paro #tds PARFS #stds parf BASE BLOC #gen;
+global
+    tdsParam : TDS;
+#tds {
+do  
+    PARFS^tds := new TDS(DEF^tds);
+end
+}     
+#stds {
+local
+    LB : Register;
+do
+    BLOC^hbloc_est_fonction := true;
 
+    tdsParam := PARFS^stds;
+    BLOC^tds := new TDS(tdsParam);
+    
+   -- deplacement de LB au debut du Bloc
+   DEF^machine.depLB(DEF^machine.getCurrentDep());
+   -- debut de BLOC : currentDep reset
+   DEF^machine.resetCurrentDep();
+   -- ajout de 3 pour les variables utilisees par TAM
+   DEF^machine.addCurrentDep(3);
+    
+end
+}
+#gen{
+do
+    -- Type Retour => Constructeur
+    DEF^tds.inserer(identc^txt, new INFOCONSTRUCTOR(tdsParam));
+    
+    -- generer le prologue et l'epilogue de la fonction
+    -- etiquette + taille des parametres + taille retour + code des instructions
+    DEF^code := DEF^machine.genFonction(identc^txt, tdsParam.getTailleParams(), 0, BLOC^code);
+end
+}
+------------------------------------------------------------------------
 ---- appel eventuel au constructeur de la classe parente.
 BASE -> ;
 
+------------------------------------------------------------------------
 BASE -> dpts base paro ES parf  ;
 
+------------------------------------------------------------------------
 ---- Mode de passage pour les fonctions et méthodes : rien : D, ref : D/R, out : R
 PARF ->  MODE TYPE ident ;
 
+------------------------------------------------------------------------
 MODE -> ref ;
 
+------------------------------------------------------------------------
 MODE -> out ; 
 
+------------------------------------------------------------------------
 F -> true #gen;
 #gen{
 do
@@ -1733,6 +1885,7 @@ do
 end
 }
 
+------------------------------------------------------------------------
 F -> false #gen;
 #gen{
 do
@@ -1743,12 +1896,22 @@ do
 end
 }
 
-F -> this FX;
+------------------------------------------------------------------------
+F -> this #tds FX;
+#tds {
+do
+    FX^tds := F^tdsClasse;
+end
+}
 
+------------------------------------------------------------------------
 F -> base FX;
 
+------------------------------------------------------------------------
+-- null des objets
 F -> null2;
 
+------------------------------------------------------------------------
 F -> new identc IDC paro ES parf ;
 
 end

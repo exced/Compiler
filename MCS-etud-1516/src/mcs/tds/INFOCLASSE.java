@@ -2,6 +2,8 @@ package mcs.tds;
 import mcs.type.*;
 
 public class INFOCLASSE extends INFO {
+	
+	protected String acces;
 
 	protected INFOINTERFACE einterface;
 	
@@ -11,11 +13,15 @@ public class INFOCLASSE extends INFO {
 	
 	protected TDS tv;
 	
-	public INFOCLASSE(DTYPE t, TDS tds, INFOINTERFACE i){
+	public INFOCLASSE(DTYPE t, String acces, TDS tdsContenu, INFOINTERFACE einterface, INFOCLASSE esuper){
 		super(t);
-		tdsContenu = tds;
-		einterface = i;
+		this.acces = acces;
+		this.tdsContenu = tdsContenu;
+		this.einterface = einterface;
+		this.esuper = esuper;
 	}
+	
+	public String getAcces() { return acces; }
 	
 	public TDS getContenu() { return tdsContenu; }
 	
