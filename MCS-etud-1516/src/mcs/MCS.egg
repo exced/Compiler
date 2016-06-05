@@ -41,7 +41,7 @@ syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES;
 inh hest_decl : BOOLEAN for AFFX;                                              
                             
 -- GC                            
-syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX,DEFS,DEF;
+syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX,DEFS,DEF,BASE;
 inh hcode   : STRING for AFFX,AX,RX,FX,TX;
 syn code_asm : STRING for ASM;
 
@@ -1859,7 +1859,12 @@ end
 }
 ------------------------------------------------------------------------
 ---- appel eventuel au constructeur de la classe parente.
-BASE -> ;
+BASE -> #gen;
+#gen {
+do
+    BASE^code := "";
+end
+}
 
 ------------------------------------------------------------------------
 BASE -> dpts base paro ES parf  ;
@@ -1905,14 +1910,27 @@ end
 }
 
 ------------------------------------------------------------------------
-F -> base FX;
+-- super
+F -> base FX #gen;
+#gen {
+do
+    
+end
+}
+
 
 ------------------------------------------------------------------------
 -- null des objets
 F -> null2;
 
 ------------------------------------------------------------------------
-F -> new identc IDC paro ES parf ;
+-- allocation var
+F -> new identc IDC paro ES parf #gen;
+#gen {
+do
+    
+end
+}
 
 end
 
