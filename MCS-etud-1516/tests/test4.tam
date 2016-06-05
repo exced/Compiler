@@ -4,11 +4,7 @@
 _main:
 	PUSH 2
 	PUSH 1
-	LOADL 3
-	STORE(1) 6[LB]
-	LOADL 5
-	STORE(1) 6[LB]
-	LOADL 0
+nullnull	LOADL 0
 	RETURN (0) 1
 ; Appel a main
 	CALL(SB) _main

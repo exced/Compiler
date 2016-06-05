@@ -32,21 +32,12 @@ public interface IMachine {
 
 	void writeCode(String fileName, String code) throws MCSException;
 	
-	public Register getSB();
-	
-	public Register getLB();
-	
-	public Register getST();
-	
-	public void depLB(int d);
-	
 	public int getCurrentDep();
 
 	public void addCurrentDep(int dep);
 	
 	public void resetCurrentDep();
 	
-	public void addRegisterDep(Register r, int d);
 	
 	public String genChaine(String s);
 	

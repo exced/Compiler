@@ -3,15 +3,7 @@
 
 _main:
 	PUSH 1
-	LOADL 1
-	SUBR MAlloc
-	LOADL 666
-	STOREI(1)
-	LOADL 1
-	SUBR MAlloc
-	LOAD(1) 5[LB]
-	STOREI(1)
-	LOADL 0
+nullnullnullnull	LOADL 0
 	RETURN (0) 1
 ; Appel a main
 	CALL(SB) _main

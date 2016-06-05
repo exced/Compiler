@@ -13,7 +13,7 @@ int fonction2(int b, int c){
 
 	int z;
 	z = 18;
-	return z;
+	return z+b+c;
 }
 
 

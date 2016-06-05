@@ -14,6 +14,11 @@ public class INFO {
 
 	public DTYPE getType() { return type; }
 	
+	/*
+	 * utilisée pour le cast uniquement à priori
+	 */
+	public void setType(DTYPE type) { this.type = type; }
+	
 
 	public String toString() {
 		return "; INFO : " + "type=" + type;

@@ -26,7 +26,8 @@ syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,CHAMP,PTRS, AFFX, A,AX, R,RX,T,
 inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX;
 
 -- INFO
-inh hinfo : INFO for AFFX;
+inh hiv : INFOVAR for AFFX;
+syn siv : INFOVAR for E,A,R,T,F;
 syn sinfo : INFO for DEF,DECL,FONCTION;
 
 -- TDS
@@ -283,16 +284,12 @@ do
 end
 }     
 #stds {
-local
-    LB : Register;
 do
     BLOC^hbloc_est_fonction := true;
 
     tdsParam := PARFS^stds;
     BLOC^tds := new TDS(tdsParam);
     
-   -- deplacement de LB au debut du Bloc
-   FONCTION^machine.depLB(FONCTION^machine.getCurrentDep());
    -- debut de BLOC : currentDep reset
    FONCTION^machine.resetCurrentDep();
    -- ajout de 3 pour les variables utilisees par TAM
@@ -336,10 +333,11 @@ PARFS -> PARF #tds PARFSX #stds;
 global
     tds:TDS;
 #tds {
-do    
+do  
+    PARFS^machine.resetCurrentDep();
+    PARFS^machine.addCurrentDep(-PARF^type.getTaille());  
     tds := PARFS^tds;  
     tds.inserer(PARF^sident, new INFOVAR(PARF^type, PARFS^machine.getCurrentDep()));
-    PARFS^machine.addCurrentDep(PARF^type.getTaille());  
     
     PARFSX^tds := tds;
 end
@@ -369,7 +367,7 @@ do
     -- transmission des tds;
     tds := PARFSX^tds;
     -- deplacement avant ajout de var
-    PARFSX^machine.addCurrentDep(PARF^type.getTaille());
+    PARFSX^machine.addCurrentDep(-PARF^type.getTaille());
     tds.inserer(PARF^sident, new INFOVAR(PARF^type, PARFSX^machine.getCurrentDep()));
         
     PARFSX1^tds := tds;
@@ -578,7 +576,7 @@ do
        error(var_declared, ident^txt);
     else  
         -- transmission de l'info
-        AFFX^hinfo := i;
+        AFFX^hiv := new INFOVAR(TYPE^type, INST^machine.getCurrentDep());
     end
 
     -- transmission de type
@@ -654,9 +652,6 @@ do
    end
    
    BLOC^hbloc_est_fonction := false;
-   
-   -- deplacement de LB au debut du Bloc
-   INST^machine.addRegisterDep(INST^machine.getLB(), INST^machine.getCurrentDep());
 end
 }
 #gen {
@@ -671,9 +666,6 @@ SIX ->    sinon #dep BLOC #gen;
 #dep {
 do
    BLOC^hbloc_est_fonction := false;
-
-   -- deplacement de LB au debut du Bloc
-   SIX^machine.addRegisterDep(SIX^machine.getLB(), SIX^machine.getCurrentDep());
 end
 }
 #gen {
@@ -723,7 +715,8 @@ end
 E -> A #type AFFX #gen;
 #type {
 do  
-    AFFX^hinfo := nil;
+    AFFX^hiv := A^siv;
+    E^siv := A^siv;
   
     AFFX^hcode_est_adresse := A^code_est_adresse;
     
@@ -762,17 +755,24 @@ end
 #gen {
 local 
   code : STRING;
+  iv : INFOVAR;
 do  
-    if AFFX^hest_decl then
-        code := A^code;
-    else
-        if AFFX^hcode_est_adresse then
-            code := A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+    match AFFX^hiv with
+    INFOVAR then
+        iv := AFFX^hiv;
+        if AFFX^hest_decl then
+            code := A^code;
         else
-            code := A^code + AFFX^machine.genWriteMem(AFFX^hinfo.getDep(), AFFX^htype.getTaille());    
+            if AFFX^hcode_est_adresse then
+                code := A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+            else
+                code := A^code + AFFX^machine.genWriteMem(iv.getDep(), AFFX^htype.getTaille());    
+            end
         end
+        AFFX^code := code;        
+    else
+        error(aff_non_var, AFFX^hiv);
     end
-    AFFX^code := code;
 end  
 }
 
@@ -800,6 +800,9 @@ end
 A -> R #type AX #gen;
 #type{
 do 
+    -- remontee infovar
+    A^siv := R^siv;
+    
     -- transmission du type de R pour le controle de type
     AX^htype := R^type;
     -- on remonte le type
@@ -923,6 +926,9 @@ end
 R -> T #type RX #gen;
 #type{
 do
+    -- remontee infovar
+    R^siv := T^siv;
+    
     -- transmission du type de R pour le controle de type
     RX^htype := T^type;
     -- on remonte le type
@@ -1021,6 +1027,9 @@ end
 }
 #type{
 do
+    -- remontee infovar
+    T^siv := F^siv;
+    
     -- transmission du type de R pour le controle de type
     TX^htype := F^type;
     -- on remonte le type
@@ -1124,6 +1133,9 @@ end
 F -> entier #gen ;
 #gen {
 do
+    -- pas une var
+    F^siv := nil;
+    
     F^type := new DTYPEImpl("int", 1);
     F^code_est_adresse := false;
     F^code := F^machine.genCst(entier^txt);
@@ -1135,6 +1147,9 @@ end
 F -> chaine #gen;
 #gen {
 do
+    -- pas une var
+    F^siv := nil;
+    
     F^type := new DTYPEImpl("chaine", 3);
     F^code_est_adresse := false;
     F^code := F^machine.genCst(chaine^txt);
@@ -1146,6 +1161,9 @@ end
 F -> caractere #gen;
 #gen {
 do
+    -- pas une var
+    F^siv := nil;
+    
     F^type := new DTYPEImpl("char", 1);
     F^code_est_adresse := false;
     F^code := F^machine.genCst(caractere^txt);
@@ -1157,6 +1175,9 @@ end
 F -> OPUN  F #type #gen;
 #type {
 do
+    -- pas une var
+    F^siv := nil;
+    
     -- controle de type
     if ~F1^type.compareOpUn(OPUN^type) then
         error(typeError_opUn, F1^type.getNom(), OPUN^type.getNom());
@@ -1212,6 +1233,9 @@ end
 F -> null #type ;
 #type {  
 do
+    -- pas une var
+    F^siv := nil;
+    
     F^type := new DTYPEImpl("PNULL", 1);
     F^code_est_adresse := false;
     F^code := "";
@@ -1223,6 +1247,9 @@ end
 F ->  paro E parf #addr FX #type #gen;
 #addr {
 do
+    -- remontee infovar
+    F^siv := E^siv;
+
     FX^ident := "";
 
     F^code_est_adresse := E^code_est_adresse;
@@ -1256,7 +1283,10 @@ end
 -- cast
 F ->  paro TYPE parf  F  #type #gen;
 #type {
-do 
+local
+    iv : INFOVAR;
+do
+ 
     -- si MAlloc pas de probleme
     if F1^type.compareTo(new DTYPEImpl("void",0)) then
         F^type := TYPE^type;
@@ -1266,6 +1296,11 @@ do
             error(not_castable_as, F1^type.getNom(), TYPE^type.getNom());
         else
             F^type := TYPE^type;
+            
+            -- remontee infovar
+            iv := F1^siv;
+            iv.setType(TYPE^type);
+            F^siv := iv;
         end
     end
 end
@@ -1283,6 +1318,9 @@ end
 F -> malloc paro E parf #gen;
 #gen {
 do
+    -- remontee infovar
+    F^siv := E^siv;
+
     if ~E^type.compareTo(new DTYPEImpl("int",1)) then
         error(malloc_need_int, E^type.getNom());
     else
@@ -1299,6 +1337,9 @@ end
 F -> mult F #type #addr;
 #type {
 do
+    -- remontee infovar
+    F^siv := F1^siv;
+
     match F1^type with POINTEUR then
         F^type := F1^type.getType();      
         F^code_est_adresse := true;
@@ -1325,16 +1366,9 @@ global
 local
     i:INFO;
     i2:INFO;
-    tdsParam:TDS;
-    estParam:boolean;
-    dep:int;
-    LB : Register;
 do  
 
-    -- utile uniquement pour savoir si la var est un param de fonction ou non  
-    tdsParam := F^tds.getParente();
-    i2 := tdsParam.chercherLocalement(ident^txt);
-    estParam := ~(i2 = null);   
+
 
     -- ident pour l'appel de fonction
     FX^ident := ident^txt;
@@ -1354,14 +1388,11 @@ do
             if F^hcode_est_adresse then
                 code := F^machine.genReadIndirectMem(iv.getTaille());
             else
-                if estParam then
-                    -- les param sont en dessous de LB
-                    dep := 2 - iv.getDep();
-                else
-                    dep := F^machine.getCurrentDep();
-                end
-                code := F^machine.genReadMem(dep - iv.getTaille() , iv.getTaille()); 
+                code := F^machine.genReadMem(iv.getDep() , iv.getTaille()); 
             end
+            
+            -- remontee infovar
+            F^siv := iv;
         
         with INFOFONC then
             infofonc := i;  
@@ -1824,39 +1855,47 @@ end
 DEF  ->  identc paro #tds PARFS #stds parf BASE BLOC #gen;
 global
     tdsParam : TDS;
+    infofonc : INFOFONC;
+    t : DTYPE;
 #tds {
 do  
+
     PARFS^tds := new TDS(DEF^tds);
 end
 }     
 #stds {
-local
-    LB : Register;
 do
     BLOC^hbloc_est_fonction := true;
 
     tdsParam := PARFS^stds;
     BLOC^tds := new TDS(tdsParam);
     
-   -- deplacement de LB au debut du Bloc
-   DEF^machine.depLB(DEF^machine.getCurrentDep());
    -- debut de BLOC : currentDep reset
    DEF^machine.resetCurrentDep();
    -- ajout de 3 pour les variables utilisees par TAM
    DEF^machine.addCurrentDep(3);
+   
+    -- remontee des info
+    t := new DTYPEImpl(nil);
+    infofonc := new INFOFONC(t, tdsParam);
+    DEF^sident := identc^txt;
+    DEF^sinfo := infofonc; 
     
+    -- transmission du type au bloc
+    BLOC^htype := t;   
 end
 }
 #gen{
-do
-    -- Type Retour => Constructeur
-    DEF^tds.inserer(identc^txt, new INFOCONSTRUCTOR(tdsParam));
+do  
+    -- Type Retour => infofonc de retour null car Constructeur
+    DEF^tds.inserer(identc^txt, infofonc);
     
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
     DEF^code := DEF^machine.genFonction(identc^txt, tdsParam.getTailleParams(), 0, BLOC^code);
 end
 }
+
 ------------------------------------------------------------------------
 ---- appel eventuel au constructeur de la classe parente.
 BASE -> #gen;
@@ -1867,22 +1906,30 @@ end
 }
 
 ------------------------------------------------------------------------
-BASE -> dpts base paro ES parf  ;
+--BASE -> dpts base paro ES parf  #gen;
+--#gen {
+--do
+    
+--end
+--}
 
 ------------------------------------------------------------------------
 ---- Mode de passage pour les fonctions et méthodes : rien : D, ref : D/R, out : R
-PARF ->  MODE TYPE ident ;
+--PARF ->  MODE TYPE ident ;
 
 ------------------------------------------------------------------------
-MODE -> ref ;
+--MODE -> ref ;
 
 ------------------------------------------------------------------------
-MODE -> out ; 
+--MODE -> out ; 
 
 ------------------------------------------------------------------------
 F -> true #gen;
 #gen{
 do
+    -- pas une var
+    F^siv := nil;
+
     F^type := new DTYPEImpl("bool",1);
     F^code_est_adresse := false;
     
@@ -1894,6 +1941,9 @@ end
 F -> false #gen;
 #gen{
 do
+    -- pas une var
+    F^siv := nil;
+    
     F^type := new DTYPEImpl("bool",1);
     F^code_est_adresse := false;
     
@@ -1902,35 +1952,35 @@ end
 }
 
 ------------------------------------------------------------------------
-F -> this #tds FX;
-#tds {
-do
-    FX^tds := F^tdsClasse;
-end
-}
+--F -> this #tds FX;
+--#tds {
+--do
+--    FX^tds := F^tdsClasse;
+--end
+--}
 
 ------------------------------------------------------------------------
 -- super
-F -> base FX #gen;
-#gen {
-do
+--F -> base FX #gen;
+--#gen {
+--do
     
-end
-}
+--end
+--}
 
 
 ------------------------------------------------------------------------
 -- null des objets
-F -> null2;
+--F -> null2;
 
 ------------------------------------------------------------------------
 -- allocation var
-F -> new identc IDC paro ES parf #gen;
-#gen {
-do
+--F -> new identc IDC paro ES parf #gen;
+--#gen {
+--do
     
-end
-}
+--end
+--}
 
 end
 
