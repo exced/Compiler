@@ -42,6 +42,7 @@ if  (att_eval)      action_gen_37(x_2, x_4);
 private void action_gen_37(S_R_MCS x_2, S_AX_MCS x_4) throws Exception {
 try {
 // instructions
+this.att_type=x_4.att_type;
 this.att_code=x_2.att_code+x_4.att_code;
 this.att_code_est_adresse=x_4.att_code_est_adresse;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","A -> R #type AX #gen ;"});
@@ -62,8 +63,6 @@ try {
 // instructions
 this.att_siv=x_2.att_siv;
 x_4.att_htype=x_2.att_type;
-this.att_type=x_2.att_type;
-x_4.att_hcode=x_2.att_code;
 x_4.att_hcode_est_adresse=x_2.att_code_est_adresse;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","A -> R #type AX #gen ;"});
 }

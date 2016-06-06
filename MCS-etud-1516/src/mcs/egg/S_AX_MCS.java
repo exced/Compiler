@@ -28,7 +28,6 @@ int [] sync= new int[0];
   boolean att_code_est_adresse;
   DTYPE att_type;
   boolean att_hcode_est_adresse;
-  String att_hcode;
   private void regle38() throws Exception {
 
     //declaration
@@ -80,7 +79,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 else {
-this.att_type=x_3.att_type;
+this.att_type= new DTYPEImpl("bool", 1);
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","AX -> OPREL R #type #gen ;"});
 }
@@ -96,34 +95,34 @@ this.att_code_est_adresse=this.att_hcode_est_adresse;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_inf : // 14674
+      case LEX_MCS.token_inf : // 10068
         regle38 () ;
       break ;
-      case LEX_MCS.token_sup : // 14676
+      case LEX_MCS.token_sup : // 10070
         regle38 () ;
       break ;
-      case LEX_MCS.token_infeg : // 14675
+      case LEX_MCS.token_infeg : // 10069
         regle38 () ;
       break ;
-      case LEX_MCS.token_supeg : // 14677
+      case LEX_MCS.token_supeg : // 10071
         regle38 () ;
       break ;
-      case LEX_MCS.token_eg : // 14678
+      case LEX_MCS.token_eg : // 10072
         regle38 () ;
       break ;
-      case LEX_MCS.token_neg : // 14679
+      case LEX_MCS.token_neg : // 10073
         regle38 () ;
       break ;
-      case LEX_MCS.token_affect : // 14647
+      case LEX_MCS.token_affect : // 10041
         regle39 () ;
       break ;
-      case LEX_MCS.token_virg : // 14644
+      case LEX_MCS.token_virg : // 10038
         regle39 () ;
       break ;
-      case LEX_MCS.token_pv : // 14646
+      case LEX_MCS.token_pv : // 10040
         regle39 () ;
       break ;
-      case LEX_MCS.token_parf : // 14641
+      case LEX_MCS.token_parf : // 10035
         regle39 () ;
       break ;
       default :

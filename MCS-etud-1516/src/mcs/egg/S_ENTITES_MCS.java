@@ -74,49 +74,49 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 14643
+      case LEX_MCS.token_acf : // 10037
         regle1 () ;
       break ;
       case LEX_MCS.EOF :
         regle1 () ;
       break ;
-      case LEX_MCS.token_typedef : // 14655
+      case LEX_MCS.token_typedef : // 10049
         regle2 () ;
       break ;
-      case LEX_MCS.token_void : // 14650
+      case LEX_MCS.token_void : // 10044
         regle2 () ;
       break ;
-      case LEX_MCS.token_int : // 14652
+      case LEX_MCS.token_int : // 10046
         regle2 () ;
       break ;
-      case LEX_MCS.token_char : // 14653
+      case LEX_MCS.token_char : // 10047
         regle2 () ;
       break ;
-      case LEX_MCS.token_identc : // 14692
+      case LEX_MCS.token_identc : // 10086
         regle2 () ;
       break ;
-      case LEX_MCS.token_struct : // 14654
+      case LEX_MCS.token_struct : // 10048
         regle2 () ;
       break ;
-      case LEX_MCS.token_bool : // 14664
+      case LEX_MCS.token_bool : // 10058
         regle2 () ;
       break ;
-      case LEX_MCS.token_asm : // 14651
+      case LEX_MCS.token_asm : // 10045
         regle2 () ;
       break ;
-      case LEX_MCS.token_namespace : // 14658
+      case LEX_MCS.token_namespace : // 10052
         regle2 () ;
       break ;
-      case LEX_MCS.token_using : // 14659
+      case LEX_MCS.token_using : // 10053
         regle2 () ;
       break ;
-      case LEX_MCS.token_public : // 14661
+      case LEX_MCS.token_public : // 10055
         regle2 () ;
       break ;
-      case LEX_MCS.token_private : // 14662
+      case LEX_MCS.token_private : // 10056
         regle2 () ;
       break ;
-      case LEX_MCS.token_class : // 14660
+      case LEX_MCS.token_class : // 10054
         regle2 () ;
       break ;
       default :

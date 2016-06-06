@@ -43,7 +43,7 @@ inh hest_decl : BOOLEAN for AFFX;
                             
 -- GC                            
 syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX,DEFS,DEF,BASE;
-inh hcode   : STRING for AFFX,AX,RX,FX,TX;
+inh hcode   : STRING for AFFX,FX;
 syn code_asm : STRING for ASM;
 
 inh hchamps : LCHAMPS for CHAMPS, CHAMP;
@@ -82,7 +82,6 @@ sugar int is  "int";
 sugar char is  "char";
 sugar struct is "struct";
 sugar typedef is "typedef";
--- decommenter pour MCS
 sugar ref is "ref" ;
 sugar out is "out";
 sugar namespace is "namespace";
@@ -97,8 +96,7 @@ sugar false is "false";
 sugar this is "this";
 sugar new is "new" ;
 sugar null2 is "null";
-sugar base is "base" ;
--- 
+sugar base is "base" ; 
 sugar retour is  "return";
 sugar arrow is "\-\>";
 sugar null is  "NULL";
@@ -805,15 +803,15 @@ do
     
     -- transmission du type de R pour le controle de type
     AX^htype := R^type;
-    -- on remonte le type
-    A^type := R^type;
     
-    AX^hcode := R^code;
     AX^hcode_est_adresse := R^code_est_adresse;
 end
 }
 #gen {
 do
+    -- on remonte le type
+    A^type := AX^type;
+    
     -- generation du code qui renvoie la valeur correspond a la relation
     A^code := R^code + AX^code;
 
@@ -830,7 +828,7 @@ do
         error(typeError_opBin, AX^htype.getNom(), OPREL^type.getNom(), R^type.getNom());
     else
     -- on remonte le type
-        AX^type := R^type;         
+        AX^type := new DTYPEImpl("bool",1);         
     end 
 end
 }
@@ -934,7 +932,6 @@ do
     -- on remonte le type
     R^type := T^type;
     
-    RX^hcode := T^code;
     RX^hcode_est_adresse := T^code_est_adresse;
 end
 }
@@ -1035,7 +1032,7 @@ do
     -- on remonte le type
     T^type := F^type;
     
-    TX^hcode := F^code;
+
     TX^hcode_est_adresse := F^code_est_adresse;
 end
 }
@@ -1254,8 +1251,9 @@ do
 
     F^code_est_adresse := E^code_est_adresse;
     -- type de FX est le type de l expression de gauche
-    FX^hcode := E^code;
     FX^htype := E^type;
+    
+     FX^hcode := E^code; 
 end
 }
 #type {
@@ -1265,7 +1263,8 @@ do
         error(castError, E^type.getNom(), FX^type.getNom());
     else
     -- on remonte le type
-        F^type := E^type;         
+        F^type := E^type;   
+            
     end 
   
 end
@@ -1274,7 +1273,7 @@ end
 do
     
     -- GC
-    F^code := E^code + FX^code;
+    F^code := FX^code;
 end
 }
 
