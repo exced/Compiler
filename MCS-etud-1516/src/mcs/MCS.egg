@@ -1772,6 +1772,7 @@ ENTITE -> ACCES class identc HERITAGE aco DEFS acf #classe #gen;
 global
     i : INFO;
     ic : INFOCLASSE;
+    t := DTYPE;
 #classe {
 do
     i := ENTITE^tds.chercherGlobalement(identc^txt);
@@ -1779,6 +1780,8 @@ do
         error(classe_defined, identc^txt, ENTITE^tds);
     else    
         -- definition de la classe
+        -- type : pointeur sur struct contenant tous les elements de la classe
+        t := new POINTEUR(new STRUCT(DEFS^champs));
         ic := new INFOCLASSE();
         
         -- insertion

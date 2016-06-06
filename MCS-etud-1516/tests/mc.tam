@@ -2,67 +2,63 @@
 ; Do not modify by hand
 
 	PUSH 1
-	PUSH 2
+	LOADL 2
+	SUBR Malloc
 _foo:
 	PUSH 1
+	LOAD(1) 3[LB]
 	LOADL 100
-	STORE(1) 4[LB]
-	LOAD(1) -3[LB]
-	LOAD(1) -4[LB]
+	STORE(1) 3[LB]
+	LOAD(1) -1[LB]
+	LOAD(1) -2[LB]
 	SUBR IAdd
-	LOADL 1
-	SUBR MAlloc
+	STORE(1) 4[LB]
+null	LOAD(1) 4[LB]
 	LOADI(1)
 	LOADL 666
 	SUBR IAdd
+	STORE(1) 4[LB]
+	LOADL 1
+	SUBR MAlloc
 	STORE(1) 5[LB]
+	LOADI(1)
+	LOAD(1) -2[LB]
+	STOREI(1)
+	LOADI(1)
 	LOADL 1
 	SUBR MAlloc
-	LOAD(1) -4[LB]
 	STOREI(1)
-	LOADL 1
-	SUBR MAlloc
-	STOREI(1)
+	LOADI(1)
 	LOADL 12
 	STOREI(1)
 	LOADI(1)
 	LOADL 9999
 	SUBR IAdd
+	STORE(1) 6[LB]
+	LOAD(1) -2[LB]
 	LOADL 1
 	SUBR MAlloc
-	STORE(1) 7[LB]
-	LOAD(1) -4[LB]
+	STORE(1) -2[LB]
+	LOAD(1) -2[LB]
 	RETURN (2) 1
 _bar:
 	PUSH 1
-null	LOADL 3
-	STORE(1) 4[LB]
+	LOADI(1)
+	LOADL 3
+	STOREI(1)
+	LOAD(1) 3[LB]
+	LOADI(2)
+
+	SUBR Iadd
+	LOADL 3
+	STORE(1) 3[LB]
 	LOADL 301
+	STORE(1) 4[LB]
 	LOADL 401
+	STORE(1) 5[LB]
 	PUSH 1
-	LOADL 33
-nullnull	SUBR IMul
-nullnull	SUBR ISub
-	LOADL 55
-	SUBR Ineg
-nullnull	LOADL 22
-	LOADL 11
-nullnull	SUBR IDiv
-	SUBR IMod
-	SUBR IDiv
-	SUBR IMul
-	LOADL 55
-	SUBR Ineg
-nullnull	LOADL 22
-	LOADL 11
-nullnull	SUBR IDiv
-	SUBR IMod
-	SUBR IDiv
-	SUBR IMul
-	SUBR IGtr
-; Appel a foo
-	CALL(SB) _foo
-	STORE(1) 7[LB]
+	LOAD(1) 6[LB]
+null	STORE(1) 6[LB]
 	LOAD(1) 6[LB]
 	RETURN (2) 1
 ; inline code_asm
