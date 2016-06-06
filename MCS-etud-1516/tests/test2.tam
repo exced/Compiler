@@ -6,6 +6,17 @@ _main:
 	LOADL 0
 	LOADL 1
 	SUBR ILss
+	LOADL 1
+	LOADL 2
+	SUBR IAdd
+	LOADL 3
+	LOADL 12
+	SUBR IMul
+	LOADL 5
+	SUBR Ineg
+	LOADL 1
+	SUBR BNeg
+	LOADL 4
 	LOADL 0
 	RETURN (0) 1
 ; Appel a main

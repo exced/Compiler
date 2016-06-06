@@ -29,8 +29,12 @@ public class DTYPEImpl implements DTYPE {
 		
 		boolean res = false;
 		
-		if(op.getNom().equals("OPUNPLUS") || op.getNom().equals("OPUNMOINS") || op.getNom().equals("OPUNNON")){
+		if(op.getNom().equals("OPUNPLUS") || op.getNom().equals("OPUNMOINS")){
 			res = this.getNom().equals("int");
+		}
+		
+		if(op.getNom().equals("OPUNNON")){
+			res = this.getNom().equals("bool");
 		}
 		
 		return res;
