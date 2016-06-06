@@ -68,27 +68,18 @@ private void action_gen_35(S_A_MCS x_3) throws Exception {
 try {
 // locales
 String loc_code;
-INFOVAR loc_iv;
 // instructions
-if (this.att_hiv instanceof INFOVAR ){
-loc_iv=((INFOVAR)this.att_hiv);
-if (this.att_hest_decl){
-loc_code=x_3.att_code;
-}
-else {
 if (this.att_hcode_est_adresse){
 loc_code=x_3.att_code+this.att_machine.genWriteIndirectMem(this.att_htype.getTaille());
 }
 else {
-loc_code=x_3.att_code+this.att_machine.genWriteMem(loc_iv.getDep(), this.att_htype.getTaille());
+loc_code=x_3.att_code+this.att_machine.genWriteMem(this.att_hiv.getDep(), this.att_htype.getTaille());
 }
-}
+if (this.att_hest_decl){
 this.att_code=loc_code;
 }
 else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_aff_non_var, MCSMessages.aff_non_var,new Object[]{""+this.att_hiv});
-
-
+this.att_code=this.att_hcode+loc_code;
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","AFFX -> affect A #type #gen ;"});
 }
@@ -124,16 +115,16 @@ this.att_type=this.att_htype;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_affect : // 10041
+      case LEX_MCS.token_affect : // 24351
         regle35 () ;
       break ;
-      case LEX_MCS.token_pv : // 10040
+      case LEX_MCS.token_pv : // 24350
         regle36 () ;
       break ;
-      case LEX_MCS.token_virg : // 10038
+      case LEX_MCS.token_virg : // 24348
         regle36 () ;
       break ;
-      case LEX_MCS.token_parf : // 10035
+      case LEX_MCS.token_parf : // 24345
         regle36 () ;
       break ;
       default :

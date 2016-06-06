@@ -3,7 +3,17 @@
 
 _main:
 	PUSH 1
-nullnullnullnull	LOADL 0
+	PUSH 1
+	LOADI(1)
+	LOADL 3
+	STOREI(1)
+	LOAD(1) 4[LB]
+	LOADI(2)
+
+	SUBR Iadd
+	LOADL 3
+	STORE(1) 4[LB]
+	LOADL 0
 	RETURN (0) 1
 ; Appel a main
 	CALL(SB) _main

@@ -5,12 +5,11 @@ int main(){
 
 	int a;
 
-    // declaration d'un pointeur et allocation de la zone pointee
-    int *m = (int *)malloc(1);
-    *m = 666;
+
     
-    int ** k = (int **)malloc(1) ;
-    *k = m;    
+    struct { int x; int y; } *pt;
+    *pt.x = 3;
+    pt->y = 3;
     
     return 0;
 }

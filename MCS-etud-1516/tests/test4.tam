@@ -4,8 +4,16 @@
 _main:
 	PUSH 2
 	PUSH 1
+	LOAD(2) 3[LB]
+	;Calcul deplacement struct 2
+	LOADL 2
+	SUBR Iadd
 	LOADL 3
 	STORE(1) 3[LB]
+	LOAD(2) 3[LB]
+	;Calcul deplacement struct 1
+	LOADL 1
+	SUBR Iadd
 	LOADL 5
 	STORE(1) 3[LB]
 	LOADL 0

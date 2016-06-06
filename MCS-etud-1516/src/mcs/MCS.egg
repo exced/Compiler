@@ -473,17 +473,14 @@ end
 ------------------------------------------------------------------------ 
 -- et struct
 STYPE -> struct aco #ch CHAMPS acf #type;
-global 
- lc : LCHAMPS ;
 #ch {
 do
-  lc := new LCHAMPS();
-  CHAMPS^hchamps := lc;
+  CHAMPS^hchamps := new LCHAMPS();
 end
 }
 #type {
  do
-   STYPE^type := new STRUCT(lc);
+   STYPE^type := new STRUCT(CHAMPS^champs);
  end
 }
 
@@ -576,6 +573,7 @@ do
         -- transmission de l'info
         AFFX^hiv := new INFOVAR(TYPE^type, INST^machine.getCurrentDep());
     end
+    
 
     -- transmission de type
     AFFX^htype := TYPE^type;
@@ -723,6 +721,7 @@ do
     AFFX^htype := A^type;
     AFFX^hcode := A^code;
     
+    
     AFFX^hest_decl := false;
 end
 }
@@ -753,24 +752,22 @@ end
 #gen {
 local 
   code : STRING;
-  iv : INFOVAR;
 do  
-    match AFFX^hiv with
-    INFOVAR then
-        iv := AFFX^hiv;
-        if AFFX^hest_decl then
-            code := A^code;
-        else
-            if AFFX^hcode_est_adresse then
-                code := A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
-            else
-                code := A^code + AFFX^machine.genWriteMem(iv.getDep(), AFFX^htype.getTaille());    
-            end
-        end
-        AFFX^code := code;        
+
+    if AFFX^hcode_est_adresse then
+        code := A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
     else
-        error(aff_non_var, AFFX^hiv);
+        code := A^code + AFFX^machine.genWriteMem(AFFX^hiv.getDep(), AFFX^htype.getTaille());    
     end
+    
+    -- si declaration on laisse direct le code sans faire de STORE 
+    if AFFX^hest_decl then
+        AFFX^code := code;
+    else
+        AFFX^code := AFFX^hcode + code; 
+    end
+            
+
 end  
 }
 
@@ -1335,12 +1332,16 @@ end
 ------------------------------------------------------------------------
 F -> mult F #type #addr;
 #type {
+local
+    p : POINTEUR;
 do
     -- remontee infovar
     F^siv := F1^siv;
 
-    match F1^type with POINTEUR then
-        F^type := F1^type.getType();      
+    match F1^type 
+    with POINTEUR then
+        p := F1^type;
+        F^type := p.getType();      
         F^code_est_adresse := true;
     else
         error(not_pointeur, F1^type.getNom());
@@ -1367,8 +1368,6 @@ local
     i2:INFO;
 do  
 
-
-
     -- ident pour l'appel de fonction
     FX^ident := ident^txt;
 
@@ -1381,6 +1380,8 @@ do
         with INFOVAR then
             iv := i;
             t := iv.getType();
+            
+            FX^htype := t;
             FX^hcode := "";
             F^code_est_adresse := false;
         
@@ -1396,6 +1397,7 @@ do
         with INFOFONC then
             infofonc := i;  
             t := infofonc.getType();
+            FX^htype := t;
             FX^hcode := "";
             F^code_est_adresse := false;
             code := "";
@@ -1409,6 +1411,7 @@ end
 #gen{
 do
     F^type := FX^type;
+    
     F^code := code + FX^code;    
 end
 }
@@ -1428,12 +1431,32 @@ end
 FX ->   pt  ident #a FX #gen;
 #a {
 local
- s : STRUCT ;
- c : CHAMP;
- lc : LCHAMPS;
+    t : DTYPE;
+    p : POINTEUR;
+    s : STRUCT ;
+    c : CHAMP;
+    lc : LCHAMPS;
 do
-    match FX^htype with
-    STRUCT then
+    match FX^htype 
+    with POINTEUR then
+        p := FX^htype;
+        t := p.getType();
+        match t with
+        STRUCT then
+            s := t;
+            lc := s.getChamps();
+            c := lc.chercherChamp(ident^txt);
+            if c = nil then
+                error(champ_not_found, lc, ident^txt);
+            else
+                FX1^htype := new POINTEUR(c.getType());
+            
+                FX1^hcode := FX^hcode + FX^machine.genPointeurField(c.getDep());
+            end    
+        else
+            error(type_not_struct, FX^htype.getNom(), ident^txt);
+        end        
+    with STRUCT then
         s := FX^htype;
         lc := s.getChamps();
         c := lc.chercherChamp(ident^txt);
@@ -1445,7 +1468,7 @@ do
             FX1^hcode := FX^hcode + FX^machine.genAdrField(c.getDep());
         end    
     else
-        error(type_not_struct, FX^htype.getNom());
+        error(type_not_struct, FX^htype.getNom(), ident^txt);
     end    
 
 end
@@ -1454,14 +1477,47 @@ end
 do
   FX^type := FX1^type;
   
-  FX^code :=FX1^code;
+  FX^code := FX1^code;
 end
 }
 
 
 ------------------------------------------------------------------------
 -- acces champ pointeur
-FX ->   arrow  ident FX #type #gen;
+FX ->   arrow ident #htype FX #type #gen;
+#htype {
+local
+    t : DTYPE;
+    p : POINTEUR;
+    s : STRUCT ;
+    c : CHAMP;
+    lc : LCHAMPS;
+ 
+do
+    match FX^htype with
+    POINTEUR then
+        p := FX^htype;
+        t := p.getType();
+            match t with
+            STRUCT then
+                s := t;
+                lc := s.getChamps();
+                c := lc.chercherChamp(ident^txt);
+                if c = nil then
+                    error(champ_not_found, lc, ident^txt);
+                else
+                    FX1^htype := c.getType();
+            
+                    FX1^hcode := FX^hcode + FX^machine.genPointeurField(c.getDep());
+                end    
+            else
+                error(type_not_struct, FX^htype.getNom(), ident^txt);
+            end  
+    else
+        error(access_not_pointeur, ident^txt);
+    end
+end
+}
 #type {
 do
     FX^type := FX1^type;    
@@ -1469,7 +1525,7 @@ end
 }
 #gen {
 do
-    FX^code := "";        
+    FX^code := FX1^code;        
 end
 }
 

@@ -23,7 +23,6 @@ int [] sync= new int[0];
   boolean att_eval;
   LEX_MCS att_scanner;
   DTYPE att_type;
-  LCHAMPS glob_20_lc;
   private void regle82() throws Exception {
 
     //declaration
@@ -90,7 +89,7 @@ x_5.att_tds=this.att_tds;
 private void action_type_20(S_CHAMPS_MCS x_5) throws Exception {
 try {
 // instructions
-this.att_type= new STRUCT(glob_20_lc);
+this.att_type= new STRUCT(x_5.att_champs);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","STYPE -> struct aco #ch CHAMPS acf #type ;"});
 }
   }
@@ -134,8 +133,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 private void action_ch_20(S_CHAMPS_MCS x_5) throws Exception {
 try {
 // instructions
-glob_20_lc= new LCHAMPS();
-x_5.att_hchamps=glob_20_lc;
+x_5.att_hchamps= new LCHAMPS();
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#ch","STYPE -> struct aco #ch CHAMPS acf #type ;"});
 }
   }
@@ -156,22 +154,22 @@ this.att_type= new DTYPEImpl("int", 1);
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 10044
+      case LEX_MCS.token_void : // 24354
         regle16 () ;
       break ;
-      case LEX_MCS.token_int : // 10046
+      case LEX_MCS.token_int : // 24356
         regle17 () ;
       break ;
-      case LEX_MCS.token_char : // 10047
+      case LEX_MCS.token_char : // 24357
         regle18 () ;
       break ;
-      case LEX_MCS.token_identc : // 10086
+      case LEX_MCS.token_identc : // 24396
         regle19 () ;
       break ;
-      case LEX_MCS.token_struct : // 10048
+      case LEX_MCS.token_struct : // 24358
         regle20 () ;
       break ;
-      case LEX_MCS.token_bool : // 10058
+      case LEX_MCS.token_bool : // 24368
         regle82 () ;
       break ;
       default :

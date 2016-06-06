@@ -155,6 +155,11 @@ public class MTAM extends AbstractMachine {
 		return "\t;Calcul deplacement struct " + dep + "\n" + "\tLOADL " + dep
 				+ "\n\tSUBR Iadd\n";
 	}
+	
+	public String genPointeurField(int dep) {
+		return genReadIndirectMem(dep) 
+				+ "\n\tSUBR Iadd\n";		
+	}
 
 	public String genComment(String c) {
 		return "; " + c + "\n";

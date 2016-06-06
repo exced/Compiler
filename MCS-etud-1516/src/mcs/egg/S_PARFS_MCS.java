@@ -80,25 +80,25 @@ this.att_stds=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 10035
+      case LEX_MCS.token_parf : // 24345
         regle8 () ;
       break ;
-      case LEX_MCS.token_void : // 10044
+      case LEX_MCS.token_void : // 24354
         regle9 () ;
       break ;
-      case LEX_MCS.token_int : // 10046
+      case LEX_MCS.token_int : // 24356
         regle9 () ;
       break ;
-      case LEX_MCS.token_char : // 10047
+      case LEX_MCS.token_char : // 24357
         regle9 () ;
       break ;
-      case LEX_MCS.token_identc : // 10086
+      case LEX_MCS.token_identc : // 24396
         regle9 () ;
       break ;
-      case LEX_MCS.token_struct : // 10048
+      case LEX_MCS.token_struct : // 24358
         regle9 () ;
       break ;
-      case LEX_MCS.token_bool : // 10058
+      case LEX_MCS.token_bool : // 24368
         regle9 () ;
       break ;
       default :

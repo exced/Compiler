@@ -9,8 +9,7 @@ int main(){
    
    pt.y = 3;
    pt.x = 5;
-   
-    //pt->y = 3;
+
     
     return 0;
 }

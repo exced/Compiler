@@ -26,7 +26,6 @@ public class MCSMessages extends NLS {
   public static  String namespace_unknown;
   public static  String castError;
   public static  String typeError_opUn;
-  public static  String aff_non_var;
   public static  String type_not_struct;
   public static  String type_undefined;
   public static  String MCS_expected_token;
@@ -35,6 +34,7 @@ public class MCSMessages extends NLS {
   public static  String not_castable_as;
   public static  String champ_declared;
   public static  String var_declared;
+  public static  String access_not_pointeur;
   public static  String type_unknown;
   public static  String using_notNameSpace;
   public static  String var_not_found;
