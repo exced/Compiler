@@ -35,7 +35,7 @@ inh tds_asm : TDS for ASM;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
                             SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX,DEFS,DEF;
 inh tdsNameSpace : TDS for ENTITE,ENTITES;   
-syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES;      
+syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES,DEFS;      
 
 
 -- INST
@@ -58,6 +58,12 @@ inh hbloc_est_fonction : BOOLEAN for BLOC;
 
 -- ACCES
 syn acces : STRING for ACCES;
+
+-- CLASSE
+syn sinfoclasse : INFOCLASSE for HERITAGE;
+
+-- CHAMPS CLASSE
+syn champsclasse : CHAMPCLASSE for DEFS;
 
 
 
@@ -251,7 +257,7 @@ end
 }
 
 ------------------------------------------------------------------------
--- déclaration d'une fonction
+-- declaration d'une fonction
 DECL -> #ident FONCTION #gen #sinfo;
 #ident {
 do
@@ -326,7 +332,7 @@ end
 
 
 ------------------------------------------------------------------------
--- multi paramètres
+-- multi parametres
 PARFS -> PARF #tds PARFSX #stds;
 global
     tds:TDS;
@@ -1555,7 +1561,7 @@ local
 do
 write "Appel fonction : " + FX^ident + "\n";
 
-    -- appel du sous-programme à partir de l'étiquette
+    -- appel du sous-programme a partir de l'étiquette
     
     i := FX^tds.chercherGlobalement(FX^ident);
     
@@ -1772,7 +1778,6 @@ ENTITE -> ACCES class identc HERITAGE aco DEFS acf #classe #gen;
 global
     i : INFO;
     ic : INFOCLASSE;
-    t := DTYPE;
 #classe {
 do
     i := ENTITE^tds.chercherGlobalement(identc^txt);
@@ -1780,10 +1785,8 @@ do
         error(classe_defined, identc^txt, ENTITE^tds);
     else    
         -- definition de la classe
-        -- type : pointeur sur struct contenant tous les elements de la classe
-        t := new POINTEUR(new STRUCT(DEFS^champs));
-        ic := new INFOCLASSE();
-        
+        -- le type de la classe est un pointeur sur un struct et les champs sont les attributs et les fonctions
+        ic := new INFOCLASSE(new POINTEUR(new STRUCT(DEFS^champsclasse)), ACCES^acces, DEFS^stds, HERITAGE^sinfoclasse);
         -- insertion
         ENTITE^tds.inserer(identc^txt, ic);  
     end    
@@ -1827,6 +1830,7 @@ HERITAGE -> #sident;
 #sident {
 do
     HERITAGE^sident := "";
+    HERITAGE^sinfoclasse := nil;
 end
 }
 
@@ -1840,6 +1844,9 @@ end
 #sident{
 do
     HERITAGE^sident := IDC^sident;
+    
+    -- remontee de l'infoclasse
+    
 end
 }
 

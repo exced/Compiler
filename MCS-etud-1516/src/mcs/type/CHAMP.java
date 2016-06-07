@@ -1,6 +1,6 @@
 package mcs.type;
 
-public class CHAMP {
+public abstract class CHAMP {
 	private String nom;
 	private int dep;
 	private DTYPE type;
