@@ -24,6 +24,7 @@ int [] sync= new int[0];
   boolean att_eval;
   String att_code;
   IMachine att_machine;
+  boolean att_hest_decl;
   LEX_MCS att_scanner;
   boolean att_code_est_adresse;
   DTYPE att_type;
@@ -55,6 +56,8 @@ x_2.att_machine=this.att_machine;
 x_4.att_machine=this.att_machine;
 x_2.att_tds=this.att_tds;
 x_4.att_tds=this.att_tds;
+x_2.att_hest_decl=this.att_hest_decl;
+x_4.att_hest_decl=this.att_hest_decl;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","A -> R #type AX #gen ;"});
 }
   }

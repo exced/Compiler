@@ -79,8 +79,6 @@ public interface IMachine {
 
 	public String genAdrField(int dep);
 	
-	public String genPointeurField(int dep); 
-	
 	public String genJump(String etq);
 
 	public String genComment(String c);

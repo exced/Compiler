@@ -26,7 +26,7 @@ syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,CHAMP,PTRS, AFFX, A,AX, R,RX,T,
 inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX;
 
 -- INFO
-inh hiv : INFOVAR for AFFX;
+inh hiv : INFOVAR for AFFX,FX;
 syn siv : INFOVAR for E,A,R,T,F;
 syn sinfo : INFO for DEF,DECL,FONCTION;
 
@@ -39,7 +39,7 @@ syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES,DEFS;
 
 
 -- INST
-inh hest_decl : BOOLEAN for AFFX;                                              
+inh hest_decl : BOOLEAN for AFFX,A,AX,R,RX,T,TX,F;                                              
                             
 -- GC                            
 syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX,DEFS,DEF,BASE;
@@ -714,7 +714,12 @@ end
 -----------------------------------------------------------------------
 
 ------------------------------------------------------------------------
-E -> A #type AFFX #gen;
+E ->#hdecl A #type AFFX #gen;
+#hdecl {
+do
+    A^hest_decl := true;
+end
+}
 #type {
 do  
     AFFX^hiv := A^siv;
@@ -724,7 +729,8 @@ do
     
     E^type := A^type;
     -- type pour permettre le controle d'erreur au moment de l'affectation
-    AFFX^htype := A^type;
+    AFFX^htype := A^type; 
+    
     AFFX^hcode := A^code;
     
     
@@ -741,7 +747,12 @@ end
 
 ------------------------------------------------------------------------
 -- affectation
-AFFX -> affect A  #type #gen;
+AFFX -> affect #hdecl A  #type #gen;
+#hdecl {
+do
+    A^hest_decl := false;
+end
+}
 #type {
 -- controle de type
 do
@@ -776,7 +787,7 @@ do
         else
             codeWrite := AFFX^machine.genWriteMem(AFFX^hiv.getDep(), AFFX^htype.getTaille());
         end        
-        AFFX^code := code + codeWrite;
+        AFFX^code := code + AFFX^hcode + codeWrite;
     end
             
 
@@ -1255,6 +1266,8 @@ F ->  paro E parf #addr FX #type #gen;
 do
     -- remontee infovar
     F^siv := E^siv;
+    
+    FX^hiv := E^siv;
 
     FX^ident := "";
 
@@ -1373,11 +1386,11 @@ global
   iv : INFOVAR ;
   infofonc : INFOFONC;
   t : DTYPE;
-  code : STRING;
 #htype {
 local
     i:INFO;
     i2:INFO;
+    code : STRING;
 do  
 
     -- ident pour l'appel de fonction
@@ -1393,15 +1406,22 @@ do
             iv := i;
             t := iv.getType();
             
+            FX^hiv := iv;
+            
             FX^htype := t;
-            FX^hcode := "";
             F^code_est_adresse := false;
-        
-            if F^hcode_est_adresse then
-                code := F^machine.genReadIndirectMem(iv.getTaille());
+            
+            if ~F^hest_decl then
+                if F^hcode_est_adresse then
+                    code := F^machine.genReadIndirectMem(iv.getTaille());
+                else
+                    code := F^machine.genReadMem(iv.getDep() , iv.getTaille()); 
+                end
             else
-                code := F^machine.genReadMem(iv.getDep() , iv.getTaille()); 
-            end
+                code := "";
+            end    
+            
+            FX^hcode := code;
             
             -- remontee infovar
             F^siv := iv;
@@ -1424,7 +1444,7 @@ end
 do
     F^type := FX^type;
     
-    F^code := code + FX^code;    
+    F^code := FX^code;    
 end
 }
 
@@ -1433,7 +1453,7 @@ FX -> #gen;
 #gen {
 do
   FX^type := FX^htype;
-  
+   
   FX^code := FX^hcode;
 end
 }
@@ -1448,7 +1468,11 @@ local
     s : STRUCT ;
     c : CHAMP;
     lc : LCHAMPS;
+    ct : DTYPE;
+    code : STRING;
 do
+    
+    code := "";
     match FX^htype 
     with POINTEUR then
         p := FX^htype;
@@ -1463,7 +1487,7 @@ do
             else
                 FX1^htype := new POINTEUR(c.getType());
             
-                FX1^hcode := FX^hcode + FX^machine.genPointeurField(c.getDep());
+                code := FX^machine.genAdrField(c.getDep());
             end    
         else
             error(type_not_struct, FX^htype.getNom(), ident^txt);
@@ -1472,17 +1496,17 @@ do
         s := FX^htype;
         lc := s.getChamps();
         c := lc.chercherChamp(ident^txt);
+        ct := c.getType();
         if c = nil then
             error(champ_not_found, lc, ident^txt);
         else
-        
             FX1^htype := c.getType();
-            
-            FX1^hcode := FX^hcode + FX^machine.genAdrField(c.getDep());
+            code := FX^machine.genWriteMem(c.getDep() + FX^hiv.getDep() -1, ct.getTaille());
         end    
     else
         error(type_not_struct, FX^htype.getNom(), ident^txt);
-    end    
+    end
+    FX1^hcode := code;    
 
 end
 }
@@ -2007,10 +2031,10 @@ end
 --PARF ->  MODE TYPE ident ;
 
 ------------------------------------------------------------------------
---MODE -> ref ;
+MODE -> ref ;
 
 ------------------------------------------------------------------------
---MODE -> out ; 
+MODE -> out ; 
 
 ------------------------------------------------------------------------
 F -> true #gen;
