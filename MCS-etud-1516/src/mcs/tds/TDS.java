@@ -88,11 +88,11 @@ public class TDS extends LinkedHashMap<String, INFO> {
 			}
 			else if (result instanceof INFONAMESPACE && i < (tailleStrings-1)) {
 				tds_temp = ((INFONAMESPACE) result).getContenu();
+				result = tds_temp.chercherLocalement(strings[i+1]);
 			}
 			else {
 				return null;
 			}
-			result = tds_temp.chercherLocalement(strings[i]);
 		}
 		return (INFOCLASSE) result;
 	}
