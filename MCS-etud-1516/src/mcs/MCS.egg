@@ -776,7 +776,7 @@ do
         else
             codeWrite := AFFX^machine.genWriteMem(AFFX^hiv.getDep(), AFFX^htype.getTaille());
         end        
-        AFFX^code := code + AFFX^hcode + codeWrite;
+        AFFX^code := code + codeWrite;
     end
             
 
@@ -1475,6 +1475,7 @@ do
         if c = nil then
             error(champ_not_found, lc, ident^txt);
         else
+        
             FX1^htype := c.getType();
             
             FX1^hcode := FX^hcode + FX^machine.genAdrField(c.getDep());
