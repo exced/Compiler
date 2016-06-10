@@ -80,10 +80,10 @@ this.att_sinfoclasse=loc_ic;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_aco : // 33646
+      case LEX_MCS.token_aco : // 1286
         regle91 () ;
       break ;
-      case LEX_MCS.token_dpts : // 33667
+      case LEX_MCS.token_dpts : // 1307
         regle92 () ;
       break ;
       default :

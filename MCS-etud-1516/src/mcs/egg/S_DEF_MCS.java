@@ -147,25 +147,25 @@ x_6.att_htype=x_2.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 33654
+      case LEX_MCS.token_void : // 1294
         regle95 () ;
       break ;
-      case LEX_MCS.token_int : // 33656
+      case LEX_MCS.token_int : // 1296
         regle95 () ;
       break ;
-      case LEX_MCS.token_char : // 33657
+      case LEX_MCS.token_char : // 1297
         regle95 () ;
       break ;
-      case LEX_MCS.token_identc : // 33696
+      case LEX_MCS.token_identc : // 1336
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_mult : // 33687
+          case LEX_MCS.token_mult : // 1327
             regle95 () ;
           break ;
-          case LEX_MCS.token_ident : // 33695
+          case LEX_MCS.token_ident : // 1335
             regle95 () ;
           break ;
-          case LEX_MCS.token_paro : // 33644
+          case LEX_MCS.token_paro : // 1284
             regle96 () ;
           break ;
           default :
@@ -173,10 +173,10 @@ x_6.att_htype=x_2.att_type;
 scanner.accepter_sucre(LEX_MCS.token_identc);
         }
       break ;
-      case LEX_MCS.token_struct : // 33658
+      case LEX_MCS.token_struct : // 1298
         regle95 () ;
       break ;
-      case LEX_MCS.token_bool : // 33668
+      case LEX_MCS.token_bool : // 1308
         regle95 () ;
       break ;
       default :

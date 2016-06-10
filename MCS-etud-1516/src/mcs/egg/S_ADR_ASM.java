@@ -95,10 +95,10 @@ this.att_code_asm="("+x_3.att_txt+") "+x_3.att_txt+'['+x_7.att_txt+']';
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_ASM.token_paro : // 18927
+      case LEX_ASM.token_paro : // 146
         regle3 () ;
       break ;
-      case LEX_ASM.token_var : // 18952
+      case LEX_ASM.token_var : // 171
         regle4 () ;
       break ;
       default :

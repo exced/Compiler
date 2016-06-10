@@ -774,7 +774,7 @@ do
     if AFFX^hest_decl then
         AFFX^code := code ;
     else      
-        AFFX^code := code + codeWrite;
+        AFFX^code := code + AFFX^hcode + codeWrite;
     end
             
 
@@ -1396,7 +1396,7 @@ do
 
             -- code de lecture de variable            
             if F^hcode_est_adresse then
-                code := F^machine.genReadIndirectMem(iv.getTaille());
+                code := F^machine.genAdr(iv.getTaille());
             else
                 code := F^machine.genReadMem(iv.getDep() , iv.getTaille()); 
             end   
