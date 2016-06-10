@@ -288,6 +288,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
+<<<<<<< HEAD
       case LEX_MCS.token_mult : // 183
         regle72 () ;
       break ;
@@ -346,6 +347,66 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
         regle74 () ;
       break ;
       case LEX_MCS.token_paro : // 140
+=======
+      case LEX_MCS.token_mult : // 7652
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_div : // 7653
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_mod : // 7654
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_et : // 7655
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_plus : // 7649
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_moins : // 7650
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_ou : // 7651
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_inf : // 7643
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_sup : // 7645
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_infeg : // 7644
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_supeg : // 7646
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_eg : // 7647
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_neg : // 7648
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_affect : // 7616
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_virg : // 7613
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_pv : // 7615
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_parf : // 7610
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_pt : // 7614
+        regle73 () ;
+      break ;
+      case LEX_MCS.token_arrow : // 7641
+        regle74 () ;
+      break ;
+      case LEX_MCS.token_paro : // 7609
+>>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
         regle75 () ;
       break ;
       default :

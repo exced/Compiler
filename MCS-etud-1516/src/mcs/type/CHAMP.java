@@ -1,9 +1,16 @@
 package mcs.type;
 
-public abstract class CHAMP {
+public class CHAMP {
 	private String nom;
 	private int dep;
 	private DTYPE type;
+	
+	public CHAMP(String nom, DTYPE type, int dep) {
+		super();
+		this.nom = nom;
+		this.type = type;
+		this.dep = dep;
+	}
 
 	public String getNom() {
 		return nom;
@@ -18,13 +25,6 @@ public abstract class CHAMP {
 	}
 	
 	public void setDep(int dep) {
-		this.dep = dep;
-	}
-
-	public CHAMP(String nom, DTYPE type, int dep) {
-		super();
-		this.nom = nom;
-		this.type = type;
 		this.dep = dep;
 	}
 
