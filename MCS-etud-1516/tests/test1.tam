@@ -1,11 +1,38 @@
 ; Generated code for tests/test1.mcs.
 ; Do not modify by hand
+
+_main:
+	LOADL 1
+	STORE(1) 3[LB]
+	PUSH 1
+	; if
+	LOADL 1
+	LOADL 0
+	SUBR IEq
+
+	JUMPIF(0) X0
+	PUSH 1
+	LOAD(1) 4[LB]
+	LOADL 4
+	STORE(1) 4[LB]
+
+	JUMP X1
+X0:
+	LOAD(1) 4[LB]
+	LOADL 5
+	STORE(1) 4[LB]
+
+X1:
+	; fin if
+	LOAD(1) 5[LB]
+	LOADL 16
+	STORE(1) 5[LB]
+	PUSH 1
+	LOAD(1) 6[LB]
+	LOADL 2
+	STORE(1) 6[LB]
+	LOADL 0
+	RETURN (1) 1
 ; Appel a main
 	CALL(SB) _main
-_main:
-	LOADL 3
-	STORE(1) 1[LB]
-	LOADL 0
-	POP (0) 2
-	RETURN (0) 1
 	HALT

@@ -4,20 +4,14 @@
 	PUSH 1
 _fonction1:
 	PUSH 1
-	LOAD(1) -1[LB]
 	LOADL 18
 	STORE(1) 3[LB]
-	LOAD(1) -2[LB]
-	LOAD(1) -1[LB]
 	SUBR IAdd
 	RETURN (2) 1
 _fonction2:
 	PUSH 1
 	LOADL 18
 	STORE(1) 3[LB]
-	LOAD(1) 3[LB]
-	LOAD(1) -1[LB]
-	LOAD(1) -2[LB]
 	SUBR IAdd
 	SUBR IAdd
 	RETURN (2) 1

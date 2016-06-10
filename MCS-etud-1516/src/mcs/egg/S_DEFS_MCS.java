@@ -22,7 +22,9 @@ int [] sync= new int[0];
   TDS att_tds;
   boolean att_eval;
   String att_code;
+  CHAMPCLASSE att_champsclasse;
   IMachine att_machine;
+  TDS att_stds;
   LEX_MCS att_scanner;
   private void regle93() throws Exception {
 
@@ -67,6 +69,8 @@ x_5.att_tds=loc_tds;
 private void action_gen_93() throws Exception {
 try {
 // instructions
+this.att_stds=this.att_tds;
+this.att_champsclasse=null;
 this.att_code="";
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","DEFS -> #gen ;"});
 }
@@ -84,37 +88,39 @@ private void action_gen_94(S_ACCES_MCS x_2, S_DEF_MCS x_3, S_DEFS_MCS x_5) throw
 try {
 // instructions
 this.att_code=x_3.att_code+x_5.att_code;
+this.att_champsclasse=x_5.att_champsclasse;
+this.att_stds=x_5.att_stds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","DEFS -> ACCES DEF #def DEFS1 #gen ;"});
 }
   }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 24347
+      case LEX_MCS.token_acf : // 14353
         regle93 () ;
       break ;
-      case LEX_MCS.token_public : // 24365
+      case LEX_MCS.token_public : // 14371
         regle94 () ;
       break ;
-      case LEX_MCS.token_private : // 24366
+      case LEX_MCS.token_private : // 14372
         regle94 () ;
       break ;
-      case LEX_MCS.token_void : // 24354
+      case LEX_MCS.token_void : // 14360
         regle94 () ;
       break ;
-      case LEX_MCS.token_int : // 24356
+      case LEX_MCS.token_int : // 14362
         regle94 () ;
       break ;
-      case LEX_MCS.token_char : // 24357
+      case LEX_MCS.token_char : // 14363
         regle94 () ;
       break ;
-      case LEX_MCS.token_identc : // 24396
+      case LEX_MCS.token_identc : // 14402
         regle94 () ;
       break ;
-      case LEX_MCS.token_struct : // 24358
+      case LEX_MCS.token_struct : // 14364
         regle94 () ;
       break ;
-      case LEX_MCS.token_bool : // 24368
+      case LEX_MCS.token_bool : // 14374
         regle94 () ;
       break ;
       default :

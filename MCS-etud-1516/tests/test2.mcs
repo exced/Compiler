@@ -3,22 +3,30 @@ int a;
 int main(){
 
 	// OPREL
-	bool b = (0 < 1);
+	bool le = (0 < 1);
+	
+	bool leq = 3 <= 6;
+	
+	bool eq = (1 == 0);
+	
+	bool ge = (3 > 2);
+	
+	bool geq = 4 >= (3 + 1);
 	
 	// OPADD
-	int c = 1 + 2;
+	int plus = 1 + 2;
 	
 	// OPMUL
-	int d = 3 * 12;
+	int mult = 3 * 12;
 	
 	// OPUN
-	int e = -5;
+	int moins = -5;
 	
 	// OPUN
-	bool f = !true;
+	bool not = !true;
 	
 	// OPUN
-	int g = +4;
+	int plus2 = +4;
 	
 
     return 0;

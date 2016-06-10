@@ -4,7 +4,7 @@ int a;
 int fonction1(int b, int c){
 
 	int z;
-	int j = b;
+	int j = c;
 	z = 18;
 	return c+b;
 }

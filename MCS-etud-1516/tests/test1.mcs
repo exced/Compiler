@@ -2,8 +2,21 @@ typedef int Entier ;
 
 int main(int x){
 
-    int a;
-    int b = 3;
+	int a = 1;
+    int b;
+    
+    if (1 == 0){
+    	int c;
+       	b = 4;
+    }   
+    else {
+       	b = 5;
+    }
+    
+    c = 16;
+    
+    int d;
+    d = 2;
 
     return 0;
 }

@@ -138,8 +138,8 @@ public class MTAM extends AbstractMachine {
 		String sinon = genEtiq();
 		String fin = genEtiq();
 		return "\t; if\n" + code + "\n" + "\tJUMPIF(0) " + sinon + "\n" + code2
-				+ "\n" + "\tJUMP " + fin + "\n" + sinon + "\n" + code3 + "\n"
-				+ fin + "\n" + "\t; fin if\n";
+				+ "\n" + "\tJUMP " + fin + "\n" + sinon+":" + "\n" + code3 + "\n"
+				+ fin+":" + "\n" + "\t; fin if\n";
 	}
 	
 

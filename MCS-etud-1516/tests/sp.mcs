@@ -1,0 +1,13 @@
+
+
+// point d'entree du programme.
+int main(){
+	type point = struct {int x; int y;};
+	point *p = (point *)malloc(2);
+	p*.x = 3;
+	p*.y = 4;
+	int c = p*.x;
+	
+    
+    return 0;
+}

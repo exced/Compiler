@@ -33,7 +33,7 @@ syn sinfo : INFO for DEF,DECL,FONCTION;
 -- TDS
 inh tds_asm : TDS for ASM;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
-                            SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX,DEFS,DEF;
+                            SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX,DEFS,DEF,HERITAGE;
 inh tdsNameSpace : TDS for ENTITE,ENTITES;   
 syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES,DEFS;      
 
@@ -649,8 +649,8 @@ end
 INST ->  si paro E #type parf BLOC SIX #gen;
 #type {
 do
-   if ~E^type.compareTo(new DTYPEImpl("int", 1)) then
-      error(not_int, E^type);
+   if ~E^type.compareTo(new DTYPEImpl("bool", 1)) then
+      error(not_bool, E^type.getNom());
    end
    
    BLOC^hbloc_est_fonction := false;
@@ -758,19 +758,25 @@ end
 #gen {
 local 
   code : STRING;
+  codeWrite : STRING;
 do  
-
-    if AFFX^hcode_est_adresse then
-        code := A^code + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
-    else
-        code := A^code + AFFX^machine.genWriteMem(AFFX^hiv.getDep(), AFFX^htype.getTaille());    
-    end
     
-    -- si declaration on laisse direct le code sans faire de STORE 
-    if AFFX^hest_decl then
-        AFFX^code := code;
+    if AFFX^hcode_est_adresse then
+        code := A^code + AFFX^machine.genReadIndirectMem(AFFX^htype.getTaille());
     else
-        AFFX^code := AFFX^hcode + code; 
+        code := A^code ;
+    end    
+
+    -- si declaration + affectation, on laisse direct le code en sommet de pile
+    if AFFX^hest_decl then
+        AFFX^code := code ;
+    else
+        if AFFX^hcode_est_adresse then
+            codeWrite := AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+        else
+            codeWrite := AFFX^machine.genWriteMem(AFFX^hiv.getDep(), AFFX^htype.getTaille());
+        end        
+        AFFX^code := code + AFFX^hcode + codeWrite;
     end
             
 
@@ -789,7 +795,7 @@ end
 #gen {
 do
     if AFFX^hest_decl then
-        AFFX^code := AFFX^hcode + AFFX^machine.genVar(AFFX^htype.getTaille());    
+        AFFX^code := AFFX^machine.genVar(AFFX^htype.getTaille());    
     else
         AFFX^code := AFFX^hcode;
     end    
@@ -1727,15 +1733,17 @@ end
 #acces{
 local
     name    : STRING;
-    i       : INFO;
-    ins     : INFONAMESPACE;
+    ins       : INFONAMESPACE;
 do
-    i := ENTITE^tds.chercherGlobalement(identc^txt);
-    if i != nil then
+    ins := ENTITE^tds.chercherNamespace(IDC^sident);
+    if ins != nil then
         error(namespace_unknown, identc^txt, ENTITE^tds);
     else    
-        match i with
+        match ins with
         INFONAMESPACE then
+
+            
+            
             
         else
             error(using_notNameSpace, identc^txt);
@@ -1842,11 +1850,20 @@ do
 end
 }
 #sident{
+local
+    i : INFO;
+    ic : INFOCLASSE;
 do
     HERITAGE^sident := IDC^sident;
     
     -- remontee de l'infoclasse
-    
+    i := HERITAGE^tds.chercherClasse(IDC^sident);
+    if i = nil then
+        error(classe_undefined, identc^txt, HERITAGE^tds);
+    else    
+        ic := i;
+        HERITAGE^sinfoclasse := ic;
+    end      
 end
 }
 
@@ -1855,6 +1872,8 @@ end
 DEFS -> #gen;
 #gen{
 do
+    DEFS^stds := DEFS^tds;
+    DEFS^champsclasse := nil;
     DEFS^code := "";
 end
 }
@@ -1884,6 +1903,10 @@ end
 #gen {
 do
     DEFS^code := DEF^code + DEFS1^code;
+    
+    -- remontee de la tds et des champsclasse
+    DEFS^champsclasse := DEFS1^champsclasse;
+    DEFS^stds := DEFS1^stds;
 end
 }
 

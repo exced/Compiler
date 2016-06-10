@@ -68,18 +68,25 @@ private void action_gen_35(S_A_MCS x_3) throws Exception {
 try {
 // locales
 String loc_code;
+String loc_codeWrite;
 // instructions
 if (this.att_hcode_est_adresse){
-loc_code=x_3.att_code+this.att_machine.genWriteIndirectMem(this.att_htype.getTaille());
+loc_code=x_3.att_code+this.att_machine.genReadIndirectMem(this.att_htype.getTaille());
 }
 else {
-loc_code=x_3.att_code+this.att_machine.genWriteMem(this.att_hiv.getDep(), this.att_htype.getTaille());
+loc_code=x_3.att_code;
 }
 if (this.att_hest_decl){
 this.att_code=loc_code;
 }
 else {
-this.att_code=this.att_hcode+loc_code;
+if (this.att_hcode_est_adresse){
+loc_codeWrite=this.att_machine.genWriteIndirectMem(this.att_htype.getTaille());
+}
+else {
+loc_codeWrite=this.att_machine.genWriteMem(this.att_hiv.getDep(), this.att_htype.getTaille());
+}
+this.att_code=loc_code+this.att_hcode+loc_codeWrite;
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","AFFX -> affect A #type #gen ;"});
 }
@@ -96,7 +103,7 @@ private void action_gen_36() throws Exception {
 try {
 // instructions
 if (this.att_hest_decl){
-this.att_code=this.att_hcode+this.att_machine.genVar(this.att_htype.getTaille());
+this.att_code=this.att_machine.genVar(this.att_htype.getTaille());
 }
 else {
 this.att_code=this.att_hcode;
@@ -115,16 +122,16 @@ this.att_type=this.att_htype;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_affect : // 24351
+      case LEX_MCS.token_affect : // 14357
         regle35 () ;
       break ;
-      case LEX_MCS.token_pv : // 24350
+      case LEX_MCS.token_pv : // 14356
         regle36 () ;
       break ;
-      case LEX_MCS.token_virg : // 24348
+      case LEX_MCS.token_virg : // 14354
         regle36 () ;
       break ;
-      case LEX_MCS.token_parf : // 24345
+      case LEX_MCS.token_parf : // 14351
         regle36 () ;
       break ;
       default :

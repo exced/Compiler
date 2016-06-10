@@ -67,6 +67,17 @@ public class TDS extends LinkedHashMap<String, INFO> {
 				return parente.chercherGlobalement(n);
 		return i;
 	}
+	
+	/*
+	public AVOIIIIR chercherNamespace(String s) {
+		String[] strings = s.split(".");
+		TDS tdsContenu;
+		INFO i = chercherGlobalement(strings[0]);
+		strings = strings privé de [0] TODO
+		((INFONAMESPACE) i).chercherNamespace(stringfsfs)
+		return i;
+	}
+	*/
 
 	/**
 	 * Ajoute le nom n et son information i dans la TDS

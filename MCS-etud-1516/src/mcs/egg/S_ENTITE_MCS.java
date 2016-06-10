@@ -144,7 +144,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 else {
-glob_87_ic= new INFOCLASSE();
+glob_87_ic= new INFOCLASSE( new POINTEUR( new STRUCT(x_7.att_champsclasse)), x_2.att_acces, x_7.att_stds, x_5.att_sinfoclasse);
 this.att_tds.inserer(x_4.att_txt, glob_87_ic);
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#classe","ENTITE -> ACCES class identc HERITAGE aco DEFS acf #classe #gen ;"});
@@ -161,16 +161,15 @@ private void action_acces_84(T_MCS x_3, S_IDC_MCS x_5) throws Exception {
 try {
 // locales
 String loc_name;
-INFO loc_i;
 INFONAMESPACE loc_ins;
 // instructions
-loc_i=this.att_tds.chercherGlobalement(x_3.att_txt);
-if (loc_i!=null){
+loc_ins=this.att_tds.chercherNamespace(x_5.att_sident);
+if (loc_ins!=null){
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_namespace_unknown, MCSMessages.namespace_unknown,new Object[]{""+x_3.att_txt, ""+this.att_tds});
 
 }
 else {
-if (loc_i instanceof INFONAMESPACE ){
+if (loc_ins instanceof INFONAMESPACE ){
 }
 else {
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_using_notNameSpace, MCSMessages.using_notNameSpace,new Object[]{""+x_3.att_txt});
@@ -238,6 +237,7 @@ private void action_auto_inh_87(S_ACCES_MCS x_2, T_MCS x_4, S_HERITAGE_MCS x_5, 
 try {
 // instructions
 x_7.att_machine=this.att_machine;
+x_5.att_tds=this.att_tds;
 x_7.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","ENTITE -> ACCES class identc HERITAGE aco DEFS acf #classe #gen ;"});
 }
@@ -305,43 +305,43 @@ x_6.att_tds=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 24359
+      case LEX_MCS.token_typedef : // 14365
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 24354
+      case LEX_MCS.token_void : // 14360
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 24356
+      case LEX_MCS.token_int : // 14362
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 24357
+      case LEX_MCS.token_char : // 14363
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 24396
+      case LEX_MCS.token_identc : // 14402
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 24358
+      case LEX_MCS.token_struct : // 14364
         regle4 () ;
       break ;
-      case LEX_MCS.token_bool : // 24368
+      case LEX_MCS.token_bool : // 14374
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 24355
+      case LEX_MCS.token_asm : // 14361
         regle80 () ;
       break ;
-      case LEX_MCS.token_namespace : // 24362
+      case LEX_MCS.token_namespace : // 14368
         regle83 () ;
       break ;
-      case LEX_MCS.token_using : // 24363
+      case LEX_MCS.token_using : // 14369
         regle84 () ;
       break ;
-      case LEX_MCS.token_public : // 24365
+      case LEX_MCS.token_public : // 14371
         regle87 () ;
       break ;
-      case LEX_MCS.token_private : // 24366
+      case LEX_MCS.token_private : // 14372
         regle87 () ;
       break ;
-      case LEX_MCS.token_class : // 24364
+      case LEX_MCS.token_class : // 14370
         regle87 () ;
       break ;
       default :
