@@ -297,7 +297,71 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
+<<<<<<< HEAD
       case LEX_MCS.token_mult : // 40883
+=======
+<<<<<<< HEAD
+      case LEX_MCS.token_mult : // 183
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_div : // 184
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_mod : // 185
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_et : // 186
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_plus : // 180
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_moins : // 181
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_ou : // 182
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_inf : // 174
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_sup : // 176
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_infeg : // 175
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_supeg : // 177
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_eg : // 178
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_neg : // 179
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_affect : // 147
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_virg : // 144
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_pv : // 146
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_parf : // 141
+        regle72 () ;
+      break ;
+      case LEX_MCS.token_pt : // 145
+        regle73 () ;
+      break ;
+      case LEX_MCS.token_arrow : // 172
+        regle74 () ;
+      break ;
+      case LEX_MCS.token_paro : // 140
+=======
+      case LEX_MCS.token_mult : // 7652
+>>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
         regle72 () ;
       break ;
       case LEX_MCS.token_div : // 40884
@@ -354,7 +418,12 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
       case LEX_MCS.token_arrow : // 40872
         regle74 () ;
       break ;
+<<<<<<< HEAD
       case LEX_MCS.token_paro : // 40840
+=======
+      case LEX_MCS.token_paro : // 7609
+>>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
+>>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
         regle75 () ;
       break ;
       default :

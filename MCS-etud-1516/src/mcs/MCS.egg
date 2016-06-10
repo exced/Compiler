@@ -1819,7 +1819,7 @@ do
     else    
         -- definition de la classe
         -- le type de la classe est un pointeur sur un struct et les champs sont les attributs et les fonctions
-        ic := new INFOCLASSE(new POINTEUR(new STRUCT(DEFS^champsclasse)), ACCES^acces, DEFS^stds, HERITAGE^sinfoclasse);
+        ic := new INFOCLASSE(DEFS^champsclasse, ACCES^acces, DEFS^stds, HERITAGE^sinfoclasse);
         -- insertion
         ENTITE^tds.inserer(identc^txt, ic);  
     end    
@@ -1882,7 +1882,7 @@ do
     HERITAGE^sident := IDC^sident;
     
     -- remontee de l'infoclasse
-    i := HERITAGE^tds.chercherClasse(IDC^sident);
+    i := HERITAGE^tds.chercherClasse(IDC^sident, HERITAGE^tds);
     if i = nil then
         error(classe_undefined, identc^txt, HERITAGE^tds);
     else    

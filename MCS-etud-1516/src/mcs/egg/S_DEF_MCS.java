@@ -147,7 +147,32 @@ x_6.att_htype=x_2.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
+<<<<<<< HEAD
       case LEX_MCS.token_void : // 40850
+=======
+<<<<<<< HEAD
+      case LEX_MCS.token_void : // 150
+        regle95 () ;
+      break ;
+      case LEX_MCS.token_int : // 152
+        regle95 () ;
+      break ;
+      case LEX_MCS.token_char : // 153
+        regle95 () ;
+      break ;
+      case LEX_MCS.token_identc : // 192
+        scanner.lit ( 2 ) ;
+        switch ( scanner.fenetre[1].code ) {
+          case LEX_MCS.token_mult : // 183
+            regle95 () ;
+          break ;
+          case LEX_MCS.token_ident : // 191
+            regle95 () ;
+          break ;
+          case LEX_MCS.token_paro : // 140
+=======
+      case LEX_MCS.token_void : // 7619
+>>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
         regle95 () ;
       break ;
       case LEX_MCS.token_int : // 40852
@@ -165,7 +190,12 @@ x_6.att_htype=x_2.att_type;
           case LEX_MCS.token_ident : // 40891
             regle95 () ;
           break ;
+<<<<<<< HEAD
           case LEX_MCS.token_paro : // 40840
+=======
+          case LEX_MCS.token_paro : // 7609
+>>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
+>>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
             regle96 () ;
           break ;
           default :
@@ -173,10 +203,24 @@ x_6.att_htype=x_2.att_type;
 scanner.accepter_sucre(LEX_MCS.token_identc);
         }
       break ;
+<<<<<<< HEAD
       case LEX_MCS.token_struct : // 40854
         regle95 () ;
       break ;
       case LEX_MCS.token_bool : // 40864
+=======
+<<<<<<< HEAD
+      case LEX_MCS.token_struct : // 154
+        regle95 () ;
+      break ;
+      case LEX_MCS.token_bool : // 164
+=======
+      case LEX_MCS.token_struct : // 7623
+        regle95 () ;
+      break ;
+      case LEX_MCS.token_bool : // 7633
+>>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
+>>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
         regle95 () ;
       break ;
       default :

@@ -130,7 +130,23 @@ this.att_type=this.att_htype;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
+<<<<<<< HEAD
       case LEX_MCS.token_affect : // 40847
+=======
+<<<<<<< HEAD
+      case LEX_MCS.token_affect : // 147
+        regle35 () ;
+      break ;
+      case LEX_MCS.token_pv : // 146
+        regle36 () ;
+      break ;
+      case LEX_MCS.token_virg : // 144
+        regle36 () ;
+      break ;
+      case LEX_MCS.token_parf : // 141
+=======
+      case LEX_MCS.token_affect : // 7616
+>>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
         regle35 () ;
       break ;
       case LEX_MCS.token_pv : // 40846
@@ -139,7 +155,12 @@ this.att_type=this.att_htype;
       case LEX_MCS.token_virg : // 40844
         regle36 () ;
       break ;
+<<<<<<< HEAD
       case LEX_MCS.token_parf : // 40841
+=======
+      case LEX_MCS.token_parf : // 7610
+>>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
+>>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
         regle36 () ;
       break ;
       default :

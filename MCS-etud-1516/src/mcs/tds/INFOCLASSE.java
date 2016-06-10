@@ -11,8 +11,8 @@ public class INFOCLASSE extends INFO {
 	
 	protected TDS tv;
 	
-	public INFOCLASSE(DTYPE t, String acces, TDS tdsContenu, INFOCLASSE parente){
-		super(t);
+	public INFOCLASSE(LCHAMPS champs, String acces, TDS tdsContenu, INFOCLASSE parente){
+		super(new POINTEUR(new STRUCT(champs)));
 		this.acces = acces;
 		this.tdsContenu = tdsContenu;
 		this.parente = parente;

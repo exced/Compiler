@@ -68,16 +68,34 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return i;
 	}
 	
-	/*
-	public AVOIIIIR chercherNamespace(String s) {
-		String[] strings = s.split(".");
-		TDS tdsContenu;
-		INFO i = chercherGlobalement(strings[0]);
-		strings = strings privé de [0] TODO
-		((INFONAMESPACE) i).chercherNamespace(stringfsfs)
-		return i;
+	
+	public INFOCLASSE chercherClasse(String nomClasse, TDS tds){
+		String[] strings = nomClasse.split(".");
+		TDS tds_temp = tds;
+		int tailleStrings = strings.length;
+		// Si liste des namespaces et de la classe vide
+		if (tailleStrings == 0){
+			return null;
+		}
+		int i = 0;
+		INFO result = tds_temp.chercherGlobalement(strings[i]);
+		for(i=0;i<tailleStrings;i++) {
+			if (result == null){
+				return null;
+			}
+			else if (result instanceof INFOCLASSE && i == (tailleStrings-1)){
+				tds_temp = ((INFOCLASSE) result).getContenu();
+			}
+			else if (result instanceof INFONAMESPACE && i < (tailleStrings-1)) {
+				tds_temp = ((INFONAMESPACE) result).getContenu();
+				result = tds_temp.chercherLocalement(strings[i+1]);
+			}
+			else {
+				return null;
+			}
+		}
+		return (INFOCLASSE) result;
 	}
-	*/
 
 	/**
 	 * Ajoute le nom n et son information i dans la TDS
