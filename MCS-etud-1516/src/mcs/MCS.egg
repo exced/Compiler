@@ -26,8 +26,8 @@ syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,CHAMP,PTRS, AFFX, A,AX, R,RX,T,
 inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX;
 
 -- INFO
-inh hiv : INFOVAR for AFFX,FX;
-syn siv : INFOVAR for E,A,R,T,F;
+inh hdep : INTEGER for AFFX,FX;
+syn sdep : INTEGER for E,A,R,T,F,FX;
 syn sinfo : INFO for DEF,DECL,FONCTION;
 
 -- TDS
@@ -39,7 +39,7 @@ syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES,DEFS;
 
 
 -- INST
-inh hest_decl : BOOLEAN for AFFX,A,AX,R,RX,T,TX,F;                                              
+inh hest_decl : BOOLEAN for AFFX;                                              
                             
 -- GC                            
 syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX,DEFS,DEF,BASE;
@@ -577,7 +577,7 @@ do
        error(var_declared, ident^txt);
     else  
         -- transmission de l'info
-        AFFX^hiv := new INFOVAR(TYPE^type, INST^machine.getCurrentDep());
+        AFFX^hdep := INST^machine.getCurrentDep();
     end
     
 
@@ -714,16 +714,11 @@ end
 -----------------------------------------------------------------------
 
 ------------------------------------------------------------------------
-E ->#hdecl A #type AFFX #gen;
-#hdecl {
-do
-    A^hest_decl := true;
-end
-}
+E -> A #type AFFX #gen;
 #type {
 do  
-    AFFX^hiv := A^siv;
-    E^siv := A^siv;
+    AFFX^hdep := A^sdep;
+    E^sdep := A^sdep;
   
     AFFX^hcode_est_adresse := A^code_est_adresse;
     
@@ -747,12 +742,7 @@ end
 
 ------------------------------------------------------------------------
 -- affectation
-AFFX -> affect #hdecl A  #type #gen;
-#hdecl {
-do
-    A^hest_decl := false;
-end
-}
+AFFX -> affect A  #type #gen;
 #type {
 -- controle de type
 do
@@ -774,20 +764,17 @@ do
     
     if AFFX^hcode_est_adresse then
         code := A^code + AFFX^machine.genReadIndirectMem(AFFX^htype.getTaille());
+        codeWrite := AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
     else
         code := A^code ;
+        codeWrite := AFFX^machine.genWriteMem(AFFX^hdep, AFFX^htype.getTaille());
     end    
 
     -- si declaration + affectation, on laisse direct le code en sommet de pile
     if AFFX^hest_decl then
         AFFX^code := code ;
-    else
-        if AFFX^hcode_est_adresse then
-            codeWrite := AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
-        else
-            codeWrite := AFFX^machine.genWriteMem(AFFX^hiv.getDep(), AFFX^htype.getTaille());
-        end        
-        AFFX^code := code + AFFX^hcode + codeWrite;
+    else      
+        AFFX^code := code + codeWrite;
     end
             
 
@@ -819,7 +806,7 @@ A -> R #type AX #gen;
 #type{
 do 
     -- remontee infovar
-    A^siv := R^siv;
+    A^sdep := R^sdep;
     
     -- transmission du type de R pour le controle de type
     AX^htype := R^type;
@@ -945,7 +932,7 @@ R -> T #type RX #gen;
 #type{
 do
     -- remontee infovar
-    R^siv := T^siv;
+    R^sdep := T^sdep;
     
     -- transmission du type de R pour le controle de type
     RX^htype := T^type;
@@ -1045,7 +1032,7 @@ end
 #type{
 do
     -- remontee infovar
-    T^siv := F^siv;
+    T^sdep := F^sdep;
     
     -- transmission du type de R pour le controle de type
     TX^htype := F^type;
@@ -1151,7 +1138,7 @@ F -> entier #gen ;
 #gen {
 do
     -- pas une var
-    F^siv := nil;
+    F^sdep := -1;
     
     F^type := new DTYPEImpl("int", 1);
     F^code_est_adresse := false;
@@ -1165,7 +1152,7 @@ F -> chaine #gen;
 #gen {
 do
     -- pas une var
-    F^siv := nil;
+    F^sdep := -1;
     
     F^type := new DTYPEImpl("chaine", 3);
     F^code_est_adresse := false;
@@ -1179,7 +1166,7 @@ F -> caractere #gen;
 #gen {
 do
     -- pas une var
-    F^siv := nil;
+    F^sdep := -1;
     
     F^type := new DTYPEImpl("char", 1);
     F^code_est_adresse := false;
@@ -1193,7 +1180,7 @@ F -> OPUN  F #type #gen;
 #type {
 do
     -- pas une var
-    F^siv := nil;
+    F^sdep := -1;
     
     -- controle de type
     if ~F1^type.compareOpUn(OPUN^type) then
@@ -1251,7 +1238,7 @@ F -> null #type ;
 #type {  
 do
     -- pas une var
-    F^siv := nil;
+    F^sdep := -1;
     
     F^type := new DTYPEImpl("PNULL", 1);
     F^code_est_adresse := false;
@@ -1265,9 +1252,9 @@ F ->  paro E parf #addr FX #type #gen;
 #addr {
 do
     -- remontee infovar
-    F^siv := E^siv;
+    F^sdep := E^sdep;
     
-    FX^hiv := E^siv;
+    FX^hdep := E^sdep;
 
     FX^ident := "";
 
@@ -1304,8 +1291,6 @@ end
 -- cast
 F ->  paro TYPE parf  F  #type #gen;
 #type {
-local
-    iv : INFOVAR;
 do
  
     -- si MAlloc pas de probleme
@@ -1319,9 +1304,7 @@ do
             F^type := TYPE^type;
             
             -- remontee infovar
-            iv := F1^siv;
-            iv.setType(TYPE^type);
-            F^siv := iv;
+            F^sdep := F1^sdep;
         end
     end
 end
@@ -1340,7 +1323,7 @@ F -> malloc paro E parf #gen;
 #gen {
 do
     -- remontee infovar
-    F^siv := E^siv;
+    F^sdep := E^sdep;
 
     if ~E^type.compareTo(new DTYPEImpl("int",1)) then
         error(malloc_need_int, E^type.getNom());
@@ -1361,7 +1344,7 @@ local
     p : POINTEUR;
 do
     -- remontee infovar
-    F^siv := F1^siv;
+    F^sdep := F1^sdep;
 
     match F1^type 
     with POINTEUR then
@@ -1376,7 +1359,7 @@ end
 #addr {
 do
     -- code acces a un pointeur
-    F^code := F^machine.genReadIndirectMem(1);
+    F^code := F1^code + F^machine.genReadIndirectMem(1);
 end
 }
 
@@ -1406,25 +1389,19 @@ do
             iv := i;
             t := iv.getType();
             
-            FX^hiv := iv;
+            FX^hdep := iv.getDep();
             
             FX^htype := t;
             F^code_est_adresse := false;
-            
-            if ~F^hest_decl then
-                if F^hcode_est_adresse then
-                    code := F^machine.genReadIndirectMem(iv.getTaille());
-                else
-                    code := F^machine.genReadMem(iv.getDep() , iv.getTaille()); 
-                end
+
+            -- code de lecture de variable            
+            if F^hcode_est_adresse then
+                code := F^machine.genReadIndirectMem(iv.getTaille());
             else
-                code := "";
-            end    
+                code := F^machine.genReadMem(iv.getDep() , iv.getTaille()); 
+            end   
             
             FX^hcode := code;
-            
-            -- remontee infovar
-            F^siv := iv;
         
         with INFOFONC then
             infofonc := i;  
@@ -1442,6 +1419,9 @@ end
 }  
 #gen{
 do
+    -- remontee infovar
+    F^sdep := FX^sdep;
+
     F^type := FX^type;
     
     F^code := FX^code;    
@@ -1452,9 +1432,11 @@ end
 FX -> #gen;
 #gen {
 do
-  FX^type := FX^htype;
+    FX^sdep := FX^hdep;
+
+    FX^type := FX^htype;
    
-  FX^code := FX^hcode;
+    FX^code := FX^hcode;
 end
 }
 
@@ -1482,6 +1464,7 @@ do
             s := t;
             lc := s.getChamps();
             c := lc.chercherChamp(ident^txt);
+            FX^sdep := c.getDep();
             if c = nil then
                 error(champ_not_found, lc, ident^txt);
             else
@@ -1501,7 +1484,8 @@ do
             error(champ_not_found, lc, ident^txt);
         else
             FX1^htype := c.getType();
-            code := FX^machine.genWriteMem(c.getDep() + FX^hiv.getDep() -1, ct.getTaille());
+            FX^sdep := c.getDep() + FX^hdep;
+            code := FX^machine.genWriteMem(c.getDep() + FX^hdep, ct.getTaille());
         end    
     else
         error(type_not_struct, FX^htype.getNom(), ident^txt);
@@ -1544,8 +1528,8 @@ do
                     error(champ_not_found, lc, ident^txt);
                 else
                     FX1^htype := c.getType();
-            
-                    FX1^hcode := FX^hcode + FX^machine.genPointeurField(c.getDep());
+                    FX^sdep := c.getDep() + FX^hdep;
+                  FX1^hcode := FX^hcode + FX^machine.genAdrField(c.getDep());
                 end    
             else
                 error(type_not_struct, FX^htype.getNom(), ident^txt);
@@ -1590,7 +1574,7 @@ local
     infofonc : INFOFONC;
     tdsParam : TDS;
 do
-write "Appel fonction : " + FX^ident + "\n";
+    FX^sdep := FX^hdep;
 
     -- appel du sous-programme a partir de l'étiquette
     
@@ -2041,7 +2025,7 @@ F -> true #gen;
 #gen{
 do
     -- pas une var
-    F^siv := nil;
+    F^sdep := -1;
 
     F^type := new DTYPEImpl("bool",1);
     F^code_est_adresse := false;
@@ -2055,7 +2039,7 @@ F -> false #gen;
 #gen{
 do
     -- pas une var
-    F^siv := nil;
+    F^sdep := -1;
     
     F^type := new DTYPEImpl("bool",1);
     F^code_est_adresse := false;

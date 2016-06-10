@@ -24,7 +24,6 @@ int [] sync= new int[0];
   boolean att_eval;
   String att_code;
   IMachine att_machine;
-  boolean att_hest_decl;
   LEX_MCS att_scanner;
   boolean att_code_est_adresse;
   DTYPE att_type;
@@ -69,7 +68,6 @@ try {
 x_2.att_machine=this.att_machine;
 x_3.att_machine=this.att_machine;
 x_3.att_tds=this.att_tds;
-x_3.att_hest_decl=this.att_hest_decl;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","AX -> OPREL R #type #gen ;"});
 }
   }
@@ -97,73 +95,34 @@ this.att_code_est_adresse=this.att_hcode_est_adresse;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-<<<<<<< HEAD
-      case LEX_MCS.token_inf : // 40874
-=======
-<<<<<<< HEAD
-      case LEX_MCS.token_inf : // 174
+      case LEX_MCS.token_inf : // 33678
         regle38 () ;
       break ;
-      case LEX_MCS.token_sup : // 176
+      case LEX_MCS.token_sup : // 33680
         regle38 () ;
       break ;
-      case LEX_MCS.token_infeg : // 175
+      case LEX_MCS.token_infeg : // 33679
         regle38 () ;
       break ;
-      case LEX_MCS.token_supeg : // 177
+      case LEX_MCS.token_supeg : // 33681
         regle38 () ;
       break ;
-      case LEX_MCS.token_eg : // 178
+      case LEX_MCS.token_eg : // 33682
         regle38 () ;
       break ;
-      case LEX_MCS.token_neg : // 179
+      case LEX_MCS.token_neg : // 33683
         regle38 () ;
       break ;
-      case LEX_MCS.token_affect : // 147
+      case LEX_MCS.token_affect : // 33651
         regle39 () ;
       break ;
-      case LEX_MCS.token_virg : // 144
+      case LEX_MCS.token_virg : // 33648
         regle39 () ;
       break ;
-      case LEX_MCS.token_pv : // 146
+      case LEX_MCS.token_pv : // 33650
         regle39 () ;
       break ;
-      case LEX_MCS.token_parf : // 141
-=======
-      case LEX_MCS.token_inf : // 7643
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
-        regle38 () ;
-      break ;
-      case LEX_MCS.token_sup : // 40876
-        regle38 () ;
-      break ;
-      case LEX_MCS.token_infeg : // 40875
-        regle38 () ;
-      break ;
-      case LEX_MCS.token_supeg : // 40877
-        regle38 () ;
-      break ;
-      case LEX_MCS.token_eg : // 40878
-        regle38 () ;
-      break ;
-      case LEX_MCS.token_neg : // 40879
-        regle38 () ;
-      break ;
-      case LEX_MCS.token_affect : // 40847
-        regle39 () ;
-      break ;
-      case LEX_MCS.token_virg : // 40844
-        regle39 () ;
-      break ;
-      case LEX_MCS.token_pv : // 40846
-        regle39 () ;
-      break ;
-<<<<<<< HEAD
-      case LEX_MCS.token_parf : // 40841
-=======
-      case LEX_MCS.token_parf : // 7610
->>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
+      case LEX_MCS.token_parf : // 33645
         regle39 () ;
       break ;
       default :

@@ -123,49 +123,22 @@ this.att_code=this.att_machine.genOp("ILss");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-<<<<<<< HEAD
-      case LEX_MCS.token_inf : // 40874
-=======
-<<<<<<< HEAD
-      case LEX_MCS.token_inf : // 174
+      case LEX_MCS.token_inf : // 33678
         regle40 () ;
       break ;
-      case LEX_MCS.token_sup : // 176
+      case LEX_MCS.token_sup : // 33680
         regle41 () ;
       break ;
-      case LEX_MCS.token_infeg : // 175
+      case LEX_MCS.token_infeg : // 33679
         regle42 () ;
       break ;
-      case LEX_MCS.token_supeg : // 177
+      case LEX_MCS.token_supeg : // 33681
         regle43 () ;
       break ;
-      case LEX_MCS.token_eg : // 178
+      case LEX_MCS.token_eg : // 33682
         regle44 () ;
       break ;
-      case LEX_MCS.token_neg : // 179
-=======
-      case LEX_MCS.token_inf : // 7643
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
-        regle40 () ;
-      break ;
-      case LEX_MCS.token_sup : // 40876
-        regle41 () ;
-      break ;
-      case LEX_MCS.token_infeg : // 40875
-        regle42 () ;
-      break ;
-      case LEX_MCS.token_supeg : // 40877
-        regle43 () ;
-      break ;
-      case LEX_MCS.token_eg : // 40878
-        regle44 () ;
-      break ;
-<<<<<<< HEAD
-      case LEX_MCS.token_neg : // 40879
-=======
-      case LEX_MCS.token_neg : // 7648
->>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
+      case LEX_MCS.token_neg : // 33683
         regle45 () ;
       break ;
       default :

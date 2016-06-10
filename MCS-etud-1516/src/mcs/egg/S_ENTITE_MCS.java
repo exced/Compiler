@@ -144,7 +144,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 else {
-glob_87_ic= new INFOCLASSE( new POINTEUR( new STRUCT(x_7.att_champsclasse)), x_2.att_acces, x_7.att_stds, x_5.att_sinfoclasse);
+glob_87_ic= new INFOCLASSE(x_7.att_champsclasse, x_2.att_acces, x_7.att_stds, x_5.att_sinfoclasse);
 this.att_tds.inserer(x_4.att_txt, glob_87_ic);
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#classe","ENTITE -> ACCES class identc HERITAGE aco DEFS acf #classe #gen ;"});
@@ -305,91 +305,43 @@ x_6.att_tds=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-<<<<<<< HEAD
-      case LEX_MCS.token_typedef : // 40855
-=======
-<<<<<<< HEAD
-      case LEX_MCS.token_typedef : // 155
+      case LEX_MCS.token_typedef : // 33659
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 150
+      case LEX_MCS.token_void : // 33654
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 152
+      case LEX_MCS.token_int : // 33656
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 153
+      case LEX_MCS.token_char : // 33657
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 192
+      case LEX_MCS.token_identc : // 33696
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 154
+      case LEX_MCS.token_struct : // 33658
         regle4 () ;
       break ;
-      case LEX_MCS.token_bool : // 164
+      case LEX_MCS.token_bool : // 33668
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 151
+      case LEX_MCS.token_asm : // 33655
         regle80 () ;
       break ;
-      case LEX_MCS.token_namespace : // 158
+      case LEX_MCS.token_namespace : // 33662
         regle83 () ;
       break ;
-      case LEX_MCS.token_using : // 159
+      case LEX_MCS.token_using : // 33663
         regle84 () ;
       break ;
-      case LEX_MCS.token_public : // 161
+      case LEX_MCS.token_public : // 33665
         regle87 () ;
       break ;
-      case LEX_MCS.token_private : // 162
+      case LEX_MCS.token_private : // 33666
         regle87 () ;
       break ;
-      case LEX_MCS.token_class : // 160
-=======
-      case LEX_MCS.token_typedef : // 7624
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
-        regle3 () ;
-      break ;
-      case LEX_MCS.token_void : // 40850
-        regle4 () ;
-      break ;
-      case LEX_MCS.token_int : // 40852
-        regle4 () ;
-      break ;
-      case LEX_MCS.token_char : // 40853
-        regle4 () ;
-      break ;
-      case LEX_MCS.token_identc : // 40892
-        regle4 () ;
-      break ;
-      case LEX_MCS.token_struct : // 40854
-        regle4 () ;
-      break ;
-      case LEX_MCS.token_bool : // 40864
-        regle4 () ;
-      break ;
-      case LEX_MCS.token_asm : // 40851
-        regle80 () ;
-      break ;
-      case LEX_MCS.token_namespace : // 40858
-        regle83 () ;
-      break ;
-      case LEX_MCS.token_using : // 40859
-        regle84 () ;
-      break ;
-      case LEX_MCS.token_public : // 40861
-        regle87 () ;
-      break ;
-      case LEX_MCS.token_private : // 40862
-        regle87 () ;
-      break ;
-<<<<<<< HEAD
-      case LEX_MCS.token_class : // 40860
-=======
-      case LEX_MCS.token_class : // 7629
->>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
+      case LEX_MCS.token_class : // 33664
         regle87 () ;
       break ;
       default :

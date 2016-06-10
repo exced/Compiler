@@ -147,55 +147,25 @@ x_6.att_htype=x_2.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-<<<<<<< HEAD
-      case LEX_MCS.token_void : // 40850
-=======
-<<<<<<< HEAD
-      case LEX_MCS.token_void : // 150
+      case LEX_MCS.token_void : // 33654
         regle95 () ;
       break ;
-      case LEX_MCS.token_int : // 152
+      case LEX_MCS.token_int : // 33656
         regle95 () ;
       break ;
-      case LEX_MCS.token_char : // 153
+      case LEX_MCS.token_char : // 33657
         regle95 () ;
       break ;
-      case LEX_MCS.token_identc : // 192
+      case LEX_MCS.token_identc : // 33696
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_mult : // 183
+          case LEX_MCS.token_mult : // 33687
             regle95 () ;
           break ;
-          case LEX_MCS.token_ident : // 191
+          case LEX_MCS.token_ident : // 33695
             regle95 () ;
           break ;
-          case LEX_MCS.token_paro : // 140
-=======
-      case LEX_MCS.token_void : // 7619
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
-        regle95 () ;
-      break ;
-      case LEX_MCS.token_int : // 40852
-        regle95 () ;
-      break ;
-      case LEX_MCS.token_char : // 40853
-        regle95 () ;
-      break ;
-      case LEX_MCS.token_identc : // 40892
-        scanner.lit ( 2 ) ;
-        switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_mult : // 40883
-            regle95 () ;
-          break ;
-          case LEX_MCS.token_ident : // 40891
-            regle95 () ;
-          break ;
-<<<<<<< HEAD
-          case LEX_MCS.token_paro : // 40840
-=======
-          case LEX_MCS.token_paro : // 7609
->>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
+          case LEX_MCS.token_paro : // 33644
             regle96 () ;
           break ;
           default :
@@ -203,24 +173,10 @@ x_6.att_htype=x_2.att_type;
 scanner.accepter_sucre(LEX_MCS.token_identc);
         }
       break ;
-<<<<<<< HEAD
-      case LEX_MCS.token_struct : // 40854
+      case LEX_MCS.token_struct : // 33658
         regle95 () ;
       break ;
-      case LEX_MCS.token_bool : // 40864
-=======
-<<<<<<< HEAD
-      case LEX_MCS.token_struct : // 154
-        regle95 () ;
-      break ;
-      case LEX_MCS.token_bool : // 164
-=======
-      case LEX_MCS.token_struct : // 7623
-        regle95 () ;
-      break ;
-      case LEX_MCS.token_bool : // 7633
->>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
+      case LEX_MCS.token_bool : // 33668
         regle95 () ;
       break ;
       default :

@@ -85,55 +85,25 @@ this.att_champs=this.att_hchamps;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-<<<<<<< HEAD
-      case LEX_MCS.token_acf : // 40843
-=======
-<<<<<<< HEAD
-      case LEX_MCS.token_acf : // 143
+      case LEX_MCS.token_acf : // 33647
         regle21 () ;
       break ;
-      case LEX_MCS.token_void : // 150
+      case LEX_MCS.token_void : // 33654
         regle22 () ;
       break ;
-      case LEX_MCS.token_int : // 152
+      case LEX_MCS.token_int : // 33656
         regle22 () ;
       break ;
-      case LEX_MCS.token_char : // 153
+      case LEX_MCS.token_char : // 33657
         regle22 () ;
       break ;
-      case LEX_MCS.token_identc : // 192
+      case LEX_MCS.token_identc : // 33696
         regle22 () ;
       break ;
-      case LEX_MCS.token_struct : // 154
+      case LEX_MCS.token_struct : // 33658
         regle22 () ;
       break ;
-      case LEX_MCS.token_bool : // 164
-=======
-      case LEX_MCS.token_acf : // 7612
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
-        regle21 () ;
-      break ;
-      case LEX_MCS.token_void : // 40850
-        regle22 () ;
-      break ;
-      case LEX_MCS.token_int : // 40852
-        regle22 () ;
-      break ;
-      case LEX_MCS.token_char : // 40853
-        regle22 () ;
-      break ;
-      case LEX_MCS.token_identc : // 40892
-        regle22 () ;
-      break ;
-      case LEX_MCS.token_struct : // 40854
-        regle22 () ;
-      break ;
-<<<<<<< HEAD
-      case LEX_MCS.token_bool : // 40864
-=======
-      case LEX_MCS.token_bool : // 7633
->>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
+      case LEX_MCS.token_bool : // 33668
         regle22 () ;
       break ;
       default :

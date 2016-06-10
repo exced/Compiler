@@ -68,67 +68,31 @@ this.att_acces="public";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-<<<<<<< HEAD
-      case LEX_MCS.token_public : // 40861
-=======
-<<<<<<< HEAD
-      case LEX_MCS.token_public : // 161
+      case LEX_MCS.token_public : // 33665
         regle88 () ;
       break ;
-      case LEX_MCS.token_private : // 162
+      case LEX_MCS.token_private : // 33666
         regle89 () ;
       break ;
-      case LEX_MCS.token_class : // 160
+      case LEX_MCS.token_class : // 33664
         regle90 () ;
       break ;
-      case LEX_MCS.token_void : // 150
+      case LEX_MCS.token_void : // 33654
         regle90 () ;
       break ;
-      case LEX_MCS.token_int : // 152
+      case LEX_MCS.token_int : // 33656
         regle90 () ;
       break ;
-      case LEX_MCS.token_char : // 153
+      case LEX_MCS.token_char : // 33657
         regle90 () ;
       break ;
-      case LEX_MCS.token_identc : // 192
+      case LEX_MCS.token_identc : // 33696
         regle90 () ;
       break ;
-      case LEX_MCS.token_struct : // 154
+      case LEX_MCS.token_struct : // 33658
         regle90 () ;
       break ;
-      case LEX_MCS.token_bool : // 164
-=======
-      case LEX_MCS.token_public : // 7630
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
-        regle88 () ;
-      break ;
-      case LEX_MCS.token_private : // 40862
-        regle89 () ;
-      break ;
-      case LEX_MCS.token_class : // 40860
-        regle90 () ;
-      break ;
-      case LEX_MCS.token_void : // 40850
-        regle90 () ;
-      break ;
-      case LEX_MCS.token_int : // 40852
-        regle90 () ;
-      break ;
-      case LEX_MCS.token_char : // 40853
-        regle90 () ;
-      break ;
-      case LEX_MCS.token_identc : // 40892
-        regle90 () ;
-      break ;
-      case LEX_MCS.token_struct : // 40854
-        regle90 () ;
-      break ;
-<<<<<<< HEAD
-      case LEX_MCS.token_bool : // 40864
-=======
-      case LEX_MCS.token_bool : // 7633
->>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
+      case LEX_MCS.token_bool : // 33668
         regle90 () ;
       break ;
       default :

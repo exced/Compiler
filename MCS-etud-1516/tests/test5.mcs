@@ -2,14 +2,19 @@
 
 // point d'entree du programme.
 int main(){
-
-	int a;
-
-
     
-    struct { int x; int y; } *pt;
-    *pt.x = 3;
-    pt->y = 3;
+	int a;
+    int *m = (int *)malloc(1);
+    a = *m +666;
+    
+    *m = 12;    
+    
+    //struct { int x; int y; } *pt = (int *)malloc(2);
+    //*pt.x = 3;
+    //*pt.y = 4;
+    //int c = *pt.x;
+    
+    //pt->y = 7;
     
     return 0;
 }

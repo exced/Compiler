@@ -19,13 +19,12 @@ LEX_MCS scanner;
     this.att_scanner = scanner;
     }
 int [] sync= new int[0];
-  INFOVAR att_siv;
   TDS att_tds;
   boolean att_eval;
   String att_code;
   IMachine att_machine;
-  boolean att_hest_decl;
   LEX_MCS att_scanner;
+  int att_sdep;
   boolean att_code_est_adresse;
   DTYPE att_type;
   private void regle37() throws Exception {
@@ -56,15 +55,13 @@ x_2.att_machine=this.att_machine;
 x_4.att_machine=this.att_machine;
 x_2.att_tds=this.att_tds;
 x_4.att_tds=this.att_tds;
-x_2.att_hest_decl=this.att_hest_decl;
-x_4.att_hest_decl=this.att_hest_decl;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","A -> R #type AX #gen ;"});
 }
   }
 private void action_type_37(S_R_MCS x_2, S_AX_MCS x_4) throws Exception {
 try {
 // instructions
-this.att_siv=x_2.att_siv;
+this.att_sdep=x_2.att_sdep;
 x_4.att_htype=x_2.att_type;
 x_4.att_hcode_est_adresse=x_2.att_code_est_adresse;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","A -> R #type AX #gen ;"});

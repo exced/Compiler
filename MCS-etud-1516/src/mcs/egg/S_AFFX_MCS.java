@@ -23,8 +23,8 @@ int [] sync= new int[0];
   TDS att_tds;
   boolean att_eval;
   String att_code;
-  INFOVAR att_hiv;
   IMachine att_machine;
+  int att_hdep;
   boolean att_hest_decl;
   LEX_MCS att_scanner;
   boolean att_code_est_adresse;
@@ -42,69 +42,57 @@ if  (att_eval)      action_gen_36();
 
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
-    S_A_MCS x_4 = new S_A_MCS(scanner,att_eval) ;
+    S_A_MCS x_3 = new S_A_MCS(scanner,att_eval) ;
     //appel
-if  (att_eval)      action_auto_inh_35(x_4);
+if  (att_eval)      action_auto_inh_35(x_3);
     x_2.analyser(LEX_MCS.token_affect);
-if  (att_eval)      action_hdecl_35(x_4);
-    x_4.analyser() ;
-if  (att_eval)      action_type_35(x_4);
-if  (att_eval)      action_gen_35(x_4);
+    x_3.analyser() ;
+if  (att_eval)      action_type_35(x_3);
+if  (att_eval)      action_gen_35(x_3);
   }
-private void action_type_35(S_A_MCS x_4) throws Exception {
+private void action_type_35(S_A_MCS x_3) throws Exception {
 try {
 // instructions
 this.att_code_est_adresse=false;
-if (!(this.att_htype.compareTo(x_4.att_type))){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_affect_notCompatible, MCSMessages.affect_notCompatible,new Object[]{""+this.att_htype.getNom(), ""+x_4.att_type.getNom()});
+if (!(this.att_htype.compareTo(x_3.att_type))){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_affect_notCompatible, MCSMessages.affect_notCompatible,new Object[]{""+this.att_htype.getNom(), ""+x_3.att_type.getNom()});
 
 }
 else {
-this.att_type=x_4.att_type;
+this.att_type=x_3.att_type;
 }
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","AFFX -> affect #hdecl A #type #gen ;"});
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","AFFX -> affect A #type #gen ;"});
 }
   }
-private void action_gen_35(S_A_MCS x_4) throws Exception {
+private void action_gen_35(S_A_MCS x_3) throws Exception {
 try {
 // locales
 String loc_code;
 String loc_codeWrite;
 // instructions
 if (this.att_hcode_est_adresse){
-loc_code=x_4.att_code+this.att_machine.genReadIndirectMem(this.att_htype.getTaille());
+loc_code=x_3.att_code+this.att_machine.genReadIndirectMem(this.att_htype.getTaille());
+loc_codeWrite=this.att_machine.genWriteIndirectMem(this.att_htype.getTaille());
 }
 else {
-loc_code=x_4.att_code;
+loc_code=x_3.att_code;
+loc_codeWrite=this.att_machine.genWriteMem(this.att_hdep, this.att_htype.getTaille());
 }
 if (this.att_hest_decl){
 this.att_code=loc_code;
 }
 else {
-if (this.att_hcode_est_adresse){
-loc_codeWrite=this.att_machine.genWriteIndirectMem(this.att_htype.getTaille());
+this.att_code=loc_code+loc_codeWrite;
 }
-else {
-loc_codeWrite=this.att_machine.genWriteMem(this.att_hiv.getDep(), this.att_htype.getTaille());
-}
-this.att_code=loc_code+this.att_hcode+loc_codeWrite;
-}
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","AFFX -> affect #hdecl A #type #gen ;"});
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","AFFX -> affect A #type #gen ;"});
 }
   }
-private void action_auto_inh_35(S_A_MCS x_4) throws Exception {
+private void action_auto_inh_35(S_A_MCS x_3) throws Exception {
 try {
 // instructions
-x_4.att_machine=this.att_machine;
-x_4.att_tds=this.att_tds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","AFFX -> affect #hdecl A #type #gen ;"});
-}
-  }
-private void action_hdecl_35(S_A_MCS x_4) throws Exception {
-try {
-// instructions
-x_4.att_hest_decl=false;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#hdecl","AFFX -> affect #hdecl A #type #gen ;"});
+x_3.att_machine=this.att_machine;
+x_3.att_tds=this.att_tds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","AFFX -> affect A #type #gen ;"});
 }
   }
 private void action_gen_36() throws Exception {
@@ -130,37 +118,16 @@ this.att_type=this.att_htype;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-<<<<<<< HEAD
-      case LEX_MCS.token_affect : // 40847
-=======
-<<<<<<< HEAD
-      case LEX_MCS.token_affect : // 147
+      case LEX_MCS.token_affect : // 33651
         regle35 () ;
       break ;
-      case LEX_MCS.token_pv : // 146
+      case LEX_MCS.token_pv : // 33650
         regle36 () ;
       break ;
-      case LEX_MCS.token_virg : // 144
+      case LEX_MCS.token_virg : // 33648
         regle36 () ;
       break ;
-      case LEX_MCS.token_parf : // 141
-=======
-      case LEX_MCS.token_affect : // 7616
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
-        regle35 () ;
-      break ;
-      case LEX_MCS.token_pv : // 40846
-        regle36 () ;
-      break ;
-      case LEX_MCS.token_virg : // 40844
-        regle36 () ;
-      break ;
-<<<<<<< HEAD
-      case LEX_MCS.token_parf : // 40841
-=======
-      case LEX_MCS.token_parf : // 7610
->>>>>>> 477cdfe2a07ecea959ec9e3d3c2138087d7362de
->>>>>>> bdbaa92301b44fdaf132c4487868997d8ebc4083
+      case LEX_MCS.token_parf : // 33645
         regle36 () ;
       break ;
       default :

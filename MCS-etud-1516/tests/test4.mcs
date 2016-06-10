@@ -4,9 +4,7 @@
 int main(){
 
    struct { int x; int y; } pt;
-   
-   int a;
-   
+      
    pt.y = 3;
    pt.x = 5;
 
