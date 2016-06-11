@@ -9,10 +9,10 @@ int main(){
     
     *m = 12;    
     
-    //struct { int x; int y; } *pt = (int *)malloc(2);
-    //*pt.x = 3;
-    //*pt.y = 4;
-    //int c = *pt.x;
+    struct { int x; int y; } *pt = (int *)malloc(2);
+    *pt.x = 3;
+    *pt.y = 4;
+    int c = *pt.x;
     
     //pt->y = 7;
     

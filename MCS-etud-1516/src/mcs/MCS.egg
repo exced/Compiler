@@ -137,6 +137,7 @@ global
 #init {
 local
 do
+
    machine := PROGRAMME^source.getMachine();
    if machine = null then
      error(NO_MACH, PROGRAMME^source.getMachName());
@@ -177,9 +178,15 @@ end
 }
 
 ------------------------------------------------------------------------
-ENTITES ->  ENTITE ENTITES #gen;
+ENTITES -> #init  ENTITE ENTITES #gen;
+#init {
+do
+    -- reset currentDep
+    ENTITES^machine.resetCurrentDep();
+end
+}
 #gen {
-do    
+do  
     ENTITES^stds := ENTITES1^stds;
 
     ENTITES^code := ENTITE^code + ENTITES1^code;
@@ -758,23 +765,20 @@ end
 }
 #gen {
 local 
-  code : STRING;
   codeWrite : STRING;
 do  
     
     if AFFX^hcode_est_adresse then
-        code := A^code + AFFX^machine.genReadIndirectMem(AFFX^htype.getTaille());
-        codeWrite := AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
+        codeWrite := AFFX^hcode + AFFX^machine.genWriteIndirectMem(AFFX^htype.getTaille());
     else
-        code := A^code ;
         codeWrite := AFFX^machine.genWriteMem(AFFX^hdep, AFFX^htype.getTaille());
     end    
 
     -- si declaration + affectation, on laisse direct le code en sommet de pile
     if AFFX^hest_decl then
-        AFFX^code := code ;
+        AFFX^code := A^code ;
     else      
-        AFFX^code := code + AFFX^hcode + codeWrite;
+        AFFX^code := A^code + codeWrite;
     end
             
 
@@ -1338,11 +1342,17 @@ end
 }
 
 ------------------------------------------------------------------------
-F -> mult F #type #addr;
+F -> mult #ptr F #type #addr;
+#ptr {
+do
+    F1^hcode_est_adresse := true;
+end
+}
 #type {
 local
     p : POINTEUR;
 do
+
     -- remontee infovar
     F^sdep := F1^sdep;
 
@@ -1359,7 +1369,7 @@ end
 #addr {
 do
     -- code acces a un pointeur
-    F^code := F1^code + F^machine.genReadIndirectMem(1);
+    F^code := F1^code ;
 end
 }
 
@@ -1396,7 +1406,7 @@ do
 
             -- code de lecture de variable            
             if F^hcode_est_adresse then
-                code := F^machine.genAdr(iv.getTaille());
+                code := F^machine.genAdr(iv.getDep()) + F^machine.genReadIndirectMem(t.getTaille());
             else
                 code := F^machine.genReadMem(iv.getDep() , iv.getTaille()); 
             end   
@@ -1464,13 +1474,13 @@ do
             s := t;
             lc := s.getChamps();
             c := lc.chercherChamp(ident^txt);
+            ct := c.getType();
             FX^sdep := c.getDep();
             if c = nil then
                 error(champ_not_found, lc, ident^txt);
             else
                 FX1^htype := new POINTEUR(c.getType());
-            
-                code := FX^machine.genAdrField(c.getDep());
+                code := FX^machine.genAdrField(c.getDep() - 1);
             end    
         else
             error(type_not_struct, FX^htype.getNom(), ident^txt);
@@ -1485,12 +1495,12 @@ do
         else
             FX1^htype := c.getType();
             FX^sdep := c.getDep() + FX^hdep;
-            code := FX^machine.genWriteMem(c.getDep() + FX^hdep, ct.getTaille());
+            code := FX^machine.genWriteMem(c.getDep() + FX^hdep , ct.getTaille());
         end    
     else
         error(type_not_struct, FX^htype.getNom(), ident^txt);
     end
-    FX1^hcode := code;    
+    FX1^hcode := FX^hcode + code;    
 
 end
 }
