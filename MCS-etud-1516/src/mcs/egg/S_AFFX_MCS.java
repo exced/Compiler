@@ -115,16 +115,16 @@ this.att_type=this.att_htype;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_affect : // 8004
+      case LEX_MCS.token_affect : // 17894
         regle35 () ;
       break ;
-      case LEX_MCS.token_pv : // 8003
+      case LEX_MCS.token_pv : // 17893
         regle36 () ;
       break ;
-      case LEX_MCS.token_virg : // 8001
+      case LEX_MCS.token_virg : // 17891
         regle36 () ;
       break ;
-      case LEX_MCS.token_parf : // 7998
+      case LEX_MCS.token_parf : // 17888
         regle36 () ;
       break ;
       default :

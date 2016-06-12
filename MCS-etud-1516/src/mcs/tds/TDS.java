@@ -21,7 +21,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	 * La TDS parente
 	 */
 	private TDS parente;
-	
+
 
 	/**
 	 * Constructeur pour une TDS sans parente
@@ -51,6 +51,19 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	 * @return
 	 */
 	public INFO chercherLocalement(String n) {
+		INFO i = null;
+		if (get(n) instanceof INFONAMESPACE) {
+			if (((INFONAMESPACE) get(n)).getUsed()){
+				i = get(n);
+			}
+		}
+		else {
+			i = get(n);
+		}
+		return i;
+	}
+	
+	private INFO chercherLocalementNS(String n) {
 		return get(n);
 	}
 
@@ -67,11 +80,40 @@ public class TDS extends LinkedHashMap<String, INFO> {
 				return parente.chercherGlobalement(n);
 		return i;
 	}
+
+	public INFO chercherNamespace(String n) {
+		String[] strings = n.split(".");
+		INFO i = null;
+		TDS tds = this;
+		// nom simple
+		if (strings.length == 0){
+			return tds.chercherLocalementNS(n);
+		}
+		else {
+			// nom composé
+			for (String s : strings){
+				i = tds.chercherLocalement(s);
+				if (i == null){
+					return null;
+				}
+				else {
+					if (i instanceof INFOCLASSE){
+						tds = ((INFOCLASSE) i).getContenu();
+					}
+					else {
+						return null;
+					}
+				}
+			}
+		}
+		return i;
+	}
 	
-	
-	public INFOCLASSE chercherClasse(String nomClasse, TDS tds){
+
+
+	public INFOCLASSE chercherClasse(String nomClasse){
 		String[] strings = nomClasse.split(".");
-		TDS tds_temp = tds;
+		TDS tds_temp = this;
 		int tailleStrings = strings.length;
 		// Si liste des namespaces et de la classe vide
 		if (tailleStrings == 0){
@@ -107,7 +149,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	public void inserer(String n, INFO i){
 		put(n, i);
 	}
-	
+
 	public boolean compareTypeTo(TDS tdsParam){
 		boolean b = true;
 		DTYPE t = null;
@@ -121,11 +163,11 @@ public class TDS extends LinkedHashMap<String, INFO> {
 				b = false;
 				break;
 			}
-			
+
 		}
 		return b;
 	}
-	
+
 
 	public int getTailleParams() {
 		int taille = 0;
@@ -135,8 +177,8 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		}
 		return taille;
 	}
-	
-	
+
+
 	public String indent( int indent){
 		StringBuffer sindent = new StringBuffer();
 		for (int i = 0; i < indent; i++){
@@ -146,13 +188,13 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	}
 
 	public String toString(int indent) {
-		
+
 		StringBuffer sb = new StringBuffer();
 		sb.append(indent(indent) +"Debut TDS \n");
-		
+
 		String p = (parente == null) ? indent(indent) + "parente null\n" : parente.toString(++indent) + "\n";
 		sb.append( p );
-		
+
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
 			sb.append(indent(indent) + "Ident : " + e.getKey() + "  Type : " + e.getValue().toString() + '\n');
@@ -160,7 +202,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		sb.append(indent(indent) + "Fin TDS\n");
 		return sb.toString();
 	}
-	
+
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Debut TDS \n");
@@ -170,8 +212,8 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		}
 		sb.append("Fin TDS\n");
 		return sb.toString();
-		
+
 	}
-	
+
 
 }

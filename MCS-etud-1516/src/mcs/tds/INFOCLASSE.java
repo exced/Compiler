@@ -27,8 +27,7 @@ public class INFOCLASSE extends INFO {
 	public TDS getTV() { return tv; }
 	
 	public String toString() {
-		return "INFOCLASSE : contenu => " + tdsContenu+
-				"\n parente => " + parente;
+		return "INFOCLASSE ";
 	}	
 	
 }

@@ -65,7 +65,7 @@ INFO loc_i;
 INFOCLASSE loc_ic;
 // instructions
 this.att_sident=x_5.att_sident;
-loc_i=this.att_tds.chercherClasse(x_5.att_sident, this.att_tds);
+loc_i=this.att_tds.chercherClasse(x_5.att_sident);
 if (loc_i==null){
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_classe_undefined, MCSMessages.classe_undefined,new Object[]{""+x_3.att_txt, ""+this.att_tds});
 
@@ -80,10 +80,10 @@ this.att_sinfoclasse=loc_ic;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_aco : // 7999
+      case LEX_MCS.token_aco : // 17889
         regle91 () ;
       break ;
-      case LEX_MCS.token_dpts : // 8020
+      case LEX_MCS.token_dpts : // 17910
         regle92 () ;
       break ;
       default :

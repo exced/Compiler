@@ -63,7 +63,7 @@ syn acces : STRING for ACCES;
 syn sinfoclasse : INFOCLASSE for HERITAGE;
 
 -- CHAMPS CLASSE
-syn champsclasse : CHAMPCLASSE for DEFS;
+syn champsclasse : LCHAMPS for DEFS;
 
 
 
@@ -1703,9 +1703,8 @@ do
 end
 }
 
------------------ CS extension --------------------
--- Decommenter les regles suivantes pour l'extension CS
--------------------------------------------------
+----------------- CS extension ------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 STYPE-> bool #type;
@@ -1727,11 +1726,11 @@ end
 local 
     i : INFO;
 do
-    i := ENTITE^tds.chercherGlobalement(identc^txt);
+    i := ENTITE^tds.chercherNamespace(identc^txt);
     if i != nil then
         error(namespace_declared, identc^txt, ENTITE^tds);
     else    
-        ENTITE^tds.inserer(identc^txt, new INFONAMESPACE(ENTITES^stds));
+        ENTITE^tds.inserer(identc^txt, new INFONAMESPACE(new DTYPEImpl("namespace",0) ,ENTITES^stds));
     end
 end       
 }
@@ -1752,24 +1751,23 @@ end
 #acces{
 local
     name    : STRING;
-    ins       : INFONAMESPACE;
+    i       : INFO;
+    ins     : INFONAMESPACE;
+    test    :INFO;
 do
-    ins := ENTITE^tds.chercherNamespace(IDC^sident);
-    if ins != nil then
-        error(namespace_unknown, identc^txt, ENTITE^tds);
+    i := ENTITE^tds.chercherNamespace(IDC^sident);
+    if i = nil then
+        error(namespace_unknown, IDC^sident, ENTITE^tds);
     else    
-        match ins with
+        match i with
         INFONAMESPACE then
-
-            
-            
-            
+            ins := i;
+            -- changer la visibilite du namespace
+            ins.setUsed(true);
         else
             error(using_notNameSpace, identc^txt);
         end      
-    end
-
-
+    end 
 end
 }
 #gen {
@@ -1821,8 +1819,9 @@ end
 }
 #gen {
 do
-    -- table des variables pour le CALLI    
-    ENTITE^code := ENTITE^machine.genTable(ic.getTV()) +  DEFS^code;    
+    -- table des variables pour le CALLI (liaison dynamique)   
+    --ENTITE^code := ENTITE^machine.genTable(ic.getTV()) +  DEFS^code;    
+    ENTITE^code := DEFS^code;
 end
 }
 
@@ -1876,7 +1875,7 @@ do
     HERITAGE^sident := IDC^sident;
     
     -- remontee de l'infoclasse
-    i := HERITAGE^tds.chercherClasse(IDC^sident, HERITAGE^tds);
+    i := HERITAGE^tds.chercherClasse(IDC^sident);
     if i = nil then
         error(classe_undefined, identc^txt, HERITAGE^tds);
     else    

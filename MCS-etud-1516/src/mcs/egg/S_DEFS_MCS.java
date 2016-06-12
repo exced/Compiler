@@ -22,7 +22,7 @@ int [] sync= new int[0];
   TDS att_tds;
   boolean att_eval;
   String att_code;
-  CHAMPCLASSE att_champsclasse;
+  LCHAMPS att_champsclasse;
   IMachine att_machine;
   TDS att_stds;
   LEX_MCS att_scanner;
@@ -96,31 +96,31 @@ this.att_stds=x_5.att_stds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 8000
+      case LEX_MCS.token_acf : // 17890
         regle93 () ;
       break ;
-      case LEX_MCS.token_public : // 8018
+      case LEX_MCS.token_public : // 17908
         regle94 () ;
       break ;
-      case LEX_MCS.token_private : // 8019
+      case LEX_MCS.token_private : // 17909
         regle94 () ;
       break ;
-      case LEX_MCS.token_void : // 8007
+      case LEX_MCS.token_void : // 17897
         regle94 () ;
       break ;
-      case LEX_MCS.token_int : // 8009
+      case LEX_MCS.token_int : // 17899
         regle94 () ;
       break ;
-      case LEX_MCS.token_char : // 8010
+      case LEX_MCS.token_char : // 17900
         regle94 () ;
       break ;
-      case LEX_MCS.token_identc : // 8049
+      case LEX_MCS.token_identc : // 17939
         regle94 () ;
       break ;
-      case LEX_MCS.token_struct : // 8011
+      case LEX_MCS.token_struct : // 17901
         regle94 () ;
       break ;
-      case LEX_MCS.token_bool : // 8021
+      case LEX_MCS.token_bool : // 17911
         regle94 () ;
       break ;
       default :
