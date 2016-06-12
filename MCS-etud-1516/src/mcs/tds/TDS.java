@@ -85,6 +85,14 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return i;
 	}
 	
+	public INFO chercherGlobalementFA(String n) {
+		INFO i = chercherLocalementFA(n);
+		if (i == null)
+			if (parente != null)
+				return parente.chercherGlobalement(n);
+		return i;
+	}	
+	
 
 	public INFO chercherNamespace(String n) {
 		String[] strings = n.split(Pattern.quote("."));
@@ -121,10 +129,10 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		String ins = "";
 		String inc;
 		INFO info = null;
-		TDS tds = this;
+		TDS tds = this.getParente();
 		// nom simple + INFOCLASSE
 		if (strings.length == 0){
-			return tds.chercherGlobalement(n) instanceof INFOCLASSE ? tds.chercherGlobalement(n) : null;
+			return tds.chercherGlobalementFA(n) instanceof INFOCLASSE ? tds.chercherGlobalementFA(n) : null;
 		}
 		else {
 			// nom composé + INFONAMESPACE...S + INFOCLASSE
@@ -134,13 +142,17 @@ public class TDS extends LinkedHashMap<String, INFO> {
 					ins = ins + ".";
 			}
 			inc = strings[strings.length - 1];
-			info = chercherNamespace(ins);
+			System.out.println("ins : " + ins);
+			System.out.println("inc : " + inc);
+			info = tds.chercherNamespace(ins);
 			if (info == null){
+				System.out.println("info null");
 				return null;
 			}
 			else {
 				if (info instanceof INFONAMESPACE){
 					tds = ((INFONAMESPACE) info).getContenu();
+					System.out.println("tds : " + tds);
 					info = tds.chercherClasse(inc);
 				}
 				else {

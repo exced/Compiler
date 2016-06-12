@@ -1729,8 +1729,6 @@ do
     else    
         ENTITE^tds.inserer(identc^txt, new INFONAMESPACE(new DTYPEImpl("namespace",0) ,ENTITES^stds));
     end
-    
-    write "ENTITE TDS : " + ENTITE^tds +"\n";
 end       
 }
 #gen{
@@ -1881,7 +1879,7 @@ do
     -- remontee de l'infoclasse
     i := HERITAGE^tds.chercherClasse(IDC^sident);
     if i = nil then
-        error(classe_undefined, identc^txt, HERITAGE^tds);
+        error(classe_undefined, IDC^sident, HERITAGE^tds);
     else 
         match i with
         INFOCLASSE then   

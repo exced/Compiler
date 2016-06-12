@@ -67,7 +67,7 @@ INFOCLASSE loc_ic;
 this.att_sident=x_5.att_sident;
 loc_i=this.att_tds.chercherClasse(x_5.att_sident);
 if (loc_i==null){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_classe_undefined, MCSMessages.classe_undefined,new Object[]{""+x_3.att_txt, ""+this.att_tds});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_classe_undefined, MCSMessages.classe_undefined,new Object[]{""+x_5.att_sident, ""+this.att_tds});
 
 }
 else {
@@ -87,10 +87,10 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_aco : // 822
+      case LEX_MCS.token_aco : // 725
         regle91 () ;
       break ;
-      case LEX_MCS.token_dpts : // 843
+      case LEX_MCS.token_dpts : // 746
         regle92 () ;
       break ;
       default :

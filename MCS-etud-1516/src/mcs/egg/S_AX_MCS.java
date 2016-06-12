@@ -95,34 +95,34 @@ this.att_code_est_adresse=this.att_hcode_est_adresse;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_inf : // 854
+      case LEX_MCS.token_inf : // 757
         regle38 () ;
       break ;
-      case LEX_MCS.token_sup : // 856
+      case LEX_MCS.token_sup : // 759
         regle38 () ;
       break ;
-      case LEX_MCS.token_infeg : // 855
+      case LEX_MCS.token_infeg : // 758
         regle38 () ;
       break ;
-      case LEX_MCS.token_supeg : // 857
+      case LEX_MCS.token_supeg : // 760
         regle38 () ;
       break ;
-      case LEX_MCS.token_eg : // 858
+      case LEX_MCS.token_eg : // 761
         regle38 () ;
       break ;
-      case LEX_MCS.token_neg : // 859
+      case LEX_MCS.token_neg : // 762
         regle38 () ;
       break ;
-      case LEX_MCS.token_affect : // 827
+      case LEX_MCS.token_affect : // 730
         regle39 () ;
       break ;
-      case LEX_MCS.token_virg : // 824
+      case LEX_MCS.token_virg : // 727
         regle39 () ;
       break ;
-      case LEX_MCS.token_pv : // 826
+      case LEX_MCS.token_pv : // 729
         regle39 () ;
       break ;
-      case LEX_MCS.token_parf : // 821
+      case LEX_MCS.token_parf : // 724
         regle39 () ;
       break ;
       default :

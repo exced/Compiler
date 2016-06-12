@@ -466,85 +466,85 @@ x_4.att_tds=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_entier : // 868
+      case LEX_MCS.token_entier : // 771
         regle59 () ;
       break ;
-      case LEX_MCS.token_chaine : // 870
+      case LEX_MCS.token_chaine : // 773
         regle60 () ;
       break ;
-      case LEX_MCS.token_caractere : // 869
+      case LEX_MCS.token_caractere : // 772
         regle61 () ;
       break ;
-      case LEX_MCS.token_plus : // 860
+      case LEX_MCS.token_plus : // 763
         regle62 () ;
       break ;
-      case LEX_MCS.token_moins : // 861
+      case LEX_MCS.token_moins : // 764
         regle62 () ;
       break ;
-      case LEX_MCS.token_non : // 867
+      case LEX_MCS.token_non : // 770
         regle62 () ;
       break ;
-      case LEX_MCS.token_null : // 853
+      case LEX_MCS.token_null : // 756
         regle66 () ;
       break ;
-      case LEX_MCS.token_paro : // 820
+      case LEX_MCS.token_paro : // 723
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_entier : // 868
+          case LEX_MCS.token_entier : // 771
             regle67 () ;
           break ;
-          case LEX_MCS.token_chaine : // 870
+          case LEX_MCS.token_chaine : // 773
             regle67 () ;
           break ;
-          case LEX_MCS.token_caractere : // 869
+          case LEX_MCS.token_caractere : // 772
             regle67 () ;
           break ;
-          case LEX_MCS.token_plus : // 860
+          case LEX_MCS.token_plus : // 763
             regle67 () ;
           break ;
-          case LEX_MCS.token_moins : // 861
+          case LEX_MCS.token_moins : // 764
             regle67 () ;
           break ;
-          case LEX_MCS.token_non : // 867
+          case LEX_MCS.token_non : // 770
             regle67 () ;
           break ;
-          case LEX_MCS.token_null : // 853
+          case LEX_MCS.token_null : // 756
             regle67 () ;
           break ;
-          case LEX_MCS.token_paro : // 820
+          case LEX_MCS.token_paro : // 723
             regle67 () ;
           break ;
-          case LEX_MCS.token_malloc : // 817
+          case LEX_MCS.token_malloc : // 720
             regle67 () ;
           break ;
-          case LEX_MCS.token_mult : // 863
+          case LEX_MCS.token_mult : // 766
             regle67 () ;
           break ;
-          case LEX_MCS.token_ident : // 871
+          case LEX_MCS.token_ident : // 774
             regle67 () ;
           break ;
-          case LEX_MCS.token_true : // 845
+          case LEX_MCS.token_true : // 748
             regle67 () ;
           break ;
-          case LEX_MCS.token_false : // 846
+          case LEX_MCS.token_false : // 749
             regle67 () ;
           break ;
-          case LEX_MCS.token_void : // 830
+          case LEX_MCS.token_void : // 733
             regle68 () ;
           break ;
-          case LEX_MCS.token_int : // 832
+          case LEX_MCS.token_int : // 735
             regle68 () ;
           break ;
-          case LEX_MCS.token_char : // 833
+          case LEX_MCS.token_char : // 736
             regle68 () ;
           break ;
-          case LEX_MCS.token_identc : // 872
+          case LEX_MCS.token_identc : // 775
             regle68 () ;
           break ;
-          case LEX_MCS.token_struct : // 834
+          case LEX_MCS.token_struct : // 737
             regle68 () ;
           break ;
-          case LEX_MCS.token_bool : // 844
+          case LEX_MCS.token_bool : // 747
             regle68 () ;
           break ;
           default :
@@ -552,19 +552,19 @@ x_4.att_tds=this.att_tds;
 scanner.accepter_sucre(LEX_MCS.token_paro);
         }
       break ;
-      case LEX_MCS.token_malloc : // 817
+      case LEX_MCS.token_malloc : // 720
         regle69 () ;
       break ;
-      case LEX_MCS.token_mult : // 863
+      case LEX_MCS.token_mult : // 766
         regle70 () ;
       break ;
-      case LEX_MCS.token_ident : // 871
+      case LEX_MCS.token_ident : // 774
         regle71 () ;
       break ;
-      case LEX_MCS.token_true : // 845
+      case LEX_MCS.token_true : // 748
         regle100 () ;
       break ;
-      case LEX_MCS.token_false : // 846
+      case LEX_MCS.token_false : // 749
         regle101 () ;
       break ;
       default :

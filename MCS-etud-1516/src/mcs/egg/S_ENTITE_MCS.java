@@ -272,7 +272,6 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 else {
 this.att_tds.inserer(x_3.att_txt,  new INFONAMESPACE( new DTYPEImpl("namespace", 0), x_6.att_stds));
 }
-System.out.print(""+"ENTITE TDS : "+this.att_tds+"\n");
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#namespace","ENTITE -> namespace identc aco #htds ENTITES acf #namespace #gen ;"});
 }
   }
@@ -315,43 +314,43 @@ x_6.att_machine=this.att_machine;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 835
+      case LEX_MCS.token_typedef : // 738
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 830
+      case LEX_MCS.token_void : // 733
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 832
+      case LEX_MCS.token_int : // 735
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 833
+      case LEX_MCS.token_char : // 736
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 872
+      case LEX_MCS.token_identc : // 775
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 834
+      case LEX_MCS.token_struct : // 737
         regle4 () ;
       break ;
-      case LEX_MCS.token_bool : // 844
+      case LEX_MCS.token_bool : // 747
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 831
+      case LEX_MCS.token_asm : // 734
         regle80 () ;
       break ;
-      case LEX_MCS.token_namespace : // 838
+      case LEX_MCS.token_namespace : // 741
         regle83 () ;
       break ;
-      case LEX_MCS.token_using : // 839
+      case LEX_MCS.token_using : // 742
         regle84 () ;
       break ;
-      case LEX_MCS.token_public : // 841
+      case LEX_MCS.token_public : // 744
         regle87 () ;
       break ;
-      case LEX_MCS.token_private : // 842
+      case LEX_MCS.token_private : // 745
         regle87 () ;
       break ;
-      case LEX_MCS.token_class : // 840
+      case LEX_MCS.token_class : // 743
         regle87 () ;
       break ;
       default :
