@@ -37,7 +37,6 @@ if  (att_eval)      action_gen_0(x_4);
 private void action_tds_0(S_ENTITES_MCS x_4) throws Exception {
 try {
 // instructions
-x_4.att_tdsNameSpace=null;
 x_4.att_tds= new TDS(null);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","PROGRAMME -> #init #tds ENTITES #gen ;"});
 }
@@ -69,43 +68,43 @@ x_4.att_machine=glob_0_machine;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 17902
+      case LEX_MCS.token_typedef : // 835
         regle0 () ;
       break ;
-      case LEX_MCS.token_void : // 17897
+      case LEX_MCS.token_void : // 830
         regle0 () ;
       break ;
-      case LEX_MCS.token_int : // 17899
+      case LEX_MCS.token_int : // 832
         regle0 () ;
       break ;
-      case LEX_MCS.token_char : // 17900
+      case LEX_MCS.token_char : // 833
         regle0 () ;
       break ;
-      case LEX_MCS.token_identc : // 17939
+      case LEX_MCS.token_identc : // 872
         regle0 () ;
       break ;
-      case LEX_MCS.token_struct : // 17901
+      case LEX_MCS.token_struct : // 834
         regle0 () ;
       break ;
-      case LEX_MCS.token_bool : // 17911
+      case LEX_MCS.token_bool : // 844
         regle0 () ;
       break ;
-      case LEX_MCS.token_asm : // 17898
+      case LEX_MCS.token_asm : // 831
         regle0 () ;
       break ;
-      case LEX_MCS.token_namespace : // 17905
+      case LEX_MCS.token_namespace : // 838
         regle0 () ;
       break ;
-      case LEX_MCS.token_using : // 17906
+      case LEX_MCS.token_using : // 839
         regle0 () ;
       break ;
-      case LEX_MCS.token_public : // 17908
+      case LEX_MCS.token_public : // 841
         regle0 () ;
       break ;
-      case LEX_MCS.token_private : // 17909
+      case LEX_MCS.token_private : // 842
         regle0 () ;
       break ;
-      case LEX_MCS.token_class : // 17907
+      case LEX_MCS.token_class : // 840
         regle0 () ;
       break ;
       case LEX_MCS.EOF :

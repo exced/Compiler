@@ -115,10 +115,10 @@ this.att_sinfo=x_3.att_sinfo;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_pv : // 17893
+      case LEX_MCS.token_pv : // 826
         regle5 () ;
       break ;
-      case LEX_MCS.token_paro : // 17887
+      case LEX_MCS.token_paro : // 820
         regle6 () ;
       break ;
       default :

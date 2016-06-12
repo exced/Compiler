@@ -25,7 +25,6 @@ int [] sync= new int[0];
   IMachine att_machine;
   TDS att_stds;
   LEX_MCS att_scanner;
-  TDS att_tdsNameSpace;
   private void regle2() throws Exception {
 
     //declaration
@@ -51,8 +50,6 @@ x_3.att_machine=this.att_machine;
 x_4.att_machine=this.att_machine;
 x_3.att_tds=this.att_tds;
 x_4.att_tds=this.att_tds;
-x_3.att_tdsNameSpace=this.att_tdsNameSpace;
-x_4.att_tdsNameSpace=this.att_tdsNameSpace;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","ENTITES -> #init ENTITE ENTITES1 #gen ;"});
 }
   }
@@ -82,49 +79,49 @@ this.att_machine.resetCurrentDep();
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 17890
+      case LEX_MCS.token_acf : // 823
         regle1 () ;
       break ;
       case LEX_MCS.EOF :
         regle1 () ;
       break ;
-      case LEX_MCS.token_typedef : // 17902
+      case LEX_MCS.token_typedef : // 835
         regle2 () ;
       break ;
-      case LEX_MCS.token_void : // 17897
+      case LEX_MCS.token_void : // 830
         regle2 () ;
       break ;
-      case LEX_MCS.token_int : // 17899
+      case LEX_MCS.token_int : // 832
         regle2 () ;
       break ;
-      case LEX_MCS.token_char : // 17900
+      case LEX_MCS.token_char : // 833
         regle2 () ;
       break ;
-      case LEX_MCS.token_identc : // 17939
+      case LEX_MCS.token_identc : // 872
         regle2 () ;
       break ;
-      case LEX_MCS.token_struct : // 17901
+      case LEX_MCS.token_struct : // 834
         regle2 () ;
       break ;
-      case LEX_MCS.token_bool : // 17911
+      case LEX_MCS.token_bool : // 844
         regle2 () ;
       break ;
-      case LEX_MCS.token_asm : // 17898
+      case LEX_MCS.token_asm : // 831
         regle2 () ;
       break ;
-      case LEX_MCS.token_namespace : // 17905
+      case LEX_MCS.token_namespace : // 838
         regle2 () ;
       break ;
-      case LEX_MCS.token_using : // 17906
+      case LEX_MCS.token_using : // 839
         regle2 () ;
       break ;
-      case LEX_MCS.token_public : // 17908
+      case LEX_MCS.token_public : // 841
         regle2 () ;
       break ;
-      case LEX_MCS.token_private : // 17909
+      case LEX_MCS.token_private : // 842
         regle2 () ;
       break ;
-      case LEX_MCS.token_class : // 17907
+      case LEX_MCS.token_class : // 840
         regle2 () ;
       break ;
       default :

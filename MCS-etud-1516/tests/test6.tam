@@ -1,6 +1,9 @@
 ; Generated code for tests/test6.mcs.
 ; Do not modify by hand
 
+	PUSH 1
+	PUSH 1
+	PUSH 1
 _main:
 	LOADL 0
 	RETURN (0) 1

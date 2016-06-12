@@ -34,7 +34,6 @@ syn sinfo : INFO for DEF,DECL,FONCTION;
 inh tds_asm : TDS for ASM;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
                             SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX,DEFS,DEF,HERITAGE;
-inh tdsNameSpace : TDS for ENTITE,ENTITES;   
 syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES,DEFS;      
 
 
@@ -148,8 +147,6 @@ end
 }
 #tds {
 do
-    ENTITES^tdsNameSpace := nil;
-
     --init de la TDS ( sans parente )
     ENTITES^tds := new TDS(nil);
 end
@@ -1716,10 +1713,10 @@ end
 
 ------------------------------------------------------------------------
 ---- definit un contenu d'un namespace
-ENTITE -> namespace identc aco #tds ENTITES acf #namespace #gen;
-#tds{
+ENTITE -> namespace identc aco #htds ENTITES acf #namespace #gen;
+#htds {
 do
-    ENTITES^tdsNameSpace := new TDS(ENTITE^tds);
+    ENTITES^tds := new TDS(ENTITE^tds);
 end
 }
 #namespace{
@@ -1732,6 +1729,8 @@ do
     else    
         ENTITE^tds.inserer(identc^txt, new INFONAMESPACE(new DTYPEImpl("namespace",0) ,ENTITES^stds));
     end
+    
+    write "ENTITE TDS : " + ENTITE^tds +"\n";
 end       
 }
 #gen{
@@ -1753,7 +1752,6 @@ local
     name    : STRING;
     i       : INFO;
     ins     : INFONAMESPACE;
-    test    :INFO;
 do
     i := ENTITE^tds.chercherNamespace(IDC^sident);
     if i = nil then
@@ -1799,11 +1797,17 @@ end
 
 ------------------------------------------------------------------------
 ---- definition d'une classe (peut etre en dehors d'un namespace)
-ENTITE -> ACCES class identc HERITAGE aco DEFS acf #classe #gen;
-global
+ENTITE -> ACCES class identc HERITAGE aco #htds DEFS acf #classe #gen;
+#htds {
+do
+    -- tds du contenu de la classe (contient attributs et methodes)
+    DEFS^tds := new TDS(ENTITE^tds);
+end
+}
+#classe {
+local
     i : INFO;
     ic : INFOCLASSE;
-#classe {
 do
     i := ENTITE^tds.chercherGlobalement(identc^txt);
     if i != nil then
@@ -1846,7 +1850,7 @@ end
 ACCES -> #acces;
 #acces{
 do
-    ACCES^acces := "def";
+    ACCES^acces := "private";
 end
 }
 
@@ -1878,9 +1882,14 @@ do
     i := HERITAGE^tds.chercherClasse(IDC^sident);
     if i = nil then
         error(classe_undefined, identc^txt, HERITAGE^tds);
-    else    
-        ic := i;
-        HERITAGE^sinfoclasse := ic;
+    else 
+        match i with
+        INFOCLASSE then   
+            ic := i;
+            HERITAGE^sinfoclasse := ic;
+        else
+            error(not_infoclasse, IDC^sident);
+        end    
     end      
 end
 }
@@ -1901,20 +1910,23 @@ DEFS ->  ACCES DEF #def DEFS #gen;
 #def {
 local
     i : INFO;
-    tds : TDS;
+    iv : INFOVAR;
 do
     -- ajout de la def a la tds
     i := DEFS^tds.chercherLocalement(DEF^sident);
-    if i != nil then
-        error(def_defined, DEF^sident, DEFS^tds);
-    else   
-        -- ajout acces
-        i.setAcces(ACCES^acces);
-        -- insertion de l'infoclasse
-        tds := DEFS^tds;
-        tds.inserer(DEF^sident, i);
-        -- transmission de la TDS 
-        DEFS1^tds := tds;
+    if i = nil then
+        error(def_undefined, DEF^sident, DEFS^tds);
+    else
+        match i with
+        INFOVAR then
+            iv := i;   
+            -- ajout acces
+            iv.setAcces(ACCES^acces);
+            -- transmission de la TDS 
+            DEFS1^tds := DEFS^tds;
+        else
+            error(not_infovar, DEF^sident);
+        end    
     end        
 end
 }

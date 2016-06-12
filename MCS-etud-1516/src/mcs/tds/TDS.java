@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.regex.Pattern;
 
 import mcs.type.*;
 
@@ -63,7 +63,11 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return i;
 	}
 	
-	private INFO chercherLocalementNS(String n) {
+	/*
+	 * chercher Localement Full Access -> aucune restriction d'accès lors de la recherche
+	 * nécessaire lors du changement d'accès pour le "using"
+	 */
+	private INFO chercherLocalementFA(String n) {
 		return get(n);
 	}
 
@@ -80,25 +84,26 @@ public class TDS extends LinkedHashMap<String, INFO> {
 				return parente.chercherGlobalement(n);
 		return i;
 	}
+	
 
 	public INFO chercherNamespace(String n) {
-		String[] strings = n.split(".");
+		String[] strings = n.split(Pattern.quote("."));
 		INFO i = null;
 		TDS tds = this;
 		// nom simple
 		if (strings.length == 0){
-			return tds.chercherLocalementNS(n);
+			return tds.chercherLocalementFA(n) instanceof INFONAMESPACE ? tds.chercherLocalementFA(n) : null;
 		}
 		else {
 			// nom composé
 			for (String s : strings){
-				i = tds.chercherLocalement(s);
+				i = tds.chercherLocalementFA(s);
 				if (i == null){
 					return null;
 				}
 				else {
-					if (i instanceof INFOCLASSE){
-						tds = ((INFOCLASSE) i).getContenu();
+					if (i instanceof INFONAMESPACE){
+						tds = ((INFONAMESPACE) i).getContenu();
 					}
 					else {
 						return null;
@@ -111,32 +116,39 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	
 
 
-	public INFOCLASSE chercherClasse(String nomClasse){
-		String[] strings = nomClasse.split(".");
-		TDS tds_temp = this;
-		int tailleStrings = strings.length;
-		// Si liste des namespaces et de la classe vide
-		if (tailleStrings == 0){
-			return null;
+	public INFO chercherClasse(String n){
+		String[] strings = n.split(Pattern.quote("."));
+		String ins = "";
+		String inc;
+		INFO info = null;
+		TDS tds = this;
+		// nom simple + INFOCLASSE
+		if (strings.length == 0){
+			return tds.chercherGlobalement(n) instanceof INFOCLASSE ? tds.chercherGlobalement(n) : null;
 		}
-		int i = 0;
-		INFO result = tds_temp.chercherGlobalement(strings[i]);
-		for(i=0;i<tailleStrings;i++) {
-			if (result == null){
+		else {
+			// nom composé + INFONAMESPACE...S + INFOCLASSE
+			for (int i = 0; i < strings.length - 1; i++){
+				ins = ins + strings[i];
+				if (i != strings.length - 2)
+					ins = ins + ".";
+			}
+			inc = strings[strings.length - 1];
+			info = chercherNamespace(ins);
+			if (info == null){
 				return null;
-			}
-			else if (result instanceof INFOCLASSE && i == (tailleStrings-1)){
-				tds_temp = ((INFOCLASSE) result).getContenu();
-			}
-			else if (result instanceof INFONAMESPACE && i < (tailleStrings-1)) {
-				tds_temp = ((INFONAMESPACE) result).getContenu();
-				result = tds_temp.chercherLocalement(strings[i+1]);
 			}
 			else {
-				return null;
+				if (info instanceof INFONAMESPACE){
+					tds = ((INFONAMESPACE) info).getContenu();
+					info = tds.chercherClasse(inc);
+				}
+				else {
+					return null;
+				}
 			}
 		}
-		return (INFOCLASSE) result;
+		return info;
 	}
 
 	/**
@@ -178,30 +190,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return taille;
 	}
 
-
-	public String indent( int indent){
-		StringBuffer sindent = new StringBuffer();
-		for (int i = 0; i < indent; i++){
-			sindent.append("\t");
-		}
-		return sindent.toString();
-	}
-
-	public String toString(int indent) {
-
-		StringBuffer sb = new StringBuffer();
-		sb.append(indent(indent) +"Debut TDS \n");
-
-		String p = (parente == null) ? indent(indent) + "parente null\n" : parente.toString(++indent) + "\n";
-		sb.append( p );
-
-		Set<Map.Entry<String, INFO>> s = entrySet();
-		for (Map.Entry<String, INFO> e : s) {
-			sb.append(indent(indent) + "Ident : " + e.getKey() + "  Type : " + e.getValue().toString() + '\n');
-		}
-		sb.append(indent(indent) + "Fin TDS\n");
-		return sb.toString();
-	}
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();

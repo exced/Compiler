@@ -1,11 +1,27 @@
 
-namespace System {
-  class Object {
+namespace Geometry {
 
-  }
+	namespace G2D {
+		
+		public class Point2D{
+			int x;
+			int y;
+		}
+
+  	}
+  	
+  	namespace G3D {
+  	
+		public class Point3D:Geometry.G2D.Point2D{
+			int z;
+		}  		
+		
+  	}
 }
 
-using System;
+using Geometry.G2D;
+using Geometry.G3D;
+
 
 // point d'entree du programme.
 int main(){

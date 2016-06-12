@@ -47,7 +47,7 @@ if  (att_eval)      action_acces_90();
 private void action_acces_90() throws Exception {
 try {
 // instructions
-this.att_acces="def";
+this.att_acces="private";
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#acces","ACCES -> #acces ;"});
 }
   }
@@ -68,31 +68,31 @@ this.att_acces="public";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_public : // 17908
+      case LEX_MCS.token_public : // 841
         regle88 () ;
       break ;
-      case LEX_MCS.token_private : // 17909
+      case LEX_MCS.token_private : // 842
         regle89 () ;
       break ;
-      case LEX_MCS.token_class : // 17907
+      case LEX_MCS.token_class : // 840
         regle90 () ;
       break ;
-      case LEX_MCS.token_void : // 17897
+      case LEX_MCS.token_void : // 830
         regle90 () ;
       break ;
-      case LEX_MCS.token_int : // 17899
+      case LEX_MCS.token_int : // 832
         regle90 () ;
       break ;
-      case LEX_MCS.token_char : // 17900
+      case LEX_MCS.token_char : // 833
         regle90 () ;
       break ;
-      case LEX_MCS.token_identc : // 17939
+      case LEX_MCS.token_identc : // 872
         regle90 () ;
       break ;
-      case LEX_MCS.token_struct : // 17901
+      case LEX_MCS.token_struct : // 834
         regle90 () ;
       break ;
-      case LEX_MCS.token_bool : // 17911
+      case LEX_MCS.token_bool : // 844
         regle90 () ;
       break ;
       default :

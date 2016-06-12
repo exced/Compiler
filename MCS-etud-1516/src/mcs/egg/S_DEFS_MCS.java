@@ -50,18 +50,24 @@ private void action_def_94(S_ACCES_MCS x_2, S_DEF_MCS x_3, S_DEFS_MCS x_5) throw
 try {
 // locales
 INFO loc_i;
-TDS loc_tds;
+INFOVAR loc_iv;
 // instructions
 loc_i=this.att_tds.chercherLocalement(x_3.att_sident);
-if (loc_i!=null){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_def_defined, MCSMessages.def_defined,new Object[]{""+x_3.att_sident, ""+this.att_tds});
+if (loc_i==null){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_def_undefined, MCSMessages.def_undefined,new Object[]{""+x_3.att_sident, ""+this.att_tds});
 
 }
 else {
-loc_i.setAcces(x_2.att_acces);
-loc_tds=this.att_tds;
-loc_tds.inserer(x_3.att_sident, loc_i);
-x_5.att_tds=loc_tds;
+if (loc_i instanceof INFOVAR ){
+loc_iv=((INFOVAR)loc_i);
+loc_iv.setAcces(x_2.att_acces);
+x_5.att_tds=this.att_tds;
+}
+else {
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_not_infovar, MCSMessages.not_infovar,new Object[]{""+x_3.att_sident});
+
+
+}
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#def","DEFS -> ACCES DEF #def DEFS1 #gen ;"});
 }
@@ -96,31 +102,31 @@ this.att_stds=x_5.att_stds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 17890
+      case LEX_MCS.token_acf : // 823
         regle93 () ;
       break ;
-      case LEX_MCS.token_public : // 17908
+      case LEX_MCS.token_public : // 841
         regle94 () ;
       break ;
-      case LEX_MCS.token_private : // 17909
+      case LEX_MCS.token_private : // 842
         regle94 () ;
       break ;
-      case LEX_MCS.token_void : // 17897
+      case LEX_MCS.token_void : // 830
         regle94 () ;
       break ;
-      case LEX_MCS.token_int : // 17899
+      case LEX_MCS.token_int : // 832
         regle94 () ;
       break ;
-      case LEX_MCS.token_char : // 17900
+      case LEX_MCS.token_char : // 833
         regle94 () ;
       break ;
-      case LEX_MCS.token_identc : // 17939
+      case LEX_MCS.token_identc : // 872
         regle94 () ;
       break ;
-      case LEX_MCS.token_struct : // 17901
+      case LEX_MCS.token_struct : // 834
         regle94 () ;
       break ;
-      case LEX_MCS.token_bool : // 17911
+      case LEX_MCS.token_bool : // 844
         regle94 () ;
       break ;
       default :

@@ -71,8 +71,15 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 else {
-loc_ic=loc_i;
+if (loc_i instanceof INFOCLASSE ){
+loc_ic=((INFOCLASSE)loc_i);
 this.att_sinfoclasse=loc_ic;
+}
+else {
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_not_infoclasse, MCSMessages.not_infoclasse,new Object[]{""+x_5.att_sident});
+
+
+}
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#sident","HERITAGE -> dpts identc #ident IDC #sident ;"});
 }
@@ -80,10 +87,10 @@ this.att_sinfoclasse=loc_ic;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_aco : // 17889
+      case LEX_MCS.token_aco : // 822
         regle91 () ;
       break ;
-      case LEX_MCS.token_dpts : // 17910
+      case LEX_MCS.token_dpts : // 843
         regle92 () ;
       break ;
       default :

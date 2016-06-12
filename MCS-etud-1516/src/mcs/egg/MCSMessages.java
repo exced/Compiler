@@ -15,7 +15,7 @@ public class MCSMessages extends NLS {
   return RESOURCE_BUNDLE;
   }		
 
-  public static  String def_defined;
+  public static  String not_infoclasse;
   public static  String namespace_declared;
   public static  String MCS_expected_eof;
   public static  String call_nomatch;
@@ -26,6 +26,7 @@ public class MCSMessages extends NLS {
   public static  String namespace_unknown;
   public static  String castError;
   public static  String typeError_opUn;
+  public static  String def_undefined;
   public static  String type_not_struct;
   public static  String type_undefined;
   public static  String MCS_expected_token;
@@ -37,6 +38,7 @@ public class MCSMessages extends NLS {
   public static  String var_declared;
   public static  String access_not_pointeur;
   public static  String type_unknown;
+  public static  String not_infovar;
   public static  String using_notNameSpace;
   public static  String var_not_found;
   public static  String not_infotype;
