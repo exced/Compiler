@@ -173,7 +173,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 else {
 if (loc_i instanceof INFONAMESPACE ){
 loc_ins=((INFONAMESPACE)loc_i);
-loc_ins.setUsed(true);
+this.att_tds.addUsedNS(x_3.att_txt, loc_ins);
 }
 else {
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_using_notNameSpace, MCSMessages.using_notNameSpace,new Object[]{""+x_3.att_txt});
@@ -264,7 +264,7 @@ try {
 // locales
 INFO loc_i;
 // instructions
-loc_i=this.att_tds.chercherNamespace(x_3.att_txt);
+loc_i=this.att_tds.chercherGlobalement(x_3.att_txt);
 if (loc_i!=null){
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_namespace_declared, MCSMessages.namespace_declared,new Object[]{""+x_3.att_txt, ""+this.att_tds});
 
@@ -314,43 +314,43 @@ x_6.att_machine=this.att_machine;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 1806
+      case LEX_MCS.token_typedef : // 14617
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 1801
+      case LEX_MCS.token_void : // 14612
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 1803
+      case LEX_MCS.token_int : // 14614
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 1804
+      case LEX_MCS.token_char : // 14615
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 1843
+      case LEX_MCS.token_identc : // 14654
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 1805
+      case LEX_MCS.token_struct : // 14616
         regle4 () ;
       break ;
-      case LEX_MCS.token_bool : // 1815
+      case LEX_MCS.token_bool : // 14626
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 1802
+      case LEX_MCS.token_asm : // 14613
         regle80 () ;
       break ;
-      case LEX_MCS.token_namespace : // 1809
+      case LEX_MCS.token_namespace : // 14620
         regle83 () ;
       break ;
-      case LEX_MCS.token_using : // 1810
+      case LEX_MCS.token_using : // 14621
         regle84 () ;
       break ;
-      case LEX_MCS.token_public : // 1812
+      case LEX_MCS.token_public : // 14623
         regle87 () ;
       break ;
-      case LEX_MCS.token_private : // 1813
+      case LEX_MCS.token_private : // 14624
         regle87 () ;
       break ;
-      case LEX_MCS.token_class : // 1811
+      case LEX_MCS.token_class : // 14622
         regle87 () ;
       break ;
       default :

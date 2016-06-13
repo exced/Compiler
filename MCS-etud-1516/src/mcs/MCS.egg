@@ -70,8 +70,6 @@ syn sinfoclasse : INFOCLASSE for HERITAGE;
 syn champsclasse : LCHAMPS for DEFS;
 
 
-
-
 sugar malloc is "malloc";
 --term identASM is "[A-Z]*";
 --term allident is "[_0-9A-Za-z]*";
@@ -1790,7 +1788,7 @@ end
 local 
     i : INFO;
 do
-    i := ENTITE^tds.chercherNamespace(identc^txt);
+    i := ENTITE^tds.chercherGlobalement(identc^txt);
     if i != nil then
         error(namespace_declared, identc^txt, ENTITE^tds);
     else    
@@ -1825,8 +1823,8 @@ do
         match i with
         INFONAMESPACE then
             ins := i;
-            -- changer la visibilite du namespace
-            ins.setUsed(true);
+            -- changer la visibilite du namespace ( ajout a la liste )
+            ENTITE^tds.addUsedNS(identc^txt, ins);
         else
             error(using_notNameSpace, identc^txt);
         end      
@@ -1874,6 +1872,7 @@ local
     i : INFO;
     ic : INFOCLASSE;
 do
+    -- si la classe n est pas deja definie dans ce namespace 
     i := ENTITE^tds.chercherGlobalement(identc^txt);
     if i != nil then
         error(classe_defined, identc^txt, ENTITE^tds);
@@ -1915,7 +1914,8 @@ end
 ACCES -> #acces;
 #acces{
 do
-    ACCES^acces := "private";
+    -- default
+    ACCES^acces := "def";
 end
 }
 
@@ -2052,6 +2052,11 @@ do
 
     tdsParam := PARFS^stds;
     BLOC^tds := new TDS(tdsParam);
+    
+    -- debut de BLOC : currentDep reset
+    DEF^machine.resetCurrentDep();
+    -- ajout de 3 pour les variables utilisees par TAM
+    DEF^machine.addCurrentDep(3);
     
     -- remontee des info
     t := new DTYPEImpl("constructeur", 0);

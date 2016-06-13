@@ -17,17 +17,19 @@ public class TDS extends LinkedHashMap<String, INFO> {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * La TDS parente
-	 */
 	private TDS parente;
-
+	
+	/*
+	 * liste des namespace used (using)
+	 */
+	private LinkedHashMap<String, INFONAMESPACE> usedNS;
 
 	/**
 	 * Constructeur pour une TDS sans parente
 	 */
 	public TDS() {
 		this(null);
+		usedNS = new LinkedHashMap<String, INFONAMESPACE>();
 	}
 
 	/**
@@ -38,10 +40,15 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	public TDS(TDS p) {
 		super();
 		parente = p;
+		usedNS = new LinkedHashMap<String, INFONAMESPACE>();
 	}
 
 	public TDS getParente() {
 		return parente;
+	}
+	
+	public void addUsedNS(String n, INFONAMESPACE ins){
+		usedNS.put(n,ins);
 	}
 
 	/**
@@ -51,23 +58,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	 * @return
 	 */
 	public INFO chercherLocalement(String n) {
-		INFO i = null;
-		if (get(n) instanceof INFONAMESPACE) {
-			if (((INFONAMESPACE) get(n)).getUsed()){
-				i = get(n);
-			}
-		}
-		else {
-			i = get(n);
-		}
-		return i;
-	}
-	
-	/*
-	 * chercher Localement Full Access -> aucune restriction d'accès lors de la recherche
-	 * nécessaire lors du changement d'accès pour le "using"
-	 */
-	private INFO chercherLocalementFA(String n) {
 		return get(n);
 	}
 
@@ -85,27 +75,55 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return i;
 	}
 	
-	public INFO chercherGlobalementFA(String n) {
-		INFO i = chercherLocalementFA(n);
+	/*
+	 * Recherche d'un Namespace à partir des namespaces imported
+	 */
+	public INFO chercherUsedNS(String n){
+		INFO i = null;
+		for (INFONAMESPACE ins : usedNS.values()){
+			System.out.println("chercherUsedNS sur : " + n + " contenu : " + ins.getContenu());
+			i = ins.getContenu().chercherLocalement(n);
+			if (i != null)
+				break;
+		}
+		return i;
+	}
+	
+	/*
+	 * Recherche de n dans la TDS courante + la liste des Infonamespace importées
+	 * on recherche d'abord dans la liste des NS imported
+	 */
+	public INFO chercherLocalementNS(String n) {
+		return chercherUsedNS(n) != null ? chercherUsedNS(n) : get(n);
+	}
+	
+	/*
+	 * Recherche de n dans la TDS courante et ses parentes + la liste des Infonamespace importées
+	 */
+	public INFO chercherGlobalementNS(String n) {
+		INFO i = chercherLocalementNS(n);
 		if (i == null)
 			if (parente != null)
-				return parente.chercherGlobalement(n);
+				return parente.chercherGlobalementNS(n);
 		return i;
-	}	
+	}
 	
-
+	/*
+	 * chercher un namespace, nécessaire pour le using
+	 */
 	public INFO chercherNamespace(String n) {
 		String[] strings = n.split(Pattern.quote("."));
+		System.out.println("chercherNamespace sur : " + n + " length strings : " + strings.length);
 		INFO i = null;
 		TDS tds = this;
 		// nom simple
-		if (strings.length == 0){
-			return tds.chercherLocalementFA(n) instanceof INFONAMESPACE ? tds.chercherLocalementFA(n) : null;
+		if (strings.length == 1){
+			return tds.chercherGlobalementNS(n) instanceof INFONAMESPACE ? tds.chercherGlobalementNS(n) : null;
 		}
 		else {
 			// nom composé
 			for (String s : strings){
-				i = tds.chercherLocalementFA(s);
+				i = tds.chercherGlobalementNS(s);
 				if (i == null){
 					return null;
 				}
@@ -126,13 +144,14 @@ public class TDS extends LinkedHashMap<String, INFO> {
 
 	public INFO chercherClasse(String n){
 		String[] strings = n.split(Pattern.quote("."));
+		System.out.println("chercherClasse sur : " + n + " length strings : " + strings.length + " TDS : " + this);
 		String ins = "";
 		String inc;
 		INFO info = null;
-		TDS tds = this.getParente();
+		TDS tds = this;
 		// nom simple + INFOCLASSE
-		if (strings.length == 0){
-			return tds.chercherGlobalementFA(n) instanceof INFOCLASSE ? tds.chercherGlobalementFA(n) : null;
+		if (strings.length == 1){
+			return tds.chercherGlobalementNS(n) instanceof INFOCLASSE ? tds.chercherGlobalementNS(n) : null;
 		}
 		else {
 			// nom composé + INFONAMESPACE...S + INFOCLASSE
@@ -211,6 +230,9 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
 			sb.append("Ident : " + e.getKey() + "  Type : " + e.getValue().toString() + '\n');
+		}
+		for (String ss : usedNS.keySet()) {
+			sb.append("NS imported : " + ss + "\n");
 		}
 		sb.append("Fin TDS\n");
 		return sb.toString();
