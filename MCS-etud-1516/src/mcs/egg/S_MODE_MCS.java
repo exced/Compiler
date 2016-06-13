@@ -38,10 +38,10 @@ int [] sync= new int[0];
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_ref : // 739
+      case LEX_MCS.token_ref : // 1234
         regle98 () ;
       break ;
-      case LEX_MCS.token_out : // 740
+      case LEX_MCS.token_out : // 1235
         regle99 () ;
       break ;
       default :

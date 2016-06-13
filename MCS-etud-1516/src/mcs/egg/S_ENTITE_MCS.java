@@ -286,7 +286,7 @@ x_5.att_htype=x_2.att_type;
 private void action_tds_80(ASM x_4) throws Exception {
 try {
 // instructions
-x_4.att_tds_asm=null;
+x_4.att_tds_asm=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","ENTITE -> asm #tds ASM #gen ;"});
 }
   }
@@ -314,43 +314,43 @@ x_6.att_machine=this.att_machine;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 738
+      case LEX_MCS.token_typedef : // 1233
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 733
+      case LEX_MCS.token_void : // 1228
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 735
+      case LEX_MCS.token_int : // 1230
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 736
+      case LEX_MCS.token_char : // 1231
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 775
+      case LEX_MCS.token_identc : // 1270
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 737
+      case LEX_MCS.token_struct : // 1232
         regle4 () ;
       break ;
-      case LEX_MCS.token_bool : // 747
+      case LEX_MCS.token_bool : // 1242
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 734
+      case LEX_MCS.token_asm : // 1229
         regle80 () ;
       break ;
-      case LEX_MCS.token_namespace : // 741
+      case LEX_MCS.token_namespace : // 1236
         regle83 () ;
       break ;
-      case LEX_MCS.token_using : // 742
+      case LEX_MCS.token_using : // 1237
         regle84 () ;
       break ;
-      case LEX_MCS.token_public : // 744
+      case LEX_MCS.token_public : // 1239
         regle87 () ;
       break ;
-      case LEX_MCS.token_private : // 745
+      case LEX_MCS.token_private : // 1240
         regle87 () ;
       break ;
-      case LEX_MCS.token_class : // 743
+      case LEX_MCS.token_class : // 1238
         regle87 () ;
       break ;
       default :

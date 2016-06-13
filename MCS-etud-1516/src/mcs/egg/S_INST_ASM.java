@@ -394,61 +394,61 @@ this.att_code_asm="\n";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_ASM.token_nl : // 167
+      case LEX_ASM.token_nl : // 32
         regle5 () ;
       break ;
-      case LEX_ASM.token_info : // 173
+      case LEX_ASM.token_info : // 38
         regle6 () ;
       break ;
-      case LEX_ASM.token_load : // 151
+      case LEX_ASM.token_load : // 16
         regle7 () ;
       break ;
-      case LEX_ASM.token_loada : // 152
+      case LEX_ASM.token_loada : // 17
         regle8 () ;
       break ;
-      case LEX_ASM.token_loadi : // 153
+      case LEX_ASM.token_loadi : // 18
         regle9 () ;
       break ;
-      case LEX_ASM.token_loadl : // 154
+      case LEX_ASM.token_loadl : // 19
         regle10 () ;
       break ;
-      case LEX_ASM.token_store : // 155
+      case LEX_ASM.token_store : // 20
         regle14 () ;
       break ;
-      case LEX_ASM.token_storei : // 156
+      case LEX_ASM.token_storei : // 21
         regle15 () ;
       break ;
-      case LEX_ASM.token_call : // 157
+      case LEX_ASM.token_call : // 22
         regle16 () ;
       break ;
-      case LEX_ASM.token_calli : // 158
+      case LEX_ASM.token_calli : // 23
         regle17 () ;
       break ;
-      case LEX_ASM.token_return : // 159
+      case LEX_ASM.token_return : // 24
         regle18 () ;
       break ;
-      case LEX_ASM.token_subr : // 160
+      case LEX_ASM.token_subr : // 25
         regle19 () ;
       break ;
-      case LEX_ASM.token_ident : // 172
+      case LEX_ASM.token_ident : // 37
         regle20 () ;
       break ;
-      case LEX_ASM.token_push : // 161
+      case LEX_ASM.token_push : // 26
         regle21 () ;
       break ;
-      case LEX_ASM.token_pop : // 162
+      case LEX_ASM.token_pop : // 27
         regle22 () ;
       break ;
-      case LEX_ASM.token_jump : // 163
+      case LEX_ASM.token_jump : // 28
         regle23 () ;
       break ;
-      case LEX_ASM.token_jumpi : // 164
+      case LEX_ASM.token_jumpi : // 29
         regle24 () ;
       break ;
-      case LEX_ASM.token_jumpif : // 165
+      case LEX_ASM.token_jumpif : // 30
         regle25 () ;
       break ;
-      case LEX_ASM.token_halt : // 166
+      case LEX_ASM.token_halt : // 31
         regle26 () ;
       break ;
       default :

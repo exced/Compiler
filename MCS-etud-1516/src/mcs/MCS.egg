@@ -68,6 +68,8 @@ syn champsclasse : LCHAMPS for DEFS;
 
 
 sugar malloc is "malloc";
+sugar identASM is "[A-Z]*";
+sugar allident is "[_0-9A-Za-z]*";
 --terminals
 space separateur is  "[\r\n\t ]+";     
 space comm is  "\/\/[^\n]*\n";
@@ -126,7 +128,7 @@ term ident is  "[a-z][_0-9A-Za-z]*";
 term identc is  "[A-Z][_0-9A-Za-z]*";
 
 -- pour les instructions en assembleur TAM 'inline'
-compil ASM;
+--compil ASM;
 
 --production rules
 PROGRAMME -> #init #tds ENTITES #gen;
@@ -1672,7 +1674,7 @@ ENTITE ->   asm #tds ASM#gen;
 do 
   -- A faire : Remplacer 'null' par la table courante pour que
   -- le code  ASM puisse acceder aux variables de MC ou MCS
-  ASM^tds_asm := null; 
+  ASM^tds_asm := ENTITE^tds; 
 end
 }
 #gen {
@@ -1690,7 +1692,6 @@ do
   ASM^tds_asm := INST^tds; 
 end
 }
-
 #gen {
 do
   -- ASM^code_asm contient le code assembleur inline
@@ -1699,6 +1700,16 @@ do
   INST^code := ASM^code_asm;
 end
 }
+
+ASM -> aco ASMINSTS acf;
+
+ASMINSTS -> ASMINST ASMINSTS;
+
+ASMINST -> identASM MODD allIdent;
+
+MODD -> mod;
+
+MODD -> ;
 
 ----------------- CS extension ------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------
