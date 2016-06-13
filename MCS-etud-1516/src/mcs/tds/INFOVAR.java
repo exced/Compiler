@@ -17,13 +17,13 @@ public class INFOVAR extends INFO {
 	public INFOVAR(DTYPE t, int d) {
 		super(t);
 		empl = new Emplacement(d, new Register("LB",0));
-		acces = "private";
+		acces = "def";
 	}
 	
 	public INFOVAR(DTYPE t, int d, String reg) {
 		super(t);
 		empl = new Emplacement(d, new Register(reg,0));
-		acces = "private";
+		acces = "def";
 	}
 
 	public DTYPE getType() { return super.getType(); }
