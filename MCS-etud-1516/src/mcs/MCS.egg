@@ -778,7 +778,7 @@ do
         codeWrite := AFFX^machine.genWriteMem(AFFX^hdep, AFFX^htype.getTaille());
     end    
 
-    -- si declaration + affectation, on laisse direct le code en sommet de pile
+    -- si declaration + affectation, on laisse directement le code en sommet de pile
     if AFFX^hest_decl then
         AFFX^code := A^code ;
     else      
@@ -1484,7 +1484,7 @@ do
                 error(champ_not_found, lc, ident^txt);
             else
                 FX1^htype := new POINTEUR(c.getType());
-                code := FX^machine.genAdrField(c.getDep() - 1);
+                code := FX^hcode + FX^machine.genAdrField(c.getDep());
             end    
         else
             error(type_not_struct, FX^htype.getNom(), ident^txt);
@@ -1499,12 +1499,12 @@ do
         else
             FX1^htype := c.getType();
             FX^sdep := c.getDep() + FX^hdep;
-            code := FX^machine.genWriteMem(c.getDep() + FX^hdep , ct.getTaille());
+            code := FX^machine.genReadMem(c.getDep() + FX^hdep , ct.getTaille());
         end    
     else
         error(type_not_struct, FX^htype.getNom(), ident^txt);
     end
-    FX1^hcode := FX^hcode + code;    
+    FX1^hcode := code;    
 
 end
 }

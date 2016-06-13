@@ -4,9 +4,15 @@
 _main:
 	PUSH 2
 	LOADL 3
-	STORE(1) 5[LB]
-	LOADL 5
 	STORE(1) 4[LB]
+	LOADL 5
+	STORE(1) 3[LB]
+	PUSH 1
+	LOADL 9
+	STORE(1) 5[LB]
+	LOAD(1) 4[LB]
+	LOAD(1) 3[LB]
+	SUBR IAdd
 	LOADL 0
 	RETURN (0) 1
 ; Appel a main

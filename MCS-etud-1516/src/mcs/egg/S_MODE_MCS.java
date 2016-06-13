@@ -55,10 +55,10 @@ this.att_mode="out";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_ref : // 5493
+      case LEX_MCS.token_ref : // 1807
         regle98 () ;
       break ;
-      case LEX_MCS.token_out : // 5494
+      case LEX_MCS.token_out : // 1808
         regle99 () ;
       break ;
       default :

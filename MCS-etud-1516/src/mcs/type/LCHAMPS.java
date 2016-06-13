@@ -25,8 +25,8 @@ public class LCHAMPS extends ArrayList<CHAMP> {
 	}
 
 	public void inserer(CHAMP c) {
-		currentDep += c.getType().getTaille();
 		c.setDep(currentDep);
+		currentDep += c.getType().getTaille();
 		add(c);
 	}
 
