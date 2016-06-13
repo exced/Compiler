@@ -144,6 +144,8 @@ public class TDS extends LinkedHashMap<String, INFO> {
 			inc = strings[strings.length - 1];
 			System.out.println("ins : " + ins);
 			System.out.println("inc : " + inc);
+			System.out.println("tds : " + tds);
+			System.out.println("tds parente : " + tds.getParente());
 			info = tds.chercherNamespace(ins);
 			if (info == null){
 				System.out.println("info null");

@@ -1883,7 +1883,7 @@ do
         ic := new INFOCLASSE(DEFS^champsclasse, ACCES^acces, DEFS^stds, HERITAGE^sinfoclasse);
         -- insertion
         ENTITE^tds.inserer(identc^txt, ic);  
-    end    
+    end   
 end
 }
 #gen {
@@ -2053,13 +2053,8 @@ do
     tdsParam := PARFS^stds;
     BLOC^tds := new TDS(tdsParam);
     
-   -- debut de BLOC : currentDep reset
-   DEF^machine.resetCurrentDep();
-   -- ajout de 3 pour les variables utilisees par TAM
-   DEF^machine.addCurrentDep(3);
-   
     -- remontee des info
-    t := new DTYPEImpl(nil);
+    t := new DTYPEImpl("constructeur", 0);
     infofonc := new INFOFONC(t, tdsParam);
     DEF^sident := identc^txt;
     DEF^sinfo := infofonc; 

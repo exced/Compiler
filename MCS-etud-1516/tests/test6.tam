@@ -3,10 +3,12 @@
 
 	PUSH 1
 	PUSH 1
-	PUSH 1
-_main:
-	LOADL 0
-	RETURN (0) 1
-; Appel a main
+_Point2D:
+	LOAD(1) -1[LB]
+	STORE(1) 0[LB]
+	LOAD(1) -2[LB]
+	STORE(1) 1[LB]
+	RETURN (2) 0
+nullnullnullnullnullnull; Appel a main
 	CALL(SB) _main
 	HALT

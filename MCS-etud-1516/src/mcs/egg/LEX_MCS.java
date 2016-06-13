@@ -33,45 +33,44 @@ public class LEX_MCS extends LEXICAL4  {
  public static final int token_inf = 17 ;
  public static final int token_base = 18 ;
  public static final int token_acf = 19 ;
- public static final int token_identASM = 20 ;
- public static final int token_identc = 21 ;
- public static final int token_ou = 22 ;
- public static final int token_arrow = 23 ;
- public static final int token_ref = 24 ;
- public static final int token_bool = 25 ;
- public static final int token_new = 26 ;
- public static final int token_moins = 27 ;
- public static final int token_neg = 28 ;
- public static final int token_malloc = 29 ;
- public static final int token_typedef = 30 ;
- public static final int token_dpts = 31 ;
- public static final int token_caractere = 32 ;
- public static final int token_chaine = 33 ;
- public static final int token_retour = 34 ;
- public static final int token_affect = 35 ;
- public static final int token_struct = 36 ;
- public static final int token_asm = 37 ;
- public static final int token_false = 38 ;
- public static final int token_private = 39 ;
- public static final int token_virg = 40 ;
- public static final int token_namespace = 41 ;
- public static final int token_entier = 42 ;
- public static final int token_si = 43 ;
- public static final int token_paro = 44 ;
- public static final int token_sup = 45 ;
- public static final int token_separateur = 46 ;
- public static final int token_comm = 47 ;
- public static final int token_parf = 48 ;
- public static final int token_class = 49 ;
- public static final int token_out = 50 ;
- public static final int token_supeg = 51 ;
- public static final int token_true = 52 ;
- public static final int token_plus = 53 ;
- public static final int token_non = 54 ;
- public static final int token_infeg = 55 ;
- public static final int token_char = 56 ;
- public static final int token_et = 57 ;
-  static final int token_autre = 58 ;
+ public static final int token_identc = 20 ;
+ public static final int token_ou = 21 ;
+ public static final int token_arrow = 22 ;
+ public static final int token_ref = 23 ;
+ public static final int token_bool = 24 ;
+ public static final int token_new = 25 ;
+ public static final int token_moins = 26 ;
+ public static final int token_neg = 27 ;
+ public static final int token_malloc = 28 ;
+ public static final int token_typedef = 29 ;
+ public static final int token_dpts = 30 ;
+ public static final int token_caractere = 31 ;
+ public static final int token_chaine = 32 ;
+ public static final int token_retour = 33 ;
+ public static final int token_affect = 34 ;
+ public static final int token_struct = 35 ;
+ public static final int token_asm = 36 ;
+ public static final int token_false = 37 ;
+ public static final int token_private = 38 ;
+ public static final int token_virg = 39 ;
+ public static final int token_namespace = 40 ;
+ public static final int token_entier = 41 ;
+ public static final int token_si = 42 ;
+ public static final int token_paro = 43 ;
+ public static final int token_sup = 44 ;
+ public static final int token_separateur = 45 ;
+ public static final int token_comm = 46 ;
+ public static final int token_parf = 47 ;
+ public static final int token_class = 48 ;
+ public static final int token_out = 49 ;
+ public static final int token_supeg = 50 ;
+ public static final int token_true = 51 ;
+ public static final int token_plus = 52 ;
+ public static final int token_non = 53 ;
+ public static final int token_infeg = 54 ;
+ public static final int token_char = 55 ;
+ public static final int token_et = 56 ;
+  static final int token_autre = 57 ;
   public static final String[][] tokenImages = {
     {"<EOF>"} ,{"sinon"},
 {"mod"},
@@ -92,7 +91,6 @@ public class LEX_MCS extends LEXICAL4  {
 {"inf"},
 {"base"},
 {"acf"},
-{"identASM"},
     {"identc"} ,
 {"ou"},
 {"arrow"},

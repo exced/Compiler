@@ -87,10 +87,10 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_aco : // 1220
+      case LEX_MCS.token_aco : // 5479
         regle91 () ;
       break ;
-      case LEX_MCS.token_dpts : // 1241
+      case LEX_MCS.token_dpts : // 5500
         regle92 () ;
       break ;
       default :

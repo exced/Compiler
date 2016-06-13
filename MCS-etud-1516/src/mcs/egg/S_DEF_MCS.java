@@ -111,9 +111,7 @@ try {
 x_9.att_hbloc_est_fonction=true;
 glob_96_tdsParam=x_5.att_stds;
 x_9.att_tds= new TDS(glob_96_tdsParam);
-this.att_machine.resetCurrentDep();
-this.att_machine.addCurrentDep(3);
-glob_96_t= new DTYPEImpl(null);
+glob_96_t= new DTYPEImpl("constructeur", 0);
 glob_96_infofonc= new INFOFONC(glob_96_t, glob_96_tdsParam);
 this.att_sident=x_2.att_txt;
 this.att_sinfo=glob_96_infofonc;
@@ -147,25 +145,25 @@ x_6.att_htype=x_2.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 1228
+      case LEX_MCS.token_void : // 5487
         regle95 () ;
       break ;
-      case LEX_MCS.token_int : // 1230
+      case LEX_MCS.token_int : // 5489
         regle95 () ;
       break ;
-      case LEX_MCS.token_char : // 1231
+      case LEX_MCS.token_char : // 5490
         regle95 () ;
       break ;
-      case LEX_MCS.token_identc : // 1270
+      case LEX_MCS.token_identc : // 5529
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_mult : // 1261
+          case LEX_MCS.token_mult : // 5520
             regle95 () ;
           break ;
-          case LEX_MCS.token_ident : // 1269
+          case LEX_MCS.token_ident : // 5528
             regle95 () ;
           break ;
-          case LEX_MCS.token_paro : // 1218
+          case LEX_MCS.token_paro : // 5477
             regle96 () ;
           break ;
           default :
@@ -173,10 +171,10 @@ x_6.att_htype=x_2.att_type;
 scanner.accepter_sucre(LEX_MCS.token_identc);
         }
       break ;
-      case LEX_MCS.token_struct : // 1232
+      case LEX_MCS.token_struct : // 5491
         regle95 () ;
       break ;
-      case LEX_MCS.token_bool : // 1242
+      case LEX_MCS.token_bool : // 5501
         regle95 () ;
       break ;
       default :

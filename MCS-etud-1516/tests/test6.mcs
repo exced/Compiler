@@ -1,26 +1,89 @@
+namespace System {
+
+	class Object {
+	// attributs
+	// methodes
+	}
+}
+
+using System;
 
 namespace Geometry {
 
-	namespace G2D {
-		
-		public class Point2D{
-			int x;
-			int y;
+	typedef struct {
+    	int x;
+    	int y;
+    } Point;
+
+   	namespace A {
+   
+   		// le nom complet de cette classe est Geometry.A.Point2D
+   		
+    	class Point2D : Object{
+      		int x;
+      		int y;
+      		
+      		// Constructeur
+      		public Point2D(int a, int b){
+        		x = a;
+        		y = b;
+        	}
+      
+      		// methodes
+      		public int getX() {
+        		return x;
+        	}
+        	
+      		public int getY() {
+        		return this.y;
+        	}
+        	
+      		public void afficher(){
+
+        	}
+        	
+      	} // class Point2D
+      
+    } // namespace A
+    
+    namespace B { 
+    
+      // le nom complet de cette classe est Geometry.B.Point2DCol
+      
+      public class Point2DCol:Geometry.A.Point2D{
+      
+        int col;
+        
+        // Constructeur avec appel du constructeur de Point2D
+        public Point2DCol(int a, int b, int c) : base(a,b){
+			col = c;
 		}
+        
+        public int getCol() {
+          return col;
+          }
+          
+        private bool isRed(){
+          return estRouge(col) != 0;
+          }
+          
+        // redefinition
+        public void afficher(){
+          // appel a la methode de la classe parente.
+          base.afficher();
+        }
+ 
+      } // classe Point2DCol
+    }
 
-  	}
-  	
-  	namespace G3D {
-  	
-		public class Point3D:Geometry.G2D.Point2D{
-			int z;
-		}  		
-		
-  	}
-}
+    // suite du namespace A
+    namespace A {
+      // ...
+    }
 
-using Geometry.G2D;
-using Geometry.G3D;
+} // namespace Geometry
+  
+using Geometry;
 
 
 // point d'entree du programme.
