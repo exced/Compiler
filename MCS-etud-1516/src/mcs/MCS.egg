@@ -14,8 +14,12 @@ inh machine : IMachine for
          ENTITES, ENTITE, DECL, FONCTION, INST, BLOC, INSTS, SIX,
          PARFS, PARF, PARFSX, ES, ESX, 
          E, AFFX, A, AX, R, RX, T, TX, F,FX,OPUN,OPMUL,OPREL,OPADD,
-         BASE, DEFS, DEF;
+         BASE, DEFS, DEF;--,ASMINST,ASM,ASMINSTS;
               
+
+-- MODE
+-- acces variable ou non (ASM)
+syn mode    : BOOLEAN for MODD;
 
 -- IDENT
 inh ident   : STRING for DECL, FONCTION,FX,IDC;
@@ -31,7 +35,7 @@ syn sdep : INTEGER for E,A,R,T,F,FX;
 syn sinfo : INFO for DEF,DECL,FONCTION;
 
 -- TDS
-inh tds_asm : TDS for ASM;
+inh tds_asm : TDS for ASM;--, ASMINST, ASMINSTS;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
                             SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX,DEFS,DEF,HERITAGE;
 syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES,DEFS;      
@@ -43,7 +47,7 @@ inh hest_decl : BOOLEAN for AFFX;
 -- GC                            
 syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX,DEFS,DEF,BASE;
 inh hcode   : STRING for AFFX,FX;
-syn code_asm : STRING for ASM;
+syn code_asm : STRING for ASM;--,ASMINST,ASMINSTS;
 
 inh hchamps : LCHAMPS for CHAMPS, CHAMP;
 syn champs : LCHAMPS for CHAMPS;
@@ -68,8 +72,8 @@ syn champsclasse : LCHAMPS for DEFS;
 
 
 sugar malloc is "malloc";
-sugar identASM is "[A-Z]*";
-sugar allident is "[_0-9A-Za-z]*";
+--term identASM is "[A-Z]*";
+--term allident is "[_0-9A-Za-z]*";
 --terminals
 space separateur is  "[\r\n\t ]+";     
 space comm is  "\/\/[^\n]*\n";
@@ -128,7 +132,7 @@ term ident is  "[a-z][_0-9A-Za-z]*";
 term identc is  "[A-Z][_0-9A-Za-z]*";
 
 -- pour les instructions en assembleur TAM 'inline'
---compil ASM;
+compil ASM;
 
 --production rules
 PROGRAMME -> #init #tds ENTITES #gen;
@@ -1701,15 +1705,66 @@ do
 end
 }
 
-ASM -> aco ASMINSTS acf;
+------------------------------------------------------------------
+-- Regles pour faire l ASM a la main 
 
-ASMINSTS -> ASMINST ASMINSTS;
+--ASM -> aco ASMINSTS acf #gen;
+--#gen {
+--do
+--    ASM^code_asm := ASMINSTS^code_asm;
+--end
+--}
 
-ASMINST -> identASM MODD allIdent;
+--ASMINSTS -> ASMINST ASMINSTS #gen;
+--#gen {
+--do
+--    ASMINSTS^code_asm := ASMINST^code_asm + ASMINSTS1^code_asm;
+--end
+--}
 
-MODD -> mod;
+--ASMINST -> identASM MODD allident #gen;
+--#gen {
+--local
+--    code : STRING;
+--    i    : INFO;
+--    iv   : INFOVAR;
+--    t    : DTYPE;
+--do
+--    code := identASM^txt;
+--    if MODD^mode then   
+--        i := ASMINST^tds_asm.chercherGlobalement(allident^txt);
+--        if i=nil then
+--            error(var_not_found, allident^txt, nil);
+--        else
+--            match i with
+--            INFOVAR then
+--                iv := i;
+--                t := iv.getType();
+--                code := code + "(" + t.getTaille() + ")" + iv.getDep() + "[LB]";
+--            else
+--                error(not_infovar, allident^txt);
+--            end 
+--        end
+--    else
+--        code := code + allident^txt; 
+--    end
+--    ASMINST^code_asm := code;
+--end
+--}
 
-MODD -> ;
+--MODD -> mod #mode;
+--#mode {
+--do
+--    MODD^mode := true; 
+--end
+--}
+
+--MODD -> #mode;
+--#mode {
+--do
+--    MODD^mode := false; 
+--end
+--}
 
 ----------------- CS extension ------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------

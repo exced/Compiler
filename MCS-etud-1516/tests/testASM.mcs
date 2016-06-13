@@ -1,0 +1,17 @@
+
+
+// point d'entree du programme.
+int main(){
+    
+  int x = 12;
+  asm {
+    LOAD %x        ; acces au premier parametre
+    SUBR Sout
+    LOAD %x         ; acces au deuxieme parametre
+    LOAD %x              ; acces a la variable x
+    SUBR IAdd
+    SUBR Iout 
+    }
+    
+    return 0;
+}
