@@ -25,13 +25,14 @@ public interface IMCSMessages {
   public static final int id_var_declared = 4194325;
   public static final int id_access_not_pointeur = 4194326;
   public static final int id_type_unknown = 4194327;
-  public static final int id_using_notNameSpace = 4194328;
-  public static final int id_var_not_found = 4194329;
-  public static final int id_not_infotype = 4194330;
-  public static final int id_NO_MACH = 4194331;
-  public static final int id_not_pointeur = 4194332;
-  public static final int id_malloc_need_int = 4194333;
-  public static final int id_MCS_unexpected_token = 4194334;
-  public static final int id_classe_undefined = 4194335;
-  public static final int id_affect_notCompatible = 4194336;
+  public static final int id_parent_undefined = 4194328;
+  public static final int id_using_notNameSpace = 4194329;
+  public static final int id_var_not_found = 4194330;
+  public static final int id_not_infotype = 4194331;
+  public static final int id_NO_MACH = 4194332;
+  public static final int id_not_pointeur = 4194333;
+  public static final int id_malloc_need_int = 4194334;
+  public static final int id_MCS_unexpected_token = 4194335;
+  public static final int id_classe_undefined = 4194336;
+  public static final int id_affect_notCompatible = 4194337;
   }

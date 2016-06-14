@@ -148,7 +148,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 }
 else {
 if (!(x_5.att_aHeritage)){
-loc_ic= new INFOCLASSE(x_8.att_schampsclasse, x_2.att_acces, x_8.att_stds);
+loc_ic= new INFOCLASSE(x_8.att_schampsclasse, x_2.att_acces);
 this.att_tds.inserer(x_4.att_txt, loc_ic);
 }
 else {
@@ -160,7 +160,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 else {
 if (loc_ih instanceof INFOCLASSE ){
 loc_ihc=((INFOCLASSE)loc_ih);
-loc_ic= new INFOCLASSE(x_8.att_schampsclasse, x_2.att_acces, x_8.att_stds, loc_ihc);
+loc_ic= new INFOCLASSE(x_8.att_schampsclasse, x_2.att_acces, loc_ihc);
 this.att_tds.inserer(x_4.att_txt, loc_ic);
 }
 else {
@@ -294,7 +294,6 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 else {
-System.out.print(""+"CONTENU NS : "+x_3.att_txt+" : "+x_6.att_stds+"\n");
 this.att_tds.inserer(x_3.att_txt,  new INFONAMESPACE( new DTYPEImpl("namespace", 0), x_6.att_stds));
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#namespace","ENTITE -> namespace identc aco #contenu ENTITES acf #namespace #gen ;"});
@@ -339,43 +338,43 @@ x_6.att_machine=this.att_machine;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 20282
+      case LEX_MCS.token_typedef : // 58316
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 20277
+      case LEX_MCS.token_void : // 58311
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 20279
+      case LEX_MCS.token_int : // 58313
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 20280
+      case LEX_MCS.token_char : // 58314
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 20319
+      case LEX_MCS.token_identc : // 58353
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 20281
+      case LEX_MCS.token_struct : // 58315
         regle4 () ;
       break ;
-      case LEX_MCS.token_bool : // 20291
+      case LEX_MCS.token_bool : // 58325
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 20278
+      case LEX_MCS.token_asm : // 58312
         regle80 () ;
       break ;
-      case LEX_MCS.token_namespace : // 20285
+      case LEX_MCS.token_namespace : // 58319
         regle83 () ;
       break ;
-      case LEX_MCS.token_using : // 20286
+      case LEX_MCS.token_using : // 58320
         regle84 () ;
       break ;
-      case LEX_MCS.token_public : // 20288
+      case LEX_MCS.token_public : // 58322
         regle87 () ;
       break ;
-      case LEX_MCS.token_private : // 20289
+      case LEX_MCS.token_private : // 58323
         regle87 () ;
       break ;
-      case LEX_MCS.token_class : // 20287
+      case LEX_MCS.token_class : // 58321
         regle87 () ;
       break ;
       default :

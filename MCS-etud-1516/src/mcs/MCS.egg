@@ -1798,9 +1798,6 @@ do
     if i != nil then
         error(namespace_declared, identc^txt, ENTITE^tds);
     else    
-    
-   write "CONTENU NS : " + identc^txt + " : " + ENTITES^stds + "\n";
-   
         ENTITE^tds.inserer(identc^txt, new INFONAMESPACE(new DTYPEImpl("namespace",0) ,ENTITES^stds));
     end
 end       

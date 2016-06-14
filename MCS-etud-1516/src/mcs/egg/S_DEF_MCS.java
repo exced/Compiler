@@ -87,6 +87,7 @@ try {
 x_5.att_machine=this.att_machine;
 x_8.att_machine=this.att_machine;
 x_9.att_machine=this.att_machine;
+x_8.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","DEF -> identc paro #tds PARFS #stds parf BASE BLOC #gen ;"});
 }
   }
@@ -110,6 +111,7 @@ glob_96_infofonc= new INFOFONC(glob_96_t, glob_96_tdsParam);
 this.att_sident=x_2.att_txt;
 this.att_sinfo=glob_96_infofonc;
 x_9.att_htype=glob_96_t;
+x_8.att_ident=x_2.att_txt;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#stds","DEF -> identc paro #tds PARFS #stds parf BASE BLOC #gen ;"});
 }
   }
@@ -117,7 +119,7 @@ private void action_gen_96(T_MCS x_2, S_PARFS_MCS x_5, S_BASE_MCS x_8, S_BLOC_MC
 try {
 // instructions
 this.att_tds.inserer(x_2.att_txt, glob_96_infofonc);
-this.att_code=this.att_machine.genFonction(x_2.att_txt, glob_96_tdsParam.getTailleParams(), 0, x_9.att_code);
+this.att_code=x_8.att_code+this.att_machine.genFonction(x_2.att_txt, glob_96_tdsParam.getTailleParams(), 0, x_9.att_code);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","DEF -> identc paro #tds PARFS #stds parf BASE BLOC #gen ;"});
 }
   }
@@ -140,25 +142,25 @@ x_6.att_htype=x_2.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 20277
+      case LEX_MCS.token_void : // 58311
         regle95 () ;
       break ;
-      case LEX_MCS.token_int : // 20279
+      case LEX_MCS.token_int : // 58313
         regle95 () ;
       break ;
-      case LEX_MCS.token_char : // 20280
+      case LEX_MCS.token_char : // 58314
         regle95 () ;
       break ;
-      case LEX_MCS.token_identc : // 20319
+      case LEX_MCS.token_identc : // 58353
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_mult : // 20310
+          case LEX_MCS.token_mult : // 58344
             regle95 () ;
           break ;
-          case LEX_MCS.token_ident : // 20318
+          case LEX_MCS.token_ident : // 58352
             regle95 () ;
           break ;
-          case LEX_MCS.token_paro : // 20267
+          case LEX_MCS.token_paro : // 58301
             regle96 () ;
           break ;
           default :
@@ -166,10 +168,10 @@ x_6.att_htype=x_2.att_type;
 scanner.accepter_sucre(LEX_MCS.token_identc);
         }
       break ;
-      case LEX_MCS.token_struct : // 20281
+      case LEX_MCS.token_struct : // 58315
         regle95 () ;
       break ;
-      case LEX_MCS.token_bool : // 20291
+      case LEX_MCS.token_bool : // 58325
         regle95 () ;
       break ;
       default :

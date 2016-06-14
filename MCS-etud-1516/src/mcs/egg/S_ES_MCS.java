@@ -78,46 +78,52 @@ this.att_stds=x_4.att_stds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 20268
+      case LEX_MCS.token_parf : // 58302
         regle76 () ;
       break ;
-      case LEX_MCS.token_entier : // 20315
+      case LEX_MCS.token_entier : // 58349
         regle77 () ;
       break ;
-      case LEX_MCS.token_chaine : // 20317
+      case LEX_MCS.token_chaine : // 58351
         regle77 () ;
       break ;
-      case LEX_MCS.token_caractere : // 20316
+      case LEX_MCS.token_caractere : // 58350
         regle77 () ;
       break ;
-      case LEX_MCS.token_plus : // 20307
+      case LEX_MCS.token_plus : // 58341
         regle77 () ;
       break ;
-      case LEX_MCS.token_moins : // 20308
+      case LEX_MCS.token_moins : // 58342
         regle77 () ;
       break ;
-      case LEX_MCS.token_non : // 20314
+      case LEX_MCS.token_non : // 58348
         regle77 () ;
       break ;
-      case LEX_MCS.token_null : // 20300
+      case LEX_MCS.token_null : // 58334
         regle77 () ;
       break ;
-      case LEX_MCS.token_paro : // 20267
+      case LEX_MCS.token_paro : // 58301
         regle77 () ;
       break ;
-      case LEX_MCS.token_malloc : // 20264
+      case LEX_MCS.token_malloc : // 58298
         regle77 () ;
       break ;
-      case LEX_MCS.token_mult : // 20310
+      case LEX_MCS.token_mult : // 58344
         regle77 () ;
       break ;
-      case LEX_MCS.token_ident : // 20318
+      case LEX_MCS.token_ident : // 58352
         regle77 () ;
       break ;
-      case LEX_MCS.token_true : // 20292
+      case LEX_MCS.token_true : // 58326
         regle77 () ;
       break ;
-      case LEX_MCS.token_false : // 20293
+      case LEX_MCS.token_false : // 58327
+        regle77 () ;
+      break ;
+      case LEX_MCS.token_null2 : // 58330
+        regle77 () ;
+      break ;
+      case LEX_MCS.token_new : // 58329
         regle77 () ;
       break ;
       default :

@@ -39,6 +39,7 @@ public class MCSMessages extends NLS {
   public static  String var_declared;
   public static  String access_not_pointeur;
   public static  String type_unknown;
+  public static  String parent_undefined;
   public static  String using_notNameSpace;
   public static  String var_not_found;
   public static  String not_infotype;
