@@ -2277,17 +2277,17 @@ end
 
 ------------------------------------------------------------------------
 -- super
-F -> base #base FX #gen;
-#base {
-do
-    FX^base := true;
-end
-}
-#gen {
-do
+--F -> base #base FX #gen;
+--#base {
+--do
+--    FX^base := true;
+--end
+--}
+--#gen {
+--do
     
-end
-}
+--end
+--}
 
 ------------------------------------------------------------------------
 -- null des objets

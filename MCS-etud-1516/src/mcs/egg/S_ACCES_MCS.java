@@ -68,31 +68,31 @@ this.att_acces="public";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_public : // 58322
+      case LEX_MCS.token_public : // 28407
         regle88 () ;
       break ;
-      case LEX_MCS.token_private : // 58323
+      case LEX_MCS.token_private : // 28408
         regle89 () ;
       break ;
-      case LEX_MCS.token_class : // 58321
+      case LEX_MCS.token_class : // 28406
         regle90 () ;
       break ;
-      case LEX_MCS.token_void : // 58311
+      case LEX_MCS.token_void : // 28396
         regle90 () ;
       break ;
-      case LEX_MCS.token_int : // 58313
+      case LEX_MCS.token_int : // 28398
         regle90 () ;
       break ;
-      case LEX_MCS.token_char : // 58314
+      case LEX_MCS.token_char : // 28399
         regle90 () ;
       break ;
-      case LEX_MCS.token_identc : // 58353
+      case LEX_MCS.token_identc : // 28438
         regle90 () ;
       break ;
-      case LEX_MCS.token_struct : // 58315
+      case LEX_MCS.token_struct : // 28400
         regle90 () ;
       break ;
-      case LEX_MCS.token_bool : // 58325
+      case LEX_MCS.token_bool : // 28410
         regle90 () ;
       break ;
       default :

@@ -118,7 +118,6 @@ x_8.att_ident=x_2.att_txt;
 private void action_gen_96(T_MCS x_2, S_PARFS_MCS x_5, S_BASE_MCS x_8, S_BLOC_MCS x_9) throws Exception {
 try {
 // instructions
-this.att_tds.inserer(x_2.att_txt, glob_96_infofonc);
 this.att_code=x_8.att_code+this.att_machine.genFonction(x_2.att_txt, glob_96_tdsParam.getTailleParams(), 0, x_9.att_code);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","DEF -> identc paro #tds PARFS #stds parf BASE BLOC #gen ;"});
 }
@@ -142,25 +141,25 @@ x_6.att_htype=x_2.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 58311
+      case LEX_MCS.token_void : // 28396
         regle95 () ;
       break ;
-      case LEX_MCS.token_int : // 58313
+      case LEX_MCS.token_int : // 28398
         regle95 () ;
       break ;
-      case LEX_MCS.token_char : // 58314
+      case LEX_MCS.token_char : // 28399
         regle95 () ;
       break ;
-      case LEX_MCS.token_identc : // 58353
+      case LEX_MCS.token_identc : // 28438
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_mult : // 58344
+          case LEX_MCS.token_mult : // 28429
             regle95 () ;
           break ;
-          case LEX_MCS.token_ident : // 58352
+          case LEX_MCS.token_ident : // 28437
             regle95 () ;
           break ;
-          case LEX_MCS.token_paro : // 58301
+          case LEX_MCS.token_paro : // 28386
             regle96 () ;
           break ;
           default :
@@ -168,10 +167,10 @@ x_6.att_htype=x_2.att_type;
 scanner.accepter_sucre(LEX_MCS.token_identc);
         }
       break ;
-      case LEX_MCS.token_struct : // 58315
+      case LEX_MCS.token_struct : // 28400
         regle95 () ;
       break ;
-      case LEX_MCS.token_bool : // 58325
+      case LEX_MCS.token_bool : // 28410
         regle95 () ;
       break ;
       default :

@@ -79,49 +79,49 @@ this.att_machine.resetCurrentDep();
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 58304
+      case LEX_MCS.token_acf : // 28389
         regle1 () ;
       break ;
       case LEX_MCS.EOF :
         regle1 () ;
       break ;
-      case LEX_MCS.token_typedef : // 58316
+      case LEX_MCS.token_typedef : // 28401
         regle2 () ;
       break ;
-      case LEX_MCS.token_void : // 58311
+      case LEX_MCS.token_void : // 28396
         regle2 () ;
       break ;
-      case LEX_MCS.token_int : // 58313
+      case LEX_MCS.token_int : // 28398
         regle2 () ;
       break ;
-      case LEX_MCS.token_char : // 58314
+      case LEX_MCS.token_char : // 28399
         regle2 () ;
       break ;
-      case LEX_MCS.token_identc : // 58353
+      case LEX_MCS.token_identc : // 28438
         regle2 () ;
       break ;
-      case LEX_MCS.token_struct : // 58315
+      case LEX_MCS.token_struct : // 28400
         regle2 () ;
       break ;
-      case LEX_MCS.token_bool : // 58325
+      case LEX_MCS.token_bool : // 28410
         regle2 () ;
       break ;
-      case LEX_MCS.token_asm : // 58312
+      case LEX_MCS.token_asm : // 28397
         regle2 () ;
       break ;
-      case LEX_MCS.token_namespace : // 58319
+      case LEX_MCS.token_namespace : // 28404
         regle2 () ;
       break ;
-      case LEX_MCS.token_using : // 58320
+      case LEX_MCS.token_using : // 28405
         regle2 () ;
       break ;
-      case LEX_MCS.token_public : // 58322
+      case LEX_MCS.token_public : // 28407
         regle2 () ;
       break ;
-      case LEX_MCS.token_private : // 58323
+      case LEX_MCS.token_private : // 28408
         regle2 () ;
       break ;
-      case LEX_MCS.token_class : // 58321
+      case LEX_MCS.token_class : // 28406
         regle2 () ;
       break ;
       default :

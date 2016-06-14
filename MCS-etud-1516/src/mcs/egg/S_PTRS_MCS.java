@@ -64,16 +64,16 @@ this.att_type=x_4.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_identc : // 58353
+      case LEX_MCS.token_identc : // 28438
         regle14 () ;
       break ;
-      case LEX_MCS.token_ident : // 58352
+      case LEX_MCS.token_ident : // 28437
         regle14 () ;
       break ;
-      case LEX_MCS.token_parf : // 58302
+      case LEX_MCS.token_parf : // 28387
         regle14 () ;
       break ;
-      case LEX_MCS.token_mult : // 58344
+      case LEX_MCS.token_mult : // 28429
         regle15 () ;
       break ;
       default :
