@@ -9,6 +9,11 @@ _Point2D:
 	LOAD(1) -2[LB]
 	STORE(1) 1[LB]
 	RETURN (2) 0
-nullnullnullnullnullnull; Appel a main
+_getX:
+	LOAD(1) 0[LB]
+	RETURN (0) 1
+_getY:
+nullnull	RETURN (0) 1
+nullnullnullnull; Appel a main
 	CALL(SB) _main
 	HALT

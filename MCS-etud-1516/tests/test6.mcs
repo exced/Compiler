@@ -19,7 +19,7 @@ namespace Geometry {
    
    		// le nom complet de cette classe est Geometry.A.Point2D
    		
-    	class Point2D : System.Object{
+    	class Point2D : Object{
       		int x;
       		int y;
       		

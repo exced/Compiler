@@ -37,7 +37,7 @@ if  (att_eval)      action_auto_inh_83(x_3, x_6);
     x_2.analyser(LEX_MCS.token_namespace);
     x_3.analyser(LEX_MCS.token_identc);
     x_4.analyser(LEX_MCS.token_aco);
-if  (att_eval)      action_htds_83(x_3, x_6);
+if  (att_eval)      action_contenu_83(x_3, x_6);
     x_6.analyser() ;
     x_7.analyser(LEX_MCS.token_acf);
 if  (att_eval)      action_namespace_83(x_3, x_6);
@@ -138,15 +138,38 @@ try {
 // locales
 INFO loc_i;
 INFOCLASSE loc_ic;
+INFO loc_ih;
+INFOCLASSE loc_ihc;
 // instructions
-loc_i=this.att_tds.chercherGlobalement(x_4.att_txt);
+loc_i=this.att_tds.chercherLocalement(x_4.att_txt);
 if (loc_i!=null){
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_classe_defined, MCSMessages.classe_defined,new Object[]{""+x_4.att_txt, ""+this.att_tds});
 
 }
 else {
-loc_ic= new INFOCLASSE(x_8.att_champsclasse, x_2.att_acces, x_8.att_stds, x_5.att_sinfoclasse);
+if (!(x_5.att_aHeritage)){
+loc_ic= new INFOCLASSE(x_8.att_schampsclasse, x_2.att_acces, x_8.att_stds);
 this.att_tds.inserer(x_4.att_txt, loc_ic);
+}
+else {
+loc_ih=this.att_tds.chercherClasse(x_5.att_sident);
+if (loc_ih==null){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_classe_undefined, MCSMessages.classe_undefined,new Object[]{""+x_5.att_sident, ""+this.att_tds});
+
+}
+else {
+if (loc_ih instanceof INFOCLASSE ){
+loc_ihc=((INFOCLASSE)loc_ih);
+loc_ic= new INFOCLASSE(x_8.att_schampsclasse, x_2.att_acces, x_8.att_stds, loc_ihc);
+this.att_tds.inserer(x_4.att_txt, loc_ic);
+}
+else {
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_not_infoclasse, MCSMessages.not_infoclasse,new Object[]{""+x_5.att_sident});
+
+
+}
+}
+}
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#classe","ENTITE -> ACCES class identc HERITAGE aco #htds DEFS acf #classe #gen ;"});
 }
@@ -182,6 +205,13 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 }
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#acces","ENTITE -> using identc #ident IDC pv #acces #gen ;"});
+}
+  }
+private void action_contenu_83(T_MCS x_3, S_ENTITES_MCS x_6) throws Exception {
+try {
+// instructions
+x_6.att_tds= new TDS(this.att_tds);
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#contenu","ENTITE -> namespace identc aco #contenu ENTITES acf #namespace #gen ;"});
 }
   }
 private void action_tds_3(S_TYPE_MCS x_3, T_MCS x_4) throws Exception {
@@ -223,13 +253,6 @@ this.att_code=x_8.att_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","ENTITE -> ACCES class identc HERITAGE aco #htds DEFS acf #classe #gen ;"});
 }
   }
-private void action_htds_83(T_MCS x_3, S_ENTITES_MCS x_6) throws Exception {
-try {
-// instructions
-x_6.att_tds= new TDS(this.att_tds);
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#htds","ENTITE -> namespace identc aco #htds ENTITES acf #namespace #gen ;"});
-}
-  }
 private void action_gen_84(T_MCS x_3, S_IDC_MCS x_5) throws Exception {
 try {
 // instructions
@@ -241,13 +264,14 @@ private void action_gen_83(T_MCS x_3, S_ENTITES_MCS x_6) throws Exception {
 try {
 // instructions
 this.att_code=x_6.att_code;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","ENTITE -> namespace identc aco #htds ENTITES acf #namespace #gen ;"});
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","ENTITE -> namespace identc aco #contenu ENTITES acf #namespace #gen ;"});
 }
   }
 private void action_htds_87(S_ACCES_MCS x_2, T_MCS x_4, S_HERITAGE_MCS x_5, S_DEFS_MCS x_8) throws Exception {
 try {
 // instructions
 x_8.att_tds= new TDS(this.att_tds);
+x_8.att_hchampsclasse= new LCHAMPS();
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#htds","ENTITE -> ACCES class identc HERITAGE aco #htds DEFS acf #classe #gen ;"});
 }
   }
@@ -270,9 +294,10 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 else {
+System.out.print(""+"CONTENU NS : "+x_3.att_txt+" : "+x_6.att_stds+"\n");
 this.att_tds.inserer(x_3.att_txt,  new INFONAMESPACE( new DTYPEImpl("namespace", 0), x_6.att_stds));
 }
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#namespace","ENTITE -> namespace identc aco #htds ENTITES acf #namespace #gen ;"});
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#namespace","ENTITE -> namespace identc aco #contenu ENTITES acf #namespace #gen ;"});
 }
   }
 private void action_decl_4(S_TYPE_MCS x_2, T_MCS x_3, S_DECL_MCS x_5) throws Exception {
@@ -308,49 +333,49 @@ private void action_auto_inh_83(T_MCS x_3, S_ENTITES_MCS x_6) throws Exception {
 try {
 // instructions
 x_6.att_machine=this.att_machine;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","ENTITE -> namespace identc aco #htds ENTITES acf #namespace #gen ;"});
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","ENTITE -> namespace identc aco #contenu ENTITES acf #namespace #gen ;"});
 }
   }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 14617
+      case LEX_MCS.token_typedef : // 20282
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 14612
+      case LEX_MCS.token_void : // 20277
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 14614
+      case LEX_MCS.token_int : // 20279
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 14615
+      case LEX_MCS.token_char : // 20280
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 14654
+      case LEX_MCS.token_identc : // 20319
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 14616
+      case LEX_MCS.token_struct : // 20281
         regle4 () ;
       break ;
-      case LEX_MCS.token_bool : // 14626
+      case LEX_MCS.token_bool : // 20291
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 14613
+      case LEX_MCS.token_asm : // 20278
         regle80 () ;
       break ;
-      case LEX_MCS.token_namespace : // 14620
+      case LEX_MCS.token_namespace : // 20285
         regle83 () ;
       break ;
-      case LEX_MCS.token_using : // 14621
+      case LEX_MCS.token_using : // 20286
         regle84 () ;
       break ;
-      case LEX_MCS.token_public : // 14623
+      case LEX_MCS.token_public : // 20288
         regle87 () ;
       break ;
-      case LEX_MCS.token_private : // 14624
+      case LEX_MCS.token_private : // 20289
         regle87 () ;
       break ;
-      case LEX_MCS.token_class : // 14622
+      case LEX_MCS.token_class : // 20287
         regle87 () ;
       break ;
       default :

@@ -28,6 +28,7 @@ int [] sync= new int[0];
   String att_ident;
   LEX_MCS att_scanner;
   DTYPE glob_5_type;
+  INFOVAR glob_5_iv;
   INFO glob_5_i;
   private void regle6() throws Exception {
 
@@ -74,10 +75,11 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 else {
-this.att_sinfo=glob_5_i;
 glob_5_type=this.att_htype;
-this.att_tds.inserer(this.att_ident,  new INFOVAR(glob_5_type, this.att_machine.getCurrentDep()));
+glob_5_iv= new INFOVAR(glob_5_type, this.att_machine.getCurrentDep());
+this.att_tds.inserer(this.att_ident, glob_5_iv);
 this.att_machine.addCurrentDep(glob_5_type.getTaille());
+this.att_sinfo=glob_5_iv;
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","DECL -> pv #tds #gen ;"});
 }
@@ -115,10 +117,10 @@ this.att_sinfo=x_3.att_sinfo;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_pv : // 14608
+      case LEX_MCS.token_pv : // 20273
         regle5 () ;
       break ;
-      case LEX_MCS.token_paro : // 14602
+      case LEX_MCS.token_paro : // 20267
         regle6 () ;
       break ;
       default :

@@ -1,17 +1,17 @@
 package mcs.type;
 
-import mcs.tds.INFOFONC;
+import mcs.tds.*;
 
 public class CHAMPCLASSE extends CHAMP {
 	
 	private String acces;
 	
-	private INFOFONC infofonc;
+	private INFO info;
 
-	public CHAMPCLASSE(String nom, DTYPE type, int dep, String acces ,INFOFONC infofonc) {
-		super(nom, type, dep);
+	public CHAMPCLASSE(String nom, String acces, int dep, INFO info) {
+		super(nom, info.getType(), dep);
 		this.acces = acces;
-		this.infofonc = infofonc;
+		this.info = info;
 	}
 
 }

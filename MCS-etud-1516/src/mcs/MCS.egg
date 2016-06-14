@@ -23,7 +23,7 @@ inh machine : IMachine for
 syn mode    : STRING for MODE;
 
 -- IDENT
-inh ident   : STRING for DECL, FONCTION,FX,IDC;
+inh ident   : STRING for DECL, FONCTION,FX,IDC,BASE;
 syn sident  : STRING for PARF, CHAMP,IDC,HERITAGE,DEF;
 
 -- TYPE
@@ -38,7 +38,7 @@ syn sinfo : INFO for DEF,DECL,FONCTION;
 -- TDS
 inh tds_asm : TDS for ASM;--, ASMINST, ASMINSTS;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
-                            SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX,DEFS,DEF,HERITAGE;
+                            SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX,DEFS,DEF,HERITAGE,BASE;
 syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES,DEFS;      
 
 
@@ -63,11 +63,12 @@ inh hbloc_est_fonction : BOOLEAN for BLOC;
 -- ACCES
 syn acces : STRING for ACCES;
 
--- CLASSE
-syn sinfoclasse : INFOCLASSE for HERITAGE;
-
 -- CHAMPS CLASSE
-syn champsclasse : LCHAMPS for DEFS;
+inh hchampsclasse : LCHAMPS for DEFS;
+syn schampsclasse : LCHAMPS for DEFS;
+
+-- HERITAGE
+syn aHeritage : BOOLEAN for HERITAGE;
 
 
 sugar malloc is "malloc";
@@ -236,18 +237,22 @@ DECL -> pv #tds #gen;
 global
     i : INFO;
     type : DTYPE;
+    iv : INFOVAR;
 #tds {
 do
     i := DECL^tds.chercherGlobalement(DECL^ident);
     if i /= nil then
         error(var_declared, DECL^ident);
     else
-        -- remontee de l'info pour la def
-        DECL^sinfo := i;
-        
         type := DECL^htype;
-        DECL^tds.inserer(DECL^ident,  new INFOVAR(type, DECL^machine.getCurrentDep()));
+        iv := new INFOVAR(type, DECL^machine.getCurrentDep());
+        
+        -- insertion
+        DECL^tds.inserer(DECL^ident,  iv);
         DECL^machine.addCurrentDep(type.getTaille());
+        
+        -- remontee de l'info pour la def
+        DECL^sinfo := iv;
     end    
 end
 }
@@ -1778,9 +1783,10 @@ end
 
 ------------------------------------------------------------------------
 ---- definit un contenu d'un namespace
-ENTITE -> namespace identc aco #htds ENTITES acf #namespace #gen;
-#htds {
+ENTITE -> namespace identc aco #contenu ENTITES acf #namespace #gen;
+#contenu {
 do
+    -- init de la tds contenu de l INFONAMESPACE
     ENTITES^tds := new TDS(ENTITE^tds);
 end
 }
@@ -1792,6 +1798,9 @@ do
     if i != nil then
         error(namespace_declared, identc^txt, ENTITE^tds);
     else    
+    
+   write "CONTENU NS : " + identc^txt + " : " + ENTITES^stds + "\n";
+   
         ENTITE^tds.inserer(identc^txt, new INFONAMESPACE(new DTYPEImpl("namespace",0) ,ENTITES^stds));
     end
 end       
@@ -1865,23 +1874,47 @@ ENTITE -> ACCES class identc HERITAGE aco #htds DEFS acf #classe #gen;
 do
     -- tds du contenu de la classe (contient attributs et methodes)
     DEFS^tds := new TDS(ENTITE^tds);
+    
+    DEFS^hchampsclasse := new LCHAMPS();
 end
 }
 #classe {
 local
     i : INFO;
     ic : INFOCLASSE;
+    ih: INFO;
+    ihc : INFOCLASSE;
 do
     -- si la classe n est pas deja definie dans ce namespace 
-    i := ENTITE^tds.chercherGlobalement(identc^txt);
+    i := ENTITE^tds.chercherLocalement(identc^txt);
     if i != nil then
         error(classe_defined, identc^txt, ENTITE^tds);
     else    
-        -- definition de la classe
-        -- le type de la classe est un pointeur sur un struct et les champs sont les attributs et les fonctions
-        ic := new INFOCLASSE(DEFS^champsclasse, ACCES^acces, DEFS^stds, HERITAGE^sinfoclasse);
-        -- insertion
-        ENTITE^tds.inserer(identc^txt, ic);  
+        -- si pas d heritage
+        if ~HERITAGE^aHeritage then
+            ic := new INFOCLASSE(DEFS^schampsclasse, ACCES^acces);
+            -- insertion
+            ENTITE^tds.inserer(identc^txt, ic); 
+        else
+            -- recherche de l heritage
+            ih := ENTITE^tds.chercherClasse(HERITAGE^sident);
+            if ih = nil then
+                error(classe_undefined, HERITAGE^sident, ENTITE^tds);
+            else 
+                match ih with
+                INFOCLASSE then   
+                    ihc := ih;
+
+                    -- definition de la classe
+                    -- le type de la classe est un pointeur sur un struct et les champs sont les attributs et les fonctions
+                    ic := new INFOCLASSE(DEFS^schampsclasse, ACCES^acces, ihc);
+                    -- insertion
+                    ENTITE^tds.inserer(identc^txt, ic); 
+                else
+                    error(not_infoclasse, HERITAGE^sident);
+                end    
+            end
+        end 
     end   
 end
 }
@@ -1924,8 +1957,8 @@ end
 HERITAGE -> #sident;
 #sident {
 do
+    HERITAGE^aHeritage := false;
     HERITAGE^sident := "";
-    HERITAGE^sinfoclasse := nil;
 end
 }
 
@@ -1937,25 +1970,9 @@ do
 end
 }
 #sident{
-local
-    i : INFO;
-    ic : INFOCLASSE;
 do
-    HERITAGE^sident := IDC^sident;
-    
-    -- remontee de l'infoclasse
-    i := HERITAGE^tds.chercherClasse(IDC^sident);
-    if i = nil then
-        error(classe_undefined, IDC^sident, HERITAGE^tds);
-    else 
-        match i with
-        INFOCLASSE then   
-            ic := i;
-            HERITAGE^sinfoclasse := ic;
-        else
-            error(not_infoclasse, IDC^sident);
-        end    
-    end      
+    HERITAGE^aHeritage := true;
+    HERITAGE^sident := IDC^sident;    
 end
 }
 
@@ -1965,7 +1982,7 @@ DEFS -> #gen;
 #gen{
 do
     DEFS^stds := DEFS^tds;
-    DEFS^champsclasse := nil;
+    DEFS^schampsclasse := DEFS^hchampsclasse;
     DEFS^code := "";
 end
 }
@@ -1974,24 +1991,37 @@ end
 DEFS ->  ACCES DEF #def DEFS #gen;
 #def {
 local
-    i : INFO;
+    c : CHAMP;
     iv : INFOVAR;
+    inf : INFOFONC;
+    ch : CHAMPCLASSE;
 do
-    -- ajout de la def a la tds
-    i := DEFS^tds.chercherLocalement(DEF^sident);
-    if i = nil then
-        error(def_undefined, DEF^sident, DEFS^tds);
+    -- recherche du champ dans la liste des champs
+    c := DEFS^hchampsclasse.chercherChamp(DEF^sident);
+    if c /= nil then
+        error(def_defined, DEF^sident, DEFS^hchampsclasse);
     else
-        match i with
-        INFOVAR then
-            iv := i;   
+        match DEF^sinfo 
+        with INFOVAR then
+            iv := DEF^sinfo;    
             -- ajout acces
             iv.setAcces(ACCES^acces);
-            -- transmission de la TDS 
-            DEFS1^tds := DEFS^tds;
+            --insertion
+            ch := new CHAMPCLASSE(DEF^sident, ACCES^acces, DEFS^hchampsclasse.getCurrentDep(), DEF^sinfo );
+            DEFS^hchampsclasse.inserer(ch);  
+        with INFOFONC then    
+            inf := DEF^sinfo;
+            --ajout acces
+            inf.setAcces(ACCES^acces);
+            --insertion
+            ch := new CHAMPCLASSE(DEF^sident, ACCES^acces, DEFS^hchampsclasse.getCurrentDep(), DEF^sinfo );
+            DEFS^hchampsclasse.inserer(ch);              
         else
-            error(not_infovar, DEF^sident);
-        end    
+            error(not_def, DEF^sident, DEF^sinfo);
+        end  
+        
+        -- transmission des champs 
+        DEFS1^hchampsclasse := DEFS^hchampsclasse;  
     end        
 end
 }
@@ -1999,8 +2029,8 @@ end
 do
     DEFS^code := DEF^code + DEFS1^code;
     
-    -- remontee de la tds et des champsclasse
-    DEFS^champsclasse := DEFS1^champsclasse;
+    -- remontee de la tds et des schampsclasse
+    DEFS^schampsclasse := DEFS1^schampsclasse;
     DEFS^stds := DEFS1^stds;
 end
 }
@@ -2008,7 +2038,7 @@ end
 
 ------------------------------------------------------------------------
 -- definition d'attribut ou de fonction
-DEF  ->  TYPE ident #sident #decl DECL #sinfo #gen;
+DEF  ->  TYPE ident #sident #decl DECL #gen;
 #decl {
 do
     DECL^ident := ident^txt;
@@ -2021,14 +2051,11 @@ do
     DEF^sident := ident^txt;
 end
 }
-#sinfo{
+#gen {
 do
     -- remontee de l'info pour la definition
     DEF^sinfo := DECL^sinfo;
-end
-}
-#gen {
-do
+    
     DEF^code := DECL^code;    
 end
 }
@@ -2065,17 +2092,19 @@ do
     DEF^sinfo := infofonc; 
     
     -- transmission du type au bloc
-    BLOC^htype := t;   
+    BLOC^htype := t;  
+    
+    -- transmission de l ident a BASE
+    BASE^ident := identc^txt; 
 end
 }
 #gen{
 do  
-    -- Type Retour => infofonc de retour null car Constructeur
     DEF^tds.inserer(identc^txt, infofonc);
     
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
-    DEF^code := DEF^machine.genFonction(identc^txt, tdsParam.getTailleParams(), 0, BLOC^code);
+    DEF^code := BASE^code + DEF^machine.genFonction(identc^txt, tdsParam.getTailleParams(), 0, BLOC^code);
 end
 }
 
@@ -2089,12 +2118,60 @@ end
 }
 
 ------------------------------------------------------------------------
---BASE -> dpts base paro ES parf  #gen;
---#gen {
---do
+BASE -> dpts base paro ES parf  #gen;
+#gen {
+local
+    i : INFO;
+    ic : INFOCLASSE;
+    icp : INFOCLASSE;
+    ip : INFO;
+    ipf : INFOFONC;
+    tdsp : TDS;
+    code : STRING;
+    tdsParam : TDS;    
+do
+    code := "";
+    -- chercher le constructeur du parent
+    i := BASE^tds.chercherClasse(BASE^ident);
+    if i = nil then
+        error(classe_undefined, BASE^ident, BASE^tds);
+    else
+        match i with 
+        INFOCLASSE then
+            ic := i;
+            -- obtenir la classe parente
+            icp := ic.getParente();
+            if icp = nil then
+                error(parent_undefined, BASE^ident, ic);
+            else
+                -- chercher le constructeur dans le contenu de la classe parente
+                tdsp := icp.getContenu();
+                ip := tdsp.chercherLocalement(new DTYPEImpl("constructeur", 0));
+                match ip with
+                INFOFONC then
+                    ipf := ip;
+                    -- code de l appel
+                    tdsParam := ipf.getParams();
+                    -- comparation des tds pour l appel
+                    if ~ES^stds.compareTypeTo(tdsParam) then
+                        error(call_nomatch, BASE^ident);  
+                    else
+                        code := BASE^machine.genArgs(ES^stds) + BASE^machine.genCall(BASE^ident) ;
+                    end    
+                else
+                    error(wrong_typeFonc, BASE^ident + "_parent ", ip);
+                end
+            end
+        else
+            error(not_infoclasse, BASE^ident);
+        end
+    end 
     
---end
---}
+    -- generer le code de l appel 
+
+    BASE^code := code;
+end
+}
 
 ------------------------------------------------------------------------
 ---- Mode de passage pour les fonctions et méthodes : rien : D, ref : D/R, out : R
@@ -2163,16 +2240,58 @@ end
 
 ------------------------------------------------------------------------
 -- null des objets
---F -> null2;
+F -> null2 #gen;
+#gen {  
+do
+    -- pas une var
+    F^sdep := -1;
+    
+    F^type := new DTYPEImpl("PNULL", 1);
+    F^code_est_adresse := false;
+    F^code := "";
+end
+}
 
 ------------------------------------------------------------------------
 -- allocation var
---F -> new identc IDC paro ES parf #gen;
---#gen {
---do
+F -> new identc #ident IDC paro ES parf #gen;
+#ident{
+do
+    IDC^ident := identc^txt;
+end
+}
+#gen {
+local
+    i : INFO;
+    ic : INFOCLASSE;
+    code : STRING;
+    lch : LCHAMPS;
+do
+    code := "";
+    F^code_est_adresse := false;
+    F^sdep := 0;
     
---end
---}
+    -- recherche de la classe
+    i := F^tds.chercherClasse(IDC^sident);
+    if i = nil then
+        error(classe_undefined, IDC^sident, F^tds);
+    else
+        match i with
+        INFOCLASSE then
+            ic := i;
+            lch := ic.getChampsClasse();
+            F^type := ic.getType();
+            F^code_est_adresse := true;
+            F^sdep := F^machine.getCurrentDep();
+            code := F^machine.genMalloc(lch.getCurrentDep());
+        else
+            error(not_infoclasse, IDC^sident);
+        end
+    end
+    
+    F^code := code;     
+end
+}
 
 end
 

@@ -40,7 +40,7 @@ public class INFOVAR extends INFO {
 
 	@Override
 	public String toString() {
-		return "INFOVAR [type=" + type.getNom() + ", dep=" + empl.getDep() + "]";
+		return "INFOVAR [type=" + type.getNom() + ", dep=" + empl.getDep() + "], acces : " + acces;
 	}
 
 }

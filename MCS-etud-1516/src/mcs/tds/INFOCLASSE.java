@@ -7,24 +7,32 @@ public class INFOCLASSE extends INFO {
 
 	protected INFOCLASSE parente;
 	
-	protected TDS tdsContenu;
+	protected LCHAMPS champsClasse;
 	
-	protected TDS tv;
-	
-	public INFOCLASSE(LCHAMPS champs, String acces, TDS tdsContenu, INFOCLASSE parente){
+	public INFOCLASSE(LCHAMPS champs, String acces, INFOCLASSE parente){
 		super(new POINTEUR(new STRUCT(champs)));
 		this.acces = acces;
-		this.tdsContenu = tdsContenu;
+		this.champsClasse = champs;
 		this.parente = parente;
+	}
+	
+	public INFOCLASSE(LCHAMPS champs, String acces){
+		super(new POINTEUR(new STRUCT(champs)));
+		this.acces = acces;
+		this.champsClasse = champs;
+		this.parente = null;
 	}
 	
 	public String getAcces() { return acces; }
 	
-	public TDS getContenu() { return tdsContenu; }
-	
 	public INFOCLASSE getParente() { return parente; }
 	
-	public TDS getTV() { return tv; }
+	/**
+	 * transforme le contenu d'une classe en LCHAMPS
+	 */
+	public LCHAMPS getChampsClasse() {
+		return champsClasse;
+	}
 	
 	public String toString() {
 		return "INFOCLASSE ";

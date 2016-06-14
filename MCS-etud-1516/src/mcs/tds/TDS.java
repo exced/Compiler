@@ -60,6 +60,17 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	public INFO chercherLocalement(String n) {
 		return get(n);
 	}
+	
+	/**
+	 * chercher localement par type (utile pour obtenir un constructeur par exemple)
+	 */
+	public INFO chercherLocalement(DTYPE t){
+		INFO i = null;
+		for (INFO in : values()){
+			i = in.getType().equals(t) ? in : null;	
+		}
+		return i;
+	}
 
 	/**
 	 * Recherche de n dans la TDS courante et ses parentes.
@@ -81,7 +92,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	public INFO chercherUsedNS(String n){
 		INFO i = null;
 		for (INFONAMESPACE ins : usedNS.values()){
-			System.out.println("chercherUsedNS sur : " + n + " contenu : " + ins.getContenu());
 			i = ins.getContenu().chercherLocalement(n);
 			if (i != null)
 				break;
@@ -113,7 +123,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	 */
 	public INFO chercherNamespace(String n) {
 		String[] strings = n.split(Pattern.quote("."));
-		System.out.println("chercherNamespace sur : " + n + " length strings : " + strings.length);
 		INFO i = null;
 		TDS tds = this;
 		// nom simple
@@ -141,10 +150,8 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	}
 	
 
-
 	public INFO chercherClasse(String n){
 		String[] strings = n.split(Pattern.quote("."));
-		System.out.println("chercherClasse sur : " + n + " length strings : " + strings.length + " TDS : " + this);
 		String ins = "";
 		String inc;
 		INFO info = null;
@@ -161,20 +168,14 @@ public class TDS extends LinkedHashMap<String, INFO> {
 					ins = ins + ".";
 			}
 			inc = strings[strings.length - 1];
-			System.out.println("ins : " + ins);
-			System.out.println("inc : " + inc);
-			System.out.println("tds : " + tds);
-			System.out.println("tds parente : " + tds.getParente());
 			info = tds.chercherNamespace(ins);
 			if (info == null){
-				System.out.println("info null");
 				return null;
 			}
 			else {
 				if (info instanceof INFONAMESPACE){
 					tds = ((INFONAMESPACE) info).getContenu();
-					System.out.println("tds : " + tds);
-					info = tds.chercherClasse(inc);
+					info = tds.chercherLocalement(inc);
 				}
 				else {
 					return null;
@@ -238,6 +239,5 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return sb.toString();
 
 	}
-
 
 }
