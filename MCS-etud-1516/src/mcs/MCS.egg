@@ -70,6 +70,9 @@ syn schampsclasse : LCHAMPS for DEFS;
 -- HERITAGE
 syn aHeritage : BOOLEAN for HERITAGE;
 
+-- THIS
+inh this : BOOLEAN for FX;
+
 
 sugar malloc is "malloc";
 --term identASM is "[A-Z]*";
@@ -1268,6 +1271,8 @@ do
     FX^hdep := E^sdep;
 
     FX^ident := "";
+    
+    FX^this := false;
 
     F^code_est_adresse := E^code_est_adresse;
     -- type de FX est le type de l expression de gauche
@@ -1393,13 +1398,15 @@ local
     code : STRING;
 do  
 
+    FX^this := false;
+
     -- ident pour l'appel de fonction
     FX^ident := ident^txt;
 
     i := F^tds.chercherGlobalement(ident^txt);
     
     if i = null then
-        error(var_not_found, ident^txt, "null");
+        error(var_not_found, ident^txt, F^tds);
     else
         match i 
         with INFOVAR then
@@ -1469,43 +1476,71 @@ local
     lc : LCHAMPS;
     ct : DTYPE;
     code : STRING;
+    i : INFO;
+    iv : INFOVAR;
+    inf : INFOFONC;
 do
-    
     code := "";
-    match FX^htype 
-    with POINTEUR then
-        p := FX^htype;
-        t := p.getType();
-        match t with
-        STRUCT then
-            s := t;
-            lc := s.getChamps();
-            c := lc.chercherChamp(ident^txt);
-            ct := c.getType();
-            FX^sdep := c.getDep();
-            if c = nil then
-                error(champ_not_found, lc, ident^txt);
+    if FX^this then
+        -- abstraction TDS -> pointeur sur struct donc on genere le code associe 
+        i := FX^tds.chercherLocalement(ident^txt);
+        if i = nil then
+            match i 
+            with INFOVAR then
+                iv := i;
+                t := iv.getType();
+                FX^sdep := iv.getDep();
+                FX1^this := false;
+                -- code acces a une var au travers de pointeur + struct
+                code := FX^machine.genAdr(FX^machine.getCurrentDep()) + FX^machine.genReadIndirectMem(t.getTaille()) + FX^machine.genAdrField(iv.getDep()); 
+            with INFOFONC then
+                inf := i;
+                t := iv.getType();
+                FX^sdep := iv.getDep();
+                -- appel fonction dans FX1
+                FX1^this := true;
             else
-                FX1^htype := new POINTEUR(c.getType());
-                code := FX^hcode + FX^machine.genAdrField(c.getDep());
-            end    
+                error(type_unknown, ident^txt, i.getType());
+            end
         else
-            error(type_not_struct, FX^htype.getNom(), ident^txt);
-        end        
-    with STRUCT then
-        s := FX^htype;
-        lc := s.getChamps();
-        c := lc.chercherChamp(ident^txt);
-        ct := c.getType();
-        if c = nil then
-            error(champ_not_found, lc, ident^txt);
-        else
-            FX1^htype := c.getType();
-            FX^sdep := c.getDep() + FX^hdep;
-            code := FX^machine.genReadMem(c.getDep() + FX^hdep , ct.getTaille());
-        end    
+            error(var_not_found, ident^txt, FX^tds);
+        end
     else
-        error(type_not_struct, FX^htype.getNom(), ident^txt);
+	    match FX^htype 
+	    with POINTEUR then
+	        p := FX^htype;
+	        t := p.getType();
+	        match t with
+	        STRUCT then
+	            s := t;
+	            lc := s.getChamps();
+	            c := lc.chercherChamp(ident^txt);
+	            ct := c.getType();
+	            FX^sdep := c.getDep();
+	            if c = nil then
+	                error(champ_not_found, lc, ident^txt);
+	            else
+	                FX1^htype := new POINTEUR(c.getType());
+	                code := FX^hcode + FX^machine.genAdrField(c.getDep());
+	            end    
+	        else
+	            error(type_not_struct, FX^htype.getNom(), ident^txt);
+	        end        
+	    with STRUCT then
+	        s := FX^htype;
+	        lc := s.getChamps();
+	        c := lc.chercherChamp(ident^txt);
+	        ct := c.getType();
+	        if c = nil then
+	            error(champ_not_found, lc, ident^txt);
+	        else
+	            FX1^htype := c.getType();
+	            FX^sdep := c.getDep() + FX^hdep;
+	            code := FX^machine.genReadMem(c.getDep() + FX^hdep , ct.getTaille());
+	        end    
+	    else
+	        error(type_not_struct, FX^htype.getNom(), ident^txt);
+	    end
     end
     FX1^hcode := code;    
 
@@ -1594,13 +1629,14 @@ do
     FX^sdep := FX^hdep;
 
     -- appel du sous-programme a partir de l'étiquette
-    
-    i := FX^tds.chercherGlobalement(FX^ident);
-    
-    if i = null then
-        error(var_not_found, FX^ident, "null");
+    if FX^this then
+        i := FX^tds.chercherLocalement(FX^ident);
+    else
+        i := FX^tds.chercherGlobalement(FX^ident);
     end
-
+    if i = null then
+        error(var_not_found, FX^ident, FX^tds);
+    end
     match i     
     with INFOFONC then
         infofonc := i;
@@ -1613,7 +1649,8 @@ do
         end
     else
         error(wrong_typeFonc, FX^ident, i.getType());
-    end        
+    end
+            
 end
 }
 
@@ -1738,7 +1775,7 @@ end
 --    if MODD^mode then   
 --        i := ASMINST^tds_asm.chercherGlobalement(allident^txt);
 --        if i=nil then
---            error(var_not_found, allident^txt, nil);
+--            error(var_not_found, allident^txt, ASMINST^tds);
 --        else
 --            match i with
 --            INFOVAR then
@@ -2005,14 +2042,16 @@ do
             iv.setAcces(ACCES^acces);
             --insertion
             ch := new CHAMPCLASSE(DEF^sident, ACCES^acces, DEFS^hchampsclasse.getCurrentDep(), DEF^sinfo );
-            DEFS^hchampsclasse.inserer(ch);  
+            DEFS^hchampsclasse.inserer(ch);
+            DEFS^tds.inserer(DEF^sident, iv);  
         with INFOFONC then    
             inf := DEF^sinfo;
             --ajout acces
             inf.setAcces(ACCES^acces);
             --insertion
             ch := new CHAMPCLASSE(DEF^sident, ACCES^acces, DEFS^hchampsclasse.getCurrentDep(), DEF^sinfo );
-            DEFS^hchampsclasse.inserer(ch);              
+            DEFS^hchampsclasse.inserer(ch);
+            DEFS^tds.inserer(DEF^sident, inf);               
         else
             error(not_def, DEF^sident, DEF^sinfo);
         end  
@@ -2097,8 +2136,6 @@ end
 }
 #gen{
 do  
-    DEF^tds.inserer(identc^txt, infofonc);
-    
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
     DEF^code := BASE^code + DEF^machine.genFonction(identc^txt, tdsParam.getTailleParams(), 0, BLOC^code);
@@ -2219,21 +2256,38 @@ end
 }
 
 ------------------------------------------------------------------------
---F -> this #tds FX;
---#tds {
---do
---    FX^tds := F^tdsClasse;
---end
---}
+F -> this #this FX #type;
+#this {
+do
+    FX^ident := "";
+    FX^hdep := 0;
+    FX^htype := nil;
+    FX^hcode := "";
+    FX^this := true;
+end
+}
+#type {
+do
+    F^type := FX^type;
+    F^sdep := FX^sdep;
+    F^code := FX^code;
+    F^code_est_adresse := false;
+end
+}
 
 ------------------------------------------------------------------------
 -- super
---F -> base FX #gen;
---#gen {
---do
+F -> base #base FX #gen;
+#base {
+do
+    FX^base := true;
+end
+}
+#gen {
+do
     
---end
---}
+end
+}
 
 ------------------------------------------------------------------------
 -- null des objets
