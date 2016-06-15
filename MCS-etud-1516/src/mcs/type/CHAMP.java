@@ -1,23 +1,39 @@
 package mcs.type;
 
+import mcs.tds.INFO;
+
 public class CHAMP {
 	private String nom;
 	private int dep;
-	private DTYPE type;
+	private INFO info;
+	private String acces;
 	
-	public CHAMP(String nom, DTYPE type, int dep) {
+	public CHAMP(String nom, INFO info, int dep) {
 		super();
 		this.nom = nom;
-		this.type = type;
+		this.info = info;
 		this.dep = dep;
+		this.acces = "def";
+	}
+	
+	public CHAMP(String nom, INFO info, int dep, String acces) {
+		super();
+		this.nom = nom;
+		this.info = info;
+		this.dep = dep;
+		this.acces = acces;
 	}
 
 	public String getNom() {
 		return nom;
 	}
 
-	public DTYPE getType() {
-		return type;
+	public INFO getInfo() {
+		return info;
+	}
+	
+	public DTYPE getType(){
+		return info.getType();
 	}
 
 	public int getDep() {
@@ -29,7 +45,7 @@ public class CHAMP {
 	}
 
 	public String toString() {
-		return nom + ": " + type + " dep = " + dep;
+		return nom + ": " + info + " dep = " + dep;
 	}
 
 }

@@ -32,7 +32,7 @@ public class STRUCT extends DTYPEImpl {
 	public LTYPES getTypes() {
 		LTYPES lt = new LTYPES();
 		for (CHAMP c : champs){
-			lt.add(c.getType());
+			lt.add(c.getInfo().getType());
 		}
 		return lt;
 	}

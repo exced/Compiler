@@ -125,10 +125,10 @@ this.att_code=loc_code;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_aco : // 16088
+      case LEX_MCS.token_aco : // 4511
         regle97 () ;
       break ;
-      case LEX_MCS.token_dpts : // 16109
+      case LEX_MCS.token_dpts : // 4532
         regle98 () ;
       break ;
       default :

@@ -22,11 +22,11 @@ int [] sync= new int[0];
   TDS att_tds;
   boolean att_eval;
   String att_code;
-  LCHAMPS att_hchampsclasse;
+  LCHAMPS att_hchamps;
+  LCHAMPS att_champs;
   IMachine att_machine;
   TDS att_stds;
   LEX_MCS att_scanner;
-  LCHAMPS att_schampsclasse;
   private void regle93() throws Exception {
 
     //declaration
@@ -53,26 +53,26 @@ try {
 CHAMP loc_c;
 INFOVAR loc_iv;
 INFOFONC loc_inf;
-CHAMPCLASSE loc_ch;
+CHAMP loc_ch;
 // instructions
-loc_c=this.att_hchampsclasse.chercherChamp(x_3.att_sident);
+loc_c=this.att_hchamps.chercherChamp(x_3.att_sident);
 if (loc_c!=null){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_def_defined, MCSMessages.def_defined,new Object[]{""+x_3.att_sident, ""+this.att_hchampsclasse});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_def_defined, MCSMessages.def_defined,new Object[]{""+x_3.att_sident, ""+this.att_hchamps});
 
 }
 else {
 if (x_3.att_sinfo instanceof INFOVAR ){
 loc_iv=((INFOVAR)x_3.att_sinfo);
 loc_iv.setAcces(x_2.att_acces);
-loc_ch= new CHAMPCLASSE(x_3.att_sident, x_2.att_acces, this.att_hchampsclasse.getCurrentDep(), ((INFOVAR)x_3.att_sinfo));
-this.att_hchampsclasse.inserer(loc_ch);
+loc_ch= new CHAMP(x_3.att_sident, ((INFOVAR)x_3.att_sinfo), this.att_hchamps.getCurrentDep(), x_2.att_acces);
+this.att_hchamps.inserer(loc_ch);
 this.att_tds.inserer(x_3.att_sident, loc_iv);
 }
 else if (x_3.att_sinfo instanceof INFOFONC ){
 loc_inf=((INFOFONC)x_3.att_sinfo);
 loc_inf.setAcces(x_2.att_acces);
-loc_ch= new CHAMPCLASSE(x_3.att_sident, x_2.att_acces, this.att_hchampsclasse.getCurrentDep(), ((INFOFONC)x_3.att_sinfo));
-this.att_hchampsclasse.inserer(loc_ch);
+loc_ch= new CHAMP(x_3.att_sident, ((INFOFONC)x_3.att_sinfo), this.att_hchamps.getCurrentDep(), x_2.att_acces);
+this.att_hchamps.inserer(loc_ch);
 this.att_tds.inserer(x_3.att_sident, loc_inf);
 }
 else {
@@ -80,7 +80,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 
 }
-x_5.att_hchampsclasse=this.att_hchampsclasse;
+x_5.att_hchamps=this.att_hchamps;
 }
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#def","DEFS -> ACCES DEF #def DEFS1 #gen ;"});
 }
@@ -89,7 +89,7 @@ private void action_gen_93() throws Exception {
 try {
 // instructions
 this.att_stds=this.att_tds;
-this.att_schampsclasse=this.att_hchampsclasse;
+this.att_champs=this.att_hchamps;
 this.att_code="";
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","DEFS -> #gen ;"});
 }
@@ -108,7 +108,7 @@ private void action_gen_94(S_ACCES_MCS x_2, S_DEF_MCS x_3, S_DEFS_MCS x_5) throw
 try {
 // instructions
 this.att_code=x_3.att_code+x_5.att_code;
-this.att_schampsclasse=x_5.att_schampsclasse;
+this.att_champs=x_5.att_champs;
 this.att_stds=x_5.att_stds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","DEFS -> ACCES DEF #def DEFS1 #gen ;"});
 }
@@ -116,31 +116,31 @@ this.att_stds=x_5.att_stds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 16089
+      case LEX_MCS.token_acf : // 4512
         regle93 () ;
       break ;
-      case LEX_MCS.token_public : // 16107
+      case LEX_MCS.token_public : // 4530
         regle94 () ;
       break ;
-      case LEX_MCS.token_private : // 16108
+      case LEX_MCS.token_private : // 4531
         regle94 () ;
       break ;
-      case LEX_MCS.token_void : // 16096
+      case LEX_MCS.token_void : // 4519
         regle94 () ;
       break ;
-      case LEX_MCS.token_int : // 16098
+      case LEX_MCS.token_int : // 4521
         regle94 () ;
       break ;
-      case LEX_MCS.token_char : // 16099
+      case LEX_MCS.token_char : // 4522
         regle94 () ;
       break ;
-      case LEX_MCS.token_identc : // 16138
+      case LEX_MCS.token_identc : // 4561
         regle94 () ;
       break ;
-      case LEX_MCS.token_struct : // 16100
+      case LEX_MCS.token_struct : // 4523
         regle94 () ;
       break ;
-      case LEX_MCS.token_bool : // 16110
+      case LEX_MCS.token_bool : // 4533
         regle94 () ;
       break ;
       default :

@@ -50,8 +50,8 @@ syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, 
 inh hcode   : STRING for AFFX,FX;
 syn code_asm : STRING for ASM;--,ASMINST,ASMINSTS;
 
-inh hchamps : LCHAMPS for CHAMPS, CHAMP;
-syn champs : LCHAMPS for CHAMPS;
+inh hchamps : LCHAMPS for CHAMPS, CHAMP, DEFS;
+syn champs : LCHAMPS for CHAMPS, DEFS;
 
 -- ADRESSE
 syn code_est_adresse : BOOLEAN for  AFFX,F, A,AX,R,RX,T,TX,E ;
@@ -62,10 +62,6 @@ inh hbloc_est_fonction : BOOLEAN for BLOC;
 
 -- ACCES
 syn acces : STRING for ACCES;
-
--- CHAMPS CLASSE
-inh hchampsclasse : LCHAMPS for DEFS;
-syn schampsclasse : LCHAMPS for DEFS;
 
 -- HERITAGE
 syn aHeritage : BOOLEAN for HERITAGE;
@@ -527,7 +523,7 @@ do
     if c /= nil then
         error(champ_declared, CHAMP^sident, CHAMPS^hchamps);
     else    
-        CHAMP^hchamps.inserer(new CHAMP(CHAMP^sident, CHAMP^type, CHAMPS^hchamps.getCurrentDep()));
+        CHAMP^hchamps.inserer(new CHAMP(CHAMP^sident, new INFOVAR(CHAMP^type, CHAMPS^hchamps.getCurrentDep()), CHAMPS^hchamps.getCurrentDep()));
     end  
     
     -- transmission
@@ -1909,7 +1905,7 @@ do
     -- tds du contenu de la classe (contient attributs et methodes)
     DEFS^tds := new TDS(ENTITE^tds);
     
-    DEFS^hchampsclasse := new LCHAMPS();
+    DEFS^hchamps := new LCHAMPS();
 end
 }
 #classe {
@@ -1926,7 +1922,7 @@ do
     else    
         -- si pas d heritage
         if ~HERITAGE^aHeritage then
-            ic := new INFOCLASSE(DEFS^schampsclasse, ACCES^acces, DEFS^stds);
+            ic := new INFOCLASSE(ACCES^acces, DEFS^stds);
             -- insertion
             ENTITE^tds.inserer(identc^txt, ic); 
         else
@@ -1941,7 +1937,7 @@ do
 
                     -- definition de la classe
                     -- le type de la classe est un pointeur sur un struct et les champs sont les attributs et les fonctions
-                    ic := new INFOCLASSE(DEFS^schampsclasse, ACCES^acces, ihc, DEFS^stds);
+                    ic := new INFOCLASSE(ACCES^acces, DEFS^stds, ihc);
                     -- insertion
                     ENTITE^tds.inserer(identc^txt, ic); 
                 else
@@ -2016,7 +2012,7 @@ DEFS -> #gen;
 #gen{
 do
     DEFS^stds := DEFS^tds;
-    DEFS^schampsclasse := DEFS^hchampsclasse;
+    DEFS^champs := DEFS^hchamps;
     DEFS^code := "";
 end
 }
@@ -2028,12 +2024,12 @@ local
     c : CHAMP;
     iv : INFOVAR;
     inf : INFOFONC;
-    ch : CHAMPCLASSE;
+    ch : CHAMP;
 do
     -- recherche du champ dans la liste des champs
-    c := DEFS^hchampsclasse.chercherChamp(DEF^sident);
+    c := DEFS^hchamps.chercherChamp(DEF^sident);
     if c /= nil then
-        error(def_defined, DEF^sident, DEFS^hchampsclasse);
+        error(def_defined, DEF^sident, DEFS^hchamps);
     else
         match DEF^sinfo 
         with INFOVAR then
@@ -2041,23 +2037,23 @@ do
             -- ajout acces
             iv.setAcces(ACCES^acces);
             --insertion
-            ch := new CHAMPCLASSE(DEF^sident, ACCES^acces, DEFS^hchampsclasse.getCurrentDep(), DEF^sinfo );
-            DEFS^hchampsclasse.inserer(ch);
+            ch := new CHAMP(DEF^sident, DEF^sinfo, DEFS^hchamps.getCurrentDep(), ACCES^acces );
+            DEFS^hchamps.inserer(ch);
             DEFS^tds.inserer(DEF^sident, iv);  
         with INFOFONC then    
             inf := DEF^sinfo;
             --ajout acces
             inf.setAcces(ACCES^acces);
             --insertion
-            ch := new CHAMPCLASSE(DEF^sident, ACCES^acces, DEFS^hchampsclasse.getCurrentDep(), DEF^sinfo );
-            DEFS^hchampsclasse.inserer(ch);
+            ch := new CHAMP(DEF^sident, DEF^sinfo, DEFS^hchamps.getCurrentDep(), ACCES^acces );
+            DEFS^hchamps.inserer(ch);
             DEFS^tds.inserer(DEF^sident, inf);               
         else
             error(not_def, DEF^sident, DEF^sinfo);
         end  
         
         -- transmission des champs 
-        DEFS1^hchampsclasse := DEFS^hchampsclasse;  
+        DEFS1^hchamps := DEFS^hchamps;  
     end        
 end
 }
@@ -2065,8 +2061,8 @@ end
 do
     DEFS^code := DEF^code + DEFS1^code;
     
-    -- remontee de la tds et des schampsclasse
-    DEFS^schampsclasse := DEFS1^schampsclasse;
+    -- remontee de la tds et des champs
+    DEFS^champs := DEFS1^champs;
     DEFS^stds := DEFS1^stds;
 end
 }

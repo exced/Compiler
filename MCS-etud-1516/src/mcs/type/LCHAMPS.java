@@ -26,7 +26,7 @@ public class LCHAMPS extends ArrayList<CHAMP> {
 
 	public void inserer(CHAMP c) {
 		c.setDep(currentDep);
-		currentDep += c.getType().getTaille();
+		currentDep += c.getInfo().getType().getTaille();
 		add(c);
 	}
 
@@ -47,7 +47,7 @@ public class LCHAMPS extends ArrayList<CHAMP> {
 			CHAMP c = get(i);
 			CHAMP ca = autre.get(i);
 			if (!c.getNom().equals(ca.getNom())
-					|| !c.getType().compareTo(ca.getType()))
+					|| !c.getInfo().getType().compareTo(ca.getInfo().getType()))
 				return false;
 		}
 		return true;

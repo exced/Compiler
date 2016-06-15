@@ -62,7 +62,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 else {
-x_2.att_hchamps.inserer( new CHAMP(x_2.att_sident, x_2.att_type, this.att_hchamps.getCurrentDep()));
+x_2.att_hchamps.inserer( new CHAMP(x_2.att_sident,  new INFOVAR(x_2.att_type, this.att_hchamps.getCurrentDep()), this.att_hchamps.getCurrentDep()));
 }
 x_4.att_hchamps=this.att_hchamps;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#hch","CHAMPS -> CHAMP #hch CHAMPS1 #ch ;"});
@@ -85,25 +85,25 @@ this.att_champs=this.att_hchamps;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 16089
+      case LEX_MCS.token_acf : // 4512
         regle21 () ;
       break ;
-      case LEX_MCS.token_void : // 16096
+      case LEX_MCS.token_void : // 4519
         regle22 () ;
       break ;
-      case LEX_MCS.token_int : // 16098
+      case LEX_MCS.token_int : // 4521
         regle22 () ;
       break ;
-      case LEX_MCS.token_char : // 16099
+      case LEX_MCS.token_char : // 4522
         regle22 () ;
       break ;
-      case LEX_MCS.token_identc : // 16138
+      case LEX_MCS.token_identc : // 4561
         regle22 () ;
       break ;
-      case LEX_MCS.token_struct : // 16100
+      case LEX_MCS.token_struct : // 4523
         regle22 () ;
       break ;
-      case LEX_MCS.token_bool : // 16110
+      case LEX_MCS.token_bool : // 4533
         regle22 () ;
       break ;
       default :

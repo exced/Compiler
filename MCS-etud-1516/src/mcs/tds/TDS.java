@@ -240,4 +240,19 @@ public class TDS extends LinkedHashMap<String, INFO> {
 
 	}
 
+	/**
+	 * transforme une TDS en champs en respectant les principes d'une classe
+	 * @return
+	 */
+	public LCHAMPS toChamps() {
+		LCHAMPS lch = new LCHAMPS();
+		int dep = 0;
+		Set<Map.Entry<String, INFO>> s = entrySet();
+		for (Map.Entry<String, INFO> e : s) {
+			if (e.getValue() instanceof INFOVAR || e.getValue() instanceof INFOFONC)
+				lch.inserer(new CHAMP(e.getKey(), e.getValue(), dep++));
+		}
+		return lch;
+	}
+
 }
