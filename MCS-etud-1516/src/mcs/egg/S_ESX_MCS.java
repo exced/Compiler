@@ -81,10 +81,10 @@ x_5.att_tds=loc_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 3247
+      case LEX_MCS.token_parf : // 16087
         regle78 () ;
       break ;
-      case LEX_MCS.token_virg : // 3250
+      case LEX_MCS.token_virg : // 16090
         regle79 () ;
       break ;
       default :

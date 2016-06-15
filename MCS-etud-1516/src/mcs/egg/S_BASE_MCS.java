@@ -74,9 +74,11 @@ INFOFONC loc_ipf;
 TDS loc_tdsp;
 String loc_code;
 TDS loc_tdsParam;
+TDS loc_tds;
 // instructions
 loc_code="";
-loc_i=this.att_tds.chercherClasse(this.att_ident);
+loc_tds=this.att_tds.getParente();
+loc_i=loc_tds.chercherClasse(this.att_ident);
 if (loc_i==null){
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_classe_undefined, MCSMessages.classe_undefined,new Object[]{""+this.att_ident, ""+this.att_tds});
 
@@ -123,10 +125,10 @@ this.att_code=loc_code;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_aco : // 3248
+      case LEX_MCS.token_aco : // 16088
         regle97 () ;
       break ;
-      case LEX_MCS.token_dpts : // 3269
+      case LEX_MCS.token_dpts : // 16109
         regle98 () ;
       break ;
       default :

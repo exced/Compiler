@@ -70,9 +70,9 @@ syn schampsclasse : LCHAMPS for DEFS;
 -- HERITAGE
 syn aHeritage : BOOLEAN for HERITAGE;
 
--- THIS
+-- THIS / BASE
 inh this : BOOLEAN for FX;
-
+inh base : BOOLEAN for FX;
 
 sugar malloc is "malloc";
 --term identASM is "[A-Z]*";
@@ -1272,6 +1272,7 @@ do
 
     FX^ident := "";
     
+    FX^base := false;
     FX^this := false;
 
     F^code_est_adresse := E^code_est_adresse;
@@ -1397,7 +1398,7 @@ local
     i2:INFO;
     code : STRING;
 do  
-
+    FX^base := false;
     FX^this := false;
 
     -- ident pour l'appel de fonction
@@ -2097,7 +2098,7 @@ end
 
 ------------------------------------------------------------------------
 ---- constructeur
-DEF  ->  identc paro #tds PARFS #stds parf BASE BLOC #gen;
+DEF  ->  identc paro #tds PARFS #stds parf #htds BASE BLOC #gen;
 global
     tdsParam : TDS;
     infofonc : INFOFONC;
@@ -2133,6 +2134,12 @@ do
     BASE^ident := identc^txt; 
 end
 }
+#htds {
+do
+    -- pour l appel a super, on va chercher les params dans PARFS 
+    BASE^tds := PARFS^stds;
+end
+}
 #gen{
 do  
     -- generer le prologue et l'epilogue de la fonction
@@ -2161,11 +2168,13 @@ local
     ipf : INFOFONC;
     tdsp : TDS;
     code : STRING;
-    tdsParam : TDS;    
+    tdsParam : TDS;
+    tds : TDS;    
 do
     code := "";
-    -- chercher le constructeur du parent
-    i := BASE^tds.chercherClasse(BASE^ident);
+    tds := BASE^tds.getParente();
+    -- chercher le constructeur du parent dans la TDS parente des PARFS
+    i := tds.chercherClasse(BASE^ident);
     if i = nil then
         error(classe_undefined, BASE^ident, BASE^tds);
     else
@@ -2263,6 +2272,7 @@ do
     FX^htype := nil;
     FX^hcode := "";
     FX^this := true;
+    FX^base := false;
 end
 }
 #type {
@@ -2276,17 +2286,25 @@ end
 
 ------------------------------------------------------------------------
 -- super
---F -> base #base FX #gen;
---#base {
---do
---    FX^base := true;
---end
---}
---#gen {
---do
-    
---end
---}
+F -> base #base FX #gen;
+#base {
+do
+    FX^ident := "";
+    FX^hdep := 0;
+    FX^htype := nil;
+    FX^hcode := "";
+    FX^this := false;
+    FX^base := true;
+end
+}
+#gen {
+do
+    F^type := FX^type;
+    F^sdep := FX^sdep;
+    F^code := FX^code;
+    F^code_est_adresse := false;
+end
+}
 
 ------------------------------------------------------------------------
 -- null des objets
