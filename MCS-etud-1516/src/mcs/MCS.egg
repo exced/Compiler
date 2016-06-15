@@ -1495,8 +1495,7 @@ do
                 code := FX^machine.genAdr(FX^machine.getCurrentDep()) + FX^machine.genReadIndirectMem(t.getTaille()) + FX^machine.genAdrField(iv.getDep()); 
             with INFOFONC then
                 inf := i;
-                t := iv.getType();
-                FX^sdep := iv.getDep();
+                t := inf.getType();
                 -- appel fonction dans FX1
                 FX1^this := true;
             else
@@ -1926,7 +1925,7 @@ do
     else    
         -- si pas d heritage
         if ~HERITAGE^aHeritage then
-            ic := new INFOCLASSE(DEFS^schampsclasse, ACCES^acces);
+            ic := new INFOCLASSE(DEFS^schampsclasse, ACCES^acces, DEFS^stds);
             -- insertion
             ENTITE^tds.inserer(identc^txt, ic); 
         else
@@ -1941,7 +1940,7 @@ do
 
                     -- definition de la classe
                     -- le type de la classe est un pointeur sur un struct et les champs sont les attributs et les fonctions
-                    ic := new INFOCLASSE(DEFS^schampsclasse, ACCES^acces, ihc);
+                    ic := new INFOCLASSE(DEFS^schampsclasse, ACCES^acces, ihc, DEFS^stds);
                     -- insertion
                     ENTITE^tds.inserer(identc^txt, ic); 
                 else
