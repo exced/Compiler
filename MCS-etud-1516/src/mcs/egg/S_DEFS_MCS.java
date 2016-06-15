@@ -84,31 +84,31 @@ this.att_stds=x_5.att_stds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 57416
+      case LEX_MCS.token_acf : // 11011
         regle93 () ;
       break ;
-      case LEX_MCS.token_public : // 57434
+      case LEX_MCS.token_public : // 11029
         regle94 () ;
       break ;
-      case LEX_MCS.token_private : // 57435
+      case LEX_MCS.token_private : // 11030
         regle94 () ;
       break ;
-      case LEX_MCS.token_void : // 57423
+      case LEX_MCS.token_void : // 11018
         regle94 () ;
       break ;
-      case LEX_MCS.token_int : // 57425
+      case LEX_MCS.token_int : // 11020
         regle94 () ;
       break ;
-      case LEX_MCS.token_char : // 57426
+      case LEX_MCS.token_char : // 11021
         regle94 () ;
       break ;
-      case LEX_MCS.token_identc : // 57465
+      case LEX_MCS.token_identc : // 11106
         regle94 () ;
       break ;
-      case LEX_MCS.token_struct : // 57427
+      case LEX_MCS.token_struct : // 11022
         regle94 () ;
       break ;
-      case LEX_MCS.token_bool : // 57437
+      case LEX_MCS.token_bool : // 11032
         regle94 () ;
       break ;
       default :

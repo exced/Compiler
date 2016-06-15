@@ -225,11 +225,20 @@ String loc_code;
 INFO loc_i;
 INFOVAR loc_iv;
 INFOFONC loc_inf;
-TDS loc_tdsParent;
+TDS loc_tdsBloc;
+TDS loc_tdsClasse;
+TDS loc_tdsSuper;
+INFOCLASSE loc_ic;
+INFOCLASSE loc_ics;
 // instructions
 loc_code="";
+loc_tdsBloc=this.att_tds.getParente();
+loc_tdsClasse=loc_tdsBloc.getParente();
+loc_ic=loc_tdsClasse.getClasseContainer();
+loc_ics=loc_ic.getParente();
+loc_tdsSuper=loc_ics.getContenu();
 if (this.att_this){
-loc_i=this.att_tds.chercherLocalement(x_3.att_txt);
+loc_i=loc_tdsClasse.chercherLocalement(x_3.att_txt);
 if (loc_i!=null){
 if (loc_i instanceof INFOVAR ){
 loc_iv=((INFOVAR)loc_i);
@@ -250,14 +259,14 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 }
 }
 else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_not_found, MCSMessages.var_not_found,new Object[]{""+x_3.att_txt, ""+this.att_tds});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_not_found, MCSMessages.var_not_found,new Object[]{""+x_3.att_txt, ""+loc_tdsClasse});
 
 }
 }
 
 if (this.att_base){
-loc_tdsParent=this.att_tds.getParente();
-loc_i=loc_tdsParent.chercherLocalement(x_3.att_txt);
+loc_tdsSuper=this.att_tds.getParente();
+loc_i=loc_tdsSuper.chercherLocalement(x_3.att_txt);
 if (loc_i!=null){
 if (loc_i instanceof INFOVAR ){
 loc_iv=((INFOVAR)loc_i);
@@ -278,7 +287,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 }
 }
 else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_not_found, MCSMessages.var_not_found,new Object[]{""+x_3.att_txt, ""+this.att_tds});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_not_found, MCSMessages.var_not_found,new Object[]{""+x_3.att_txt, ""+loc_tdsSuper});
 
 }
 }
@@ -374,64 +383,64 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_mult : // 57456
+      case LEX_MCS.token_mult : // 11051
         regle72 () ;
       break ;
-      case LEX_MCS.token_div : // 57457
+      case LEX_MCS.token_div : // 11052
         regle72 () ;
       break ;
-      case LEX_MCS.token_mod : // 57458
+      case LEX_MCS.token_mod : // 11099
         regle72 () ;
       break ;
-      case LEX_MCS.token_et : // 57459
+      case LEX_MCS.token_et : // 11100
         regle72 () ;
       break ;
-      case LEX_MCS.token_plus : // 57453
+      case LEX_MCS.token_plus : // 11048
         regle72 () ;
       break ;
-      case LEX_MCS.token_moins : // 57454
+      case LEX_MCS.token_moins : // 11049
         regle72 () ;
       break ;
-      case LEX_MCS.token_ou : // 57455
+      case LEX_MCS.token_ou : // 11050
         regle72 () ;
       break ;
-      case LEX_MCS.token_inf : // 57447
+      case LEX_MCS.token_inf : // 11042
         regle72 () ;
       break ;
-      case LEX_MCS.token_sup : // 57449
+      case LEX_MCS.token_sup : // 11044
         regle72 () ;
       break ;
-      case LEX_MCS.token_infeg : // 57448
+      case LEX_MCS.token_infeg : // 11043
         regle72 () ;
       break ;
-      case LEX_MCS.token_supeg : // 57450
+      case LEX_MCS.token_supeg : // 11045
         regle72 () ;
       break ;
-      case LEX_MCS.token_eg : // 57451
+      case LEX_MCS.token_eg : // 11046
         regle72 () ;
       break ;
-      case LEX_MCS.token_neg : // 57452
+      case LEX_MCS.token_neg : // 11047
         regle72 () ;
       break ;
-      case LEX_MCS.token_affect : // 57420
+      case LEX_MCS.token_affect : // 11015
         regle72 () ;
       break ;
-      case LEX_MCS.token_virg : // 57417
+      case LEX_MCS.token_virg : // 11012
         regle72 () ;
       break ;
-      case LEX_MCS.token_pv : // 57419
+      case LEX_MCS.token_pv : // 11014
         regle72 () ;
       break ;
-      case LEX_MCS.token_parf : // 57414
+      case LEX_MCS.token_parf : // 11009
         regle72 () ;
       break ;
-      case LEX_MCS.token_pt : // 57418
+      case LEX_MCS.token_pt : // 11013
         regle73 () ;
       break ;
-      case LEX_MCS.token_arrow : // 57445
+      case LEX_MCS.token_arrow : // 11040
         regle74 () ;
       break ;
-      case LEX_MCS.token_paro : // 57413
+      case LEX_MCS.token_paro : // 11008
         regle75 () ;
       break ;
       default :

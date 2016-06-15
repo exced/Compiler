@@ -73,6 +73,8 @@ inh this : BOOLEAN for FX;
 inh base : BOOLEAN for FX;
 
 sugar malloc is "malloc";
+sugar do is "do";
+sugar while is "while";
 --term identASM is "[A-Z]*";
 --term allident is "[_0-9A-Za-z]*";
 --terminals
@@ -634,6 +636,39 @@ do
     INST^code := AFFX^code;
 end
 }
+
+------------------------------------------------------------------------
+-- dowhile
+INST -> do aco #hbloc BLOC acf WHILE #gen;
+global
+    etiquette : STRING;
+#hbloc {
+do
+    BLOC^hbloc_est_fonction := false;
+    
+    etiquette := "loop" + INST^machine.getXEtiquette();
+    WHILE^ident := etiquette;
+end
+}
+#gen {
+do
+    INST^code := INST^machine.genEtiquette(etiquette) + BLOC^code + WHILE^code;
+end
+}
+
+------------------------------------------------------------------------
+-- whiledo
+INST -> WHILE aco BLOC acf #gen;
+#gen {
+do
+    
+end
+}
+
+------------------------------------------------------------------------
+-- condition d'arret 
+WHILE -> while paro E parf;
+
 
 ------------------------------------------------------------------------
 -- instruction expression (affectation et appel de procedure)
@@ -1478,13 +1513,25 @@ local
     i : INFO;
     iv : INFOVAR;
     inf : INFOFONC;
-    tdsParent : TDS;
+    tdsBloc : TDS;
+    tdsClasse : TDS;
+    tdsSuper : TDS;
+    ic : INFOCLASSE;
+    ics : INFOCLASSE;
 do
     code := "";
+    -- tds classe
+    tdsBloc := FX^tds.getParente();
+    tdsClasse := tdsBloc.getParente();
+    --tds super
+    ic := tdsClasse.getClasseContainer();
+    ics := ic.getParente();
+    tdsSuper := ics.getContenu();
+    
     -- THIS
     if FX^this then
         -- abstraction TDS -> pointeur sur struct donc on genere le code associe 
-        i := FX^tds.chercherLocalement(ident^txt);
+        i := tdsClasse.chercherLocalement(ident^txt);
                 if i /= nil then
             match i 
             with INFOVAR then
@@ -1503,14 +1550,15 @@ do
                 error(type_unknown, ident^txt, i.getType());
             end
         else
-            error(var_not_found, ident^txt, FX^tds);
+            error(var_not_found, ident^txt, tdsClasse);
         end 
     end
+    
     -- BASE
     if FX^base then
         -- chercher dans la tds super
-        tdsParent := FX^tds.getParente();
-        i := tdsParent.chercherLocalement(ident^txt);
+        tdsSuper := FX^tds.getParente();
+        i := tdsSuper.chercherLocalement(ident^txt);
                 if i /= nil then
             match i 
             with INFOVAR then
@@ -1529,7 +1577,7 @@ do
                 error(type_unknown, ident^txt, i.getType());
             end
         else
-            error(var_not_found, ident^txt, FX^tds);
+            error(var_not_found, ident^txt, tdsSuper);
         end 
     end
     
@@ -1991,7 +2039,7 @@ do
                     error(not_infoclasse, HERITAGE^sident);
                 end    
             end
-        end 
+        end  
     end   
 end
 }

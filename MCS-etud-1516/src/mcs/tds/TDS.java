@@ -261,6 +261,15 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	
 	public INFOCLASSE getClasseContainer() { return classeContainer; }
 	
+	
+	public INFOCLASSE getClasseContainerRec() {
+		INFOCLASSE classeContainer = this.classeContainer;
+		if (classeContainer == null)
+			if (parente != null)
+				return parente.getClasseContainerRec();
+		return classeContainer; 
+		}
+	
 	public void setClasseContainer(INFOCLASSE classeContainer) { this.classeContainer = classeContainer; } 
 
 
