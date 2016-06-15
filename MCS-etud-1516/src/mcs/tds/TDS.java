@@ -1,5 +1,6 @@
 package mcs.tds;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -19,7 +20,12 @@ public class TDS extends LinkedHashMap<String, INFO> {
 
 	private TDS parente;
 	
-	/*
+	/**
+	 * une TDS connait la classe dont elle est le contenu 
+	 */
+	private INFOCLASSE classeContainer;
+	
+	/**
 	 * liste des namespace used (using)
 	 */
 	private LinkedHashMap<String, INFONAMESPACE> usedNS;
@@ -30,6 +36,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	public TDS() {
 		this(null);
 		usedNS = new LinkedHashMap<String, INFONAMESPACE>();
+		classeContainer = null;
 	}
 
 	/**
@@ -41,7 +48,9 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		super();
 		parente = p;
 		usedNS = new LinkedHashMap<String, INFONAMESPACE>();
+		classeContainer = null;
 	}
+		
 
 	public TDS getParente() {
 		return parente;
@@ -61,13 +70,30 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return get(n);
 	}
 	
+	public INFO chercherLocalementClasse(String n) {
+		return get(n) instanceof INFOCLASSE ? get(n) : null;
+	}
+	
 	/**
-	 * chercher localement par type (utile pour obtenir un constructeur par exemple)
+	 * chercher un constructeur
 	 */
-	public INFO chercherLocalement(DTYPE t){
+	public INFO chercherLocalement(DTYPE t, TDS tds){
 		INFO i = null;
+		ArrayList<INFO> constructeurs = new ArrayList<INFO>();
 		for (INFO in : values()){
-			i = in.getType().equals(t) ? in : null;	
+			if (in.getType().equals(t)) {
+				constructeurs.add(in);
+			}
+		}
+		// prendre celui qui match avec la TDS des params d'appel
+		for (INFO cs : constructeurs){
+			if (cs instanceof INFOFONC){
+				if (((INFOFONC) cs).getParams().compareTypeTo(tds)){
+					// match params OK
+					i = cs;
+					break;
+				}
+			}
 		}
 		return i;
 	}
@@ -91,10 +117,18 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	 */
 	public INFO chercherUsedNS(String n){
 		INFO i = null;
-		for (INFONAMESPACE ins : usedNS.values()){
-			i = ins.getContenu().chercherLocalement(n);
-			if (i != null)
+		Set<Map.Entry<String, INFONAMESPACE>> s = usedNS.entrySet();
+		for (Map.Entry<String, INFONAMESPACE> e : s) {
+			if (e.getKey().equals(n)) {
+				i = e.getValue();
 				break;
+			}
+			else {
+				if (e.getValue().getContenu().chercherLocalement(n) != null) {
+					i = e.getValue().getContenu().chercherLocalement(n);
+					break;
+				}
+			}
 		}
 		return i;
 	}
@@ -184,6 +218,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		}
 		return info;
 	}
+	
 
 	/**
 	 * Ajoute le nom n et son information i dans la TDS
@@ -223,6 +258,10 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		}
 		return taille;
 	}
+	
+	public INFOCLASSE getClasseContainer() { return classeContainer; }
+	
+	public void setClasseContainer(INFOCLASSE classeContainer) { this.classeContainer = classeContainer; } 
 
 
 	public String toString() {

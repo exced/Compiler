@@ -19,11 +19,11 @@ LEX_MCS scanner;
     this.att_scanner = scanner;
     }
 int [] sync= new int[0];
+  String att_identSuper;
   TDS att_tds;
   boolean att_eval;
   String att_code;
   IMachine att_machine;
-  String att_ident;
   LEX_MCS att_scanner;
   private void regle97() throws Exception {
 
@@ -74,46 +74,37 @@ INFOFONC loc_ipf;
 TDS loc_tdsp;
 String loc_code;
 TDS loc_tdsParam;
-TDS loc_tds;
 // instructions
 loc_code="";
-loc_tds=this.att_tds.getParente();
-loc_i=loc_tds.chercherClasse(this.att_ident);
+loc_i=this.att_tds.chercherClasse(this.att_identSuper);
 if (loc_i==null){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_classe_undefined, MCSMessages.classe_undefined,new Object[]{""+this.att_ident, ""+this.att_tds});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_classe_undefined, MCSMessages.classe_undefined,new Object[]{""+this.att_identSuper, ""+this.att_tds});
 
 }
 else {
 if (loc_i instanceof INFOCLASSE ){
 loc_ic=((INFOCLASSE)loc_i);
-loc_icp=loc_ic.getParente();
-if (loc_icp==null){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_parent_undefined, MCSMessages.parent_undefined,new Object[]{""+this.att_ident, ""+loc_ic});
-
-}
-else {
-loc_tdsp=loc_icp.getContenu();
-loc_ip=loc_tdsp.chercherLocalement( new DTYPEImpl("constructeur", 0));
+loc_tdsp=loc_ic.getContenu();
+loc_ip=loc_tdsp.chercherLocalement( new DTYPEImpl("constructeur", 0), x_5.att_stds);
 if (loc_ip instanceof INFOFONC ){
 loc_ipf=((INFOFONC)loc_ip);
 loc_tdsParam=loc_ipf.getParams();
 if (!(x_5.att_stds.compareTypeTo(loc_tdsParam))){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_call_nomatch, MCSMessages.call_nomatch,new Object[]{""+this.att_ident});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_call_nomatch, MCSMessages.call_nomatch,new Object[]{""+this.att_identSuper});
 
 }
 else {
-loc_code=this.att_machine.genArgs(x_5.att_stds)+this.att_machine.genCall(this.att_ident);
+loc_code=this.att_machine.genArgs(x_5.att_stds)+this.att_machine.genCall(this.att_identSuper);
 }
 }
 else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_wrong_typeFonc, MCSMessages.wrong_typeFonc,new Object[]{""+this.att_ident+"_parent ", ""+loc_ip});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_wrong_typeFonc, MCSMessages.wrong_typeFonc,new Object[]{""+this.att_identSuper+"_parent ", ""+loc_ip});
 
 
 }
 }
-}
 else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_not_infoclasse, MCSMessages.not_infoclasse,new Object[]{""+this.att_ident});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_not_infoclasse, MCSMessages.not_infoclasse,new Object[]{""+loc_i});
 
 
 }
@@ -125,10 +116,10 @@ this.att_code=loc_code;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_aco : // 4511
+      case LEX_MCS.token_aco : // 57415
         regle97 () ;
       break ;
-      case LEX_MCS.token_dpts : // 4532
+      case LEX_MCS.token_dpts : // 57436
         regle98 () ;
       break ;
       default :

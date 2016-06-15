@@ -16,7 +16,6 @@ public class MCSMessages extends NLS {
   }		
 
   public static  String not_infoclasse;
-  public static  String def_defined;
   public static  String namespace_declared;
   public static  String MCS_expected_eof;
   public static  String call_nomatch;
@@ -24,7 +23,6 @@ public class MCSMessages extends NLS {
   public static  String type_declared;
   public static  String classe_defined;
   public static  String wrong_typeFonc;
-  public static  String not_def;
   public static  String namespace_unknown;
   public static  String castError;
   public static  String typeError_opUn;
@@ -39,7 +37,6 @@ public class MCSMessages extends NLS {
   public static  String var_declared;
   public static  String access_not_pointeur;
   public static  String type_unknown;
-  public static  String parent_undefined;
   public static  String using_notNameSpace;
   public static  String var_not_found;
   public static  String not_infotype;
@@ -48,5 +45,6 @@ public class MCSMessages extends NLS {
   public static  String malloc_need_int;
   public static  String MCS_unexpected_token;
   public static  String classe_undefined;
+  public static  String decl_not_infofonc_infovar;
   public static  String affect_notCompatible;
   }

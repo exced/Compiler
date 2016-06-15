@@ -43,7 +43,7 @@ namespace Geometry {
         	}
         	
       	} // class Point2D
-      
+      	
     } // namespace A
     
     namespace B { 

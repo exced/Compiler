@@ -20,7 +20,7 @@ public class INFOFONC extends INFO {
 	public void setAcces(String acces) { this.acces = acces; }
 	
 	public String toString() {
-		return "INFOFONC : fonction => " + type.getNom() + " acces : " + acces;
+		return "INFOFONC : fonction => " + type.getNom() + ", acces : " + acces;
 	}	
 	
 }
