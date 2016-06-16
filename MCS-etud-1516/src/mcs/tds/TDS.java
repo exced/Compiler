@@ -336,7 +336,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		int dep = 0;
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
-			if (e.getValue() instanceof INFOVAR || e.getValue() instanceof INFOFONC)
+			if (e.getValue() instanceof INFOVAR)
 				lch.inserer(new CHAMP(e.getKey(), e.getValue(), dep++));
 		}
 		return lch;
