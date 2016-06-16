@@ -27,6 +27,7 @@ int [] sync= new int[0];
   IMachine att_machine;
   String att_ident;
   LEX_MCS att_scanner;
+  String att_identClasse;
   DTYPE glob_5_type;
   INFOVAR glob_5_iv;
   INFO glob_5_i;
@@ -62,6 +63,7 @@ private void action_auto_inh_6(S_FONCTION_MCS x_3) throws Exception {
 try {
 // instructions
 x_3.att_machine=this.att_machine;
+x_3.att_identClasse=this.att_identClasse;
 x_3.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","DECL -> #ident FONCTION #gen #sinfo ;"});
 }
@@ -117,10 +119,10 @@ this.att_sinfo=x_3.att_sinfo;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_pv : // 856
+      case LEX_MCS.token_pv : // 8159
         regle5 () ;
       break ;
-      case LEX_MCS.token_paro : // 850
+      case LEX_MCS.token_paro : // 8153
         regle6 () ;
       break ;
       default :

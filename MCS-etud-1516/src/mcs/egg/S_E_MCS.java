@@ -24,6 +24,7 @@ int [] sync= new int[0];
   String att_code;
   IMachine att_machine;
   LEX_MCS att_scanner;
+  String att_identClasse;
   int att_sdep;
   boolean att_code_est_adresse;
   DTYPE att_type;
@@ -45,6 +46,8 @@ try {
 // instructions
 x_2.att_machine=this.att_machine;
 x_4.att_machine=this.att_machine;
+x_2.att_identClasse=this.att_identClasse;
+x_4.att_identClasse=this.att_identClasse;
 x_2.att_tds=this.att_tds;
 x_4.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","E -> A #type AFFX #gen ;"});

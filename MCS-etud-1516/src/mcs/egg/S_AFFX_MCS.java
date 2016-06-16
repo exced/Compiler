@@ -30,6 +30,7 @@ int [] sync= new int[0];
   IMachine att_machine;
   int att_hdep;
   LEX_MCS att_scanner;
+  String att_identClasse;
   boolean att_hcode_est_adresse;
   String att_hcode;
   private void regle38() throws Exception {
@@ -89,6 +90,7 @@ private void action_auto_inh_37(S_A_MCS x_3) throws Exception {
 try {
 // instructions
 x_3.att_machine=this.att_machine;
+x_3.att_identClasse=this.att_identClasse;
 x_3.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","AFFX -> affect A #type #gen ;"});
 }
@@ -118,16 +120,16 @@ this.att_type=x_3.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_affect : // 857
+      case LEX_MCS.token_affect : // 8160
         regle37 () ;
       break ;
-      case LEX_MCS.token_pv : // 856
+      case LEX_MCS.token_pv : // 8159
         regle38 () ;
       break ;
-      case LEX_MCS.token_virg : // 854
+      case LEX_MCS.token_virg : // 8157
         regle38 () ;
       break ;
-      case LEX_MCS.token_parf : // 851
+      case LEX_MCS.token_parf : // 8154
         regle38 () ;
       break ;
       default :

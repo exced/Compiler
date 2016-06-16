@@ -44,6 +44,7 @@ public class MCSMessages extends NLS {
   public static  String not_pointeur;
   public static  String malloc_need_int;
   public static  String MCS_unexpected_token;
+  public static  String fonction_deja_existante;
   public static  String classe_undefined;
   public static  String decl_not_infofonc_infovar;
   public static  String affect_notCompatible;

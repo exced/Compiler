@@ -30,7 +30,8 @@ public interface IMCSMessages {
   public static final int id_not_pointeur = 4194330;
   public static final int id_malloc_need_int = 4194331;
   public static final int id_MCS_unexpected_token = 4194332;
-  public static final int id_classe_undefined = 4194333;
-  public static final int id_decl_not_infofonc_infovar = 4194334;
-  public static final int id_affect_notCompatible = 4194335;
+  public static final int id_fonction_deja_existante = 4194333;
+  public static final int id_classe_undefined = 4194334;
+  public static final int id_decl_not_infofonc_infovar = 4194335;
+  public static final int id_affect_notCompatible = 4194336;
   }

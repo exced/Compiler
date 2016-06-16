@@ -25,6 +25,7 @@ int [] sync= new int[0];
   String att_code;
   IMachine att_machine;
   LEX_MCS att_scanner;
+  String att_identClasse;
   boolean att_code_est_adresse;
   DTYPE att_type;
   boolean att_hcode_est_adresse;
@@ -71,6 +72,8 @@ try {
 x_2.att_machine=this.att_machine;
 x_3.att_machine=this.att_machine;
 x_4.att_machine=this.att_machine;
+x_3.att_identClasse=this.att_identClasse;
+x_4.att_identClasse=this.att_identClasse;
 x_4.att_htype=this.att_htype;
 x_3.att_tds=this.att_tds;
 x_4.att_tds=this.att_tds;
@@ -98,43 +101,43 @@ this.att_type=x_3.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_plus : // 890
+      case LEX_MCS.token_plus : // 8193
         regle49 () ;
       break ;
-      case LEX_MCS.token_moins : // 891
+      case LEX_MCS.token_moins : // 8194
         regle49 () ;
       break ;
-      case LEX_MCS.token_ou : // 892
+      case LEX_MCS.token_ou : // 8195
         regle49 () ;
       break ;
-      case LEX_MCS.token_inf : // 884
+      case LEX_MCS.token_inf : // 8187
         regle50 () ;
       break ;
-      case LEX_MCS.token_sup : // 886
+      case LEX_MCS.token_sup : // 8189
         regle50 () ;
       break ;
-      case LEX_MCS.token_infeg : // 885
+      case LEX_MCS.token_infeg : // 8188
         regle50 () ;
       break ;
-      case LEX_MCS.token_supeg : // 887
+      case LEX_MCS.token_supeg : // 8190
         regle50 () ;
       break ;
-      case LEX_MCS.token_eg : // 888
+      case LEX_MCS.token_eg : // 8191
         regle50 () ;
       break ;
-      case LEX_MCS.token_neg : // 889
+      case LEX_MCS.token_neg : // 8192
         regle50 () ;
       break ;
-      case LEX_MCS.token_affect : // 857
+      case LEX_MCS.token_affect : // 8160
         regle50 () ;
       break ;
-      case LEX_MCS.token_virg : // 854
+      case LEX_MCS.token_virg : // 8157
         regle50 () ;
       break ;
-      case LEX_MCS.token_parf : // 851
+      case LEX_MCS.token_parf : // 8154
         regle50 () ;
       break ;
-      case LEX_MCS.token_pv : // 856
+      case LEX_MCS.token_pv : // 8159
         regle50 () ;
       break ;
       default :

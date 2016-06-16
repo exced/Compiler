@@ -91,16 +91,16 @@ this.att_code=this.att_machine.genOp("IMod");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_mult : // 893
+      case LEX_MCS.token_mult : // 8196
         regle57 () ;
       break ;
-      case LEX_MCS.token_div : // 894
+      case LEX_MCS.token_div : // 8197
         regle58 () ;
       break ;
-      case LEX_MCS.token_mod : // 895
+      case LEX_MCS.token_mod : // 8198
         regle59 () ;
       break ;
-      case LEX_MCS.token_et : // 896
+      case LEX_MCS.token_et : // 8199
         regle60 () ;
       break ;
       default :

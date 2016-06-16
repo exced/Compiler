@@ -25,6 +25,7 @@ int [] sync= new int[0];
   String att_code;
   IMachine att_machine;
   LEX_MCS att_scanner;
+  String att_identClasse;
   String glob_28_etiquette;
   String glob_32_code;
   private void regle30() throws Exception {
@@ -211,6 +212,7 @@ private void action_auto_inh_27(S_TYPE_MCS x_2, T_MCS x_3, S_AFFX_MCS x_5) throw
 try {
 // instructions
 x_5.att_machine=this.att_machine;
+x_5.att_identClasse=this.att_identClasse;
 x_2.att_tds=this.att_tds;
 x_5.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> TYPE ident #htype AFFX pv #tds #type #gen ;"});
@@ -228,6 +230,8 @@ try {
 // instructions
 x_5.att_machine=this.att_machine;
 x_7.att_machine=this.att_machine;
+x_5.att_identClasse=this.att_identClasse;
+x_7.att_identClasse=this.att_identClasse;
 x_5.att_htype=this.att_htype;
 x_5.att_tds=this.att_tds;
 x_7.att_tds=this.att_tds;
@@ -286,6 +290,7 @@ private void action_auto_inh_30(S_E_MCS x_2) throws Exception {
 try {
 // instructions
 x_2.att_machine=this.att_machine;
+x_2.att_identClasse=this.att_identClasse;
 x_2.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> E pv #gen ;"});
 }
@@ -294,6 +299,7 @@ private void action_auto_inh_31(S_BLOC_MCS x_3) throws Exception {
 try {
 // instructions
 x_3.att_machine=this.att_machine;
+x_3.att_identClasse=this.att_identClasse;
 x_3.att_htype=this.att_htype;
 x_3.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> #bloc BLOC #code ;"});
@@ -312,6 +318,9 @@ try {
 x_4.att_machine=this.att_machine;
 x_7.att_machine=this.att_machine;
 x_8.att_machine=this.att_machine;
+x_4.att_identClasse=this.att_identClasse;
+x_7.att_identClasse=this.att_identClasse;
+x_8.att_identClasse=this.att_identClasse;
 x_7.att_htype=this.att_htype;
 x_8.att_htype=this.att_htype;
 x_4.att_tds=this.att_tds;
@@ -331,6 +340,7 @@ private void action_auto_inh_35(S_E_MCS x_3) throws Exception {
 try {
 // instructions
 x_3.att_machine=this.att_machine;
+x_3.att_identClasse=this.att_identClasse;
 x_3.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> retour E pv #type #gen ;"});
 }
@@ -345,88 +355,88 @@ x_4.att_tds_asm=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 860
+      case LEX_MCS.token_void : // 8163
         regle27 () ;
       break ;
-      case LEX_MCS.token_int : // 862
+      case LEX_MCS.token_int : // 8165
         regle27 () ;
       break ;
-      case LEX_MCS.token_char : // 863
+      case LEX_MCS.token_char : // 8166
         regle27 () ;
       break ;
-      case LEX_MCS.token_identc : // 902
+      case LEX_MCS.token_identc : // 8205
         regle27 () ;
       break ;
-      case LEX_MCS.token_struct : // 864
+      case LEX_MCS.token_struct : // 8167
         regle27 () ;
       break ;
-      case LEX_MCS.token_bool : // 874
+      case LEX_MCS.token_bool : // 8177
         regle27 () ;
       break ;
-      case LEX_MCS.token_do : // 846
+      case LEX_MCS.token_do : // 8149
         regle28 () ;
       break ;
-      case LEX_MCS.token_entier : // 898
+      case LEX_MCS.token_entier : // 8201
         regle30 () ;
       break ;
-      case LEX_MCS.token_chaine : // 900
+      case LEX_MCS.token_chaine : // 8203
         regle30 () ;
       break ;
-      case LEX_MCS.token_caractere : // 899
+      case LEX_MCS.token_caractere : // 8202
         regle30 () ;
       break ;
-      case LEX_MCS.token_plus : // 890
+      case LEX_MCS.token_plus : // 8193
         regle30 () ;
       break ;
-      case LEX_MCS.token_moins : // 891
+      case LEX_MCS.token_moins : // 8194
         regle30 () ;
       break ;
-      case LEX_MCS.token_non : // 897
+      case LEX_MCS.token_non : // 8200
         regle30 () ;
       break ;
-      case LEX_MCS.token_null : // 883
+      case LEX_MCS.token_null : // 8186
         regle30 () ;
       break ;
-      case LEX_MCS.token_paro : // 850
+      case LEX_MCS.token_paro : // 8153
         regle30 () ;
       break ;
-      case LEX_MCS.token_malloc : // 845
+      case LEX_MCS.token_malloc : // 8148
         regle30 () ;
       break ;
-      case LEX_MCS.token_mult : // 893
+      case LEX_MCS.token_mult : // 8196
         regle30 () ;
       break ;
-      case LEX_MCS.token_ident : // 901
+      case LEX_MCS.token_ident : // 8204
         regle30 () ;
       break ;
-      case LEX_MCS.token_true : // 875
+      case LEX_MCS.token_true : // 8178
         regle30 () ;
       break ;
-      case LEX_MCS.token_false : // 876
+      case LEX_MCS.token_false : // 8179
         regle30 () ;
       break ;
-      case LEX_MCS.token_this : // 877
+      case LEX_MCS.token_this : // 8180
         regle30 () ;
       break ;
-      case LEX_MCS.token_base : // 880
+      case LEX_MCS.token_base : // 8183
         regle30 () ;
       break ;
-      case LEX_MCS.token_null2 : // 879
+      case LEX_MCS.token_null2 : // 8182
         regle30 () ;
       break ;
-      case LEX_MCS.token_new : // 878
+      case LEX_MCS.token_new : // 8181
         regle30 () ;
       break ;
-      case LEX_MCS.token_aco : // 852
+      case LEX_MCS.token_aco : // 8155
         regle31 () ;
       break ;
-      case LEX_MCS.token_si : // 858
+      case LEX_MCS.token_si : // 8161
         regle32 () ;
       break ;
-      case LEX_MCS.token_retour : // 881
+      case LEX_MCS.token_retour : // 8184
         regle35 () ;
       break ;
-      case LEX_MCS.token_asm : // 861
+      case LEX_MCS.token_asm : // 8164
         regle83 () ;
       break ;
       default :

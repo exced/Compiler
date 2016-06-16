@@ -69,10 +69,10 @@ this.att_sident=x_5.att_sident;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_aco : // 852
+      case LEX_MCS.token_aco : // 8155
         regle93 () ;
       break ;
-      case LEX_MCS.token_dpts : // 873
+      case LEX_MCS.token_dpts : // 8176
         regle94 () ;
       break ;
       default :

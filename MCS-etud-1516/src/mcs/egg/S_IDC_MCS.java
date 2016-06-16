@@ -66,16 +66,16 @@ this.att_sident=this.att_ident;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_pv : // 856
+      case LEX_MCS.token_pv : // 8159
         regle87 () ;
       break ;
-      case LEX_MCS.token_paro : // 850
+      case LEX_MCS.token_paro : // 8153
         regle87 () ;
       break ;
-      case LEX_MCS.token_aco : // 852
+      case LEX_MCS.token_aco : // 8155
         regle87 () ;
       break ;
-      case LEX_MCS.token_pt : // 855
+      case LEX_MCS.token_pt : // 8158
         regle88 () ;
       break ;
       default :

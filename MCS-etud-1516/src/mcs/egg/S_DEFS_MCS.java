@@ -26,6 +26,7 @@ int [] sync= new int[0];
   IMachine att_machine;
   TDS att_stds;
   LEX_MCS att_scanner;
+  String att_identClasse;
   private void regle95() throws Exception {
 
     //declaration
@@ -53,6 +54,8 @@ x_4.att_machine=this.att_machine;
 x_5.att_machine=this.att_machine;
 x_4.att_identSuper=this.att_identSuper;
 x_5.att_identSuper=this.att_identSuper;
+x_4.att_identClasse=this.att_identClasse;
+x_5.att_identClasse=this.att_identClasse;
 x_4.att_tds=this.att_tds;
 x_5.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","DEFS -> ACCES #hacces DEF DEFS1 #gen ;"});
@@ -84,31 +87,31 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 853
+      case LEX_MCS.token_acf : // 8156
         regle95 () ;
       break ;
-      case LEX_MCS.token_public : // 871
+      case LEX_MCS.token_public : // 8174
         regle96 () ;
       break ;
-      case LEX_MCS.token_private : // 872
+      case LEX_MCS.token_private : // 8175
         regle96 () ;
       break ;
-      case LEX_MCS.token_void : // 860
+      case LEX_MCS.token_void : // 8163
         regle96 () ;
       break ;
-      case LEX_MCS.token_int : // 862
+      case LEX_MCS.token_int : // 8165
         regle96 () ;
       break ;
-      case LEX_MCS.token_char : // 863
+      case LEX_MCS.token_char : // 8166
         regle96 () ;
       break ;
-      case LEX_MCS.token_identc : // 902
+      case LEX_MCS.token_identc : // 8205
         regle96 () ;
       break ;
-      case LEX_MCS.token_struct : // 864
+      case LEX_MCS.token_struct : // 8167
         regle96 () ;
       break ;
-      case LEX_MCS.token_bool : // 874
+      case LEX_MCS.token_bool : // 8177
         regle96 () ;
       break ;
       default :

@@ -22,44 +22,44 @@ int [] sync= new int[0];
   String att_mode;
   boolean att_eval;
   LEX_MCS att_scanner;
-  private void regle101() throws Exception {
+  private void regle103() throws Exception {
 
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_ref);
-if  (att_eval)      action_mode_101();
+    x_2.analyser(LEX_MCS.token_out);
+if  (att_eval)      action_mode_103();
   }
   private void regle102() throws Exception {
 
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     //appel
-    x_2.analyser(LEX_MCS.token_out);
+    x_2.analyser(LEX_MCS.token_ref);
 if  (att_eval)      action_mode_102();
   }
 private void action_mode_102() throws Exception {
-try {
-// instructions
-this.att_mode="out";
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#mode","MODE -> out #mode ;"});
-}
-  }
-private void action_mode_101() throws Exception {
 try {
 // instructions
 this.att_mode="ref";
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#mode","MODE -> ref #mode ;"});
 }
   }
+private void action_mode_103() throws Exception {
+try {
+// instructions
+this.att_mode="out";
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#mode","MODE -> out #mode ;"});
+}
+  }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_ref : // 866
-        regle101 () ;
-      break ;
-      case LEX_MCS.token_out : // 867
+      case LEX_MCS.token_ref : // 8169
         regle102 () ;
+      break ;
+      case LEX_MCS.token_out : // 8170
+        regle103 () ;
       break ;
       default :
                scanner._interrompre(IProblem.Syntax, scanner.getBeginLine(), IMCSMessages.id_MCS_unexpected_token,MCSMessages.MCS_unexpected_token,new String[]{scanner.fenetre[0].getNom()});

@@ -20,12 +20,13 @@ inh machine : IMachine for
 -- MODE
 -- acces variable ou non (ASM)
 --syn mode    : BOOLEAN for MODD;
-syn mode    : STRING for MODE;
+syn mode    : STRING for MODE,PARF;
 
 -- IDENT
 inh ident   : STRING for DECL, FONCTION,FX,IDC,WHILE;
 syn sident  : STRING for PARF, CHAMP,IDC,HERITAGE;
 inh identSuper : STRING for DEFS,DEF,BASE;
+inh identClasse : STRING for DEFS,DEF,DECL,FONCTION, BLOC,INSTS,INST,WHILE,SIX,E,A,AFFX,AX,R,F,T,TX,RX,FX;
 
 -- TYPE
 syn type    : DTYPE for F,FX, TYPE,PARF,E, STYPE,CHAMP,PTRS, AFFX, A,AX, R,RX,T,TX,OPADD, OPMUL,OPUN,OPREL;
@@ -234,6 +235,7 @@ ENTITE ->  TYPE ident #decl DECL #gen;
 do
     DECL^ident := ident^txt;
     DECL^htype := TYPE^type;
+    DECL^identClasse := "";
 end
 }
 #gen {
@@ -412,7 +414,6 @@ PARFSX -> virg PARF #tds PARFSX #stds;
 local
     tds : TDS;
 do 
-
     -- transmission des tds;
     tds := PARFSX^tds;
     -- deplacement avant ajout de var
@@ -433,6 +434,7 @@ end
 PARF -> TYPE ident #tds;
 #tds {
 do
+    PARF^mode := "in";
     PARF^type := TYPE^type;
     PARF^sident := ident^txt;
 end
@@ -1574,23 +1576,33 @@ local
     i : INFO;
     iv : INFOVAR;
     inf : INFOFONC;
-    tdsBloc : TDS;
     tdsClasse : TDS;
     tdsSuper : TDS;
-    ic : INFOCLASSE;
+    ic : INFO;
+    icc : INFOCLASSE;
     ics : INFOCLASSE;
 do
+
+write "FX pt ident sur : " + ident^txt + "\n";
+
     code := "";
-    -- tds classe
-    tdsBloc := FX^tds.getParente();
-    tdsClasse := tdsBloc.getParente();
-    --tds super
-    ic := tdsClasse.getClasseContainer();
-    ics := ic.getParente();
-    tdsSuper := ics.getContenu();
-    
+    tdsClasse := nil;
+      
     -- THIS
     if FX^this then
+	    -- tds classe
+	    ic := FX^tds.chercherClasse(FX^identClasse);
+	    if ic = nil then
+	        error(classe_undefined, FX^identClasse, FX^tds);
+	    else
+	        match ic with
+	        INFOCLASSE then
+	            icc := ic;
+	            tdsClasse := ic.getContenu();
+	        else
+	            error(not_infoclasse, ic);
+	        end
+	    end
         -- abstraction TDS -> pointeur sur struct donc on genere le code associe 
         i := tdsClasse.chercherLocalement(ident^txt);
         if i /= nil then
@@ -1620,6 +1632,22 @@ do
     
     -- BASE
     if FX^base then
+	    -- tds super
+	    ic := FX^tds.chercherClasse(FX^identClasse);
+	    if ic = nil then
+	        error(classe_undefined, ident^txt, FX^tds);
+	    else
+	        match ic with
+	        INFOCLASSE then
+	            icc := ic;
+	            tdsClasse := ic.getContenu();
+			    --tds super
+			    ics := ic.getParente();
+			    tdsSuper := ics.getContenu();
+	        else
+	            error(not_infoclasse, ic);
+	        end
+	    end
         -- chercher dans la tds super
         tdsSuper := FX^tds.getParente();
         i := tdsSuper.chercherLocalement(ident^txt);
@@ -1809,9 +1837,14 @@ end
 }
 
 ------------------------------------------------------------------------
-ES -> E #tds ESX #stds ;
+ES ->#idc E #tds ESX #stds ;
 global
     tds:TDS;
+#idc{
+do
+    E^identClasse := "";
+end
+}    
 #tds {
 do
     tds := ES^tds;
@@ -1837,7 +1870,12 @@ end
 
 
 ------------------------------------------------------------------------
-ESX -> virg E #tds ESX #stds;
+ESX -> #idc virg E #tds ESX #stds;
+#idc {
+do
+    E^identClasse := "";
+end
+}
 #tds {
 local
     tds : TDS;
@@ -2061,6 +2099,8 @@ end
 ENTITE -> ACCES class identc HERITAGE aco #htds DEFS acf #classe #gen;
 #htds {
 do
+    -- transmission du nom de la classe aux DEFS
+    DEFS^identClasse := identc^txt;
     -- transmission de l'infoclasse super
     DEFS^identSuper := HERITAGE^sident;
     -- tds du contenu de la classe (contient attributs et methodes)
@@ -2337,7 +2377,14 @@ end
 
 ------------------------------------------------------------------------
 ---- Mode de passage pour les fonctions et méthodes : rien : D, ref : D/R, out : R
---PARF ->  MODE TYPE ident ;
+PARF ->  MODE TYPE ident #stype;
+#stype {
+do
+    PARF^mode := MODE^mode;
+    PARF^sident := ident^txt;
+    PARF^type := TYPE^type;
+end
+}
 
 ------------------------------------------------------------------------
 MODE -> ref #mode;

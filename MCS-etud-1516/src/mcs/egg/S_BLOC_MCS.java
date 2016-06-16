@@ -26,6 +26,7 @@ int [] sync= new int[0];
   String att_code;
   IMachine att_machine;
   LEX_MCS att_scanner;
+  String att_identClasse;
   private void regle24() throws Exception {
 
     //declaration
@@ -51,6 +52,7 @@ private void action_auto_inh_24(S_INSTS_MCS x_4) throws Exception {
 try {
 // instructions
 x_4.att_machine=this.att_machine;
+x_4.att_identClasse=this.att_identClasse;
 x_4.att_htype=this.att_htype;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","BLOC -> aco #tds INSTS acf #gen ;"});
 }

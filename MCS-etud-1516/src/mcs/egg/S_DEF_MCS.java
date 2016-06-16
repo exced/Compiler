@@ -25,6 +25,7 @@ int [] sync= new int[0];
   String att_code;
   IMachine att_machine;
   LEX_MCS att_scanner;
+  String att_identClasse;
   String att_hacces;
   TDS glob_98_tdsParam;
   INFOFONC glob_98_infofonc;
@@ -69,6 +70,7 @@ private void action_auto_inh_97(S_TYPE_MCS x_2, T_MCS x_3, S_DECL_MCS x_5) throw
 try {
 // instructions
 x_5.att_machine=this.att_machine;
+x_5.att_identClasse=this.att_identClasse;
 x_2.att_tds=this.att_tds;
 x_5.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","DEF -> TYPE ident #decl DECL #gen ;"});
@@ -95,6 +97,7 @@ x_5.att_machine=this.att_machine;
 x_9.att_machine=this.att_machine;
 x_10.att_machine=this.att_machine;
 x_9.att_identSuper=this.att_identSuper;
+x_10.att_identClasse=this.att_identClasse;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","DEF -> identc paro #tds PARFS #stds parf #htds BASE BLOC #gen ;"});
 }
   }
@@ -155,25 +158,25 @@ x_5.att_htype=x_2.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 860
+      case LEX_MCS.token_void : // 8163
         regle97 () ;
       break ;
-      case LEX_MCS.token_int : // 862
+      case LEX_MCS.token_int : // 8165
         regle97 () ;
       break ;
-      case LEX_MCS.token_char : // 863
+      case LEX_MCS.token_char : // 8166
         regle97 () ;
       break ;
-      case LEX_MCS.token_identc : // 902
+      case LEX_MCS.token_identc : // 8205
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_mult : // 893
+          case LEX_MCS.token_mult : // 8196
             regle97 () ;
           break ;
-          case LEX_MCS.token_ident : // 901
+          case LEX_MCS.token_ident : // 8204
             regle97 () ;
           break ;
-          case LEX_MCS.token_paro : // 850
+          case LEX_MCS.token_paro : // 8153
             regle98 () ;
           break ;
           default :
@@ -181,10 +184,10 @@ x_5.att_htype=x_2.att_type;
 scanner.accepter_sucre(LEX_MCS.token_identc);
         }
       break ;
-      case LEX_MCS.token_struct : // 864
+      case LEX_MCS.token_struct : // 8167
         regle97 () ;
       break ;
-      case LEX_MCS.token_bool : // 874
+      case LEX_MCS.token_bool : // 8177
         regle97 () ;
       break ;
       default :

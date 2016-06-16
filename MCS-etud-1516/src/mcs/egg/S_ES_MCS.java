@@ -28,14 +28,15 @@ int [] sync= new int[0];
   private void regle79() throws Exception {
 
     //declaration
-    S_E_MCS x_2 = new S_E_MCS(scanner,att_eval) ;
-    S_ESX_MCS x_4 = new S_ESX_MCS(scanner,att_eval) ;
+    S_E_MCS x_3 = new S_E_MCS(scanner,att_eval) ;
+    S_ESX_MCS x_5 = new S_ESX_MCS(scanner,att_eval) ;
     //appel
-if  (att_eval)      action_auto_inh_79(x_2, x_4);
-    x_2.analyser() ;
-if  (att_eval)      action_tds_79(x_2, x_4);
-    x_4.analyser() ;
-if  (att_eval)      action_stds_79(x_2, x_4);
+if  (att_eval)      action_auto_inh_79(x_3, x_5);
+if  (att_eval)      action_idc_79(x_3, x_5);
+    x_3.analyser() ;
+if  (att_eval)      action_tds_79(x_3, x_5);
+    x_5.analyser() ;
+if  (att_eval)      action_stds_79(x_3, x_5);
   }
   private void regle78() throws Exception {
 
@@ -50,86 +51,93 @@ this.att_stds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","ES -> #tds ;"});
 }
   }
-private void action_stds_79(S_E_MCS x_2, S_ESX_MCS x_4) throws Exception {
+private void action_stds_79(S_E_MCS x_3, S_ESX_MCS x_5) throws Exception {
 try {
 // instructions
-this.att_stds=x_4.att_stds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#stds","ES -> E #tds ESX #stds ;"});
+this.att_stds=x_5.att_stds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#stds","ES -> #idc E #tds ESX #stds ;"});
 }
   }
-private void action_auto_inh_79(S_E_MCS x_2, S_ESX_MCS x_4) throws Exception {
+private void action_idc_79(S_E_MCS x_3, S_ESX_MCS x_5) throws Exception {
 try {
 // instructions
-x_2.att_machine=this.att_machine;
-x_4.att_machine=this.att_machine;
-x_2.att_tds=this.att_tds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","ES -> E #tds ESX #stds ;"});
+x_3.att_identClasse="";
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#idc","ES -> #idc E #tds ESX #stds ;"});
 }
   }
-private void action_tds_79(S_E_MCS x_2, S_ESX_MCS x_4) throws Exception {
+private void action_auto_inh_79(S_E_MCS x_3, S_ESX_MCS x_5) throws Exception {
+try {
+// instructions
+x_3.att_machine=this.att_machine;
+x_5.att_machine=this.att_machine;
+x_3.att_tds=this.att_tds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","ES -> #idc E #tds ESX #stds ;"});
+}
+  }
+private void action_tds_79(S_E_MCS x_3, S_ESX_MCS x_5) throws Exception {
 try {
 // instructions
 glob_79_tds=this.att_tds;
-glob_79_tds.inserer(x_2.att_code,  new INFOTYPE(x_2.att_type));
-x_4.att_tds=glob_79_tds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","ES -> E #tds ESX #stds ;"});
+glob_79_tds.inserer(x_3.att_code,  new INFOTYPE(x_3.att_type));
+x_5.att_tds=glob_79_tds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#tds","ES -> #idc E #tds ESX #stds ;"});
 }
   }
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 851
+      case LEX_MCS.token_parf : // 8154
         regle78 () ;
       break ;
-      case LEX_MCS.token_entier : // 898
+      case LEX_MCS.token_entier : // 8201
         regle79 () ;
       break ;
-      case LEX_MCS.token_chaine : // 900
+      case LEX_MCS.token_chaine : // 8203
         regle79 () ;
       break ;
-      case LEX_MCS.token_caractere : // 899
+      case LEX_MCS.token_caractere : // 8202
         regle79 () ;
       break ;
-      case LEX_MCS.token_plus : // 890
+      case LEX_MCS.token_plus : // 8193
         regle79 () ;
       break ;
-      case LEX_MCS.token_moins : // 891
+      case LEX_MCS.token_moins : // 8194
         regle79 () ;
       break ;
-      case LEX_MCS.token_non : // 897
+      case LEX_MCS.token_non : // 8200
         regle79 () ;
       break ;
-      case LEX_MCS.token_null : // 883
+      case LEX_MCS.token_null : // 8186
         regle79 () ;
       break ;
-      case LEX_MCS.token_paro : // 850
+      case LEX_MCS.token_paro : // 8153
         regle79 () ;
       break ;
-      case LEX_MCS.token_malloc : // 845
+      case LEX_MCS.token_malloc : // 8148
         regle79 () ;
       break ;
-      case LEX_MCS.token_mult : // 893
+      case LEX_MCS.token_mult : // 8196
         regle79 () ;
       break ;
-      case LEX_MCS.token_ident : // 901
+      case LEX_MCS.token_ident : // 8204
         regle79 () ;
       break ;
-      case LEX_MCS.token_true : // 875
+      case LEX_MCS.token_true : // 8178
         regle79 () ;
       break ;
-      case LEX_MCS.token_false : // 876
+      case LEX_MCS.token_false : // 8179
         regle79 () ;
       break ;
-      case LEX_MCS.token_this : // 877
+      case LEX_MCS.token_this : // 8180
         regle79 () ;
       break ;
-      case LEX_MCS.token_base : // 880
+      case LEX_MCS.token_base : // 8183
         regle79 () ;
       break ;
-      case LEX_MCS.token_null2 : // 879
+      case LEX_MCS.token_null2 : // 8182
         regle79 () ;
       break ;
-      case LEX_MCS.token_new : // 878
+      case LEX_MCS.token_new : // 8181
         regle79 () ;
       break ;
       default :
