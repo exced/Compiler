@@ -75,7 +75,7 @@ inh this : BOOLEAN for FX;
 inh base : BOOLEAN for FX;
 
 -- RELATIONNEL 
-syn estTestRel : BOOLEAN for E,AFFX,AX,OPREL;
+syn estTestRel : BOOLEAN for E,A,AFFX,AX;
 
 
 
@@ -809,7 +809,8 @@ end
 #gen {
 do
     E^code_est_adresse := AFFX^code_est_adresse;
-    E^estTestRel := AFFX^estTestRel;
+    -- test relationnel : pas d'affectation et OPREL
+    E^estTestRel := AFFX^estTestRel && A^estTestRel;
     
     E^code := AFFX^code;  
 end
@@ -868,7 +869,8 @@ do
         AFFX^code := AFFX^machine.genVar(AFFX^htype.getTaille());    
     else
         AFFX^code := AFFX^hcode;
-    end    
+    end
+    AFFX^estTestRel := true;    
 end
 }
 
@@ -895,6 +897,7 @@ do
     A^code := R^code + AX^code;
 
     A^code_est_adresse := AX^code_est_adresse;   
+    A^estTestRel := AX^estTestRel;
 end
 }
 
@@ -918,6 +921,7 @@ do
     AX^code := R^code + OPREL^code;     
     -- membre de droite lors de la relation -> ce n est pas une adresse
     AX^code_est_adresse := false;
+    AX^estTestRel := true;
 end
 }
 
@@ -934,6 +938,7 @@ end
 #gen {
 do
     AX^code := "";
+    AX^estTestRel := false;
 end
 }
 
