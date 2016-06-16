@@ -70,7 +70,7 @@ inh hcode_est_adresse : BOOLEAN for AFFX,AX,RX,TX ,F;
 inh hbloc_est_fonction : BOOLEAN for BLOC;
 
 -- ACCES
-inh hacces : STRING for DEF;
+inh hacces : STRING for DEF,DECL,FONCTION;
 syn acces : STRING for ACCES;
 
 -- HERITAGE
@@ -239,6 +239,7 @@ end
 ENTITE ->  TYPE ident #decl DECL #gen;
 #decl {
 do
+    DECL^hacces := "def";
     DECL^ident := ident^txt;
     DECL^htype := TYPE^type;
     DECL^identClasse := "";
@@ -264,12 +265,13 @@ do
     else
         type := DECL^htype;
         iv := new INFOVAR(type, DECL^machine.getCurrentDep());
+        iv.setAcces(DECL^hacces);
         
         -- insertion
         DECL^tds.inserer(DECL^ident,  iv);
         DECL^machine.addCurrentDep(type.getTaille());
         
-        -- remontee de l'info pour la def
+        -- remontee de l'info pour la def (ajout de l'acces)
         DECL^sinfo := iv;
     end    
 end
@@ -343,6 +345,7 @@ do
 
     -- TDS
     i := new INFOFONC(FONCTION^htype, tdsParam);
+    i.setAcces(FONCTION^hacces);
     
     ir := FONCTION^tds.chercherGlobalement(FONCTION^ident);
     if (ir = null) then
@@ -1666,47 +1669,43 @@ local
     i : INFO;
     iv : INFOVAR;
     inf : INFOFONC;
+    tdsBloc : TDS;
     tdsClasse : TDS;
     tdsSuper : TDS;
     ic : INFO;
-    icc : INFOCLASSE;
     ics : INFOCLASSE;
 do
-
-write "FX pt ident sur : " + ident^txt + "\n";
-
     code := "";
-    tdsClasse := nil;
+    i := nil;
+    -- tds classe
+    tdsBloc := FX^tds.getParente();
+    tdsClasse := tdsBloc.getParente();
       
     -- THIS
     if FX^this then
-	    -- tds classe
-	    ic := FX^tds.chercherClasse(FX^identClasse);
-	    if ic = nil then
-	        error(classe_undefined, FX^identClasse, FX^tds);
-	    else
-	        match ic with
-	        INFOCLASSE then
-	            icc := ic;
-	            tdsClasse := ic.getContenu();
-	        else
-	            error(not_infoclasse, ic);
-	        end
-	    end
         -- abstraction TDS -> pointeur sur struct donc on genere le code associe 
         i := tdsClasse.chercherLocalement(ident^txt);
+    end
+    
+    -- BASE
+    if FX^base then
+        -- chercher dans la tds super
+        tdsSuper := FX^tds.getParente();
+        i := tdsSuper.chercherLocalement(ident^txt);
+    end
+    
+    -- dans les 2 cas
+    if FX^this || FX^base then
         if i /= nil then
             match i 
             with INFOVAR then
                 iv := i;
                 t := iv.getType();
                 FX^sdep := iv.getDep();
-                FX1^this := false;
-                
-                write "THIS sur : " + ident^txt + "\n";
                 
                 -- code acces a une var au travers de pointeur + struct
-                code := FX^machine.genAdr(FX^machine.getCurrentDep()) + FX^machine.genReadIndirectMem(t.getTaille()) + FX^machine.genAdrField(iv.getDep()); 
+                code := FX^machine.genAdr(FX^machine.getCurrentDep()) + FX^machine.genReadIndirectMem(t.getTaille()) + FX^machine.genAdrField(iv.getDep());
+                
             with INFOFONC then
                 inf := i;
                 t := inf.getType();
@@ -1717,89 +1716,48 @@ write "FX pt ident sur : " + ident^txt + "\n";
             end
         else
             error(var_not_found, ident^txt, tdsClasse);
-        end 
-    end
+        end
+    end 
     
-    -- BASE
-    if FX^base then
-	    -- tds super
-	    ic := FX^tds.chercherClasse(FX^identClasse);
-	    if ic = nil then
-	        error(classe_undefined, ident^txt, FX^tds);
-	    else
-	        match ic with
-	        INFOCLASSE then
-	            icc := ic;
-	            tdsClasse := ic.getContenu();
-			    --tds super
-			    ics := ic.getParente();
-			    tdsSuper := ics.getContenu();
-	        else
-	            error(not_infoclasse, ic);
-	        end
-	    end
-        -- chercher dans la tds super
-        tdsSuper := FX^tds.getParente();
-        i := tdsSuper.chercherLocalement(ident^txt);
-                if i /= nil then
-            match i 
-            with INFOVAR then
-                iv := i;
-                t := iv.getType();
-                FX^sdep := iv.getDep();
-                FX1^this := false;
-                -- code acces a une var au travers de pointeur + struct
-                code := FX^machine.genAdr(FX^machine.getCurrentDep()) + FX^machine.genReadIndirectMem(t.getTaille()) + FX^machine.genAdrField(iv.getDep()); 
-            with INFOFONC then
-                inf := i;
-                t := inf.getType();
-                -- appel fonction dans FX1
-                FX1^this := true;
+-- le htype est null dans le cas de this. et base.
+if FX^htype /= nil then
+
+    match FX^htype
+	with POINTEUR then
+        p := FX^htype;
+		t := p.getType();
+		match t with
+		STRUCT then
+            s := t;
+            lc := s.getChamps();
+            c := lc.chercherChamp(ident^txt);
+            ct := c.getType();
+            FX^sdep := c.getDep();
+		    if c = nil then
+                error(champ_not_found, lc, ident^txt);
             else
-                error(type_unknown, ident^txt, i.getType());
-            end
+                FX1^htype := new POINTEUR(c.getType());
+		      code := FX^hcode + FX^machine.genAdrField(c.getDep());
+            end    
         else
-            error(var_not_found, ident^txt, tdsSuper);
-        end 
-    end
-    
-
-
-		    match FX^htype
-		    with POINTEUR then
-		        p := FX^htype;
-		        t := p.getType();
-		        match t with
-		        STRUCT then
-		            s := t;
-		            lc := s.getChamps();
-		            c := lc.chercherChamp(ident^txt);
-		            ct := c.getType();
-		            FX^sdep := c.getDep();
-		            if c = nil then
-		                error(champ_not_found, lc, ident^txt);
-		            else
-		                FX1^htype := new POINTEUR(c.getType());
-		                code := FX^hcode + FX^machine.genAdrField(c.getDep());
-		            end    
-		        else
-		            error(type_not_struct, FX^htype.getNom(), ident^txt);
-		        end        
-		    with STRUCT then
-		        s := FX^htype;
-		        lc := s.getChamps();
-		        c := lc.chercherChamp(ident^txt);
-		        ct := c.getType();
-		        if c = nil then
-		            error(champ_not_found, lc, ident^txt);
-		        else
-		            FX1^htype := c.getType();
-		            FX^sdep := c.getDep() + FX^hdep;
-		            code := FX^machine.genReadMem(c.getDep() + FX^hdep , ct.getTaille());
-		        end    
-		    else
-		        error(type_not_struct, FX^htype.getNom(), ident^txt);
-		    end
+            error(type_not_struct, FX^htype.getNom(), ident^txt);
+        end        
+		with STRUCT then
+            s := FX^htype;
+		    lc := s.getChamps();
+		    c := lc.chercherChamp(ident^txt);
+		    ct := c.getType();
+		    if c = nil then
+                error(champ_not_found, lc, ident^txt);
+            else
+                FX1^htype := c.getType();
+		        FX^sdep := c.getDep() + FX^hdep;
+		        code := FX^machine.genReadMem(c.getDep() + FX^hdep , ct.getTaille());
+            end    
+        else
+            error(type_not_struct, FX^htype.getNom(), ident^txt);
+        end
+end
 
     FX1^hcode := code;    
 
@@ -1887,15 +1845,15 @@ local
     tdsParam : TDS;
 do
     FX^sdep := FX^hdep;
+    
 
     -- appel du sous-programme a partir de l'étiquette
     if FX^this then
         i := FX^tds.chercherLocalementFonc(FX^ident, ES^stds);
-        -- i := FX^tds.chercherLocalement(FX^ident);
     else
         i := FX^tds.chercherGlobalementFonc(FX^ident, ES^stds);
-        -- i := FX^tds.chercherGlobalement(FX^ident);
     end
+    
     
     t := i.getType();
     
@@ -1906,13 +1864,7 @@ do
     with INFOFONC then
         infofonc := i;
         tdsParam := infofonc.getParams();
-        
-        --if ~ES^stds.compareTypeTo(tdsParam) then
-        --    error(call_nomatch, FX^ident);  
-        --else
-            FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident) ;
-        --end
-        
+        FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident) ;
     else
         error(not_infofonc, i);
     end
@@ -2200,23 +2152,49 @@ end
 ------------------------------------------------------------------------
 ---- definition d'une classe (peut etre en dehors d'un namespace)
 ENTITE -> ACCES class identc HERITAGE aco #htds DEFS acf #classe #gen;
+global
+    ic : INFOCLASSE;
+    ih: INFO;
+    ihc : INFOCLASSE;
+    tdsParent : TDS;
 #htds {
+local
+    htds : TDS;
 do
+    htds := new TDS(ENTITE^tds);
+
+    -- si heritage
+    if HERITAGE^aHeritage then
+        -- recherche de l heritage
+        tdsParent := ENTITE^tds.getParente();
+        ih := tdsParent.chercherClasse(HERITAGE^sident);
+        if ih = nil then
+            error(classe_undefined, HERITAGE^sident, tdsParent);
+        else 
+            match ih with
+            INFOCLASSE then   
+                ihc := ih;
+                -- on insere l'infoclasse de super dans la TDS contenu pour avoir plus de facilite a la retrouver (appel a base)
+                htds.inserer(HERITAGE^sident, ihc); 
+            else
+                error(not_infoclasse, HERITAGE^sident);
+            end    
+        end
+    end
+
+
     -- transmission du nom de la classe aux DEFS
     DEFS^identClasse := identc^txt;
     -- transmission de l'infoclasse super
     DEFS^identSuper := HERITAGE^sident;
+
     -- tds du contenu de la classe (contient attributs et methodes)
-    DEFS^tds := new TDS(ENTITE^tds);
+    DEFS^tds := htds;
 end
 }
 #classe {
 local
     i : INFO;
-    ic : INFOCLASSE;
-    ih: INFO;
-    ihc : INFOCLASSE;
-    tdsParent : TDS;
 do
     -- si la classe n est pas deja definie dans ce namespace 
     i := ENTITE^tds.chercherLocalementClasse(identc^txt);
@@ -2229,25 +2207,11 @@ do
             -- insertion
             ENTITE^tds.inserer(identc^txt, ic); 
         else
-            -- recherche de l heritage
-            tdsParent := ENTITE^tds.getParente();
-            ih := tdsParent.chercherClasse(HERITAGE^sident);
-            if ih = nil then
-                error(classe_undefined, HERITAGE^sident, tdsParent);
-            else 
-                match ih with
-                INFOCLASSE then   
-                    ihc := ih;
-
-                    -- definition de la classe
-                    -- le type de la classe est un pointeur sur un struct et les champs sont les attributs et les fonctions
-                    ic := new INFOCLASSE(ACCES^acces, DEFS^stds, ihc);
-                    -- insertion
-                    ENTITE^tds.inserer(identc^txt, ic); 
-                else
-                    error(not_infoclasse, HERITAGE^sident);
-                end    
-            end
+            -- definition de la classe
+            -- le type de la classe est un pointeur sur un struct et les champs sont les attributs et les fonctions
+            ic := new INFOCLASSE(ACCES^acces, DEFS^stds, ihc);
+            -- insertion
+            ENTITE^tds.inserer(identc^txt, ic);    
         end  
     end   
 end
@@ -2347,21 +2311,7 @@ do
 end
 }
 #gen {
-local
-    inf : INFOFONC;
-    iv : INFOVAR;
 do
-    -- ajout acces a l'info
-    match DECL^sinfo 
-    with INFOVAR then
-        iv := DECL^sinfo;
-        iv.setAcces(DEF^hacces);
-    with INFOFONC then    
-        inf := DECL^sinfo;
-        inf.setAcces(DEF^hacces);
-    else
-        error(decl_not_infofonc_infovar, DECL^sinfo);
-    end
     DEF^code := DECL^code;    
 end
 }

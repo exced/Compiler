@@ -73,6 +73,7 @@ x_5.att_machine=this.att_machine;
 x_5.att_identClasse=this.att_identClasse;
 x_2.att_tds=this.att_tds;
 x_5.att_tds=this.att_tds;
+x_5.att_hacces=this.att_hacces;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","DEF -> TYPE ident #decl DECL #gen ;"});
 }
   }
@@ -103,23 +104,7 @@ x_10.att_identClasse=this.att_identClasse;
   }
 private void action_gen_97(S_TYPE_MCS x_2, T_MCS x_3, S_DECL_MCS x_5) throws Exception {
 try {
-// locales
-INFOFONC loc_inf;
-INFOVAR loc_iv;
 // instructions
-if (x_5.att_sinfo instanceof INFOVAR ){
-loc_iv=((INFOVAR)x_5.att_sinfo);
-loc_iv.setAcces(this.att_hacces);
-}
-else if (x_5.att_sinfo instanceof INFOFONC ){
-loc_inf=((INFOFONC)x_5.att_sinfo);
-loc_inf.setAcces(this.att_hacces);
-}
-else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_decl_not_infofonc_infovar, MCSMessages.decl_not_infofonc_infovar,new Object[]{""+x_5.att_sinfo});
-
-
-}
 this.att_code=x_5.att_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","DEF -> TYPE ident #decl DECL #gen ;"});
 }
@@ -158,25 +143,25 @@ x_5.att_htype=x_2.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 23774
+      case LEX_MCS.token_void : // 54028
         regle97 () ;
       break ;
-      case LEX_MCS.token_int : // 23776
+      case LEX_MCS.token_int : // 54030
         regle97 () ;
       break ;
-      case LEX_MCS.token_char : // 23777
+      case LEX_MCS.token_char : // 54031
         regle97 () ;
       break ;
-      case LEX_MCS.token_identc : // 23816
+      case LEX_MCS.token_identc : // 54070
         scanner.lit ( 2 ) ;
         switch ( scanner.fenetre[1].code ) {
-          case LEX_MCS.token_mult : // 23807
+          case LEX_MCS.token_mult : // 54061
             regle97 () ;
           break ;
-          case LEX_MCS.token_ident : // 23815
+          case LEX_MCS.token_ident : // 54069
             regle97 () ;
           break ;
-          case LEX_MCS.token_paro : // 23764
+          case LEX_MCS.token_paro : // 54018
             regle98 () ;
           break ;
           default :
@@ -184,10 +169,10 @@ x_5.att_htype=x_2.att_type;
 scanner.accepter_sucre(LEX_MCS.token_identc);
         }
       break ;
-      case LEX_MCS.token_struct : // 23778
+      case LEX_MCS.token_struct : // 54032
         regle97 () ;
       break ;
-      case LEX_MCS.token_bool : // 23788
+      case LEX_MCS.token_bool : // 54042
         regle97 () ;
       break ;
       default :

@@ -116,10 +116,10 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_aco : // 23766
+      case LEX_MCS.token_aco : // 54020
         regle99 () ;
       break ;
-      case LEX_MCS.token_dpts : // 23787
+      case LEX_MCS.token_dpts : // 54041
         regle100 () ;
       break ;
       default :

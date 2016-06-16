@@ -28,6 +28,7 @@ int [] sync= new int[0];
   String att_ident;
   LEX_MCS att_scanner;
   String att_identClasse;
+  String att_hacces;
   INFOFONC glob_7_i;
   TDS glob_7_tdsParam;
   private void regle7() throws Exception {
@@ -56,6 +57,7 @@ INFOFONC loc_inf;
 TDS loc_tdsPF;
 // instructions
 glob_7_i= new INFOFONC(this.att_htype, glob_7_tdsParam);
+glob_7_i.setAcces(this.att_hacces);
 loc_ir=this.att_tds.chercherGlobalement(this.att_ident);
 if ((loc_ir==null)){
 this.att_tds.inserer(this.att_ident, glob_7_i);

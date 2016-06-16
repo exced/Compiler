@@ -72,12 +72,13 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	 */
 	public INFO chercherLocalementFonc(String n, TDS tds) {
 		INFO i = null;
-		Set<Map.Entry<String, INFO>> s = this.entrySet();
+		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
-			i = e.getValue();
-			if (i instanceof INFOFONC){
-				if (e.getKey().equals(n) && ((INFOFONC) i).getParams().compareTypeTo(tds)){
-					return i;
+			if (e.getKey().equals(n)){
+				if (e.getValue() instanceof INFOFONC){
+					if (((INFOFONC) i).getParams().compareTypeTo(tds)){
+						return i;
+					}
 				}
 			}
 		}
@@ -130,7 +131,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 				return parente.chercherGlobalement(n);
 		return i;
 	}
-	
+
 	/**
 	 * Recherche de la fonction n dans la TDS courante et ses parentes.
 	 * @param n
