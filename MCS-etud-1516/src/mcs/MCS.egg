@@ -328,16 +328,37 @@ end
 #gen{
 local
     typeRetour : DTYPE;
+    ir : INFO;
+    inf : INFOFONC;
+    tdsPF : TDS;
 do
 
     -- TDS
     i := new INFOFONC(FONCTION^htype, tdsParam);
     
+    ir := FONCTION^tds.chercherGlobalement(FONCTION^ident);
+    if (ir = null) then
+        FONCTION^tds.inserer(FONCTION^ident, i);    
+    else
+        match ir with
+        INFOFONC then
+            inf := ir;
+            tdsPF := ir.getParams();
+            if (tdsPF.compareTypeTo(PARFS^stds)) then
+                error(fonction_deja_existante,FONCTION^ident,tdsPF);
+            else
+                FONCTION^tds.inserer(FONCTION^ident, i);  
+            end
+        else
+            FONCTION^tds.inserer(FONCTION^ident, i);
+        end
+         
+    end
+    
     -- remontee de l'info pour la def
     FONCTION^sinfo := i;
-    
-    FONCTION^tds.inserer(FONCTION^ident, i);
-    typeRetour :=i.getType();
+
+    typeRetour := i.getType();
     
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
@@ -1739,9 +1760,11 @@ do
 
     -- appel du sous-programme a partir de l'étiquette
     if FX^this then
-        i := FX^tds.chercherLocalement(FX^ident);
+        i := FX^tds.chercherLocalementFonc(FX^ident, ES^stds);
+        -- i := FX^tds.chercherLocalement(FX^ident);
     else
-        i := FX^tds.chercherGlobalement(FX^ident);
+        i := FX^tds.chercherGlobalementFonc(FX^ident, ES^stds);
+        -- i := FX^tds.chercherGlobalement(FX^ident);
     end
     if i = null then
         error(var_not_found, FX^ident, FX^tds);
@@ -1751,11 +1774,11 @@ do
         infofonc := i;
         tdsParam := infofonc.getParams();
         
-        if ~ES^stds.compareTypeTo(tdsParam) then
-            error(call_nomatch, FX^ident);  
-        else
+        --if ~ES^stds.compareTypeTo(tdsParam) then
+        --    error(call_nomatch, FX^ident);  
+        --else
             FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident) ;
-        end
+        --end
     else
         error(wrong_typeFonc, FX^ident, i.getType());
     end
