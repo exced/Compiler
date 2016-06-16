@@ -1551,7 +1551,7 @@ do
             FX^hdep := iv.getDep();
             
             FX^htype := t;
-            F^code_est_adresse := false;            
+            F^code_est_adresse := false;
             
             -- Match du mode 
             if iv.matchMode(F^hmode) then

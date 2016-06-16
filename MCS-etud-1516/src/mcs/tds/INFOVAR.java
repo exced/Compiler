@@ -49,4 +49,10 @@ public class INFOVAR extends INFO {
 		return "INFOVAR [type=" + type.getNom() + ", dep=" + empl.getDep() + "], acces : " + acces;
 	}
 
+	public boolean matchMode(String cote){
+		// Erreur si à gauche et de type in, ou si à droite et de type out
+		return !((cote.equals("gauche") && this.mode.equals("in")) || (cote.equals("droite") && this.mode.equals("out")));
+	}
+	
+	
 }
