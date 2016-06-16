@@ -19,12 +19,12 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	private static final long serialVersionUID = 1L;
 
 	private TDS parente;
-	
+
 	/**
 	 * une TDS connait la classe dont elle est le contenu 
 	 */
 	private INFOCLASSE classeContainer;
-	
+
 	/**
 	 * liste des namespace used (using)
 	 */
@@ -50,12 +50,12 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		usedNS = new LinkedHashMap<String, INFONAMESPACE>();
 		classeContainer = null;
 	}
-		
+
 
 	public TDS getParente() {
 		return parente;
 	}
-	
+
 	public void addUsedNS(String n, INFONAMESPACE ins){
 		usedNS.put(n,ins);
 	}
@@ -69,11 +69,36 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	public INFO chercherLocalement(String n) {
 		return get(n);
 	}
-	
+
+	/**
+	 * recherche de fonction
+	 * @param n
+	 * @param tds des PARAMS
+	 * @return
+	 */
+	public INFO chercherLocalementFonc(String n, TDS tds) {
+		INFO i = null;
+		Set<Map.Entry<String, INFO>> s = this.entrySet();
+		for (Map.Entry<String, INFO> e : s) {
+			i = e.getValue();
+			if (i instanceof INFOFONC){
+				if (e.getKey().equals(n) && ((INFOFONC) i).getParams().compareTypeTo(tds)){
+					return i;
+				}
+			}
+		}
+		return i;
+	}
+
+	/**
+	 * 
+	 * @param n
+	 * @return
+	 */
 	public INFO chercherLocalementClasse(String n) {
 		return get(n) instanceof INFOCLASSE ? get(n) : null;
 	}
-	
+
 	/**
 	 * chercher un constructeur
 	 */
@@ -112,6 +137,20 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return i;
 	}
 	
+	/**
+	 * Recherche de la fonction n dans la TDS courante et ses parentes.
+	 * @param n
+	 * @param tds
+	 * @return
+	 */
+	public INFO chercherGlobalementFonc(String n, TDS tds) {
+		INFO i = chercherLocalementFonc(n, tds);
+		if (i == null)
+			if (parente != null)
+				return parente.chercherGlobalementFonc(n, tds);
+		return i;
+	}
+
 	/*
 	 * Recherche d'un Namespace à partir des namespaces imported
 	 */
@@ -132,7 +171,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		}
 		return i;
 	}
-	
+
 	/*
 	 * Recherche de n dans la TDS courante + la liste des Infonamespace importées
 	 * on recherche d'abord dans la liste des NS imported
@@ -140,7 +179,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	public INFO chercherLocalementNS(String n) {
 		return chercherUsedNS(n) != null ? chercherUsedNS(n) : get(n);
 	}
-	
+
 	/*
 	 * Recherche de n dans la TDS courante et ses parentes + la liste des Infonamespace importées
 	 */
@@ -151,7 +190,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 				return parente.chercherGlobalementNS(n);
 		return i;
 	}
-	
+
 	/*
 	 * chercher un namespace, nécessaire pour le using
 	 */
@@ -182,7 +221,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		}
 		return i;
 	}
-	
+
 
 	public INFO chercherClasse(String n){
 		String[] strings = n.split(Pattern.quote("."));
@@ -218,7 +257,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		}
 		return info;
 	}
-	
+
 
 	/**
 	 * Ajoute le nom n et son information i dans la TDS
@@ -258,18 +297,18 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		}
 		return taille;
 	}
-	
+
 	public INFOCLASSE getClasseContainer() { return classeContainer; }
-	
-	
+
+
 	public INFOCLASSE getClasseContainerRec() {
 		INFOCLASSE classeContainer = this.classeContainer;
 		if (classeContainer == null)
 			if (parente != null)
 				return parente.getClasseContainerRec();
 		return classeContainer; 
-		}
-	
+	}
+
 	public void setClasseContainer(INFOCLASSE classeContainer) { this.classeContainer = classeContainer; } 
 
 
