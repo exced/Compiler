@@ -14,16 +14,20 @@ public class INFOVAR extends INFO {
 	
 	private String acces;
 	
+	private String mode;
+	
 	public INFOVAR(DTYPE t, int d) {
 		super(t);
 		empl = new Emplacement(d, new Register("LB",0));
 		acces = "def";
+		mode = "inout";
 	}
 	
 	public INFOVAR(DTYPE t, int d, String reg) {
 		super(t);
 		empl = new Emplacement(d, new Register(reg,0));
 		acces = "def";
+		mode = "inout";
 	}
 
 	public DTYPE getType() { return super.getType(); }
@@ -37,6 +41,8 @@ public class INFOVAR extends INFO {
 	public String getAcces() { return acces; }
 	
 	public void setAcces(String acces) { this.acces = acces; }
+	
+	public void setMode(String mode) { this.mode = mode; }
 
 	@Override
 	public String toString() {

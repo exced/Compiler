@@ -20,10 +20,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 
 	private TDS parente;
 
-	/**
-	 * une TDS connait la classe dont elle est le contenu 
-	 */
-	private INFOCLASSE classeContainer;
 
 	/**
 	 * liste des namespace used (using)
@@ -36,7 +32,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	public TDS() {
 		this(null);
 		usedNS = new LinkedHashMap<String, INFONAMESPACE>();
-		classeContainer = null;
 	}
 
 	/**
@@ -48,7 +43,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		super();
 		parente = p;
 		usedNS = new LinkedHashMap<String, INFONAMESPACE>();
-		classeContainer = null;
 	}
 
 
@@ -298,19 +292,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return taille;
 	}
 
-	public INFOCLASSE getClasseContainer() { return classeContainer; }
-
-
-	public INFOCLASSE getClasseContainerRec() {
-		INFOCLASSE classeContainer = this.classeContainer;
-		if (classeContainer == null)
-			if (parente != null)
-				return parente.getClasseContainerRec();
-		return classeContainer; 
-	}
-
-	public void setClasseContainer(INFOCLASSE classeContainer) { this.classeContainer = classeContainer; } 
-
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -336,7 +317,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		int dep = 0;
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
-			if (e.getValue() instanceof INFOVAR)
+			if (e.getValue() instanceof INFOVAR || e.getValue() instanceof INFOFONC)
 				lch.inserer(new CHAMP(e.getKey(), e.getValue(), dep++));
 		}
 		return lch;
