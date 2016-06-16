@@ -30,7 +30,9 @@ _isRed:
 	SUBR INeq
 	RETURN (0) 1
 _afficher:
-null	RETURN (0) 0
+; Appel a 
+	CALL(SB) _
+	RETURN (0) 0
 _main:
 	LOADL 0
 	RETURN (0) 1

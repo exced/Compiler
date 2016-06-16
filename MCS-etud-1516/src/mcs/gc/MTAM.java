@@ -180,7 +180,8 @@ public class MTAM extends AbstractMachine {
 		return "tam";
 	}
 	
+	public boolean stringEquals(String sg, String sd){
+		return sg.equals(sd);
+	}
 	
-	
-
 }
