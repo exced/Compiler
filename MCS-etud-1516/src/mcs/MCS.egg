@@ -21,6 +21,7 @@ inh machine : IMachine for
 -- acces variable ou non (ASM)
 --syn mode    : BOOLEAN for MODD;
 syn mode    : STRING for MODE;
+inh hmode   : STRING for F,FX,R,RX,T,TX,A,AX;
 
 -- IDENT
 inh ident   : STRING for DECL, FONCTION,FX,IDC,WHILE;
@@ -49,12 +50,13 @@ inh hest_decl : BOOLEAN for AFFX;
 -- GC                            
 syn code    : STRING for    ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,
                             OPREL,OPADD,T,TX,A,AX,R,RX,DEFS,DEF,BASE,WHILE;
-
 inh hcode   : STRING for AFFX,FX;
 syn code_asm : STRING for ASM;--,ASMINST,ASMINSTS;
 
+-- CHAMPS
 inh hchamps : LCHAMPS for CHAMPS, CHAMP;
 syn champs : LCHAMPS for CHAMPS;
+
 
 -- ADRESSE
 syn code_est_adresse : BOOLEAN for  AFFX,F, A,AX,R,RX,T,TX,E ;
@@ -76,6 +78,7 @@ inh base : BOOLEAN for FX;
 
 -- RELATIONNEL 
 syn estTestRel : BOOLEAN for E,A,AFFX,AX;
+
 
 
 
@@ -819,7 +822,12 @@ end
 
 
 ------------------------------------------------------------------------
-E -> A #type AFFX #gen;
+E -> #hmode A #type AFFX #gen;
+#hmode {
+do
+    A^hmode := "gauche";
+end
+}
 #type {
 do  
     AFFX^hdep := A^sdep;
@@ -849,7 +857,12 @@ end
 
 ------------------------------------------------------------------------
 -- affectation
-AFFX -> affect A  #type #gen;
+AFFX -> affect #hmode A  #type #gen;
+#hmode {
+do
+    A^hmode := "droite";
+end
+}
 #type {
 -- controle de type
 do
@@ -933,16 +946,23 @@ end
 }
 
 ------------------------------------------------------------------------
-AX -> OPREL R #type #gen;
+AX -> #mode OPREL R #type #gen;
+#mode{
+do
+    if AX^machine.stringEquals("gauche", AX^hmode) then
+        error(Expr_not_aff, "OPREL", AX^hmode);
+    end
+end
+}
 #type {
 do
     -- controle de type
-    if ~AX^htype.compareOpBin(OPREL^type, R^type) then
-        error(typeError_opBin, AX^htype.getNom(), OPREL^type.getNom(), R^type.getNom());
-    else
-    -- on remonte le type
-        AX^type := new DTYPEImpl("bool",1);         
-    end 
+	if ~AX^htype.compareOpBin(OPREL^type, R^type) then
+	    error(typeError_opBin, AX^htype.getNom(), OPREL^type.getNom(), R^type.getNom());
+	else
+	-- on remonte le type
+	    AX^type := new DTYPEImpl("bool",1);         
+	end
 end
 }
 #gen {
@@ -1061,7 +1081,14 @@ end
 
 ------------------------------------------------------------------------
 -- additions ...
-RX ->   OPADD  T RX  #type #gen;
+RX -> #mode OPADD  T RX  #type #gen;
+#mode{
+do
+    if RX^machine.stringEquals("gauche", RX^hmode) then
+        error(Expr_not_aff, "OPADD", RX^hmode);
+    end
+end
+}
 #type {
 do
     -- controle de type
@@ -1161,7 +1188,14 @@ end
 }
 
 ------------------------------------------------------------------------
-TX -> OPMUL F TX  #type #gen;
+TX -> #mode OPMUL F TX  #type #gen;
+#mode{
+do
+    if TX^machine.stringEquals("gauche", TX^hmode) then
+        error(Expr_not_aff, "OPMUL", TX^hmode);
+    end
+end
+}
 #type {
 do
     -- controle de type
@@ -1284,7 +1318,14 @@ end
 
 ------------------------------------------------------------------------
 -- expression unaire
-F -> OPUN  F #type #gen;
+F -> #mode OPUN F #type #gen;
+#mode{
+do
+    if F^machine.stringEquals("gauche", F^hmode) then
+        error(Expr_not_aff, "OPUN", F^hmode);
+    end
+end
+}
 #type {
 do
     -- pas une var
@@ -1373,7 +1414,7 @@ do
     -- type de FX est le type de l expression de gauche
     FX^htype := E^type;
     
-     FX^hcode := E^code; 
+    FX^hcode := E^code; 
 end
 }
 #type {
@@ -1507,18 +1548,22 @@ do
         with INFOVAR then
             iv := i;
             t := iv.getType();
-            
             FX^hdep := iv.getDep();
             
             FX^htype := t;
-            F^code_est_adresse := false;
-
-            -- code de lecture de variable            
-            if F^hcode_est_adresse then
-                code := F^machine.genAdr(iv.getDep()) + F^machine.genReadIndirectMem(t.getTaille());
+            F^code_est_adresse := false;            
+            
+            -- Match du mode 
+            if iv.matchMode(F^hmode) then
+                -- code de lecture de variable            
+                if F^hcode_est_adresse then
+                    code := F^machine.genAdr(iv.getDep()) + F^machine.genReadIndirectMem(t.getTaille());
+                else
+                    code := F^machine.genReadMem(iv.getDep() , iv.getTaille()); 
+                end 
             else
-                code := F^machine.genReadMem(iv.getDep() , iv.getTaille()); 
-            end   
+                error(mode_mismatch, ident^txt, iv.getMode(), F^hmode);
+            end
             
             FX^hcode := code;
         
