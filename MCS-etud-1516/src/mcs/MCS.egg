@@ -721,18 +721,27 @@ end
 ------------------------------------------------------------------------
 -- conditionnelle
 INST ->  si paro E #type parf BLOC SIX #gen;
+global
+    code : STRING;
 #type {
 do
-   if ~E^type.compareTo(new DTYPEImpl("bool", 1)) then
-      error(not_bool, E^type.getNom());
-   end
+    if ~E^type.compareTo(new DTYPEImpl("bool", 1)) then
+        error(not_bool, E^type.getNom());
+    else
+        if E^estTestRel then
+            code := E^code;
+        else
+            -- booleen : true / false
+            code := INST^machine.genCst("1") + INST^machine.genOp("IEq");
+        end    
+    end
    
    BLOC^hbloc_est_fonction := false;
 end
 }
 #gen {
 do
-    INST^code := INST^machine.genIf(E^code, BLOC^code, SIX^code) ;
+    INST^code := INST^machine.genIf(code, BLOC^code, SIX^code) ;
 end
 }
 
@@ -786,6 +795,7 @@ end
 -- T = expression figurant dans une expression additive (TERME)
 -- F = expression figurant dans une expression multiplicative (FACTEUR)
 -----------------------------------------------------------------------
+
 
 ------------------------------------------------------------------------
 E -> A #type AFFX #gen;
@@ -1562,13 +1572,15 @@ do
     if FX^this then
         -- abstraction TDS -> pointeur sur struct donc on genere le code associe 
         i := tdsClasse.chercherLocalement(ident^txt);
-                if i /= nil then
+        if i /= nil then
             match i 
             with INFOVAR then
                 iv := i;
                 t := iv.getType();
                 FX^sdep := iv.getDep();
                 FX1^this := false;
+                
+                
                 -- code acces a une var au travers de pointeur + struct
                 code := FX^machine.genAdr(FX^machine.getCurrentDep()) + FX^machine.genReadIndirectMem(t.getTaille()) + FX^machine.genAdrField(iv.getDep()); 
             with INFOFONC then
@@ -1613,7 +1625,7 @@ do
     
 
 
-		    match FX^htype 
+		    match FX^htype
 		    with POINTEUR then
 		        p := FX^htype;
 		        t := p.getType();
@@ -2323,8 +2335,8 @@ end
 F -> true #gen;
 #gen{
 do
-    -- pas une var
-    F^sdep := -1;
+    -- taille entier
+    F^sdep := 1;
 
     F^type := new DTYPEImpl("bool",1);
     F^code_est_adresse := false;
@@ -2337,8 +2349,8 @@ end
 F -> false #gen;
 #gen{
 do
-    -- pas une var
-    F^sdep := -1;
+    -- taille entier
+    F^sdep := 1;
     
     F^type := new DTYPEImpl("bool",1);
     F^code_est_adresse := false;
@@ -2353,7 +2365,7 @@ F -> this #this FX #type;
 do
     FX^ident := "";
     FX^hdep := 0;
-    FX^htype := nil;
+    FX^htype := new THIS();
     FX^hcode := "";
     FX^this := true;
     FX^base := false;
@@ -2375,7 +2387,7 @@ F -> base #base FX #gen;
 do
     FX^ident := "";
     FX^hdep := 0;
-    FX^htype := nil;
+    FX^htype := new BASE();
     FX^hcode := "";
     FX^this := false;
     FX^base := true;
