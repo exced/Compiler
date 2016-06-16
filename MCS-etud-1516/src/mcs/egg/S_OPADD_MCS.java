@@ -75,13 +75,13 @@ this.att_code=this.att_machine.genOp("IAdd");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_plus : // 8193
+      case LEX_MCS.token_plus : // 23804
         regle51 () ;
       break ;
-      case LEX_MCS.token_moins : // 8194
+      case LEX_MCS.token_moins : // 23805
         regle52 () ;
       break ;
-      case LEX_MCS.token_ou : // 8195
+      case LEX_MCS.token_ou : // 23806
         regle53 () ;
       break ;
       default :

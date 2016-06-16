@@ -24,6 +24,7 @@ int [] sync= new int[0];
   String att_code;
   IMachine att_machine;
   LEX_MCS att_scanner;
+  boolean att_estConditionnelle;
   String att_identClasse;
   int att_sdep;
   boolean att_code_est_adresse;
@@ -32,47 +33,57 @@ int [] sync= new int[0];
   private void regle36() throws Exception {
 
     //declaration
-    S_A_MCS x_2 = new S_A_MCS(scanner,att_eval) ;
-    S_AFFX_MCS x_4 = new S_AFFX_MCS(scanner,att_eval) ;
+    S_A_MCS x_3 = new S_A_MCS(scanner,att_eval) ;
+    S_AFFX_MCS x_5 = new S_AFFX_MCS(scanner,att_eval) ;
     //appel
-if  (att_eval)      action_auto_inh_36(x_2, x_4);
-    x_2.analyser() ;
-if  (att_eval)      action_type_36(x_2, x_4);
-    x_4.analyser() ;
-if  (att_eval)      action_gen_36(x_2, x_4);
+if  (att_eval)      action_auto_inh_36(x_3, x_5);
+if  (att_eval)      action_hmode_36(x_3, x_5);
+    x_3.analyser() ;
+if  (att_eval)      action_type_36(x_3, x_5);
+    x_5.analyser() ;
+if  (att_eval)      action_gen_36(x_3, x_5);
   }
-private void action_auto_inh_36(S_A_MCS x_2, S_AFFX_MCS x_4) throws Exception {
+private void action_auto_inh_36(S_A_MCS x_3, S_AFFX_MCS x_5) throws Exception {
 try {
 // instructions
-x_2.att_machine=this.att_machine;
-x_4.att_machine=this.att_machine;
-x_2.att_identClasse=this.att_identClasse;
-x_4.att_identClasse=this.att_identClasse;
-x_2.att_tds=this.att_tds;
-x_4.att_tds=this.att_tds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","E -> A #type AFFX #gen ;"});
+x_3.att_machine=this.att_machine;
+x_5.att_machine=this.att_machine;
+x_3.att_estConditionnelle=this.att_estConditionnelle;
+x_5.att_estConditionnelle=this.att_estConditionnelle;
+x_3.att_identClasse=this.att_identClasse;
+x_5.att_identClasse=this.att_identClasse;
+x_3.att_tds=this.att_tds;
+x_5.att_tds=this.att_tds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","E -> #hmode A #type AFFX #gen ;"});
 }
   }
-private void action_gen_36(S_A_MCS x_2, S_AFFX_MCS x_4) throws Exception {
+private void action_gen_36(S_A_MCS x_3, S_AFFX_MCS x_5) throws Exception {
 try {
 // instructions
-this.att_code_est_adresse=x_4.att_code_est_adresse;
-this.att_estTestRel=x_4.att_estTestRel&&x_2.att_estTestRel;
-this.att_code=x_4.att_code;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","E -> A #type AFFX #gen ;"});
+this.att_code_est_adresse=x_5.att_code_est_adresse;
+this.att_estTestRel=x_5.att_estTestRel&&x_3.att_estTestRel;
+this.att_code=x_5.att_code;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","E -> #hmode A #type AFFX #gen ;"});
 }
   }
-private void action_type_36(S_A_MCS x_2, S_AFFX_MCS x_4) throws Exception {
+private void action_hmode_36(S_A_MCS x_3, S_AFFX_MCS x_5) throws Exception {
 try {
 // instructions
-x_4.att_hdep=x_2.att_sdep;
-this.att_sdep=x_2.att_sdep;
-x_4.att_hcode_est_adresse=x_2.att_code_est_adresse;
-this.att_type=x_2.att_type;
-x_4.att_htype=x_2.att_type;
-x_4.att_hcode=x_2.att_code;
-x_4.att_hest_decl=false;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","E -> A #type AFFX #gen ;"});
+x_3.att_hmode="gauche";
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#hmode","E -> #hmode A #type AFFX #gen ;"});
+}
+  }
+private void action_type_36(S_A_MCS x_3, S_AFFX_MCS x_5) throws Exception {
+try {
+// instructions
+x_5.att_hdep=x_3.att_sdep;
+this.att_sdep=x_3.att_sdep;
+x_5.att_hcode_est_adresse=x_3.att_code_est_adresse;
+this.att_type=x_3.att_type;
+x_5.att_htype=x_3.att_type;
+x_5.att_hcode=x_3.att_code;
+x_5.att_hest_decl=false;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","E -> #hmode A #type AFFX #gen ;"});
 }
   }
   public void analyser () throws Exception {

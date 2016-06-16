@@ -42,6 +42,8 @@ public class INFOVAR extends INFO {
 	
 	public void setAcces(String acces) { this.acces = acces; }
 	
+	public String getMode() { return mode; }
+	
 	public void setMode(String mode) { this.mode = mode; }
 
 	@Override

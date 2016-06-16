@@ -31,13 +31,14 @@ int [] sync= new int[0];
   private void regle30() throws Exception {
 
     //declaration
-    S_E_MCS x_2 = new S_E_MCS(scanner,att_eval) ;
-    T_MCS x_3 = new T_MCS(scanner ) ;
+    S_E_MCS x_3 = new S_E_MCS(scanner,att_eval) ;
+    T_MCS x_4 = new T_MCS(scanner ) ;
     //appel
-if  (att_eval)      action_auto_inh_30(x_2);
-    x_2.analyser() ;
-    x_3.analyser(LEX_MCS.token_pv);
-if  (att_eval)      action_gen_30(x_2);
+if  (att_eval)      action_auto_inh_30(x_3);
+if  (att_eval)      action_hcond_30(x_3);
+    x_3.analyser() ;
+    x_4.analyser(LEX_MCS.token_pv);
+if  (att_eval)      action_gen_30(x_3);
   }
   private void regle83() throws Exception {
 
@@ -58,20 +59,21 @@ if  (att_eval)      action_gen_83(x_4);
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
     T_MCS x_3 = new T_MCS(scanner ) ;
-    S_E_MCS x_4 = new S_E_MCS(scanner,att_eval) ;
-    T_MCS x_6 = new T_MCS(scanner ) ;
-    S_BLOC_MCS x_7 = new S_BLOC_MCS(scanner,att_eval) ;
-    S_SIX_MCS x_8 = new S_SIX_MCS(scanner,att_eval) ;
+    S_E_MCS x_5 = new S_E_MCS(scanner,att_eval) ;
+    T_MCS x_7 = new T_MCS(scanner ) ;
+    S_BLOC_MCS x_8 = new S_BLOC_MCS(scanner,att_eval) ;
+    S_SIX_MCS x_9 = new S_SIX_MCS(scanner,att_eval) ;
     //appel
-if  (att_eval)      action_auto_inh_32(x_4, x_7, x_8);
+if  (att_eval)      action_auto_inh_32(x_5, x_8, x_9);
     x_2.analyser(LEX_MCS.token_si);
     x_3.analyser(LEX_MCS.token_paro);
-    x_4.analyser() ;
-if  (att_eval)      action_type_32(x_4, x_7, x_8);
-    x_6.analyser(LEX_MCS.token_parf);
-    x_7.analyser() ;
+if  (att_eval)      action_hcond_32(x_5, x_8, x_9);
+    x_5.analyser() ;
+if  (att_eval)      action_type_32(x_5, x_8, x_9);
+    x_7.analyser(LEX_MCS.token_parf);
     x_8.analyser() ;
-if  (att_eval)      action_gen_32(x_4, x_7, x_8);
+    x_9.analyser() ;
+if  (att_eval)      action_gen_32(x_5, x_8, x_9);
   }
   private void regle31() throws Exception {
 
@@ -105,15 +107,16 @@ if  (att_eval)      action_gen_27(x_2, x_3, x_5);
 
     //declaration
     T_MCS x_2 = new T_MCS(scanner ) ;
-    S_E_MCS x_3 = new S_E_MCS(scanner,att_eval) ;
-    T_MCS x_4 = new T_MCS(scanner ) ;
+    S_E_MCS x_4 = new S_E_MCS(scanner,att_eval) ;
+    T_MCS x_5 = new T_MCS(scanner ) ;
     //appel
-if  (att_eval)      action_auto_inh_35(x_3);
+if  (att_eval)      action_auto_inh_35(x_4);
     x_2.analyser(LEX_MCS.token_retour);
-    x_3.analyser() ;
-    x_4.analyser(LEX_MCS.token_pv);
-if  (att_eval)      action_type_35(x_3);
-if  (att_eval)      action_gen_35(x_3);
+if  (att_eval)      action_hcond_35(x_4);
+    x_4.analyser() ;
+    x_5.analyser(LEX_MCS.token_pv);
+if  (att_eval)      action_type_35(x_4);
+if  (att_eval)      action_gen_35(x_4);
   }
   private void regle28() throws Exception {
 
@@ -133,34 +136,34 @@ if  (att_eval)      action_hbloc_28(x_5, x_7);
     x_7.analyser() ;
 if  (att_eval)      action_gen_28(x_5, x_7);
   }
-private void action_type_35(S_E_MCS x_3) throws Exception {
+private void action_type_35(S_E_MCS x_4) throws Exception {
 try {
 // instructions
-if (!(this.att_htype.compareTo(x_3.att_type))){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_returnType_notCompatible, MCSMessages.returnType_notCompatible,new Object[]{""+this.att_htype, ""+x_3.att_type});
+if (!(this.att_htype.compareTo(x_4.att_type))){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_returnType_notCompatible, MCSMessages.returnType_notCompatible,new Object[]{""+this.att_htype, ""+x_4.att_type});
 
 }
 
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","INST -> retour E pv #type #gen ;"});
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","INST -> retour #hcond E pv #type #gen ;"});
 }
   }
-private void action_type_32(S_E_MCS x_4, S_BLOC_MCS x_7, S_SIX_MCS x_8) throws Exception {
+private void action_type_32(S_E_MCS x_5, S_BLOC_MCS x_8, S_SIX_MCS x_9) throws Exception {
 try {
 // instructions
-if (!(x_4.att_type.compareTo( new DTYPEImpl("bool", 1)))){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_not_bool, MCSMessages.not_bool,new Object[]{""+x_4.att_type.getNom()});
+if (!(x_5.att_type.compareTo( new DTYPEImpl("bool", 1)))){
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_not_bool, MCSMessages.not_bool,new Object[]{""+x_5.att_type.getNom()});
 
 }
 else {
-if (x_4.att_estTestRel){
-glob_32_code=x_4.att_code;
+if (x_5.att_estTestRel){
+glob_32_code=x_5.att_code;
 }
 else {
 glob_32_code=this.att_machine.genCst("1")+this.att_machine.genOp("IEq");
 }
 }
-x_7.att_hbloc_est_fonction=false;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","INST -> si paro E #type parf BLOC SIX #gen ;"});
+x_8.att_hbloc_est_fonction=false;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#type","INST -> si paro #hcond E #type parf BLOC SIX #gen ;"});
 }
   }
 private void action_htype_27(S_TYPE_MCS x_2, T_MCS x_3, S_AFFX_MCS x_5) throws Exception {
@@ -168,6 +171,7 @@ try {
 // locales
 INFO loc_i;
 // instructions
+x_5.att_estConditionnelle=false;
 loc_i=this.att_tds.chercherGlobalement(x_3.att_txt);
 if (loc_i!=null){
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_declared, MCSMessages.var_declared,new Object[]{""+x_3.att_txt});
@@ -218,11 +222,11 @@ x_5.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> TYPE ident #htype AFFX pv #tds #type #gen ;"});
 }
   }
-private void action_gen_30(S_E_MCS x_2) throws Exception {
+private void action_gen_30(S_E_MCS x_3) throws Exception {
 try {
 // instructions
-this.att_code=x_2.att_code;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","INST -> E pv #gen ;"});
+this.att_code=x_3.att_code;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","INST -> #hcond E pv #gen ;"});
 }
   }
 private void action_auto_inh_28(S_BLOC_MCS x_5, S_WHILE_MCS x_7) throws Exception {
@@ -238,11 +242,11 @@ x_7.att_tds=this.att_tds;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> do aco #hbloc BLOC acf WHILE #gen ;"});
 }
   }
-private void action_gen_32(S_E_MCS x_4, S_BLOC_MCS x_7, S_SIX_MCS x_8) throws Exception {
+private void action_gen_32(S_E_MCS x_5, S_BLOC_MCS x_8, S_SIX_MCS x_9) throws Exception {
 try {
 // instructions
-this.att_code=this.att_machine.genIf(glob_32_code, x_7.att_code, x_8.att_code);
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","INST -> si paro E #type parf BLOC SIX #gen ;"});
+this.att_code=this.att_machine.genIf(glob_32_code, x_8.att_code, x_9.att_code);
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","INST -> si paro #hcond E #type parf BLOC SIX #gen ;"});
 }
   }
 private void action_type_27(S_TYPE_MCS x_2, T_MCS x_3, S_AFFX_MCS x_5) throws Exception {
@@ -286,13 +290,13 @@ this.att_code=x_5.att_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","INST -> TYPE ident #htype AFFX pv #tds #type #gen ;"});
 }
   }
-private void action_auto_inh_30(S_E_MCS x_2) throws Exception {
+private void action_auto_inh_30(S_E_MCS x_3) throws Exception {
 try {
 // instructions
-x_2.att_machine=this.att_machine;
-x_2.att_identClasse=this.att_identClasse;
-x_2.att_tds=this.att_tds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> E pv #gen ;"});
+x_3.att_machine=this.att_machine;
+x_3.att_identClasse=this.att_identClasse;
+x_3.att_tds=this.att_tds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> #hcond E pv #gen ;"});
 }
   }
 private void action_auto_inh_31(S_BLOC_MCS x_3) throws Exception {
@@ -312,37 +316,58 @@ this.att_code=x_3.att_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#code","INST -> #bloc BLOC #code ;"});
 }
   }
-private void action_auto_inh_32(S_E_MCS x_4, S_BLOC_MCS x_7, S_SIX_MCS x_8) throws Exception {
+private void action_auto_inh_32(S_E_MCS x_5, S_BLOC_MCS x_8, S_SIX_MCS x_9) throws Exception {
+try {
+// instructions
+x_5.att_machine=this.att_machine;
+x_8.att_machine=this.att_machine;
+x_9.att_machine=this.att_machine;
+x_5.att_identClasse=this.att_identClasse;
+x_8.att_identClasse=this.att_identClasse;
+x_9.att_identClasse=this.att_identClasse;
+x_8.att_htype=this.att_htype;
+x_9.att_htype=this.att_htype;
+x_5.att_tds=this.att_tds;
+x_8.att_tds=this.att_tds;
+x_9.att_tds=this.att_tds;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> si paro #hcond E #type parf BLOC SIX #gen ;"});
+}
+  }
+private void action_gen_35(S_E_MCS x_4) throws Exception {
+try {
+// instructions
+this.att_code=x_4.att_code;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","INST -> retour #hcond E pv #type #gen ;"});
+}
+  }
+private void action_auto_inh_35(S_E_MCS x_4) throws Exception {
 try {
 // instructions
 x_4.att_machine=this.att_machine;
-x_7.att_machine=this.att_machine;
-x_8.att_machine=this.att_machine;
 x_4.att_identClasse=this.att_identClasse;
-x_7.att_identClasse=this.att_identClasse;
-x_8.att_identClasse=this.att_identClasse;
-x_7.att_htype=this.att_htype;
-x_8.att_htype=this.att_htype;
 x_4.att_tds=this.att_tds;
-x_7.att_tds=this.att_tds;
-x_8.att_tds=this.att_tds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> si paro E #type parf BLOC SIX #gen ;"});
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> retour #hcond E pv #type #gen ;"});
 }
   }
-private void action_gen_35(S_E_MCS x_3) throws Exception {
+private void action_hcond_30(S_E_MCS x_3) throws Exception {
 try {
 // instructions
-this.att_code=x_3.att_code;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","INST -> retour E pv #type #gen ;"});
+x_3.att_estConditionnelle=false;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#hcond","INST -> #hcond E pv #gen ;"});
 }
   }
-private void action_auto_inh_35(S_E_MCS x_3) throws Exception {
+private void action_hcond_35(S_E_MCS x_4) throws Exception {
 try {
 // instructions
-x_3.att_machine=this.att_machine;
-x_3.att_identClasse=this.att_identClasse;
-x_3.att_tds=this.att_tds;
-}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","INST -> retour E pv #type #gen ;"});
+x_4.att_estConditionnelle=true;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#hcond","INST -> retour #hcond E pv #type #gen ;"});
+}
+  }
+private void action_hcond_32(S_E_MCS x_5, S_BLOC_MCS x_8, S_SIX_MCS x_9) throws Exception {
+try {
+// instructions
+x_5.att_estConditionnelle=true;
+}catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#hcond","INST -> si paro #hcond E #type parf BLOC SIX #gen ;"});
 }
   }
 private void action_tds_83(ASM x_4) throws Exception {
@@ -355,88 +380,88 @@ x_4.att_tds_asm=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 8163
+      case LEX_MCS.token_void : // 23774
         regle27 () ;
       break ;
-      case LEX_MCS.token_int : // 8165
+      case LEX_MCS.token_int : // 23776
         regle27 () ;
       break ;
-      case LEX_MCS.token_char : // 8166
+      case LEX_MCS.token_char : // 23777
         regle27 () ;
       break ;
-      case LEX_MCS.token_identc : // 8205
+      case LEX_MCS.token_identc : // 23816
         regle27 () ;
       break ;
-      case LEX_MCS.token_struct : // 8167
+      case LEX_MCS.token_struct : // 23778
         regle27 () ;
       break ;
-      case LEX_MCS.token_bool : // 8177
+      case LEX_MCS.token_bool : // 23788
         regle27 () ;
       break ;
-      case LEX_MCS.token_do : // 8149
+      case LEX_MCS.token_do : // 23760
         regle28 () ;
       break ;
-      case LEX_MCS.token_entier : // 8201
+      case LEX_MCS.token_entier : // 23812
         regle30 () ;
       break ;
-      case LEX_MCS.token_chaine : // 8203
+      case LEX_MCS.token_chaine : // 23814
         regle30 () ;
       break ;
-      case LEX_MCS.token_caractere : // 8202
+      case LEX_MCS.token_caractere : // 23813
         regle30 () ;
       break ;
-      case LEX_MCS.token_plus : // 8193
+      case LEX_MCS.token_plus : // 23804
         regle30 () ;
       break ;
-      case LEX_MCS.token_moins : // 8194
+      case LEX_MCS.token_moins : // 23805
         regle30 () ;
       break ;
-      case LEX_MCS.token_non : // 8200
+      case LEX_MCS.token_non : // 23811
         regle30 () ;
       break ;
-      case LEX_MCS.token_null : // 8186
+      case LEX_MCS.token_null : // 23797
         regle30 () ;
       break ;
-      case LEX_MCS.token_paro : // 8153
+      case LEX_MCS.token_paro : // 23764
         regle30 () ;
       break ;
-      case LEX_MCS.token_malloc : // 8148
+      case LEX_MCS.token_malloc : // 23759
         regle30 () ;
       break ;
-      case LEX_MCS.token_mult : // 8196
+      case LEX_MCS.token_mult : // 23807
         regle30 () ;
       break ;
-      case LEX_MCS.token_ident : // 8204
+      case LEX_MCS.token_ident : // 23815
         regle30 () ;
       break ;
-      case LEX_MCS.token_true : // 8178
+      case LEX_MCS.token_true : // 23789
         regle30 () ;
       break ;
-      case LEX_MCS.token_false : // 8179
+      case LEX_MCS.token_false : // 23790
         regle30 () ;
       break ;
-      case LEX_MCS.token_this : // 8180
+      case LEX_MCS.token_this : // 23791
         regle30 () ;
       break ;
-      case LEX_MCS.token_base : // 8183
+      case LEX_MCS.token_base : // 23794
         regle30 () ;
       break ;
-      case LEX_MCS.token_null2 : // 8182
+      case LEX_MCS.token_null2 : // 23793
         regle30 () ;
       break ;
-      case LEX_MCS.token_new : // 8181
+      case LEX_MCS.token_new : // 23792
         regle30 () ;
       break ;
-      case LEX_MCS.token_aco : // 8155
+      case LEX_MCS.token_aco : // 23766
         regle31 () ;
       break ;
-      case LEX_MCS.token_si : // 8161
+      case LEX_MCS.token_si : // 23772
         regle32 () ;
       break ;
-      case LEX_MCS.token_retour : // 8184
+      case LEX_MCS.token_retour : // 23795
         regle35 () ;
       break ;
-      case LEX_MCS.token_asm : // 8164
+      case LEX_MCS.token_asm : // 23775
         regle83 () ;
       break ;
       default :

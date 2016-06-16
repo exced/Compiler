@@ -23,7 +23,9 @@ int [] sync= new int[0];
   boolean att_eval;
   String att_code;
   IMachine att_machine;
+  String att_hmode;
   LEX_MCS att_scanner;
+  boolean att_estConditionnelle;
   String att_identClasse;
   int att_sdep;
   boolean att_code_est_adresse;
@@ -56,6 +58,10 @@ try {
 // instructions
 x_3.att_machine=this.att_machine;
 x_5.att_machine=this.att_machine;
+x_3.att_hmode=this.att_hmode;
+x_5.att_hmode=this.att_hmode;
+x_3.att_estConditionnelle=this.att_estConditionnelle;
+x_5.att_estConditionnelle=this.att_estConditionnelle;
 x_3.att_identClasse=this.att_identClasse;
 x_5.att_identClasse=this.att_identClasse;
 x_3.att_tds=this.att_tds;

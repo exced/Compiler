@@ -87,31 +87,31 @@ this.att_code="";
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_acf : // 8156
+      case LEX_MCS.token_acf : // 23767
         regle95 () ;
       break ;
-      case LEX_MCS.token_public : // 8174
+      case LEX_MCS.token_public : // 23785
         regle96 () ;
       break ;
-      case LEX_MCS.token_private : // 8175
+      case LEX_MCS.token_private : // 23786
         regle96 () ;
       break ;
-      case LEX_MCS.token_void : // 8163
+      case LEX_MCS.token_void : // 23774
         regle96 () ;
       break ;
-      case LEX_MCS.token_int : // 8165
+      case LEX_MCS.token_int : // 23776
         regle96 () ;
       break ;
-      case LEX_MCS.token_char : // 8166
+      case LEX_MCS.token_char : // 23777
         regle96 () ;
       break ;
-      case LEX_MCS.token_identc : // 8205
+      case LEX_MCS.token_identc : // 23816
         regle96 () ;
       break ;
-      case LEX_MCS.token_struct : // 8167
+      case LEX_MCS.token_struct : // 23778
         regle96 () ;
       break ;
-      case LEX_MCS.token_bool : // 8177
+      case LEX_MCS.token_bool : // 23788
         regle96 () ;
       break ;
       default :

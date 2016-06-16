@@ -23,16 +23,8 @@ _fonction2:
 	RETURN (2) 1
 _main:
 	LOADL 2
-	LOADL 0
-	LOADL 1
-; Appel a fonction1
-	CALL(SB) _fonction1
-	PUSH 1
-	LOADL 3
-	LOADL 4
-; Appel a fonction2
-	CALL(SB) _fonction2
-	STORE(1) 5[LB]
+null	PUSH 1
+null	STORE(1) 5[LB]
 	LOADL 0
 	RETURN (0) 1
 ; Appel a main

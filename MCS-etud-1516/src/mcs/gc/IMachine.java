@@ -84,5 +84,7 @@ public interface IMachine {
 	public String genComment(String c);
 	
 	public String genOp(String op);
+	
+	public boolean stringEquals(String sg, String sd);
 
 }

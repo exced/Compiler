@@ -20,12 +20,11 @@ inh machine : IMachine for
 -- MODE
 -- acces variable ou non (ASM)
 --syn mode    : BOOLEAN for MODD;
-<<<<<<< HEAD
+
 syn mode    : STRING for MODE,PARF;
-=======
-syn mode    : STRING for MODE;
 inh hmode   : STRING for F,FX,R,RX,T,TX,A,AX;
->>>>>>> f0767af40a39845468f69f23d47585c885a6a5f0
+inh estConditionnelle : BOOLEAN for E,A,AFFX,R,RX,AX,T,TX,F;
+
 
 -- IDENT
 inh ident   : STRING for DECL, FONCTION,FX,IDC,WHILE;
@@ -626,6 +625,8 @@ INST ->  TYPE ident #htype AFFX pv #tds #type #gen ;
 local
     i : INFO;
 do
+    AFFX^estConditionnelle := false;
+
     i := INST^tds.chercherGlobalement(ident^txt);
     if i /= nil then
        error(var_declared, ident^txt);
@@ -704,7 +705,12 @@ end
 
 ------------------------------------------------------------------------
 -- condition d'arret 
-WHILE -> while paro E parf #gen;
+WHILE -> while paro #hcond E parf #gen;
+#hcond {
+do
+    E^estConditionnelle := true;
+end
+}
 #gen {
 local
     code : STRING;
@@ -726,7 +732,12 @@ end
 
 ------------------------------------------------------------------------
 -- instruction expression (affectation et appel de procedure)
-INST -> E pv #gen;
+INST -> #hcond E pv #gen;
+#hcond {
+do
+    E^estConditionnelle := false;
+end
+}
 #gen {
 do
     INST^code := E^code;
@@ -750,9 +761,14 @@ end
 
 ------------------------------------------------------------------------
 -- conditionnelle
-INST ->  si paro E #type parf BLOC SIX #gen;
+INST ->  si paro #hcond E #type parf BLOC SIX #gen;
 global
     code : STRING;
+#hcond {
+do
+    E^estConditionnelle := true;
+end
+}    
 #type {
 do
     if ~E^type.compareTo(new DTYPEImpl("bool", 1)) then
@@ -800,7 +816,12 @@ end
 
 ------------------------------------------------------------------------
 -- retour de fonction
-INST ->  retour E pv #type #gen;
+INST ->  retour #hcond E pv #type #gen;
+#hcond {
+do
+    E^estConditionnelle := true;
+end
+}
 #type {
 do
     -- controle de type de retour
@@ -955,8 +976,10 @@ end
 AX -> #mode OPREL R #type #gen;
 #mode{
 do
-    if AX^machine.stringEquals("gauche", AX^hmode) then
-        error(Expr_not_aff, "OPREL", AX^hmode);
+    if ~AX^estConditionnelle then
+	    if AX^machine.stringEquals("gauche", AX^hmode) then
+	        error(Expr_not_aff, "OPREL", AX^hmode);
+	    end
     end
 end
 }
@@ -1090,8 +1113,10 @@ end
 RX -> #mode OPADD  T RX  #type #gen;
 #mode{
 do
-    if RX^machine.stringEquals("gauche", RX^hmode) then
-        error(Expr_not_aff, "OPADD", RX^hmode);
+    if ~RX^estConditionnelle then
+	    if RX^machine.stringEquals("gauche", RX^hmode) then
+	        error(Expr_not_aff, "OPADD", RX^hmode);
+	    end
     end
 end
 }
@@ -1197,8 +1222,10 @@ end
 TX -> #mode OPMUL F TX  #type #gen;
 #mode{
 do
-    if TX^machine.stringEquals("gauche", TX^hmode) then
-        error(Expr_not_aff, "OPMUL", TX^hmode);
+    if ~TX^estConditionnelle then
+	    if TX^machine.stringEquals("gauche", TX^hmode) then
+	        error(Expr_not_aff, "OPMUL", TX^hmode);
+	    end
     end
 end
 }
@@ -1327,8 +1354,10 @@ end
 F -> #mode OPUN F #type #gen;
 #mode{
 do
-    if F^machine.stringEquals("gauche", F^hmode) then
-        error(Expr_not_aff, "OPUN", F^hmode);
+    if ~F^estConditionnelle then
+	    if F^machine.stringEquals("gauche", F^hmode) then
+	        error(Expr_not_aff, "OPUN", F^hmode);
+	    end
     end
 end
 }
@@ -1403,7 +1432,12 @@ end
 
 ------------------------------------------------------------------------
 -- expression parenthesee
-F ->  paro E parf #addr FX #type #gen;
+F ->  paro #hcond E parf #addr FX #type #gen;
+#hcond {
+do
+    E^estConditionnelle := true;
+end
+}
 #addr {
 do
     -- remontee infovar
@@ -1477,7 +1511,12 @@ end
 
 ------------------------------------------------------------------------
 -- allocation memoire d un pointeur
-F -> malloc paro E parf #gen;
+F -> malloc paro #hcond E parf #gen;
+#hcond {
+do
+    E^estConditionnelle := false;
+end
+}
 #gen {
 do
     -- remontee infovar
@@ -1539,6 +1578,8 @@ local
     i2:INFO;
     code : STRING;
 do  
+    code := "";
+    
     FX^base := false;
     FX^this := false;
 
@@ -1760,8 +1801,6 @@ write "FX pt ident sur : " + ident^txt + "\n";
 		        error(type_not_struct, FX^htype.getNom(), ident^txt);
 		    end
 
-    
-
     FX1^hcode := code;    
 
 end
@@ -1843,6 +1882,7 @@ end
 #gen {
 local
     i:INFO;
+    t : DTYPE;
     infofonc : INFOFONC;
     tdsParam : TDS;
 do
@@ -1856,6 +1896,9 @@ do
         i := FX^tds.chercherGlobalementFonc(FX^ident, ES^stds);
         -- i := FX^tds.chercherGlobalement(FX^ident);
     end
+    
+    t := i.getType();
+    
     if i = null then
         error(var_not_found, FX^ident, FX^tds);
     end
@@ -1869,8 +1912,9 @@ do
         --else
             FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident) ;
         --end
+        
     else
-        error(wrong_typeFonc, FX^ident, i.getType());
+        error(not_infofonc, i);
     end
             
 end
@@ -1886,7 +1930,7 @@ end
 }
 
 ------------------------------------------------------------------------
-ES ->#idc E #tds ESX #stds ;
+ES ->#idc #hcond E #tds ESX #stds ;
 global
     tds:TDS;
 #idc{
@@ -1894,6 +1938,11 @@ do
     E^identClasse := "";
 end
 }    
+#hcond {
+do
+    E^estConditionnelle := false;
+end
+}
 #tds {
 do
     tds := ES^tds;
@@ -1919,10 +1968,15 @@ end
 
 
 ------------------------------------------------------------------------
-ESX -> #idc virg E #tds ESX #stds;
+ESX -> #idc virg #hcond E #tds ESX #stds;
 #idc {
 do
     E^identClasse := "";
+end
+}
+#hcond {
+do
+    E^estConditionnelle := false;
 end
 }
 #tds {
