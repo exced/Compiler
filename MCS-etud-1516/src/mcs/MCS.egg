@@ -14,7 +14,7 @@ inh machine : IMachine for
          ENTITES, ENTITE, DECL, FONCTION, INST, BLOC, INSTS, SIX,
          PARFS, PARF, PARFSX, ES, ESX, 
          E, AFFX, A, AX, R, RX, T, TX, F,FX,OPUN,OPMUL,OPREL,OPADD,
-         BASE, DEFS, DEF;--,ASMINST,ASM,ASMINSTS;
+         BASE, DEFS, DEF,WHILE;--,ASMINST,ASM,ASMINSTS;
               
 
 -- MODE
@@ -23,7 +23,7 @@ inh machine : IMachine for
 syn mode    : STRING for MODE;
 
 -- IDENT
-inh ident   : STRING for DECL, FONCTION,FX,IDC;
+inh ident   : STRING for DECL, FONCTION,FX,IDC,WHILE;
 syn sident  : STRING for PARF, CHAMP,IDC,HERITAGE;
 inh identSuper : STRING for DEFS,DEF,BASE;
 
@@ -39,7 +39,7 @@ syn sinfo : INFO for DECL,FONCTION;
 -- TDS
 inh tds_asm : TDS for ASM;--, ASMINST, ASMINSTS;
 inh tds     : TDS     for    BLOC, ENTITE,ENTITES,CHAMP,CHAMPS, INSTS,TYPE,STYPE, INST, FONCTION, DECL, PARFS, PARF, PARFSX, 
-                            SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX,DEFS,DEF,HERITAGE,BASE;
+                            SIX ,E,ES,ESX,F,FX,T,TX,R,RX,A,AFFX,AX,DEFS,DEF,HERITAGE,BASE,WHILE;
 syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES,DEFS;      
 
 
@@ -47,7 +47,9 @@ syn stds    : TDS for PARFS,PARFSX,ES,ESX,ENTITES,DEFS;
 inh hest_decl : BOOLEAN for AFFX;                                              
                             
 -- GC                            
-syn code    : STRING for ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,OPREL,OPADD,T,TX,A,AX,R,RX,DEFS,DEF,BASE;
+syn code    : STRING for    ENTITE , ENTITES,DECL,FONCTION, F,FX, BLOC,SIX, INSTS, INST, E, AFFX,OPUN,OPMUL,
+                            OPREL,OPADD,T,TX,A,AX,R,RX,DEFS,DEF,BASE,WHILE;
+
 inh hcode   : STRING for AFFX,FX;
 syn code_asm : STRING for ASM;--,ASMINST,ASMINSTS;
 
@@ -71,6 +73,11 @@ syn aHeritage : BOOLEAN for HERITAGE;
 -- THIS / BASE
 inh this : BOOLEAN for FX;
 inh base : BOOLEAN for FX;
+
+-- RELATIONNEL 
+syn estTestRel : BOOLEAN for E,AFFX,AX,OPREL;
+
+
 
 sugar malloc is "malloc";
 sugar do is "do";
@@ -645,29 +652,46 @@ global
 #hbloc {
 do
     BLOC^hbloc_est_fonction := false;
-    
-    etiquette := "loop" + INST^machine.getXEtiquette();
+    etiquette := "loop" + INST^machine.getXEtiq();
     WHILE^ident := etiquette;
 end
 }
 #gen {
+
 do
-    INST^code := INST^machine.genEtiquette(etiquette) + BLOC^code + WHILE^code;
+    INST^code := etiquette +":\n" + BLOC^code + WHILE^code;
 end
 }
 
 ------------------------------------------------------------------------
 -- whiledo
-INST -> WHILE aco BLOC acf #gen;
-#gen {
-do
+--INST -> WHILE aco BLOC acf #gen;
+--#gen {
+--do
     
-end
-}
+--end
+--}
 
 ------------------------------------------------------------------------
 -- condition d'arret 
-WHILE -> while paro E parf;
+WHILE -> while paro E parf #gen;
+#gen {
+local
+    code : STRING;
+do
+    if ~E^type.compareTo(new DTYPEImpl("bool", 1)) then  
+        error(not_bool, E^type.getNom());
+    else
+        if E^estTestRel then
+            code := "";
+        else
+            -- booleen : true / false
+            code := WHILE^machine.genCst("1") + WHILE^machine.genOp("IEq");
+        end
+    end
+    WHILE^code := E^code + code + WHILE^machine.genJumpIf(1, WHILE^ident);
+end
+}
 
 
 ------------------------------------------------------------------------
@@ -785,6 +809,7 @@ end
 #gen {
 do
     E^code_est_adresse := AFFX^code_est_adresse;
+    E^estTestRel := AFFX^estTestRel;
     
     E^code := AFFX^code;  
 end
@@ -824,7 +849,7 @@ do
         AFFX^code := A^code + codeWrite;
     end
             
-
+    AFFX^estTestRel := false;
 end  
 }
 

@@ -80,6 +80,8 @@ public class MTAM extends AbstractMachine {
 	public String genEtiq() {
 		return "X" + cpt++;
 	}
+	
+	public String getXEtiq() { return "X"+ cpt; }
 
 	// genere le code pour l'arret de la machine
 	public String genFin() {
@@ -143,6 +145,10 @@ public class MTAM extends AbstractMachine {
 				+ fin+":" + "\n" + "\t; fin if\n";
 	}
 	
+	public String genJumpIf(int taille, String etq) {
+		return "\tJUMPIF(" + taille + ") " + etq + "\n";
+	}
+	
 
 	public String genMalloc(int taille) {
 		return "\tLOADL " + taille + "\n" + "\tSUBR Malloc\n";
@@ -173,5 +179,8 @@ public class MTAM extends AbstractMachine {
 	public String getSuffixe() {
 		return "tam";
 	}
+	
+	
+	
 
 }
