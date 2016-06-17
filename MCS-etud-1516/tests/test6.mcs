@@ -1,12 +1,3 @@
-namespace System {
-
-	class Object {
-	// attributs
-	// methodes
-	}
-}
-
-using System;
 
 namespace Geometry {
 
@@ -19,7 +10,7 @@ namespace Geometry {
    
    		// le nom complet de cette classe est Geometry.A.Point2D
    		
-    	class Point2D : Object{
+    	class Point2D {
       		int x;
       		int y;
       		

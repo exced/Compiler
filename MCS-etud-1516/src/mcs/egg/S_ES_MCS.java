@@ -94,58 +94,58 @@ x_4.att_estConditionnelle=false;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 54019
+      case LEX_MCS.token_parf : // 2753
         regle78 () ;
       break ;
-      case LEX_MCS.token_entier : // 54066
+      case LEX_MCS.token_entier : // 2869
         regle79 () ;
       break ;
-      case LEX_MCS.token_chaine : // 54068
+      case LEX_MCS.token_chaine : // 2874
         regle79 () ;
       break ;
-      case LEX_MCS.token_caractere : // 54067
+      case LEX_MCS.token_caractere : // 2872
         regle79 () ;
       break ;
-      case LEX_MCS.token_plus : // 54058
+      case LEX_MCS.token_plus : // 2853
         regle79 () ;
       break ;
-      case LEX_MCS.token_moins : // 54059
+      case LEX_MCS.token_moins : // 2855
         regle79 () ;
       break ;
-      case LEX_MCS.token_non : // 54065
+      case LEX_MCS.token_non : // 2867
         regle79 () ;
       break ;
-      case LEX_MCS.token_null : // 54051
+      case LEX_MCS.token_null : // 2840
         regle79 () ;
       break ;
-      case LEX_MCS.token_paro : // 54018
+      case LEX_MCS.token_paro : // 2748
         regle79 () ;
       break ;
-      case LEX_MCS.token_malloc : // 54013
+      case LEX_MCS.token_malloc : // 2743
         regle79 () ;
       break ;
-      case LEX_MCS.token_mult : // 54061
+      case LEX_MCS.token_mult : // 2859
         regle79 () ;
       break ;
-      case LEX_MCS.token_ident : // 54069
+      case LEX_MCS.token_ident : // 2878
         regle79 () ;
       break ;
-      case LEX_MCS.token_true : // 54043
+      case LEX_MCS.token_true : // 2823
         regle79 () ;
       break ;
-      case LEX_MCS.token_false : // 54044
+      case LEX_MCS.token_false : // 2825
         regle79 () ;
       break ;
-      case LEX_MCS.token_this : // 54045
+      case LEX_MCS.token_this : // 2827
         regle79 () ;
       break ;
-      case LEX_MCS.token_base : // 54048
+      case LEX_MCS.token_base : // 2834
         regle79 () ;
       break ;
-      case LEX_MCS.token_null2 : // 54047
+      case LEX_MCS.token_null2 : // 2832
         regle79 () ;
       break ;
-      case LEX_MCS.token_new : // 54046
+      case LEX_MCS.token_new : // 2829
         regle79 () ;
       break ;
       default :

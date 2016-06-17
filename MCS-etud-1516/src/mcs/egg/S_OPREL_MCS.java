@@ -123,22 +123,22 @@ this.att_code=this.att_machine.genOp("INeq");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_inf : // 54052
+      case LEX_MCS.token_inf : // 2842
         regle42 () ;
       break ;
-      case LEX_MCS.token_sup : // 54054
+      case LEX_MCS.token_sup : // 2846
         regle43 () ;
       break ;
-      case LEX_MCS.token_infeg : // 54053
+      case LEX_MCS.token_infeg : // 2844
         regle44 () ;
       break ;
-      case LEX_MCS.token_supeg : // 54055
+      case LEX_MCS.token_supeg : // 2848
         regle45 () ;
       break ;
-      case LEX_MCS.token_eg : // 54056
+      case LEX_MCS.token_eg : // 2850
         regle46 () ;
       break ;
-      case LEX_MCS.token_neg : // 54057
+      case LEX_MCS.token_neg : // 2852
         regle47 () ;
       break ;
       default :

@@ -122,43 +122,43 @@ this.att_type=x_4.att_type;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_plus : // 54058
+      case LEX_MCS.token_plus : // 2853
         regle49 () ;
       break ;
-      case LEX_MCS.token_moins : // 54059
+      case LEX_MCS.token_moins : // 2855
         regle49 () ;
       break ;
-      case LEX_MCS.token_ou : // 54060
+      case LEX_MCS.token_ou : // 2857
         regle49 () ;
       break ;
-      case LEX_MCS.token_inf : // 54052
+      case LEX_MCS.token_inf : // 2842
         regle50 () ;
       break ;
-      case LEX_MCS.token_sup : // 54054
+      case LEX_MCS.token_sup : // 2846
         regle50 () ;
       break ;
-      case LEX_MCS.token_infeg : // 54053
+      case LEX_MCS.token_infeg : // 2844
         regle50 () ;
       break ;
-      case LEX_MCS.token_supeg : // 54055
+      case LEX_MCS.token_supeg : // 2848
         regle50 () ;
       break ;
-      case LEX_MCS.token_eg : // 54056
+      case LEX_MCS.token_eg : // 2850
         regle50 () ;
       break ;
-      case LEX_MCS.token_neg : // 54057
+      case LEX_MCS.token_neg : // 2852
         regle50 () ;
       break ;
-      case LEX_MCS.token_affect : // 54025
+      case LEX_MCS.token_affect : // 2794
         regle50 () ;
       break ;
-      case LEX_MCS.token_virg : // 54022
+      case LEX_MCS.token_virg : // 2785
         regle50 () ;
       break ;
-      case LEX_MCS.token_parf : // 54019
+      case LEX_MCS.token_parf : // 2753
         regle50 () ;
       break ;
-      case LEX_MCS.token_pv : // 54024
+      case LEX_MCS.token_pv : // 2790
         regle50 () ;
       break ;
       default :

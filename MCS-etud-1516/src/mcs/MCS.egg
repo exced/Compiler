@@ -169,9 +169,25 @@ do
 end
 }
 #tds {
+local
+    contenuObject : TDS;
+    tdsParamEquals : TDS;
 do
     --init de la TDS ( sans parente )
     ENTITES^tds := new TDS(nil);
+    
+    -- insertion de la classe Object, mere de toutes les classes
+    contenuObject := new TDS(nil);
+    -- clone (A IMPLEMENTER)
+    contenuObject.inserer("clone", new INFOFONC(new DTYPEImpl("Object",1), new TDS(contenuObject)));
+    -- equals (A IMPLEMENTER)
+    tdsParamEquals := new TDS(contenuObject);
+    tdsParamEquals.inserer("obj", new INFOVAR(new DTYPEImpl("Object",1), -1));
+    contenuObject.inserer("equals", new INFOFONC(new DTYPEImpl("bool",1), tdsParamEquals));
+    -- toString (A IMPLEMENTER)
+    contenuObject.inserer("toString", new INFOFONC(new DTYPEImpl("String",1), new TDS(contenuObject)));
+    -- insertion de la classe Object
+    ENTITES^tds.inserer("Object", new INFOCLASSE("public", contenuObject));
 end
 }
 -- ecrit le code dans un fichier
@@ -2162,25 +2178,29 @@ local
     htds : TDS;
 do
     htds := new TDS(ENTITE^tds);
-
+    
+    -- recherche de l heritage
+    tdsParent := ENTITE^tds.getParente();
     -- si heritage
     if HERITAGE^aHeritage then
-        -- recherche de l heritage
-        tdsParent := ENTITE^tds.getParente();
         ih := tdsParent.chercherClasse(HERITAGE^sident);
-        if ih = nil then
-            error(classe_undefined, HERITAGE^sident, tdsParent);
-        else 
-            match ih with
-            INFOCLASSE then   
-                ihc := ih;
-                -- on insere l'infoclasse de super dans la TDS contenu pour avoir plus de facilite a la retrouver (appel a base)
-                htds.inserer(HERITAGE^sident, ihc); 
-            else
-                error(not_infoclasse, HERITAGE^sident);
-            end    
-        end
+    else
+        -- pas d'heritage -> herite de la classe Object, mere de toutes les classes
+        ih := tdsParent.chercherClasse("Object");
     end
+        
+    if ih = nil then
+        error(classe_undefined, HERITAGE^sident, tdsParent);
+    else 
+        match ih with
+        INFOCLASSE then   
+            ihc := ih;
+            -- on insere l'infoclasse de super dans la TDS contenu pour avoir plus de facilite a la retrouver (appel a base)
+            htds.inserer(HERITAGE^sident, ihc); 
+        else
+            error(not_infoclasse, HERITAGE^sident);
+        end    
+    end 
 
 
     -- transmission du nom de la classe aux DEFS
