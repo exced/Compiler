@@ -9,12 +9,15 @@ public class INFOCLASSE extends INFO {
 	
 	protected TDS contenu;
 	
+	protected INFONAMESPACE parent;
+	
 	
 	public INFOCLASSE(String acces, TDS contenu, INFOCLASSE parente){
 		super(new POINTEUR(new STRUCT(contenu.toChamps())));
 		this.acces = acces;
 		this.parente = parente;
 		this.contenu = contenu;
+		parent = null;
 	}
 	
 	public INFOCLASSE( String acces, TDS contenu){
@@ -22,6 +25,23 @@ public class INFOCLASSE extends INFO {
 		this.acces = acces;
 		this.parente = null;
 		this.contenu = contenu;
+		parent = null;
+	}
+	
+	public INFOCLASSE(String acces, TDS contenu, INFOCLASSE parente, INFONAMESPACE parent){
+		super(new POINTEUR(new STRUCT(contenu.toChamps())));
+		this.acces = acces;
+		this.parente = parente;
+		this.contenu = contenu;
+		this.parent = parent;
+	}
+	
+	public INFOCLASSE( String acces, TDS contenu, INFONAMESPACE parent){
+		super(new POINTEUR(new STRUCT(contenu.toChamps())));
+		this.acces = acces;
+		this.parente = null;
+		this.contenu = contenu;
+		this.parent = parent;
 	}
 	
 	public String getAcces() { return acces; }
@@ -30,9 +50,11 @@ public class INFOCLASSE extends INFO {
 	
 	public TDS getContenu() { return contenu; }
 	
+	public INFONAMESPACE getNSParent() { return parent; }
+	
 	
 	public String toString() {
-		return "INFOCLASSE, contenu : " + contenu;
+		return "INFOCLASSE " ;
 	}	
 	
 }

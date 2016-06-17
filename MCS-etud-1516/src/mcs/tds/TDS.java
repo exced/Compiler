@@ -20,18 +20,11 @@ public class TDS extends LinkedHashMap<String, INFO> {
 
 	private TDS parente;
 
-
-	/**
-	 * liste des namespace used (using)
-	 */
-	private LinkedHashMap<String, INFONAMESPACE> usedNS;
-
 	/**
 	 * Constructeur pour une TDS sans parente
 	 */
 	public TDS() {
 		this(null);
-		usedNS = new LinkedHashMap<String, INFONAMESPACE>();
 	}
 
 	/**
@@ -42,7 +35,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 	public TDS(TDS p) {
 		super();
 		parente = p;
-		usedNS = new LinkedHashMap<String, INFONAMESPACE>();
 	}
 
 
@@ -50,9 +42,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return parente;
 	}
 
-	public void addUsedNS(String n, INFONAMESPACE ins){
-		usedNS.put(n,ins);
-	}
 
 	/**
 	 * Recherche de n dans la TDS courante uniquement
@@ -146,140 +135,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return i;
 	}
 
-	/*
-	 * Recherche d'un Namespace à partir des namespaces imported
-	 */
-	public INFO chercherUsedNS(String n){
-		INFO i = null;
-		Set<Map.Entry<String, INFONAMESPACE>> s = usedNS.entrySet();
-		for (Map.Entry<String, INFONAMESPACE> e : s) {
-			if (e.getKey().equals(n)) {
-				i = e.getValue();
-				break;
-			}
-			else {
-				if (e.getValue().getContenu().chercherLocalement(n) != null) {
-					i = e.getValue().getContenu().chercherLocalement(n);
-					break;
-				}
-			}
-		}
-		return i;
-	}
-
-
-	public INFO chercherLocalementCL(String n) {
-		return (get(n) instanceof INFOCLASSE) ? get(n) : null;
-	}
-
-
-	public INFO chercherGlobalementCL(String n) {
-		INFO i = chercherLocalementCL(n);
-		System.out.println("chercherGlobalement " + i + this);
-		if (i == null)
-			if (parente != null)
-				return parente.chercherGlobalementCL(n);
-		return i;
-	}
-
-	public INFO chercherLocalementNS(String n) {
-		return (get(n) instanceof INFONAMESPACE) ? get(n) : null;
-	}
-
-
-	public INFO chercherGlobalementNS(String n) {
-		INFO i = chercherLocalementCL(n);
-		if (i == null)
-			if (parente != null)
-				return parente.chercherGlobalementCL(n);
-		return i;
-	}
-
-
-	public TDS chercherGlobalementNSTDS(String n) {
-		TDS t = null;
-		INFO i = chercherLocalementCL(n);
-		if (i == null){
-			if (parente != null){
-				i = parente.chercherGlobalementCL(n);
-			}
-		}
-		else {
-			t = this;
-		}
-		return t;
-	}
-
-
-
-	/*
-	 * chercher un namespace, nécessaire pour le using
-	 */
-	public INFO chercherNamespace(String n) {
-		String[] strings = n.split(Pattern.quote("."));
-		INFO i = null;
-		TDS tds = this;
-		// nom simple
-		if (strings.length == 1){
-			return tds.chercherGlobalementNS(n) instanceof INFONAMESPACE ? tds.chercherGlobalementNS(n) : null;
-		}
-		else {
-			// nom composé
-			for (String s : strings){
-				System.out.println("chercherNS sur : " + s);
-				i = tds.chercherGlobalementNS(s);
-				if (i == null){
-					return null;
-				}
-				else {
-					if (i instanceof INFONAMESPACE){
-						tds = ((INFONAMESPACE) i).getContenu();
-					}
-					else {
-						return null;
-					}
-				}
-			}
-		}
-		return i;
-	}
-
-
-	public INFO chercherClasse(String n){
-		String[] strings = n.split(Pattern.quote("."));
-		System.out.println("chercher classe sur : " + n);
-		String ins = "";
-		String inc;
-		INFO info = null;
-		TDS tds = this;
-		// nom simple + INFOCLASSE
-		if (strings.length == 1){
-			System.out.println("chercher classe " + strings[0]);
-			return tds.chercherGlobalementCL(n) instanceof INFOCLASSE ? tds.chercherGlobalementCL(n) : null;
-		}
-		else {
-			tds = chercherGlobalementNSTDS(strings[0]);
-			// nom composé + INFONAMESPACE...S.. 
-			for (int i = 1; i < strings.length - 1; i++){
-				info = tds.chercherLocalementNS(strings[i]);
-				if (info != null && info instanceof INFONAMESPACE){
-					tds = ((INFONAMESPACE) info).getContenu();
-				}
-				else {
-					return null;
-				}
-			}
-			//.. + INFOCLASSE
-			System.out.println("NAMESPACE FOUND " + info);
-			info = tds.chercherLocalementNS(strings[strings.length - 1]);
-			if (info != null && info instanceof INFOCLASSE){
-				System.out.println("CLASSE FOUND " + info);
-				return info;
-			}
-		}
-		return info;
-	}
-
 
 	/**
 	 * Ajoute le nom n et son information i dans la TDS
@@ -327,9 +182,6 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		Set<Map.Entry<String, INFO>> s = entrySet();
 		for (Map.Entry<String, INFO> e : s) {
 			sb.append("Ident : " + e.getKey() + "  Type : " + e.getValue().toString() + '\n');
-		}
-		for (String ss : usedNS.keySet()) {
-			sb.append("NS imported : " + ss + "\n");
 		}
 		sb.append("Fin TDS\n");
 		return sb.toString();

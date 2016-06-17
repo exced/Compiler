@@ -41,7 +41,7 @@ namespace Geometry {
     
       // le nom complet de cette classe est Geometry.B.Point2DCol
       
-      public class Point2DCol{
+      public class Point2DCol:Geometry.A.Point2D{
       
         int col;
         
@@ -76,7 +76,7 @@ using Geometry;
 // point d'entree du programme.
 int main(){
 
-
+	Point2D p = new Point2D(0,1);
     
     return 0;
 }

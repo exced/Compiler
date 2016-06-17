@@ -12,9 +12,9 @@ inh source : MCSSourceFile for PROGRAMME;
 -- la machine cible pour la generation de code
 inh machine : IMachine for 
          ENTITES, ENTITE, DECL, FONCTION, INST, BLOC, INSTS, SIX,
-         PARFS, PARF, PARFSX, ES, ESX, 
+         PARFS, PARF, PARFSX, ES, ESX,STYPE,TYPE,CHAMP,CHAMPS, 
          E, AFFX, A, AX, R, RX, T, TX, F,FX,OPUN,OPMUL,OPREL,OPADD,
-         BASE, DEFS, DEF,WHILE;--,ASMINST,ASM,ASMINSTS;
+         BASE, DEFS, DEF,WHILE,IDC,HERITAGE;--,ASMINST,ASM,ASMINSTS;
               
 
 -- MODE
@@ -29,7 +29,7 @@ inh estConditionnelle : BOOLEAN for E,A,AFFX,R,RX,AX,T,TX,F;
 -- IDENT
 inh ident   : STRING for DECL, FONCTION,FX,IDC,WHILE;
 syn sident  : STRING for PARF, CHAMP,IDC,HERITAGE;
-inh identSuper : STRING for DEFS,DEF,BASE;
+inh identSuper : STRING for DEFS,DEF,BASE,FX,DECL,FONCTION, BLOC,INSTS,INST,WHILE,SIX,E,A,AFFX,AX,R,F,T,TX,RX;
 inh identClasse : STRING for DEFS,DEF,DECL,FONCTION, BLOC,INSTS,INST,WHILE,SIX,E,A,AFFX,AX,R,F,T,TX,RX,FX;
 
 -- TYPE
@@ -40,6 +40,7 @@ inh htype   : DTYPE for  DECL,FONCTION,PTRS,BLOC,SIX,INSTS,INST,AFFX,AX,FX,RX,TX
 inh hdep : INTEGER for AFFX,FX;
 syn sdep : INTEGER for E,A,R,T,F,FX;
 syn sinfo : INFO for DECL,FONCTION;
+inh hinfoNSParent : INFONAMESPACE for ENTITE,ENTITES;
 
 -- TDS
 inh tds_asm : TDS for ASM;--, ASMINST, ASMINSTS;
@@ -173,6 +174,9 @@ local
     contenuObject : TDS;
     tdsParamEquals : TDS;
 do
+    -- premier NS : pas de parent
+    ENTITES^hinfoNSParent := nil;
+
     --init de la TDS ( sans parente )
     ENTITES^tds := new TDS(nil);
     
@@ -187,7 +191,7 @@ do
     -- toString (A IMPLEMENTER)
     contenuObject.inserer("toString", new INFOFONC(new DTYPEImpl("String",1), new TDS(contenuObject)));
     -- insertion de la classe Object
-    ENTITES^tds.inserer("Object", new INFOCLASSE("public", contenuObject));
+    ENTITES^machine.addClasse("Object", new INFOCLASSE("public", contenuObject));
 end
 }
 -- ecrit le code dans un fichier
@@ -259,6 +263,7 @@ do
     DECL^ident := ident^txt;
     DECL^htype := TYPE^type;
     DECL^identClasse := "";
+    DECL^identSuper := "";
 end
 }
 #gen {
@@ -696,7 +701,7 @@ end
 
 ------------------------------------------------------------------------
 -- dowhile
-INST -> do aco #hbloc BLOC acf WHILE #gen;
+INST -> do #hbloc BLOC WHILE pv #gen;
 global
     etiquette : STRING;
 #hbloc {
@@ -715,7 +720,7 @@ end
 
 ------------------------------------------------------------------------
 -- whiledo
---INST -> WHILE aco BLOC acf #gen;
+--INST -> WHILE BLOC pv #gen;
 --#gen {
 --do
     
@@ -734,6 +739,7 @@ end
 local
     code : STRING;
 do
+    code := "";
     if ~E^type.compareTo(new DTYPEImpl("bool", 1)) then  
         error(not_bool, E^type.getNom());
     else
@@ -1480,7 +1486,7 @@ end
 do
     -- controle de type
     if ~E^type.compareTo(FX^type) then
-        error(castError, E^type.getNom(), FX^type.getNom());
+        error(typeError, E^type.getNom(), FX^type.getNom());
     else
     -- on remonte le type
         F^type := E^type;   
@@ -1687,31 +1693,41 @@ local
     inf : INFOFONC;
     tdsBloc : TDS;
     tdsClasse : TDS;
-    tdsSuper : TDS;
     ic : INFO;
-    ics : INFOCLASSE;
+    icc : INFOCLASSE;
 do
     code := "";
     i := nil;
-    -- tds classe
-    tdsBloc := FX^tds.getParente();
-    tdsClasse := tdsBloc.getParente();
-      
-    -- THIS
+    tdsClasse := nil;
+    
     if FX^this then
-        -- abstraction TDS -> pointeur sur struct donc on genere le code associe 
-        i := tdsClasse.chercherLocalement(ident^txt);
+        -- tds classe
+        tdsBloc := FX^tds.getParente();
+        tdsClasse := tdsBloc.getParente();
     end
     
-    -- BASE
     if FX^base then
-        -- chercher dans la tds super
-        tdsSuper := FX^tds.getParente();
-        i := tdsSuper.chercherLocalement(ident^txt);
-    end
     
+        -- chercher la classe
+        ic := FX^machine.chercherClasse(FX^identSuper);
+        if ic = nil then
+            error(classe_not_found, FX^identSuper, FX^machine.getClasses(), FX^machine.getNamespaces());
+        else    
+            match ic with
+            INFOCLASSE then
+                icc := ic;
+                -- TDS
+                tdsClasse := icc.getContenu();
+            else
+                error(not_infoclasse, ic);
+            end        
+        end    
+    end 
+
     -- dans les 2 cas
-    if FX^this || FX^base then
+    if FX^this || FX^base then        
+        i := tdsClasse.chercherLocalement(ident^txt);    
+        
         if i /= nil then
             match i 
             with INFOVAR then
@@ -1733,7 +1749,8 @@ do
         else
             error(var_not_found, ident^txt, tdsClasse);
         end
-    end 
+    end
+
     
 -- le htype est null dans le cas de this. et base.
 if FX^htype /= nil then
@@ -1904,6 +1921,7 @@ global
 #idc{
 do
     E^identClasse := "";
+    E^identSuper := "";
 end
 }    
 #hcond {
@@ -1940,6 +1958,7 @@ ESX -> #idc virg #hcond E #tds ESX #stds;
 #idc {
 do
     E^identClasse := "";
+    E^identSuper := "";
 end
 }
 #hcond {
@@ -2087,13 +2106,20 @@ end
 local 
     i : INFO;
 do
-    ins := new INFONAMESPACE(new DTYPEImpl("namespace",0));
+    if ENTITE^hinfoNSParent = nil then
+        ins := new INFONAMESPACE(new DTYPEImpl("namespace",0));
+    else
+        ins := new INFONAMESPACE(new DTYPEImpl("namespace",0), ENTITE^hinfoNSParent);
+    end    
+    
+    -- transmission de l'infoNSParent
+    ENTITES^hinfoNSParent := ins;
 
-    i := ENTITE^tds.chercherGlobalement(identc^txt);
+    i := ENTITE^machine.chercherNamespace(identc^txt);
     if i != nil then
-        error(namespace_declared, identc^txt, ENTITE^tds);
+        error(namespace_declared, identc^txt, ENTITE^machine.getNamespaces());
     else    
-        ENTITE^tds.inserer(identc^txt, ins);
+        ENTITE^machine.addNamespace(identc^txt, ins);
     end
 end       
 }
@@ -2123,15 +2149,15 @@ local
     i       : INFO;
     ins     : INFONAMESPACE;
 do
-    i := ENTITE^tds.chercherNamespace(IDC^sident);
+    i := ENTITE^machine.chercherNamespace(IDC^sident);
     if i = nil then
-        error(namespace_unknown, IDC^sident, ENTITE^tds);
+        error(namespace_unknown, IDC^sident, ENTITE^machine.getNamespaces());
     else    
         match i with
         INFONAMESPACE then
             ins := i;
             -- changer la visibilite du namespace ( ajout a la liste )
-            ENTITE^tds.addUsedNS(identc^txt, ins);
+            ENTITE^machine.addUsedNS(identc^txt, ins);
         else
             error(using_notNameSpace, identc^txt);
         end      
@@ -2172,40 +2198,13 @@ global
     ic : INFOCLASSE;
     ih: INFO;
     ihc : INFOCLASSE;
+    i : INFO;
+    ident : STRING;
 #htds {
 local
     htds : TDS;
-    ident : STRING;
 do
     htds := new TDS(ENTITE^tds);
-    
-    -- recherche de l heritage
-    -- si heritage
-    if HERITAGE^aHeritage then
-        ih := ENTITE^tds.chercherClasse(HERITAGE^sident);
-        ident := HERITAGE^sident;
-    else
-        -- pas d'heritage -> herite de la classe Object, mere de toutes les classes
-        ih := ENTITE^tds.chercherClasse("Object");
-        ident := "Object";   
-    end
-        
-    if ih = nil then
-        error(classe_undefined, ident, ENTITE^tds);
-    else 
-        match ih with
-        INFOCLASSE then   
-            ihc := ih;
-            
-            write "HERITAGE found " + identc^txt + HERITAGE^sident + ihc + "\n";
-            
-            -- on insere l'infoclasse de super dans la TDS contenu pour avoir plus de facilite a la retrouver (appel a base)
-            htds.inserer(HERITAGE^sident, ihc); 
-        else
-            error(not_infoclasse, HERITAGE^sident);
-        end    
-    end 
-
 
     -- transmission du nom de la classe aux DEFS
     DEFS^identClasse := identc^txt;
@@ -2217,31 +2216,48 @@ do
 end
 }
 #classe {
-local
-    i : INFO;
 do
-    -- si la classe n est pas deja definie dans ce namespace 
-    i := ENTITE^tds.chercherLocalementClasse(identc^txt);
+    -- si la classe n est pas deja definie 
+    i := ENTITE^machine.chercherClasse(identc^txt);
     if i != nil then
-        error(classe_defined, identc^txt, ENTITE^tds);
+        error(classe_defined, identc^txt, ENTITE^machine.getClasses());
     else    
         -- si pas d heritage
         if ~HERITAGE^aHeritage then
-            ic := new INFOCLASSE(ACCES^acces, DEFS^stds);
-            -- insertion
-            ENTITE^tds.inserer(identc^txt, ic); 
+            -- pas d'heritage -> herite de la classe Object, mere de toutes les classes
+            ident := "Object";
         else
-            -- definition de la classe
-            -- le type de la classe est un pointeur sur un struct et les champs sont les attributs et les fonctions
-            ic := new INFOCLASSE(ACCES^acces, DEFS^stds, ihc);
-            -- insertion
-            ENTITE^tds.inserer(identc^txt, ic);    
-        end  
+            ident := HERITAGE^sident;
+        end        
+        ih := ENTITE^machine.chercherClasse(ident);
+        if ih = nil then 
+            error(classe_not_found, ident, ENTITE^machine.getClasses(), ENTITE^machine.getNamespaces());
+        else
+            match ih with
+            INFOCLASSE then
+                ihc := ih;
+	            -- definition de la classe
+                if ENTITE^hinfoNSParent = nil then
+                    ic := new INFOCLASSE(ACCES^acces, DEFS^stds, ihc);
+                else
+                    ic := new INFOCLASSE(ACCES^acces, DEFS^stds, ihc, ENTITE^hinfoNSParent);
+                end    
+	            
+	            -- insertion
+	            ENTITE^machine.addClasse(identc^txt, ic);
+            else
+                error(not_infoclasse, ih);
+            end
+        end 
+       
     end   
 end
 }
 #gen {
 do
+    -- creation d'une INFOTYPE dediee a la classe
+    ENTITE^tds.inserer(identc^txt, new INFOTYPE(new OBJET(identc^txt,ic)));
+
     -- table des variables pour le CALLI (liaison dynamique)   
     --ENTITE^code := ENTITE^machine.genTable(ic.getTV()) +  DEFS^code;    
     ENTITE^code := DEFS^code;
@@ -2416,9 +2432,9 @@ local
 do
     code := "";
     -- chercher la classe super
-    i := BASE^tds.chercherClasse(BASE^identSuper);
+    i := BASE^machine.chercherClasse(BASE^identSuper);
     if i = nil then
-        error(classe_undefined, BASE^identSuper, BASE^tds);
+        error(classe_not_found, BASE^identSuper, BASE^machine.getClasses(),BASE^machine.getNamespaces());
     else
         match i with
         INFOCLASSE then
@@ -2578,21 +2594,26 @@ local
     ic : INFOCLASSE;
     code : STRING;
     lch : LCHAMPS;
+    tdsContenu : TDS;
+    t : DTYPE;
 do
     code := "";
     F^code_est_adresse := false;
     F^sdep := 0;
     
     -- recherche de la classe
-    i := F^tds.chercherClasse(IDC^sident);
+    i := F^machine.chercherClasse(IDC^sident);
     if i = nil then
-        error(classe_undefined, IDC^sident, F^tds);
+        error(classe_not_found, IDC^sident, F^machine.getClasses(), F^machine.getNamespaces());
     else
         match i with
         INFOCLASSE then
             ic := i;
-            lch := ic.getChampsClasse();
-            F^type := ic.getType();
+            tdsContenu := ic.getContenu();
+            lch := tdsContenu.toChamps();
+            t := ic.getType();
+            F^type := t;
+            
             F^code_est_adresse := true;
             F^sdep := F^machine.getCurrentDep();
             code := F^machine.genMalloc(lch.getCurrentDep());

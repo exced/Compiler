@@ -22,7 +22,7 @@ _getY:
 _afficher:
 	RETURN (0) 0
 	PUSH 1
-_Point2DCol:
+null_Point2DCol:
 	LOAD(1) -3[LB]
 	STORE(1) 0[LB]
 	RETURN (5) 0
@@ -37,7 +37,7 @@ _isRed:
 _afficher:
 null	RETURN (0) 0
 _main:
-	LOADL 0
+null	LOADL 0
 	RETURN (0) 1
 ; Appel a main
 	CALL(SB) _main

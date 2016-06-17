@@ -11,6 +11,8 @@ namespace A {
 	}	
 }	
 
+using A.B;
+
 
 // point d'entree du programme.
 int main(){
