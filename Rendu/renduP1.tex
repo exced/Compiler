@@ -72,25 +72,49 @@
 
 \vfill
 
-\part{Langage $\mu$C}
+\chapter{Structure}
+
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.4]{UML.png}
+		\end{center}
+		\caption{UML global}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.4]{UMLSTRUCT.png}
+		\end{center}
+		\caption{Précision STRUCT}
+	\end{figure}
+
+Les principaux choix de conception sont liés à la gestion de la TDS. Afin de distinguer les éléments présents dans celle-ci, plutôt que de donner un attribut à une Info pour distinguer sa vraie nature, nous avons choisi d'utiliser le typage. C'est pour cette raison que nous avons créé les classes Infofonc, Infonamespace, Infoclasse, et Infovar qui héritent toutes de la classe INFO. \\
+
+\begin{itemize}
+ 	\item[INFOFONC :]Représente une fonction. Le type de cette fonction correspond à son type de retour. Une Infofonc possède une TDS contenant les paramètres de la fonction.\\
+ 	\item[INFONAMESPACE :]Représente un Namespace. Une Infonamespace possède une TDS contenant  l'ensemble des définitions effectuées au sein de ce dernier.\\
+ 	\item[INFOCLASSE :]Représente une classe objet. Une Infoclasse possède un contenu, ce qui correspond aux attributs et aux méthodes de la classe. La distinction entre un attribut et une méthode s'effectue grâce au typage. Acces correspond à l'accessibilité de la classe (private, public, protected…). Et enfin, parente est la « super-classe » de  la classe en question.\\
+ 	\item[INFOVAR :]Représente une variable quelconque. Elle possède un attribut accès qui représente son accessibilité (public, private…), utilisée uniquement dans le cadre de l’objet. L’attribut emplacement représente la position dans la pile, par rapport à un registre donné. L’attribut mode correspond au mode de passage de la variable dans les paramètres d’une fonction. Si la variable en question n’est pas un paramètre, son mode par défaut sera « ref » : on peut la lire et l’affecter.\\
+\end{itemize}
+
+En ce qui concerne le système de type, nous avons simplement rajouté les méthodes compareOpUn et compareOpBin permettant de tester respectivement la compatibilité entre un d'un opérateur binaire avec son argument et celle d'un opérateur binaire avec ses deux arguments. \\
+La classe CHAMPCLASSE permet de représenter les attributs et les méthodes d'une classe de la même manière que l'on utilise la classe CHAMP pour représenter un élément d'un Struct. La différence est l'existence d'un attribut de type Info permettant de faire la différence entre une méthode et un attribut, différence impossible à effectuer uniquement à partir des informations contenues par CHAMP. Chaque CHAMPCLASSE possède également une accessibilité. 
 
 \chapter{Choix de conception}
 
 \begin{itemize}
-	\item Nous avons choisi de gérer le problème d'insertion de doublons directement dans la TDS afin de rendre plus clair le contenu des actions sémantiques.
-	\item La TDS d'un bloc est créée à l'"extérieur" de celui-ci (1\iere{} apparition du non-terminal BLOC).
-	\item Nous avons choisi de rajouter des méthodes à la machine TAM, celles-ci permettant de faciliter la gestion du déplacement dans le bloc courant.
-	\item La classe INFOFONC a été créée afin de faciliter la manipulation des fonctions: paramètres et retour.
-	\item Nous stockons les paramètres d'une fonction à la déclaration dans une unique TDS pour relever les erreurs de paramètres qui ont le même nom lors de l'appel d'une fonction.
-	\item de nouvelles fonctions compareTo ont été définies afin de simplifier la vérification de type entre opérateurs et types.  
+ 	\item Assembleur Inline : Nous avions au départ modifié la classe Infovar de manière à gérer la position dans la pile sans passer par la classe Emplacement, et donc créé nos propres règles pour la gestion de l'assembleur Inline, à cause d'erreurs liées à des conflits avec les règles déjà existantes. Nous sommes ensuite revenu sur notre décision, et avons utilisé la classe Emplacement, encore une fois à cause de conflits avec le traitement initialement prévu pour l'assembleur Inline.\\
+ 	\item Nous avons choisi de représenter un objet sous la forme d'un pointeur vers un Struct.\\
+ 	\item L'utilisateur doit indiquer toutes les variables globales en premier, c'est à dire avant les fonctions/Namespaces, pour une raison de complexité de traitement.\\
+ 	\item Le déplacement courant au sein d’un Bloc est conservé non pas grâce à un attribut, mais directement par la machine. Cela simplifie grandement l’écriture des règles. La même classe Java s’occupe de la modification de la valeur de ce déplacement.\\
+ 	\item Au début, nous avions choisi d’utiliser une classe Infoparam pour représenter le fait qu’une variable soit le paramètre d’une fonction. Nous insérions en effet les paramètres comme des variables normales, puis au moment de leur affectation, nous testions leur appartenance aux paramètres pour savoir si le déplacement par rapport à LB était négatif. Maintenant, nous donnons directement aux paramètres une valeur de déplacement négative, conformément à la solution vu en TD.\\
+ 	\item L'attribut mode est utilisé à la fois pour gérer l'affectation des paramètres des fonctions, mais aussi pour éviter que des expressions autres que identifiants puissent être affectées. Pour cela, on recherche le seul cas aboutissant à une expression comportant seulement un identifiant, à savoir celui où aucun opérateur n'apparaît dans l'expression. Il existe cependant un cas où une expression autre qu’un ident peut se trouver à droite d’un opérateur d’affectation, à savoir lorsqu’il s’agit d’une condition. D’où la présence d’un attribut permettant de vérifier si l’on se trouve dans ce cas.\\
+ 	\item Au départ, nous avions choisi de créer une classe Champclasse héritant de Champ, et possédant les attributs nom, dep, type, acces, et info. Le problème avec cette implantation, c'est que l'attribut info contient déjà les informations sur le type et l'accès. Il était donc plus logique de remplacer l'attribut type de la classe champ pour le remplacer par une info. Cela ne pose pas de problème car toutes les variables ont une accessibilité, set par défaut à « default », avoir comme attribut une info pour un champ de struct n'est donc pas un problème.\\
 \end{itemize}
 
 \chapter{Limitations}
-\begin{itemize}
-	\item La génération de code n'est pas terminée, nous nous sommes focalisés sur la bonne gestion de la TDS et des types.
-	\item Des exemples simples de code sont en cours de création et de traduction en assembleur, pour simplifier le travail de vérification de génération de code dans le futur.
-	
-\end{itemize}
+
+Supposons que l'on ait deux fonctions du même nom dans deux Namespaces différents, et que l'on se trouve dans un troisième Namespace dans lequel on utilise les deux précédents. Si l'on souhaite appeler ladite fonction, qui par ailleurs n'existe pas dans le dernier Namespace, il est impossible de choisir laquelle appeler, il s'agira de la première trouvée par la recherche (vraisemblablement celle du premier Namespace).
 
 
 
