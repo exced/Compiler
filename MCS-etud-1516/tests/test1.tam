@@ -1,7 +1,7 @@
 ; Generated code for tests/test1.mcs.
 ; Do not modify by hand
 
-_main:
+_X2main:
 	LOADL 1
 	PUSH 1
 	; if

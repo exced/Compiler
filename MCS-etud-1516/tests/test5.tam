@@ -1,7 +1,7 @@
 ; Generated code for tests/test5.mcs.
 ; Do not modify by hand
 
-_main:
+_X0main:
 	PUSH 1
 	LOADL 1
 	SUBR MAlloc

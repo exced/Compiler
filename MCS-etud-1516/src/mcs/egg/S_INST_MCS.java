@@ -180,7 +180,12 @@ else {
 x_5.att_hdep=this.att_machine.getCurrentDep();
 }
 x_5.att_htype=x_2.att_type;
+if (this.att_identClasse==null){
 x_5.att_hcode_est_adresse=false;
+}
+else {
+x_5.att_hcode_est_adresse=true;
+}
 x_5.att_hcode="";
 x_5.att_hest_decl=true;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#htype","INST -> TYPE ident #htype AFFX pv #tds #type #gen ;"});
@@ -389,88 +394,88 @@ x_4.att_tds_asm=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_void : // 32173
+      case LEX_MCS.token_void : // 57287
         regle27 () ;
       break ;
-      case LEX_MCS.token_int : // 32175
+      case LEX_MCS.token_int : // 57289
         regle27 () ;
       break ;
-      case LEX_MCS.token_char : // 32176
+      case LEX_MCS.token_char : // 57290
         regle27 () ;
       break ;
-      case LEX_MCS.token_identc : // 32215
+      case LEX_MCS.token_identc : // 57329
         regle27 () ;
       break ;
-      case LEX_MCS.token_struct : // 32177
+      case LEX_MCS.token_struct : // 57291
         regle27 () ;
       break ;
-      case LEX_MCS.token_bool : // 32187
+      case LEX_MCS.token_bool : // 57301
         regle27 () ;
       break ;
-      case LEX_MCS.token_do : // 32159
+      case LEX_MCS.token_do : // 57273
         regle28 () ;
       break ;
-      case LEX_MCS.token_entier : // 32211
+      case LEX_MCS.token_entier : // 57325
         regle30 () ;
       break ;
-      case LEX_MCS.token_chaine : // 32213
+      case LEX_MCS.token_chaine : // 57327
         regle30 () ;
       break ;
-      case LEX_MCS.token_caractere : // 32212
+      case LEX_MCS.token_caractere : // 57326
         regle30 () ;
       break ;
-      case LEX_MCS.token_plus : // 32203
+      case LEX_MCS.token_plus : // 57317
         regle30 () ;
       break ;
-      case LEX_MCS.token_moins : // 32204
+      case LEX_MCS.token_moins : // 57318
         regle30 () ;
       break ;
-      case LEX_MCS.token_non : // 32210
+      case LEX_MCS.token_non : // 57324
         regle30 () ;
       break ;
-      case LEX_MCS.token_null : // 32196
+      case LEX_MCS.token_null : // 57310
         regle30 () ;
       break ;
-      case LEX_MCS.token_paro : // 32163
+      case LEX_MCS.token_paro : // 57277
         regle30 () ;
       break ;
-      case LEX_MCS.token_malloc : // 32158
+      case LEX_MCS.token_malloc : // 57272
         regle30 () ;
       break ;
-      case LEX_MCS.token_mult : // 32206
+      case LEX_MCS.token_mult : // 57320
         regle30 () ;
       break ;
-      case LEX_MCS.token_ident : // 32214
+      case LEX_MCS.token_ident : // 57328
         regle30 () ;
       break ;
-      case LEX_MCS.token_true : // 32188
+      case LEX_MCS.token_true : // 57302
         regle30 () ;
       break ;
-      case LEX_MCS.token_false : // 32189
+      case LEX_MCS.token_false : // 57303
         regle30 () ;
       break ;
-      case LEX_MCS.token_this : // 32190
+      case LEX_MCS.token_this : // 57304
         regle30 () ;
       break ;
-      case LEX_MCS.token_base : // 32193
+      case LEX_MCS.token_base : // 57307
         regle30 () ;
       break ;
-      case LEX_MCS.token_null2 : // 32192
+      case LEX_MCS.token_null2 : // 57306
         regle30 () ;
       break ;
-      case LEX_MCS.token_new : // 32191
+      case LEX_MCS.token_new : // 57305
         regle30 () ;
       break ;
-      case LEX_MCS.token_aco : // 32165
+      case LEX_MCS.token_aco : // 57279
         regle31 () ;
       break ;
-      case LEX_MCS.token_si : // 32171
+      case LEX_MCS.token_si : // 57285
         regle32 () ;
       break ;
-      case LEX_MCS.token_retour : // 32194
+      case LEX_MCS.token_retour : // 57308
         regle35 () ;
       break ;
-      case LEX_MCS.token_asm : // 32174
+      case LEX_MCS.token_asm : // 57288
         regle83 () ;
       break ;
       default :

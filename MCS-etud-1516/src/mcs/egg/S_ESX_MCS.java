@@ -98,10 +98,10 @@ this.att_stds=x_7.att_stds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_parf : // 32164
+      case LEX_MCS.token_parf : // 57278
         regle80 () ;
       break ;
-      case LEX_MCS.token_virg : // 32167
+      case LEX_MCS.token_virg : // 57281
         regle81 () ;
       break ;
       default :

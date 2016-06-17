@@ -9,34 +9,32 @@ _Point2D:
 	LOAD(1) -2[LB]
 	STORE(1) 1[LB]
 	RETURN (2) 0
-_getX:
+_X0getX:
 	LOAD(1) 0[LB]
 	RETURN (0) 1
-_getY:
-	LOADA 3[LB]
-	LOADI(1)
+_X1getY:
 	;Calcul deplacement struct 1
 	LOADL 1
 	SUBR Iadd
 	RETURN (0) 1
-_afficher:
+_X2afficher:
 	RETURN (0) 0
 	PUSH 1
 null_Point2DCol:
 	LOAD(1) -3[LB]
 	STORE(1) 0[LB]
 	RETURN (5) 0
-_getCol:
+_X3getCol:
 	LOAD(1) 0[LB]
 	RETURN (0) 1
-_isRed:
+_X4isRed:
 	LOAD(1) 0[LB]
 	LOADL 0
 	SUBR INeq
 	RETURN (0) 1
-_afficher:
+_X5afficher:
 null	RETURN (0) 0
-_main:
+_X6main:
 null	LOADL 0
 	RETURN (0) 1
 ; Appel a main

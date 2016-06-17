@@ -362,10 +362,12 @@ local
     ir : INFO;
     inf : INFOFONC;
     tdsPF : TDS;
+    etq : STRING;
 do
 
+    etq := FONCTION^machine.genEtiq();
     -- TDS
-    i := new INFOFONC(FONCTION^htype, tdsParam);
+    i := new INFOFONC(FONCTION^htype, tdsParam, etq);
     i.setAcces(FONCTION^hacces);
     
     ir := FONCTION^tds.chercherGlobalement(FONCTION^ident);
@@ -394,7 +396,7 @@ do
     
     -- generer le prologue et l'epilogue de la fonction
     -- etiquette + taille des parametres + taille retour + code des instructions
-    FONCTION^code := FONCTION^machine.genFonction(FONCTION^ident, tdsParam.getTailleParams(), typeRetour.getTaille(), BLOC^code);
+    FONCTION^code := FONCTION^machine.genFonction(etq + FONCTION^ident, tdsParam.getTailleParams(), typeRetour.getTaille(), BLOC^code);
 end
 }
 
@@ -663,7 +665,15 @@ do
     -- transmission de type
     AFFX^htype := TYPE^type;
     -- transmission de l adresse
-    AFFX^hcode_est_adresse := false;
+    
+    -- si on est pas dans une classe
+    if INST^identClasse = nil then
+        AFFX^hcode_est_adresse := false;
+    else
+        AFFX^hcode_est_adresse := true;
+    end        
+    
+    
     AFFX^hcode := "";
     
     AFFX^hest_decl := true;
@@ -1605,6 +1615,7 @@ local
 do  
     code := "";
     
+    
     FX^base := false;
     FX^this := false;
 
@@ -1695,6 +1706,7 @@ local
     tdsClasse : TDS;
     ic : INFO;
     icc : INFOCLASSE;
+    tt : DTYPE;
 do
     code := "";
     i := nil;
@@ -1707,7 +1719,6 @@ do
     end
     
     if FX^base then
-    
         -- chercher la classe
         ic := FX^machine.chercherClasse(FX^identSuper);
         if ic = nil then
@@ -1726,38 +1737,16 @@ do
 
     -- dans les 2 cas
     if FX^this || FX^base then        
-        i := tdsClasse.chercherLocalement(ident^txt);    
-        
-        if i /= nil then
-            match i 
-            with INFOVAR then
-                iv := i;
-                t := iv.getType();
-                FX^sdep := iv.getDep();
-                
-                -- code acces a une var au travers de pointeur + struct
-                code := FX^machine.genAdr(FX^machine.getCurrentDep()) + FX^machine.genReadIndirectMem(t.getTaille()) + FX^machine.genAdrField(iv.getDep());
-                
-            with INFOFONC then
-                inf := i;
-                t := inf.getType();
-                -- appel fonction dans FX1
-                FX1^this := true;
-            else
-                error(type_unknown, ident^txt, i.getType());
-            end
-        else
-            error(var_not_found, ident^txt, tdsClasse);
-        end
+        tt := new POINTEUR(new STRUCT(tdsClasse.toChamps()));
+    else
+        tt := FX^htype;
     end
 
     
--- le htype est null dans le cas de this. et base.
-if FX^htype /= nil then
 
-    match FX^htype
+    match tt
 	with POINTEUR then
-        p := FX^htype;
+        p := tt;
 		t := p.getType();
 		match t with
 		STRUCT then
@@ -1773,10 +1762,10 @@ if FX^htype /= nil then
 		      code := FX^hcode + FX^machine.genAdrField(c.getDep());
             end    
         else
-            error(type_not_struct, FX^htype.getNom(), ident^txt);
+            error(type_not_struct, tt.getNom(), ident^txt);
         end        
 		with STRUCT then
-            s := FX^htype;
+            s := tt;
 		    lc := s.getChamps();
 		    c := lc.chercherChamp(ident^txt);
 		    ct := c.getType();
@@ -1788,9 +1777,8 @@ if FX^htype /= nil then
 		        code := FX^machine.genReadMem(c.getDep() + FX^hdep , ct.getTaille());
             end    
         else
-            error(type_not_struct, FX^htype.getNom(), ident^txt);
+            error(type_not_struct, tt.getNom(), ident^txt);
         end
-end
 
     FX1^hcode := code;    
 
@@ -1876,17 +1864,20 @@ local
     t : DTYPE;
     infofonc : INFOFONC;
     tdsParam : TDS;
+    tdsBloc : TDS;
+    tdsClasse : TDS;
 do
     FX^sdep := FX^hdep;
-    
 
     -- appel du sous-programme a partir de l'étiquette
     if FX^this then
-        i := FX^tds.chercherLocalementFonc(FX^ident, ES^stds);
+        -- tds classe
+        tdsBloc := FX^tds.getParente();
+        tdsClasse := tdsBloc.getParente();
+        i := tdsClasse.chercherLocalementFonc(FX^ident, ES^stds);
     else
         i := FX^tds.chercherGlobalementFonc(FX^ident, ES^stds);
     end
-    
     
     t := i.getType();
     
@@ -1897,7 +1888,7 @@ do
     with INFOFONC then
         infofonc := i;
         tdsParam := infofonc.getParams();
-        FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(FX^ident) ;
+        FX^code := FX^machine.genArgs(ES^stds) + FX^machine.genCall(infofonc.getEtq() + FX^ident) ;
     else
         error(not_infofonc, i);
     end
@@ -2205,6 +2196,7 @@ local
     htds : TDS;
 do
     htds := new TDS(ENTITE^tds);
+
 
     -- transmission du nom de la classe aux DEFS
     DEFS^identClasse := identc^txt;

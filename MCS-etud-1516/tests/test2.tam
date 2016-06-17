@@ -2,7 +2,7 @@
 ; Do not modify by hand
 
 	PUSH 1
-_main:
+_X0main:
 	LOADL 0
 	LOADL 1
 	SUBR ILss

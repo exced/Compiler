@@ -1,7 +1,7 @@
 ; Generated code for tests/test4.mcs.
 ; Do not modify by hand
 
-_main:
+_X0main:
 	PUSH 2
 	LOADL 3
 	STORE(1) 4[LB]

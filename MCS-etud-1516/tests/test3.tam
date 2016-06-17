@@ -2,7 +2,7 @@
 ; Do not modify by hand
 
 	PUSH 1
-_fonction1:
+_X0fonction1:
 	PUSH 1
 	LOAD(1) -2[LB]
 	LOADL 18
@@ -11,7 +11,12 @@ _fonction1:
 	LOAD(1) -1[LB]
 	SUBR IAdd
 	RETURN (2) 1
-_fonction2:
+_X1fonction1:
+	LOAD(1) -1[LB]
+	LOADL 1
+	SUBR IAdd
+	RETURN (1) 1
+_X2fonction2:
 	PUSH 1
 	LOADL 18
 	STORE(1) 3[LB]
@@ -21,10 +26,21 @@ _fonction2:
 	SUBR IAdd
 	SUBR IAdd
 	RETURN (2) 1
-_main:
+_X3main:
 	LOADL 2
-null	PUSH 1
-null	STORE(1) 5[LB]
+	LOADL 0
+	LOADL 1
+; Appel a X1fonction1
+	CALL(SB) _X1fonction1
+	LOADL 2
+; Appel a X1fonction1
+	CALL(SB) _X1fonction1
+	PUSH 1
+	LOADL 3
+	LOADL 4
+; Appel a X2fonction2
+	CALL(SB) _X2fonction2
+	STORE(1) 6[LB]
 	LOADL 0
 	RETURN (0) 1
 ; Appel a main

@@ -56,8 +56,10 @@ DTYPE loc_typeRetour;
 INFO loc_ir;
 INFOFONC loc_inf;
 TDS loc_tdsPF;
+String loc_etq;
 // instructions
-glob_7_i= new INFOFONC(this.att_htype, glob_7_tdsParam);
+loc_etq=this.att_machine.genEtiq();
+glob_7_i= new INFOFONC(this.att_htype, glob_7_tdsParam, loc_etq);
 glob_7_i.setAcces(this.att_hacces);
 loc_ir=this.att_tds.chercherGlobalement(this.att_ident);
 if ((loc_ir==null)){
@@ -82,7 +84,7 @@ this.att_tds.inserer(this.att_ident, glob_7_i);
 }
 this.att_sinfo=glob_7_i;
 loc_typeRetour=glob_7_i.getType();
-this.att_code=this.att_machine.genFonction(this.att_ident, glob_7_tdsParam.getTailleParams(), loc_typeRetour.getTaille(), x_7.att_code);
+this.att_code=this.att_machine.genFonction(loc_etq+this.att_ident, glob_7_tdsParam.getTailleParams(), loc_typeRetour.getTaille(), x_7.att_code);
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#gen","FONCTION -> paro #tds PARFS #stds parf BLOC #gen ;"});
 }
   }

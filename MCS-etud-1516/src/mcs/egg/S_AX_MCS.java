@@ -121,34 +121,34 @@ this.att_estTestRel=true;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_inf : // 32197
+      case LEX_MCS.token_inf : // 57311
         regle40 () ;
       break ;
-      case LEX_MCS.token_sup : // 32199
+      case LEX_MCS.token_sup : // 57313
         regle40 () ;
       break ;
-      case LEX_MCS.token_infeg : // 32198
+      case LEX_MCS.token_infeg : // 57312
         regle40 () ;
       break ;
-      case LEX_MCS.token_supeg : // 32200
+      case LEX_MCS.token_supeg : // 57314
         regle40 () ;
       break ;
-      case LEX_MCS.token_eg : // 32201
+      case LEX_MCS.token_eg : // 57315
         regle40 () ;
       break ;
-      case LEX_MCS.token_neg : // 32202
+      case LEX_MCS.token_neg : // 57316
         regle40 () ;
       break ;
-      case LEX_MCS.token_affect : // 32170
+      case LEX_MCS.token_affect : // 57284
         regle41 () ;
       break ;
-      case LEX_MCS.token_virg : // 32167
+      case LEX_MCS.token_virg : // 57281
         regle41 () ;
       break ;
-      case LEX_MCS.token_parf : // 32164
+      case LEX_MCS.token_parf : // 57278
         regle41 () ;
       break ;
-      case LEX_MCS.token_pv : // 32169
+      case LEX_MCS.token_pv : // 57283
         regle41 () ;
       break ;
       default :

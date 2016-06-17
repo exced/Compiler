@@ -9,6 +9,11 @@ int fonction1(int b, int c){
 	return c+b;
 }
 
+
+int fonction1(int b){
+	return b+1;
+}
+
 int fonction2(int b, int c){
 
 	int z;
@@ -17,12 +22,12 @@ int fonction2(int b, int c){
 }
 
 
-
-
 int main(){
 
 	int x = 2;
 	int y = fonction1(0,1);
+	
+	int p = fonction1(2);
 	
 	int g;
 	g = fonction2(3,4);

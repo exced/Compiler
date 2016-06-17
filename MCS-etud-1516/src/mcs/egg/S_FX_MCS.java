@@ -126,10 +126,14 @@ INFO loc_i;
 DTYPE loc_t;
 INFOFONC loc_infofonc;
 TDS loc_tdsParam;
+TDS loc_tdsBloc;
+TDS loc_tdsClasse;
 // instructions
 this.att_sdep=this.att_hdep;
 if (this.att_this){
-loc_i=this.att_tds.chercherLocalementFonc(this.att_ident, x_4.att_stds);
+loc_tdsBloc=this.att_tds.getParente();
+loc_tdsClasse=loc_tdsBloc.getParente();
+loc_i=loc_tdsClasse.chercherLocalementFonc(this.att_ident, x_4.att_stds);
 }
 else {
 loc_i=this.att_tds.chercherGlobalementFonc(this.att_ident, x_4.att_stds);
@@ -143,7 +147,7 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 if (loc_i instanceof INFOFONC ){
 loc_infofonc=((INFOFONC)loc_i);
 loc_tdsParam=loc_infofonc.getParams();
-this.att_code=this.att_machine.genArgs(x_4.att_stds)+this.att_machine.genCall(this.att_ident);
+this.att_code=this.att_machine.genArgs(x_4.att_stds)+this.att_machine.genCall(loc_infofonc.getEtq()+this.att_ident);
 }
 else {
 att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_not_infofonc, MCSMessages.not_infofonc,new Object[]{""+loc_i});
@@ -177,6 +181,7 @@ TDS loc_tdsBloc;
 TDS loc_tdsClasse;
 INFO loc_ic;
 INFOCLASSE loc_icc;
+DTYPE loc_tt;
 // instructions
 loc_code="";
 loc_i=null;
@@ -206,34 +211,13 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 }
 
 if (this.att_this||this.att_base){
-loc_i=loc_tdsClasse.chercherLocalement(x_3.att_txt);
-if (loc_i!=null){
-if (loc_i instanceof INFOVAR ){
-loc_iv=((INFOVAR)loc_i);
-loc_t=loc_iv.getType();
-this.att_sdep=loc_iv.getDep();
-loc_code=this.att_machine.genAdr(this.att_machine.getCurrentDep())+this.att_machine.genReadIndirectMem(loc_t.getTaille())+this.att_machine.genAdrField(loc_iv.getDep());
-}
-else if (loc_i instanceof INFOFONC ){
-loc_inf=((INFOFONC)loc_i);
-loc_t=loc_inf.getType();
-x_5.att_this=true;
+loc_tt= new POINTEUR( new STRUCT(loc_tdsClasse.toChamps()));
 }
 else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_type_unknown, MCSMessages.type_unknown,new Object[]{""+x_3.att_txt, ""+loc_i.getType()});
-
-
+loc_tt=this.att_htype;
 }
-}
-else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_var_not_found, MCSMessages.var_not_found,new Object[]{""+x_3.att_txt, ""+loc_tdsClasse});
-
-}
-}
-
-if (this.att_htype!=null){
-if (this.att_htype instanceof POINTEUR ){
-loc_p=((POINTEUR)this.att_htype);
+if (loc_tt instanceof POINTEUR ){
+loc_p=((POINTEUR)loc_tt);
 loc_t=loc_p.getType();
 if (loc_t instanceof STRUCT ){
 loc_s=((STRUCT)loc_t);
@@ -251,13 +235,13 @@ loc_code=this.att_hcode+this.att_machine.genAdrField(loc_c.getDep());
 }
 }
 else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_type_not_struct, MCSMessages.type_not_struct,new Object[]{""+((POINTEUR)this.att_htype).getNom(), ""+x_3.att_txt});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_type_not_struct, MCSMessages.type_not_struct,new Object[]{""+((POINTEUR)loc_tt).getNom(), ""+x_3.att_txt});
 
 
 }
 }
-else if (this.att_htype instanceof STRUCT ){
-loc_s=((STRUCT)this.att_htype);
+else if (loc_tt instanceof STRUCT ){
+loc_s=((STRUCT)loc_tt);
 loc_lc=loc_s.getChamps();
 loc_c=loc_lc.chercherChamp(x_3.att_txt);
 loc_ct=loc_c.getType();
@@ -272,12 +256,10 @@ loc_code=this.att_machine.genReadMem(loc_c.getDep()+this.att_hdep, loc_ct.getTai
 }
 }
 else {
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_type_not_struct, MCSMessages.type_not_struct,new Object[]{""+this.att_htype.getNom(), ""+x_3.att_txt});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_type_not_struct, MCSMessages.type_not_struct,new Object[]{""+loc_tt.getNom(), ""+x_3.att_txt});
 
 
 }
-}
-
 x_5.att_hcode=loc_code;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#a","FX -> pt ident #a FX1 #gen ;"});
 }
@@ -292,6 +274,7 @@ x_5.att_identSuper=this.att_identSuper;
 x_5.att_identClasse=this.att_identClasse;
 x_5.att_hdep=this.att_hdep;
 x_5.att_tds=this.att_tds;
+x_5.att_this=this.att_this;
 x_5.att_base=this.att_base;
 }catch(RuntimeException e) {       att_scanner._interrompre(IProblem.Internal,att_scanner.getBeginLine(),ICoreMessages.id_EGG_runtime_error, CoreMessages.EGG_runtime_error,new Object[] { "MCS", "#auto_inh","FX -> pt ident #a FX1 #gen ;"});
 }
@@ -385,64 +368,64 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_mult : // 32206
+      case LEX_MCS.token_mult : // 57320
         regle74 () ;
       break ;
-      case LEX_MCS.token_div : // 32207
+      case LEX_MCS.token_div : // 57321
         regle74 () ;
       break ;
-      case LEX_MCS.token_mod : // 32208
+      case LEX_MCS.token_mod : // 57322
         regle74 () ;
       break ;
-      case LEX_MCS.token_et : // 32209
+      case LEX_MCS.token_et : // 57323
         regle74 () ;
       break ;
-      case LEX_MCS.token_plus : // 32203
+      case LEX_MCS.token_plus : // 57317
         regle74 () ;
       break ;
-      case LEX_MCS.token_moins : // 32204
+      case LEX_MCS.token_moins : // 57318
         regle74 () ;
       break ;
-      case LEX_MCS.token_ou : // 32205
+      case LEX_MCS.token_ou : // 57319
         regle74 () ;
       break ;
-      case LEX_MCS.token_inf : // 32197
+      case LEX_MCS.token_inf : // 57311
         regle74 () ;
       break ;
-      case LEX_MCS.token_sup : // 32199
+      case LEX_MCS.token_sup : // 57313
         regle74 () ;
       break ;
-      case LEX_MCS.token_infeg : // 32198
+      case LEX_MCS.token_infeg : // 57312
         regle74 () ;
       break ;
-      case LEX_MCS.token_supeg : // 32200
+      case LEX_MCS.token_supeg : // 57314
         regle74 () ;
       break ;
-      case LEX_MCS.token_eg : // 32201
+      case LEX_MCS.token_eg : // 57315
         regle74 () ;
       break ;
-      case LEX_MCS.token_neg : // 32202
+      case LEX_MCS.token_neg : // 57316
         regle74 () ;
       break ;
-      case LEX_MCS.token_affect : // 32170
+      case LEX_MCS.token_affect : // 57284
         regle74 () ;
       break ;
-      case LEX_MCS.token_virg : // 32167
+      case LEX_MCS.token_virg : // 57281
         regle74 () ;
       break ;
-      case LEX_MCS.token_parf : // 32164
+      case LEX_MCS.token_parf : // 57278
         regle74 () ;
       break ;
-      case LEX_MCS.token_pv : // 32169
+      case LEX_MCS.token_pv : // 57283
         regle74 () ;
       break ;
-      case LEX_MCS.token_pt : // 32168
+      case LEX_MCS.token_pt : // 57282
         regle75 () ;
       break ;
-      case LEX_MCS.token_arrow : // 32195
+      case LEX_MCS.token_arrow : // 57309
         regle76 () ;
       break ;
-      case LEX_MCS.token_paro : // 32163
+      case LEX_MCS.token_paro : // 57277
         regle77 () ;
       break ;
       default :
