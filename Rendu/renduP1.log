@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.5-0.9999.3 (TeX Live 2013/Debian) (format=xelatex 2016.5.2)  17 JUN 2016 07:11
+This is XeTeX, Version 3.1415926-2.5-0.9999.3 (TeX Live 2013/Debian) (format=xelatex 2016.5.2)  17 JUN 2016 07:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -410,46 +410,105 @@ File: UML.png Graphic file (type QTm)
 File: UMLSTRUCT.png Graphic file (type QTm)
  <use  "UMLSTRUCT.png" > [2
 
-] [3]
+]
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 94--95
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 95--96
+
+ []
+
+Missing character: There is no … in font ecrm1000!
+
+Underfull \hbox (badness 10000) in paragraph at lines 96--97
+
+ []
+
+Missing character: There is no … in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
+
+ []
+
+[3]
 Chapitre 2.
 
-! LaTeX Error: Something's wrong--perhaps a missing \item.
+Underfull \hbox (badness 10000) in paragraph at lines 106--107
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.95 \end{itemize}
-                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 107--108
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
+
+ []
+
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--110
+
+ []
+
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+
+Underfull \hbox (badness 10000) in paragraph at lines 110--111
+
+ []
+
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+Missing character: There is no ’ in font ecrm1000!
+
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 112--113
+
+ []
 
 [4
 
 ]
 Chapitre 3.
-
-! LaTeX Error: Something's wrong--perhaps a missing \item.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.100 \end{itemize}
-                   
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
 [5
 
 ] (./renduP1.aux) ) 
 Here is how much of TeX's memory you used:
  4525 strings out of 493918
  59333 string characters out of 6150564
- 149391 words of memory out of 5000000
+ 152391 words of memory out of 5000000
  7801 multiletter control sequences out of 15000+600000
  16295 words of font info for 43 fonts, out of 8000000 for 9000
  1144 hyphenation exceptions out of 8191
- 27i,6n,24p,232b,253s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 27i,6n,24p,629b,253s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on renduP1.pdf (6 pages).
