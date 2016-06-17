@@ -32,7 +32,7 @@ public class INFOCLASSE extends INFO {
 	
 	
 	public String toString() {
-		return "INFOCLASSE ";
+		return "INFOCLASSE, contenu : " + contenu;
 	}	
 	
 }

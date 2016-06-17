@@ -2172,29 +2172,33 @@ global
     ic : INFOCLASSE;
     ih: INFO;
     ihc : INFOCLASSE;
-    tdsParent : TDS;
 #htds {
 local
     htds : TDS;
+    ident : STRING;
 do
     htds := new TDS(ENTITE^tds);
     
     -- recherche de l heritage
-    tdsParent := ENTITE^tds.getParente();
     -- si heritage
     if HERITAGE^aHeritage then
-        ih := tdsParent.chercherClasse(HERITAGE^sident);
+        ih := ENTITE^tds.chercherClasse(HERITAGE^sident);
+        ident := HERITAGE^sident;
     else
         -- pas d'heritage -> herite de la classe Object, mere de toutes les classes
-        ih := tdsParent.chercherClasse("Object");
+        ih := ENTITE^tds.chercherClasse("Object");
+        ident := "Object";   
     end
         
     if ih = nil then
-        error(classe_undefined, HERITAGE^sident, tdsParent);
+        error(classe_undefined, ident, ENTITE^tds);
     else 
         match ih with
         INFOCLASSE then   
             ihc := ih;
+            
+            write "HERITAGE found " + identc^txt + HERITAGE^sident + ihc + "\n";
+            
             -- on insere l'infoclasse de super dans la TDS contenu pour avoir plus de facilite a la retrouver (appel a base)
             htds.inserer(HERITAGE^sident, ihc); 
         else

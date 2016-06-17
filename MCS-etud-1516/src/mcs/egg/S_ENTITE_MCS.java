@@ -24,7 +24,6 @@ int [] sync= new int[0];
   String att_code;
   IMachine att_machine;
   LEX_MCS att_scanner;
-  TDS glob_89_tdsParent;
   INFOCLASSE glob_89_ic;
   INFOCLASSE glob_89_ihc;
   INFONAMESPACE glob_85_ins;
@@ -283,18 +282,25 @@ private void action_htds_89(S_ACCES_MCS x_2, T_MCS x_4, S_HERITAGE_MCS x_5, S_DE
 try {
 // locales
 TDS loc_htds;
+String loc_ident;
 // instructions
 loc_htds= new TDS(this.att_tds);
 if (x_5.att_aHeritage){
-glob_89_tdsParent=this.att_tds.getParente();
-glob_89_ih=glob_89_tdsParent.chercherClasse(x_5.att_sident);
+glob_89_ih=this.att_tds.chercherClasse(x_5.att_sident);
+loc_ident=x_5.att_sident;
+}
+else {
+glob_89_ih=this.att_tds.chercherClasse("Object");
+loc_ident="Object";
+}
 if (glob_89_ih==null){
-att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_classe_undefined, MCSMessages.classe_undefined,new Object[]{""+x_5.att_sident, ""+glob_89_tdsParent});
+att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMessages.id_classe_undefined, MCSMessages.classe_undefined,new Object[]{""+loc_ident, ""+this.att_tds});
 
 }
 else {
 if (glob_89_ih instanceof INFOCLASSE ){
 glob_89_ihc=((INFOCLASSE)glob_89_ih);
+System.out.print(""+"HERITAGE found "+x_4.att_txt+x_5.att_sident+glob_89_ihc+"\n");
 loc_htds.inserer(x_5.att_sident, glob_89_ihc);
 }
 else {
@@ -303,8 +309,6 @@ att_scanner._interrompre(IProblem.Semantic, att_scanner.getBeginLine(), IMCSMess
 
 }
 }
-}
-
 x_8.att_identClasse=x_4.att_txt;
 x_8.att_identSuper=x_5.att_sident;
 x_8.att_tds=loc_htds;
@@ -360,43 +364,43 @@ x_4.att_tds_asm=this.att_tds;
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_typedef : // 2805
+      case LEX_MCS.token_typedef : // 39273
         regle3 () ;
       break ;
-      case LEX_MCS.token_void : // 2799
+      case LEX_MCS.token_void : // 39268
         regle4 () ;
       break ;
-      case LEX_MCS.token_int : // 2801
+      case LEX_MCS.token_int : // 39270
         regle4 () ;
       break ;
-      case LEX_MCS.token_char : // 2802
+      case LEX_MCS.token_char : // 39271
         regle4 () ;
       break ;
-      case LEX_MCS.token_identc : // 2881
+      case LEX_MCS.token_identc : // 39310
         regle4 () ;
       break ;
-      case LEX_MCS.token_struct : // 2803
+      case LEX_MCS.token_struct : // 39272
         regle4 () ;
       break ;
-      case LEX_MCS.token_bool : // 2821
+      case LEX_MCS.token_bool : // 39282
         regle4 () ;
       break ;
-      case LEX_MCS.token_asm : // 2800
+      case LEX_MCS.token_asm : // 39269
         regle82 () ;
       break ;
-      case LEX_MCS.token_namespace : // 2810
+      case LEX_MCS.token_namespace : // 39276
         regle85 () ;
       break ;
-      case LEX_MCS.token_using : // 2812
+      case LEX_MCS.token_using : // 39277
         regle86 () ;
       break ;
-      case LEX_MCS.token_public : // 2815
+      case LEX_MCS.token_public : // 39279
         regle89 () ;
       break ;
-      case LEX_MCS.token_private : // 2817
+      case LEX_MCS.token_private : // 39280
         regle89 () ;
       break ;
-      case LEX_MCS.token_class : // 2813
+      case LEX_MCS.token_class : // 39278
         regle89 () ;
       break ;
       default :

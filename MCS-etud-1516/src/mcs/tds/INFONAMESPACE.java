@@ -21,7 +21,7 @@ public class INFONAMESPACE extends INFO {
 	
 	
 	public String toString() {
-		return "INFONAMESPACE ";
+		return "INFONAMESPACE, contenu :" + tdsContenu;
 	}	
 	
 }

@@ -1,0 +1,21 @@
+
+namespace A {
+	namespace B {
+		class Test {
+		}
+	}
+	namespace C {
+		class Test2 : Test {
+		}
+		
+	}	
+}	
+
+
+// point d'entree du programme.
+int main(){
+
+
+    
+    return 0;
+}

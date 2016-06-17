@@ -75,13 +75,13 @@ this.att_code=this.att_machine.genOp("Ineg");
   public void analyser () throws Exception {
     scanner.lit ( 1 ) ;
     switch ( scanner.fenetre[0].code ) {
-      case LEX_MCS.token_plus : // 2853
+      case LEX_MCS.token_plus : // 39298
         regle65 () ;
       break ;
-      case LEX_MCS.token_moins : // 2855
+      case LEX_MCS.token_moins : // 39299
         regle66 () ;
       break ;
-      case LEX_MCS.token_non : // 2867
+      case LEX_MCS.token_non : // 39305
         regle67 () ;
       break ;
       default :

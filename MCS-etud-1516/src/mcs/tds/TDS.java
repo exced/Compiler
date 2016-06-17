@@ -167,24 +167,50 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		return i;
 	}
 
-	/*
-	 * Recherche de n dans la TDS courante + la liste des Infonamespace importées
-	 * on recherche d'abord dans la liste des NS imported
-	 */
-	public INFO chercherLocalementNS(String n) {
-		return chercherUsedNS(n) != null ? chercherUsedNS(n) : get(n);
+
+	public INFO chercherLocalementCL(String n) {
+		return (get(n) instanceof INFOCLASSE) ? get(n) : null;
 	}
 
-	/*
-	 * Recherche de n dans la TDS courante et ses parentes + la liste des Infonamespace importées
-	 */
-	public INFO chercherGlobalementNS(String n) {
-		INFO i = chercherLocalementNS(n);
+
+	public INFO chercherGlobalementCL(String n) {
+		INFO i = chercherLocalementCL(n);
+		System.out.println("chercherGlobalement " + i + this);
 		if (i == null)
 			if (parente != null)
-				return parente.chercherGlobalementNS(n);
+				return parente.chercherGlobalementCL(n);
 		return i;
 	}
+
+	public INFO chercherLocalementNS(String n) {
+		return (get(n) instanceof INFONAMESPACE) ? get(n) : null;
+	}
+
+
+	public INFO chercherGlobalementNS(String n) {
+		INFO i = chercherLocalementCL(n);
+		if (i == null)
+			if (parente != null)
+				return parente.chercherGlobalementCL(n);
+		return i;
+	}
+
+
+	public TDS chercherGlobalementNSTDS(String n) {
+		TDS t = null;
+		INFO i = chercherLocalementCL(n);
+		if (i == null){
+			if (parente != null){
+				i = parente.chercherGlobalementCL(n);
+			}
+		}
+		else {
+			t = this;
+		}
+		return t;
+	}
+
+
 
 	/*
 	 * chercher un namespace, nécessaire pour le using
@@ -200,6 +226,7 @@ public class TDS extends LinkedHashMap<String, INFO> {
 		else {
 			// nom composé
 			for (String s : strings){
+				System.out.println("chercherNS sur : " + s);
 				i = tds.chercherGlobalementNS(s);
 				if (i == null){
 					return null;
@@ -220,34 +247,34 @@ public class TDS extends LinkedHashMap<String, INFO> {
 
 	public INFO chercherClasse(String n){
 		String[] strings = n.split(Pattern.quote("."));
+		System.out.println("chercher classe sur : " + n);
 		String ins = "";
 		String inc;
 		INFO info = null;
 		TDS tds = this;
 		// nom simple + INFOCLASSE
 		if (strings.length == 1){
-			return tds.chercherGlobalementNS(n) instanceof INFOCLASSE ? tds.chercherGlobalementNS(n) : null;
+			System.out.println("chercher classe " + strings[0]);
+			return tds.chercherGlobalementCL(n) instanceof INFOCLASSE ? tds.chercherGlobalementCL(n) : null;
 		}
 		else {
-			// nom composé + INFONAMESPACE...S + INFOCLASSE
-			for (int i = 0; i < strings.length - 1; i++){
-				ins = ins + strings[i];
-				if (i != strings.length - 2)
-					ins = ins + ".";
-			}
-			inc = strings[strings.length - 1];
-			info = tds.chercherNamespace(ins);
-			if (info == null){
-				return null;
-			}
-			else {
-				if (info instanceof INFONAMESPACE){
+			tds = chercherGlobalementNSTDS(strings[0]);
+			// nom composé + INFONAMESPACE...S.. 
+			for (int i = 1; i < strings.length - 1; i++){
+				info = tds.chercherLocalementNS(strings[i]);
+				if (info != null && info instanceof INFONAMESPACE){
 					tds = ((INFONAMESPACE) info).getContenu();
-					info = tds.chercherLocalement(inc);
 				}
 				else {
 					return null;
 				}
+			}
+			//.. + INFOCLASSE
+			System.out.println("NAMESPACE FOUND " + info);
+			info = tds.chercherLocalementNS(strings[strings.length - 1]);
+			if (info != null && info instanceof INFOCLASSE){
+				System.out.println("CLASSE FOUND " + info);
+				return info;
 			}
 		}
 		return info;

@@ -41,7 +41,7 @@ namespace Geometry {
     
       // le nom complet de cette classe est Geometry.B.Point2DCol
       
-      public class Point2DCol:Geometry.A.Point2D{
+      public class Point2DCol{
       
         int col;
         
