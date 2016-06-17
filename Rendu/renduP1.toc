@@ -1,4 +1,4 @@
 \select@language {french}
-\contentsline {part}{I\hspace {1em}Langage $\mu $C}{2}
-\contentsline {chapter}{\numberline {1}Choix de conception}{3}
-\contentsline {chapter}{\numberline {2}Limitations}{4}
+\contentsline {chapter}{\numberline {1}Structure}{2}
+\contentsline {chapter}{\numberline {2}Choix de conception}{4}
+\contentsline {chapter}{\numberline {3}Limitations}{5}

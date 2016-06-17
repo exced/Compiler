@@ -72,24 +72,31 @@
 
 \vfill
 
-\part{Langage $\mu$C}
+\chapter{Structure}
+
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.4]{UML.png}
+		\end{center}
+		\caption{UML global}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.4]{UMLSTRUCT.png}
+		\end{center}
+		\caption{Précision STRUCT}
+	\end{figure}
 
 \chapter{Choix de conception}
 
 \begin{itemize}
-	\item Nous avons choisi de gérer le problème d'insertion de doublons directement dans la TDS afin de rendre plus clair le contenu des actions sémantiques.
-	\item La TDS d'un bloc est créée à l'"extérieur" de celui-ci (1\iere{} apparition du non-terminal BLOC).
-	\item Nous avons choisi de rajouter des méthodes à la machine TAM, celles-ci permettant de faciliter la gestion du déplacement dans le bloc courant.
-	\item La classe INFOFONC a été créée afin de faciliter la manipulation des fonctions: paramètres et retour.
-	\item Nous stockons les paramètres d'une fonction à la déclaration dans une unique TDS pour relever les erreurs de paramètres qui ont le même nom lors de l'appel d'une fonction.
-	\item de nouvelles fonctions compareTo ont été définies afin de simplifier la vérification de type entre opérateurs et types.  
+ 
 \end{itemize}
 
 \chapter{Limitations}
 \begin{itemize}
-	\item La génération de code n'est pas terminée, nous nous sommes focalisés sur la bonne gestion de la TDS et des types.
-	\item Des exemples simples de code sont en cours de création et de traduction en assembleur, pour simplifier le travail de vérification de génération de code dans le futur.
-	
+
 \end{itemize}
 
 
