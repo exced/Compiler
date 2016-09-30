@@ -1,4 +1,0 @@
-\select@language {french}
-\contentsline {chapter}{\numberline {1}Structure}{2}
-\contentsline {chapter}{\numberline {2}Choix de conception}{4}
-\contentsline {chapter}{\numberline {3}Limitations}{5}
